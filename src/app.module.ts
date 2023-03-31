@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfiguration, EnvConfiguration, AppEnvironments } from 'config/app.config';
 import { join } from 'path';
 
@@ -11,6 +12,15 @@ import { join } from 'path';
       envFilePath: process.env.NODE_ENV ? `${process.cwd()}/env/${process.env.NODE_ENV}.env` : undefined,
       isGlobal: true,
       load: [ EnvConfiguration ]
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ ConfigModule ],
+      inject: [ ConfigService ],
+      useFactory: async (configService: ConfigService<AppConfiguration>) => {
+        return {
+          uri: configService.get('mongoDb'),
+        };
+      }
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       imports: [ ConfigModule ],

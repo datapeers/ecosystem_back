@@ -5,6 +5,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfiguration, EnvConfiguration, AppEnvironments } from 'config/app.config';
 import { join } from 'path';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   imports: [
@@ -28,15 +31,22 @@ import { join } from 'path';
       driver: ApolloDriver,
       useFactory: async (configService: ConfigService<AppConfiguration>) => {
         const enableDebug = configService.get('environment') === AppEnvironments.Development;
+        const plugins = [];
+        if(enableDebug) {
+          plugins.push(ApolloServerPluginLandingPageLocalDefault());
+        }
         return {
           cors: true,
           debug: enableDebug,
-          playground: enableDebug,
+          playground: false,
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
           sortSchema: true,
+          plugins,
         }
-      }
+      },
     }),
+    UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

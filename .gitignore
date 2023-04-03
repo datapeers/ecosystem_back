@@ -38,3 +38,8 @@ lerna-debug.log*
 development.env
 staging.env
 production.env
+
+config/firebase/config.json
+
+# Graphql
+*.gql

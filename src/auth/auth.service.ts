@@ -1,11 +1,9 @@
 import * as admin from 'firebase-admin';
-import * as serviceAccount from './firebase/config.json';
+import * as serviceAccount from 'config/firebase/config.json';
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AuthUser } from 'src/auth/types/auth-user';
-import { SignUpInput } from './dto/sign-up.input';
-
 @Injectable()
 export class AuthService {
   constructor(private readonly usersService: UsersService) {

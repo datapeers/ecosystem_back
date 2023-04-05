@@ -4,4 +4,5 @@ export enum ValidRoles {
   admin = 'admin',
   user = 'user',
   responsible = 'responsible',
+  investor = 'investor',
 }

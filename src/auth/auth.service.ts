@@ -12,20 +12,11 @@ export class AuthService {
     });
   }
 
-  async validateUser(idToken: string): Promise<User> {
+  async exchangeToken(idToken: string): Promise<User | AuthUser> {
     try {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
-      const user = await this.usersService.findOne(decodedToken.uid);
-      return user;
-    } catch (error) {
-      console.error('Error while verifying Firebase ID token:', error);
-      throw error;
-    }
-  }
-
-  async exchangeToken(idToken: string): Promise<AuthUser> {
-    try {
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const user = await this.usersService.tryFindOne(decodedToken.uid);
+      if(user) return user;
       const userRecord = await admin.auth().getUser(decodedToken.uid);
       let authUser: AuthUser = {
         uid: userRecord.uid,

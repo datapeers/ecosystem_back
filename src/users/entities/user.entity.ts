@@ -2,7 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
-@Schema()
+@Schema({ timestamps: true })
 @ObjectType()
 export class User {
   @Field( () => ID )
@@ -22,11 +22,25 @@ export class User {
 
   @Prop({ type: [String], array: true, enum: ValidRoles, default: [ValidRoles.user] })
   @Field( () => [ String ])
-  roles: string[];
+  roles: ValidRoles[];
 
   @Prop({ type: 'boolean', default: true })
   @Field( () => Boolean )
   isActive: boolean;
+
+  @Field( () => Date )
+  createdAt: Date;
+
+  @Field( () => Date )
+  updatedAt: Date;
+
+  @Prop({ default: "" })
+  updatedBy: string;
+
+  get rolValue(): number {
+    const rolValues = this.roles.map(rol => rolValues[rol]);
+    return Math.max(...rolValues);
+  };
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

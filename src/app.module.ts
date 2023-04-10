@@ -16,6 +16,7 @@ import { EmailsModule } from './emails/emails.module';
 import { InvitationsModule } from './invitations/invitations.module';
 import { LoggerModule } from './logger/logger.module';
 import { AuthService } from './auth/auth.service';
+import { PhasesModule } from './phases/phases.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { AuthService } from './auth/auth.service';
     EmailsModule,
     InvitationsModule,
     LoggerModule,
+    PhasesModule,
   ],
   controllers: [],
   providers: [],

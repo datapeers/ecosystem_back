@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { EmailsModule } from './emails/emails.module';
+import { InvitationsModule } from './invitations/invitations.module';
 import { LoggerModule } from './logger/logger.module';
 import { AuthService } from './auth/auth.service';
 
@@ -58,6 +59,7 @@ import { AuthService } from './auth/auth.service';
     UsersModule,
     AuthModule,
     EmailsModule,
+    InvitationsModule,
     LoggerModule,
   ],
   controllers: [],

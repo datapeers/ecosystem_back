@@ -1,4 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
+import { IsEnum } from 'class-validator';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
 @InputType()
 export class CreateUserInput {
@@ -15,6 +17,7 @@ export class CreateUserInput {
   @Field( () => String, { nullable: true })
   profileImageUrl?: string;
 
-  @Field(() => [String], { nullable: true })
-  roles: string[];
+  @Field(() => [ValidRoles], { nullable: true })
+  @IsEnum(ValidRoles, { each: true })
+  roles: ValidRoles[];
 }

@@ -8,6 +8,10 @@ import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { EmailsModule } from './emails/emails.module';
+import { InvitationsModule } from './invitations/invitations.module';
+import { LoggerModule } from './logger/logger.module';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
@@ -26,10 +30,13 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       }
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
-      imports: [ ConfigModule ],
-      inject: [ ConfigService ],
+      imports: [ ConfigModule, AuthModule ],
+      inject: [ ConfigService, AuthService ],
       driver: ApolloDriver,
-      useFactory: async (configService: ConfigService<AppConfiguration>) => {
+      useFactory: async (
+        configService: ConfigService<AppConfiguration>,
+        authService: AuthService,
+      ) => {
         const enableDebug = configService.get('environment') === AppEnvironments.Development;
         const plugins = [];
         if(enableDebug) {
@@ -42,11 +49,18 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
           sortSchema: true,
           plugins,
+          context: async ({ req }) => {
+            const token = req.headers.authorization.replace('Bearer ', '');
+            await authService.validateToken(token);
+          }
         }
       },
     }),
     UsersModule,
     AuthModule,
+    EmailsModule,
+    InvitationsModule,
+    LoggerModule,
   ],
   controllers: [],
   providers: [],

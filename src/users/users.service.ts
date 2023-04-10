@@ -1,6 +1,4 @@
 import { ConflictException, Injectable, NotFoundException, MethodNotAllowedException } from '@nestjs/common';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 import { Model } from 'mongoose';
 import { User } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,8 +10,8 @@ export class UsersService {
 
   }
   
-  async tryFindOne(uid: string): Promise<User | null> {
-    return await this.userModel.findOne({ uid: uid }).lean();
+  async tryFindOne(filters: { uid?: string, email?: string }) {
+    return await this.userModel.findOne(filters).lean();
   }
 
   async findOne(uid: string) {
@@ -38,15 +36,18 @@ export class UsersService {
     return users;
   }
 
-  async create(createUserInput: CreateUserInput) {
-    const user = await this.tryFindOne(createUserInput.uid);
+  async create(createUserInput: Partial<User>) {
+    const user = await this.tryFindOne({ uid: createUserInput.uid });
     if(user) throw new ConflictException("Authenticated user already exist");
     const createdUser = await this.userModel.create(createUserInput);
     return createdUser;
   }
 
-  async update(id: string, updateUserInput: UpdateUserInput) {
-    //TODO: Implement users update
+  async update(filters: { _id?: string, uid?: string }, userUpdates: Partial<User>) {
+    const user = await this.userModel.findOneAndUpdate(filters, {
+      ...userUpdates
+    }).lean();
+    return user;
   }
 
   async updateState(uid: string, adminUser: User, setActive: boolean) {

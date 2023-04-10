@@ -9,6 +9,14 @@ export enum ValidRoles {
   user = 'user',
 }
 
+export const rolNames: Record<ValidRoles, string> = {
+  [ValidRoles.superAdmin]: "Super admin",
+  [ValidRoles.admin]: "Admin",
+  [ValidRoles.user]: "Usuario",
+  [ValidRoles.responsible]: "Responsable",
+  [ValidRoles.investor]: "Inversionista"
+}
+
 export const rolValues: Record<ValidRoles, number> = {
   [ValidRoles.superAdmin]: 99999,
   [ValidRoles.admin]: 9999,

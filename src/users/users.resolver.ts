@@ -41,12 +41,12 @@ export class UsersResolver {
     @Args('uid', { type: () => String }) uid: string,
     @CurrentUser([]) user: User,
   ): Promise<User> {
-    return Promise.resolve(user);
+    return this.usersService.findOne(uid);
   }
 
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput._id, updateUserInput);
+    return this.usersService.update({ _id: updateUserInput._id }, updateUserInput);
   }
 
   @Mutation(() => User)

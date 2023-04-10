@@ -37,10 +37,17 @@ export class User {
   @Prop({ default: "" })
   updatedBy: string;
 
+  @Prop({ default: true })
+  @Field( () => Boolean )
+  passwordSet: boolean;
+
   get rolValue(): number {
     const rolValues = this.roles.map(rol => rolValues[rol]);
     return Math.max(...rolValues);
   };
+
+  @Field( () => String, { nullable: true })
+  profileImageUrl?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

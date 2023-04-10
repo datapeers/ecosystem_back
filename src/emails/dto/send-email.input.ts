@@ -2,6 +2,7 @@ import { IsEmail, IsOptional, IsString } from "class-validator";
 
 export class SendEmailInput {
   @IsString()
+  @IsEmail()
   to: string;
 
   @IsString()

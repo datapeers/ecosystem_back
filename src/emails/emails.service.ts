@@ -2,22 +2,38 @@ import { BadRequestException, Injectable, InternalServerErrorException, MethodNo
 import { ConfigService } from '@nestjs/config';
 import { AppConfiguration } from 'config/app.config';
 import * as SendGrid from '@sendgrid/mail';
+import * as SendGridClient from '@sendgrid/client';
 import { SendEmailInput } from './dto/send-email.input';
+import { AppLogger } from 'src/logger/app-logger';
+import { Template } from './templates/template';
+import { EmailTemplates, templateNames } from './enums/email-templates';
 
 @Injectable()
 export class EmailsService {
+  private readonly templatesId: Record<EmailTemplates, string>;
   private readonly defaultVerifiedEmail: string;
   private readonly apiKey: string;
-  constructor(private readonly configService: ConfigService<AppConfiguration>) {
+  constructor(
+    private readonly configService: ConfigService<AppConfiguration>,
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(EmailsService.name);
+    // Set api key
     this.apiKey = this.configService.get<string>('sendGridKey');
     if(this.apiKey) {
       SendGrid.setApiKey(this.apiKey);
+      SendGridClient.setApiKey(this.apiKey);
+    }
+    // Set available templates
+    this.templatesId = {
+      [EmailTemplates.invitation]: configService.get("sendGridInvitationTemplateId"),
+      [EmailTemplates.notification]: configService.get("sendGridNotificationTemplateId")
     }
     this.defaultVerifiedEmail = this.configService.get<string>('sendGridDefaultVerifiedEmail');
   }
 
   async send(mail: SendEmailInput) {
-    if(!this.apiKey) throw new MethodNotAllowedException();
+    if(!this.apiKey) throw new MethodNotAllowedException("This service is not available");
 
     if(!mail.from) {
       if(!this.defaultVerifiedEmail) {
@@ -27,11 +43,34 @@ export class EmailsService {
     }
     try {
       const transport = await SendGrid.send(mail);
-      console.log(`Email successfully dispatched to ${mail.to}`);
+      this.logger.log(`Email successfully dispatched to ${mail.to}`);
       return transport;
     } catch(ex) {
-      console.error(ex);
-      throw new InternalServerErrorException("Got an unexpected exception while trying to send an email");
+      this.logger.error(ex);
+      throw new InternalServerErrorException("Got an unexpected exception while trying to send an email", ex);
+    }
+  }
+
+  async sendFromTemplate(templateInput: Template) {
+    const templateId = this.templatesId[templateInput.template];
+    if(!templateId) throw new MethodNotAllowedException(`This template ${templateNames[templateInput.template]} is not available or configuration is missing`);
+    if(!this.apiKey) throw new MethodNotAllowedException("This service is not available");
+    if(!templateInput.from) {
+      if(!this.defaultVerifiedEmail) {
+        throw new BadRequestException("Must specify a verified email for the from field");
+      }
+    }
+    try {
+      const transport = await SendGrid.send({
+        ...templateInput,
+        from: templateInput.from ?? this.defaultVerifiedEmail,
+        templateId: templateId,
+      });
+      this.logger.log(`Email successfully dispatched with template ${templateInput.template}`);
+      return transport;
+    } catch(ex) {
+      this.logger.error(ex);
+      throw new InternalServerErrorException("Got an unexpected exception while trying to send an email", ex);
     }
   }
 }

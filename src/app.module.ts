@@ -56,10 +56,10 @@ import { AuthService } from './auth/auth.service';
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
           sortSchema: true,
           plugins,
-          context: async ({ req }) => {
-            const token = req.headers.authorization.replace('Bearer ', '');
-            await authService.validateToken(token);
-          },
+          // context: async ({ req }) => {
+          //   const token = req.headers.authorization.replace('Bearer ', '');
+          //   await authService.validateToken(token);
+          // },
         };
       },
     }),

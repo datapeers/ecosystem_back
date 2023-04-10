@@ -8,7 +8,8 @@ import { AppLogger } from 'src/logger/app-logger';
 import { ValidRoles } from './enums/valid-roles.enum';
 @Injectable()
 export class AuthService {
-  private readonly defaultUserPassword: string = "oM4X74g11zhH4I7iorH8en91D9VlcTBI";
+  private readonly defaultUserPassword: string =
+    'oM4X74g11zhH4I7iorH8en91D9VlcTBI';
 
   constructor(
     private readonly usersService: UsersService,
@@ -24,17 +25,21 @@ export class AuthService {
     try {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
       return decodedToken;
-    } catch(ex) {
-      this.logger.error(`Got an invalid or expired token ${idToken} with exception: ${ex}`);
-      throw new UnauthorizedException("Got an expired or invalid token");
+    } catch (ex) {
+      this.logger.error(
+        `Got an invalid or expired token ${idToken} with exception: ${ex}`,
+      );
+      throw new UnauthorizedException('Got an expired or invalid token');
     }
   }
 
   async exchangeToken(idToken: string): Promise<User | AuthUser> {
     try {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
-      const user = await this.usersService.tryFindOne({ uid: decodedToken.uid });
-      if(user) return user;
+      const user = await this.usersService.tryFindOne({
+        uid: decodedToken.uid,
+      });
+      if (user) return user;
       const userRecord = await admin.auth().getUser(decodedToken.uid);
       let authUser: AuthUser = {
         uid: userRecord.uid,
@@ -43,8 +48,11 @@ export class AuthService {
       };
       return authUser;
     } catch (error) {
-      this.logger.error(`Error while verifying Firebase ID token: ${idToken}`, error);
-      throw new error;
+      this.logger.error(
+        `Error while verifying Firebase ID token: ${idToken}`,
+        error,
+      );
+      throw new error();
     }
   }
 

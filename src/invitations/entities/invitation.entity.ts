@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { InvitationStates } from '../enums/invitation-states.enum';
+import { User } from 'src/users/entities/user.entity';
 
 @ObjectType()
 @Schema({ timestamps: true })
@@ -21,7 +22,7 @@ export class Invitation {
   rol: ValidRoles;
 
   @Prop({ required: true })
-  @Field(() => String)
+  @Field(() => User)
   createdBy: string;
 
   @Prop({ default: InvitationStates.enabled })

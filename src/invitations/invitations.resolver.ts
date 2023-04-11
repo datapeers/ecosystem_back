@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, ResolveField, Parent } from '@nestjs/graphql';
 import { InvitationsService } from './invitations.service';
 import { Invitation } from './entities/invitation.entity';
 import { CreateInvitationArgs } from './args/create-invitation.args';
@@ -8,11 +8,15 @@ import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { User } from 'src/users/entities/user.entity';
 import { FindInvitationArgs } from './args/find-invitation.args';
+import { UsersService } from 'src/users/users.service';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Invitation)
 export class InvitationsResolver {
-  constructor(private readonly invitationsService: InvitationsService) {}
+  constructor(
+    private readonly invitationsService: InvitationsService,
+    private readonly usersService: UsersService,
+  ) {}
   
   @Query(() => [Invitation], { name: 'invitations' })
   findAll(
@@ -36,5 +40,11 @@ export class InvitationsResolver {
     @CurrentUser([ ValidRoles.admin, ValidRoles.superAdmin ]) user: User
   ) {
     return this.invitationsService.cancel(id);
+  }
+
+  @ResolveField('createdBy', () => User)
+  async getProductProviders (@Parent() invitation: Invitation) {
+    const { createdBy: uid } = invitation;
+    return await this.usersService.findOne(uid);
   }
 }

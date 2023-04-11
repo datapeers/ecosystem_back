@@ -31,6 +31,7 @@ import { PhasesModule } from './phases/phases.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService<AppConfiguration>) => {
+        console.log(configService.get('mongoDb'));
         return {
           uri: configService.get('mongoDb'),
         };
@@ -51,7 +52,10 @@ import { PhasesModule } from './phases/phases.module';
           plugins.push(ApolloServerPluginLandingPageLocalDefault());
         }
         return {
-          cors: true,
+          cors: {
+            credentials: true,
+            origin: '*',
+          },
           debug: enableDebug,
           playground: false,
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),

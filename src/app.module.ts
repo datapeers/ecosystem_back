@@ -31,7 +31,6 @@ import { PhasesModule } from './phases/phases.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService<AppConfiguration>) => {
-        console.log(configService.get('mongoDb'));
         return {
           uri: configService.get('mongoDb'),
         };

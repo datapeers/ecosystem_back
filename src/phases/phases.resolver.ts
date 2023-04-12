@@ -17,11 +17,12 @@ export class PhasesResolver {
     @Args('createPhaseInput') createPhaseInput: CreatePhaseInput,
     @CurrentUser() user: AuthUser,
   ) {
+    console.log('entra?');
     const PhaseInput = {
       ...createPhaseInput,
       createBy: user,
     };
-    return this.phasesService.create(createPhaseInput);
+    return this.phasesService.create(PhaseInput);
   }
 
   @Query(() => [Phase], { name: 'phases' })

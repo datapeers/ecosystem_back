@@ -7,7 +7,8 @@ export class Phase {
   @Field(() => ID)
   _id: string;
 
-  @Prop()
+  @Prop({ required: true })
+  @Field(() => String)
   name: string;
 
   @Field(() => String, { nullable: true })

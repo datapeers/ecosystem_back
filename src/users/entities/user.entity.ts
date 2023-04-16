@@ -47,6 +47,7 @@ export class User {
   };
 
   @Field( () => String, { nullable: true })
+  @Prop({ default: "" })
   profileImageUrl?: string;
 }
 

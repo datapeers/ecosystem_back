@@ -15,19 +15,6 @@ import { UpdateUserInput } from './dto/update-user.input';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => User, { description: "Creates a user using the current authenticated user details and a set of optional parameters to override." })
-  createUser(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-    @CurrentUser() user: AuthUser,
-  ) {
-    //TODO: Should allow only users to be created with this endpoint
-    createUserInput = {
-      ...createUserInput,
-      ...user
-    }
-    return this.usersService.create(createUserInput);
-  }
-
   @Query(() => [User], { name: 'users' })
   findAll(
     @Args() findUsersArgs: FindUsersArgs,
@@ -44,8 +31,24 @@ export class UsersResolver {
     return this.usersService.findOne(uid);
   }
 
+  @Mutation(() => User, { description: "Creates a user using the current authenticated user details and a set of optional parameters to override." })
+  createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput,
+    @CurrentUser() user: AuthUser,
+  ) {
+    //TODO: Should allow only users to be created with this endpoint
+    createUserInput = {
+      ...createUserInput,
+      ...user
+    }
+    return this.usersService.create(createUserInput);
+  }
+
   @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+  updateUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @CurrentUser([]) user: User,
+  ) {
     return this.usersService.update({ _id: updateUserInput._id }, updateUserInput);
   }
 

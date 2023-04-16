@@ -51,10 +51,11 @@ export class UsersService {
     filters: { _id?: string; uid?: string },
     userUpdates: Partial<User>,
   ) {
+    delete userUpdates["_id"];
     const user = await this.userModel
       .findOneAndUpdate(filters, {
-        ...userUpdates,
-      })
+        ...userUpdates
+      }, { new: true })
       .lean();
     return user;
   }

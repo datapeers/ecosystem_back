@@ -7,21 +7,19 @@ import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UseGuards, MethodNotAllowedException } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
-@UseGuards(GqlAuthGuard)
+// @UseGuards(GqlAuthGuard)
 @Resolver(() => Phase)
 export class PhasesResolver {
   constructor(private readonly phasesService: PhasesService) {}
 
   @Mutation(() => Phase)
-  createPhase(
-    @Args('createPhaseInput') createPhaseInput: CreatePhaseInput,
-    @CurrentUser() user: AuthUser,
-  ) {
+  createPhase(@Args('createPhaseInput') createPhaseInput: CreatePhaseInput) {
     console.log('entra?');
     const PhaseInput = {
       ...createPhaseInput,
-      createBy: user,
+      createBy: 'something',
     };
+    console.log('aaaaaaaaaaaaaaa');
     return this.phasesService.create(PhaseInput);
   }
 

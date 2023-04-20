@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePhaseInput } from './dto/create-phase.input';
 import { UpdatePhaseInput } from './dto/update-phase.input';
 import { Phase } from './entities/phase.entity';
@@ -13,7 +13,7 @@ export class PhasesService {
   ) {}
 
   async findAll(): Promise<Phase[]> {
-    const phases = await this.phaseModel.find({});
+    const phases = await this.phaseModel.find({ deleted: false });
     return phases;
   }
 
@@ -23,7 +23,10 @@ export class PhasesService {
     return phase;
   }
 
-  async create(createPhaseInput: CreatePhaseInput, user: AuthUser): Promise<Phase> {
+  async create(
+    createPhaseInput: CreatePhaseInput,
+    user: AuthUser,
+  ): Promise<Phase> {
     const createdPhase = await this.phaseModel.create({
       ...createPhaseInput,
       createdBy: user.uid,
@@ -43,19 +46,14 @@ export class PhasesService {
   }
 
   async update(id: string, updatePhaseInput: UpdatePhaseInput): Promise<Phase> {
-    delete updatePhaseInput["_id"];
-    const updatedPhase = await this.phaseModel.findOneAndUpdate(
-      { _id: id },
-      { ...updatePhaseInput },
-      { new: true }
-    ).lean();
+    delete updatePhaseInput['_id'];
+    const updatedPhase = await this.phaseModel
+      .findOneAndUpdate({ _id: id }, { ...updatePhaseInput }, { new: true })
+      .lean();
     return updatedPhase;
   }
 
   remove(id: string) {
-    this.phaseModel.updateOne(
-      { _id: id },
-      { deleted: true }
-    );
+    this.phaseModel.updateOne({ _id: id }, { deleted: true });
   }
 }

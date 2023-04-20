@@ -27,7 +27,6 @@ export class PhasesResolver {
     @Args('createPhaseInput') createPhaseInput: CreatePhaseInput,
     @CurrentUser() user: AuthUser,
   ) {
-    console.log('here!');
     const PhaseInput = {
       ...createPhaseInput,
       createBy: user,

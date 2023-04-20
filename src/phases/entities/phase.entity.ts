@@ -1,11 +1,16 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Stage } from 'src/stages/entities/stage.entity';
 import { User } from 'src/users/entities/user.entity';
 @Schema({ timestamps: true })
 @ObjectType()
 export class Phase {
   @Field(() => ID)
   _id: string;
+
+  @Field(() => String)
+  @Prop({ required: true })
+  stage: string;
 
   @Field(() => String)
   @Prop({ required: true })

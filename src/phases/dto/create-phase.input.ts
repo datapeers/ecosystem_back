@@ -9,10 +9,14 @@ export class CreatePhaseInput {
 
   @Field(() => String)
   @IsNotEmpty()
-  name: string;
+  stage: string;
 
   @Field(() => String)
   @IsNotEmpty()
+  name: string;
+
+  @Field(() => String, { defaultValue: '' })
+  @IsOptional()
   description: string;
 
   @Field(() => String, { nullable: true })

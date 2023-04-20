@@ -19,6 +19,7 @@ import { AuthService } from './auth/auth.service';
 import { PhasesModule } from './phases/phases.module';
 import { StagesModule } from './stages/stages.module';
 import { StorageModule } from './storage/storage.module';
+import { ContentModule } from './content/content.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { StorageModule } from './storage/storage.module';
     PhasesModule,
     StagesModule,
     StorageModule,
+    ContentModule,
   ],
   controllers: [],
   providers: [],

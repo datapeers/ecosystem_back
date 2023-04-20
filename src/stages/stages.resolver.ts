@@ -22,7 +22,7 @@ export class StagesResolver {
   }
 
   @Query(() => Stage, { name: 'stage' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.stagesService.findOne(id);
   }
 

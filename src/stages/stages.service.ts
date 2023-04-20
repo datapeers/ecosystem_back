@@ -19,8 +19,8 @@ export class StagesService {
     return this.stageModel.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stage`;
+  findOne(id: string) {
+    return this.stageModel.findById(id);
   }
 
   async update(id: string, updateStageInput: UpdateStageInput) {

@@ -11,12 +11,12 @@ export class Phase {
   @Prop({ required: true })
   name: string;
 
-  @Field(() => String)
-  @Prop({ default: "" })
+  @Field(() => String, { nullable: true })
+  @Prop({ default: '' })
   thumbnail: string;
 
   @Field(() => String)
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   description: string;
 
   @Field(() => String, { nullable: true })

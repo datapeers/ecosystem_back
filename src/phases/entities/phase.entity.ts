@@ -7,27 +7,31 @@ export class Phase {
   @Field(() => ID)
   _id: string;
 
-  @Prop({ required: true })
   @Field(() => String)
+  @Prop({ required: true })
   name: string;
 
-  @Field(() => String, { nullable: true })
-  thumbnail?: string;
+  @Field(() => String)
+  @Prop({ default: "" })
+  thumbnail: string;
 
-  @Field(() => String, { nullable: true })
-  description?: string;
+  @Field(() => String)
+  @Prop({ default: "" })
+  description: string;
 
   @Field(() => String, { nullable: true })
   landing?: string;
 
-  @Prop({ required: true })
   @Field(() => User)
+  @Prop({ required: true })
   createdBy: string;
 
   @Field(() => Date)
+  @Prop({ type: Date })
   startAt: Date;
 
   @Field(() => Date)
+  @Prop({ type: Date })
   endAt: Date;
 
   @Prop({ type: 'boolean', default: true })

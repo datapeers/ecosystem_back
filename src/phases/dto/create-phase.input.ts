@@ -19,6 +19,10 @@ export class CreatePhaseInput {
   @IsOptional()
   description: string;
 
+  @Field(() => String, { defaultValue: '' })
+  @IsOptional()
+  landing: string;
+
   @Field(() => String, { nullable: true })
   @IsOptional()
   thumbnail?: string;

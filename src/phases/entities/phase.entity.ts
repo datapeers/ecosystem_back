@@ -24,8 +24,9 @@ export class Phase {
   @Prop({ default: '' })
   description: string;
 
-  @Field(() => String, { nullable: true })
-  landing?: string;
+  @Field(() => String)
+  @Prop({ default: '' })
+  landing: string;
 
   @Field(() => User)
   @Prop({ required: true })

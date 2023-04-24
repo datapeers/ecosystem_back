@@ -17,6 +17,10 @@ export class UpdatePhaseInput {
 
   @Field(() => String, { nullable: true })
   @IsOptional()
+  landing?: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   thumbnail?: string;
 
   @Field(() => Date, { nullable: true })

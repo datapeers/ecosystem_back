@@ -20,6 +20,7 @@ import { PhasesModule } from './phases/phases.module';
 import { StagesModule } from './stages/stages.module';
 import { StorageModule } from './storage/storage.module';
 import { ContentModule } from './content/content.module';
+import { FormsModule } from './forms/forms.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { ContentModule } from './content/content.module';
     StagesModule,
     StorageModule,
     ContentModule,
+    FormsModule,
   ],
   controllers: [],
   providers: [],

@@ -34,6 +34,7 @@ export class User {
   @Field( () => Date )
   updatedAt: Date;
 
+  @Field(() => String)
   @Prop({ default: "" })
   updatedBy: string;
 

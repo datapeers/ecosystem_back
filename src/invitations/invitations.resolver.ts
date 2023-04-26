@@ -43,7 +43,7 @@ export class InvitationsResolver {
   }
 
   @ResolveField('createdBy', () => User)
-  async getProductProviders (@Parent() invitation: Invitation) {
+  async getInvitationCreator (@Parent() invitation: Invitation) {
     const { createdBy: uid } = invitation;
     return await this.usersService.findOne(uid);
   }

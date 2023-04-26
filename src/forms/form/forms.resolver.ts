@@ -5,6 +5,7 @@ import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormInput } from './dto/update-form.input';
 import { FormTag } from '../form-tag/entities/form-tag.entity';
 import { FormTagService } from '../form-tag/form-tag.service';
+import { FindFormsArgs } from './args/find-forms.args';
 
 @Resolver(() => Form)
 export class FormsResolver {
@@ -14,15 +15,17 @@ export class FormsResolver {
   ) {}
 
   @Query(() => [Form], { name: 'forms' })
-  findAll() {
-    return this.formsService.findAll();
+  findMany(
+    @Args() findFormsArgs: FindFormsArgs,
+  ) {
+    return this.formsService.findMany(findFormsArgs);
   }
 
   @Query(() => Form, { name: 'form' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.formsService.findOne(id);
   }
-  
+
   @Mutation(() => Form)
   createForm(@Args('createFormInput') createFormInput: CreateFormInput) {
     return this.formsService.create(createFormInput);

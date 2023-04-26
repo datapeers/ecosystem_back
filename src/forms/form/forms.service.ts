@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Form } from './entities/form.entity';
 import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormInput } from './dto/update-form.input';
+import { FindFormsArgs } from './args/find-forms.args';
 
 @Injectable()
 export class FormsService {
@@ -13,8 +14,9 @@ export class FormsService {
     
   }
 
-  async findAll() {
+  async findMany(filters: FindFormsArgs) {
     return this.formModel.find({
+      ...filters,
       isDeleted: false
     });
   }

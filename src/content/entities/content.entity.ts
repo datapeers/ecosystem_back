@@ -40,8 +40,8 @@ export class Content {
   @Prop({ type: { type: Types.ObjectId, ref: 'phases' } })
   phase: Phase;
 
-  @Prop({ type: Types. })
-  item: any;
+  // @Prop({ type: Types. })
+  // item: any;
 
   @Field(() => Date)
   createdAt: Date;

@@ -3,11 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import {
-  AppConfiguration,
-  EnvConfiguration,
-  AppEnvironments,
-} from 'config/app.config';
+import { AppConfiguration, EnvConfiguration, AppEnvironments, } from 'config/app.config';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -21,6 +17,7 @@ import { StagesModule } from './stages/stages.module';
 import { StorageModule } from './storage/storage.module';
 import { ContentModule } from './content/content.module';
 import { FormsModule } from './forms/forms.module';
+import GraphQLJSON from 'graphql-type-json';
 
 @Module({
   imports: [
@@ -55,12 +52,16 @@ import { FormsModule } from './forms/forms.module';
           plugins.push(ApolloServerPluginLandingPageLocalDefault());
         }
         return {
+          resolvers: { JSON: GraphQLJSON },
           cors: {
             credentials: true,
             origin: '*',
           },
           debug: enableDebug,
           playground: false,
+          subscriptions: {
+            'graphql-ws': true
+          },
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
           sortSchema: true,
           plugins,

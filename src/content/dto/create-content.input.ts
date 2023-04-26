@@ -1,15 +1,19 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { GraphQLJSONObject } from 'graphql-scalars';
 @InputType()
 export class CreateContentInput {
+  @Field(() => String)
+  @IsNotEmpty()
+  name: string;
+
   @Field(() => String, { defaultValue: '' })
   @IsOptional()
   content: string;
 
-  @ApiProperty({ type: () => Object, additionalProperties: true })
-  @IsNotEmpty()
-  extra_options: any;
+  @Field(() => GraphQLJSONObject)
+  @IsOptional()
+  extra_options: Record<string, any>;
 
   @Field(() => String)
   @IsNotEmpty()

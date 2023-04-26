@@ -1,7 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
-import { Phase } from 'src/phases/entities/phase.entity';
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -30,17 +29,23 @@ export class Content {
   // }[];
 
   @Field(() => String)
-  @Prop()
+  @Prop({ required: true })
+  name: string;
+
+  @Field(() => String)
+  @Prop({ default: '' })
   content: string;
 
-  @Prop({ type: {}, default: {} })
-  extra_options: any;
+  @Prop({ type: SchemaTypes.Mixed })
+  extra_options: Record<string, any>;
 
-  @Prop({ default: false })
+  @Prop({ type: 'boolean', default: false })
+  @Field(() => Boolean)
   hide: boolean;
 
-  @Prop({ type: { type: Types.ObjectId, ref: 'phases' } })
-  phase: Phase;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
+  @Field(() => String)
+  phase: string;
 
   @Field(() => Date)
   @Prop({ type: Date })

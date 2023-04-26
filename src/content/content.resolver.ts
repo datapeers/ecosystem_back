@@ -3,7 +3,10 @@ import { ContentService } from './content.service';
 import { Content } from './entities/content.entity';
 import { CreateContentInput } from './dto/create-content.input';
 import { UpdateContentInput } from './dto/update-content.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Content)
 export class ContentResolver {
   constructor(private readonly contentService: ContentService) {}

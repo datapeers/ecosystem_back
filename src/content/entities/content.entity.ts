@@ -13,6 +13,7 @@ export class Content {
   // recursos: string[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'content' }] })
+  @Field(() => [String])
   childs: Content[];
 
   // @Prop([
@@ -28,26 +29,30 @@ export class Content {
   //   date: Date;
   // }[];
 
+  @Field(() => String)
   @Prop()
   content: string;
+
+  @Prop({ type: {}, default: {} })
+  extra_options: any;
 
   @Prop({ default: false })
   hide: boolean;
 
-  @Prop({ default: false })
-  deleted: boolean;
-
   @Prop({ type: { type: Types.ObjectId, ref: 'phases' } })
   phase: Phase;
 
-  // @Prop({ type: Types. })
-  // item: any;
-
   @Field(() => Date)
+  @Prop({ type: Date })
   createdAt: Date;
 
   @Field(() => Date)
+  @Prop({ type: Date })
   updatedAt: Date;
+
+  @Prop({ type: 'boolean', default: false })
+  @Field(() => Boolean)
+  isDeleted: boolean;
 }
 
 export const ContentSchema = SchemaFactory.createForClass(Content);

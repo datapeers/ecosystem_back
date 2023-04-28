@@ -16,10 +16,11 @@ export class ContentService {
   }
 
   findAll(phase: string) {
-    return this.contentModel.find({ phase, 'extra_options.sprint': true });
-    // .populate({
-    //   path: 'childs',
-    // });
+    return this.contentModel
+      .find({ phase, 'extra_options.sprint': true })
+      .populate({
+        path: 'childs',
+      });
   }
 
   findOne(id: string) {

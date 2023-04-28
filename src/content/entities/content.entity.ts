@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
-
+import { GraphQLJSONObject } from 'graphql-scalars';
 @Schema({ timestamps: true })
 @ObjectType()
 export class Content {
@@ -11,8 +11,8 @@ export class Content {
   // @Prop([{ type: SchemaTypes.ObjectId, ref: 'resources' }])
   // recursos: string[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'content' }] })
-  @Field(() => [String])
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Content' }] })
+  @Field(() => [Content])
   childs: Content[];
 
   // @Prop([
@@ -36,15 +36,16 @@ export class Content {
   @Prop({ default: '' })
   content: string;
 
+  @Field(() => GraphQLJSONObject)
   @Prop({ type: SchemaTypes.Mixed })
-  extra_options: Record<string, any>;
+  extra_options: any;
 
-  @Prop({ type: 'boolean', default: false })
   @Field(() => Boolean)
+  @Prop({ type: 'boolean', default: false })
   hide: boolean;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
   @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
   phase: string;
 
   @Field(() => Date)
@@ -55,8 +56,8 @@ export class Content {
   @Prop({ type: Date })
   updatedAt: Date;
 
-  @Prop({ type: 'boolean', default: false })
   @Field(() => Boolean)
+  @Prop({ type: 'boolean', default: false })
   isDeleted: boolean;
 }
 

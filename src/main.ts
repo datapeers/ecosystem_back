@@ -15,6 +15,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      // Used to combine class validator with graphql nullable fields and allow missing graphql fields but not null
+      // This works good to allow partial updates with proper endpoint validation since graphql doesnt handle undefined
+      skipUndefinedProperties: true,
     }),
   );
   const port = process.env.PORT ?? 3000;

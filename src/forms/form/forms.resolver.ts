@@ -42,7 +42,7 @@ export class FormsResolver {
   }
 
   @Mutation(() => Form)
-  removeForm(@Args('id', { type: () => String }) id: string) {
+  deleteForm(@Args('id', { type: () => String }) id: string) {
     return this.formsService.delete(id);
   }
 

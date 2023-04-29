@@ -42,7 +42,7 @@ export class FormsService {
   async update(id: string, updateFormInput: Partial<UpdateFormInput>) {
     delete updateFormInput["_id"];
     const form = await this.formModel
-      .findOneAndUpdate({ id }, {
+      .findByIdAndUpdate(id, {
         ...updateFormInput
       }, { new: true })
       .lean();

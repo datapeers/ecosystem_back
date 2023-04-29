@@ -78,4 +78,9 @@ export class FormSubscriptionService {
         throw new NotImplementedException(`There is no implementation to submit the form subscription ${subscription._id}`);
     }
   }
+
+  async getSubmittedDocument(id: string, target: FormCollections): Promise<any> {
+    // TODO: Get document based on its id and collection
+    return null;
+  }
 }

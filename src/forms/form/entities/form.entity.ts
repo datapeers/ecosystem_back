@@ -18,28 +18,61 @@ export class Form {
   description: string;
 
   @Field(() => String)
-  @Prop()
+  @Prop({ required: true })
   formJson: string;
 
   @Field(() => String)
-  @Prop({ enum: FormCollections })
+  @Prop({ enum: FormCollections, required: true })
   target: FormCollections;
 
-  @Field(() => [String])
-  @Prop()
-  documents: [{}];
+  @Field(() => [FormDocument])
+  @Prop({ default: [] })
+  documents: FormDocument[];
 
   @Field(() => [String])
-  @Prop()
+  @Prop({ default: [] })
   keys: string[];
-  
+
   @Field(() => String)
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
 
   @Field(() => [FormTag])
-  @Prop()
+  @Prop({ default: [] })
   tags: string[];
+
+  @Field(() => Date)
+  createdAt: Date;
+
+  @Field(() => Date)
+  updatedAt: Date;
+}
+
+@Schema()
+@ObjectType()
+export class FormDocument implements IFormDocument {
+  @Field(() => String)
+  @Prop({ default: "" })
+  name: string;
+
+  @Field(() => String)
+  @Prop({ default: "" })
+  observation: string;
+
+  @Field(() => Boolean)
+  @Prop({ default: true })
+  optional: boolean;
+
+  @Field(() => String)
+  @Prop()
+  key: string;
+}
+
+export interface IFormDocument {
+  name: string;
+  observation: string;
+  optional: boolean;
+  key: string;
 }
 
 export const FormSchema = SchemaFactory.createForClass(Form);

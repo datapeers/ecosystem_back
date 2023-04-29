@@ -1,6 +1,8 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsDefined, IsEmpty, IsEnum, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 import { FormCollections } from '../enums/form-collections';
+import { IFormDocument } from '../entities/form.entity';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class UpdateFormInput {
@@ -8,35 +10,54 @@ export class UpdateFormInput {
   @IsNotEmpty()
   _id: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsOptional()
-  name: string;
+  name?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsOptional()
-  description: string;
+  description?: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsOptional()
-  formJson: string;
+  formJson?: string;
 
-  @Field(() => String)
-  @IsOptional()
-  target: FormCollections;
+  @Field(() => FormCollections, { nullable: true })
+  @IsEnum(FormCollections)
+  target?: FormCollections;
 
-  @Field(() => [String])
-  @IsOptional()
-  documents: [{}];
+  @Field(() => [InputFormDocument], { nullable: true })
+  @ValidateNested({ each: true })
+  @Type(() => InputFormDocument)
+  documents: InputFormDocument[];
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsOptional()
   keys: string[];
   
-  @Field(() => String)
-  @IsOptional()
-  isDeleted: boolean;
+  @IsEmpty()
+  isDeleted?: boolean;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsOptional()
   tags: string[];
+}
+
+@InputType()
+class InputFormDocument implements IFormDocument {
+  @Field(() => String)
+  @IsDefined()
+  name: string;
+
+  @Field(() => String)
+  @IsDefined()
+  observation: string;
+
+  @Field(() => Boolean)
+  @IsDefined()
+  optional: boolean;
+
+  @Field(() => String)
+  @IsDefined()
+  key: string;
 }

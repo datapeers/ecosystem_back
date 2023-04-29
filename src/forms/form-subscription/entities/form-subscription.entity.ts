@@ -14,6 +14,9 @@ export class FormSubscription {
   @Prop({ default: "" })
   doc: string;
 
+  @Field(() => GraphQLJSON, { nullable: true })
+  submission: JSON;
+
   @Field(() => Form)
   @Prop({ required: true })
   form: string;

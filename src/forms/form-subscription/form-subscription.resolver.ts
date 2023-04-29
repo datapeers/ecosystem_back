@@ -5,6 +5,7 @@ import { CreateFormSubscriptionInput } from './dto/create-form-subscription.inpu
 import { SubmitFormSubscriptionArgs } from './args/submit-form-subscription.args';
 import { Form } from '../form/entities/form.entity';
 import { FormsService } from '../form/forms.service';
+import GraphQLJSON from 'graphql-type-json';
 
 @Resolver(() => FormSubscription)
 export class FormSubscriptionResolver {
@@ -48,5 +49,12 @@ export class FormSubscriptionResolver {
   async getFormTags (@Parent() subscription: FormSubscription) {
     const { form } = subscription;
     return this.formService.findOne(form);
+  }
+
+  @ResolveField('submission', () => GraphQLJSON)
+  async getSubmittedDocument (@Parent() subscription: FormSubscription) {
+    const { doc, target } = subscription;
+    if(!doc || !target) return null;
+    return this.formSubscriptionService.getSubmittedDocument(doc, target);
   }
 }

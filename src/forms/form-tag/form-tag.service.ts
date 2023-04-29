@@ -20,7 +20,7 @@ export class FormTagService {
   }
 
   async findAll() {
-    const tags = await this.formTagModel.find({ isDeleted: true }).lean();
+    const tags = await this.formTagModel.find({ isDeleted: false }).lean();
     return tags;
   }
 

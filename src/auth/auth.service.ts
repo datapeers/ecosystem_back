@@ -52,7 +52,7 @@ export class AuthService {
         `Error while verifying Firebase ID token: ${idToken}`,
         error,
       );
-      throw new error();
+      throw new Error("Failed to authorize request");
     }
   }
 

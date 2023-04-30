@@ -19,6 +19,7 @@ export class GqlAuthGuard implements CanActivate {
     const user = await this.authService.exchangeToken(token);
     if (!user) throw new UnauthorizedException();
     request.user = user;
+    request.token = token;
     return request;
   }
 

@@ -10,9 +10,11 @@ import { FormSubscriptionResolver } from './form-subscription/form-subscription.
 import { FormSubscriptionService } from './form-subscription/form-subscription.service';
 import { UsersModule } from 'src/users/users.module';
 import { FormSubscription, FormSubscriptionSchema } from './form-subscription/entities/form-subscription.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     MongooseModule.forFeature([
       { name: Form.name, schema: FormSchema },
       { name: FormTag.name, schema: FormTagSchema },

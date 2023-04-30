@@ -1,10 +1,12 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, ResolveField, Parent, Query } from '@nestjs/graphql';
 import { FormsService } from './forms.service';
 import { Form } from './entities/form.entity';
 import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormInput } from './dto/update-form.input';
 import { FormTag } from '../form-tag/entities/form-tag.entity';
 import { FormTagService } from '../form-tag/form-tag.service';
+import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
+import { UseGuards } from '@nestjs/common';
 import { FindFormsArgs } from './args/find-forms.args';
 
 @Resolver(() => Form)
@@ -26,21 +28,25 @@ export class FormsResolver {
     return this.formsService.findOne(id);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
   createForm(@Args('createFormInput') createFormInput: CreateFormInput) {
     return this.formsService.create(createFormInput);
   }
-  
+
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
   cloneForm(@Args('id', { type: () => String }) id: string) {
     return this.formsService.clone(id);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
   updateForm(@Args('updateFormInput') updateFormInput: UpdateFormInput) {
     return this.formsService.update(updateFormInput._id, updateFormInput);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
   deleteForm(@Args('id', { type: () => String }) id: string) {
     return this.formsService.delete(id);

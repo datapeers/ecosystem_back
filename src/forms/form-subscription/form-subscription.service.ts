@@ -66,13 +66,13 @@ export class FormSubscriptionService {
 
   private async handleDocumentSubmit(subscription: FormSubscription, data: any) {
     switch(subscription.target) {
-      case FormCollections.Entrepreneurs:
+      case FormCollections.entrepreneurs:
         throw new NotImplementedException();
-      case FormCollections.Resources:
+      case FormCollections.resources:
         throw new NotImplementedException();
-      case FormCollections.Announcements:
+      case FormCollections.announcements:
         throw new NotImplementedException();
-      case FormCollections.Survey:
+      case FormCollections.survey:
         throw new NotImplementedException();
       default:
         throw new NotImplementedException(`There is no implementation to submit the form subscription ${subscription._id}`);

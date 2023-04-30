@@ -17,6 +17,7 @@ import { StagesModule } from './stages/stages.module';
 import { StorageModule } from './storage/storage.module';
 import { ContentModule } from './content/content.module';
 import { FormsModule } from './forms/forms.module';
+import { AuthCodeModule } from './auth-code/auth-code.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -82,6 +83,7 @@ import GraphQLJSON from 'graphql-type-json';
     StorageModule,
     ContentModule,
     FormsModule,
+    AuthCodeModule,
   ],
   controllers: [],
   providers: [],

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, MethodNotAllowedException, NotImplementedException } from '@nestjs/common';
+import { Injectable, NotFoundException, MethodNotAllowedException, Inject } from '@nestjs/common';
 import { CreateFormSubscriptionInput } from './dto/create-form-subscription.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { FormSubscription } from './entities/form-subscription.entity';
@@ -7,6 +7,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { SubmitFormSubscriptionArgs } from './args/submit-form-subscription.args';
 import { FormCollections } from '../form/enums/form-collections';
 import { FormsService } from '../form/forms.service';
+import { FORM_DOCUMENT_SERVICE_PROVIDER, FormDocumentServiceProvider } from '../factories/form-document-service-provider';
 
 const pubSub = new PubSub();
 
@@ -17,6 +18,7 @@ export class FormSubscriptionService {
   constructor(
     @InjectModel(FormSubscription.name) private readonly formSubscriptionModel: Model<FormSubscription>,
     private readonly formsService: FormsService,
+    @Inject(FORM_DOCUMENT_SERVICE_PROVIDER) private readonly documentServiceProvider: FormDocumentServiceProvider
   ) {
     
   }
@@ -29,58 +31,57 @@ export class FormSubscriptionService {
 
   async create(createFormSubscriptionInput: CreateFormSubscriptionInput) {
     const subscriptionForm = await this.formsService.findOne(createFormSubscriptionInput.form);
-    createFormSubscriptionInput.target = subscriptionForm.target;
-    const createdFormSubscription = await this.formSubscriptionModel.create(createFormSubscriptionInput);
-    pubSub.publish(FormSubscriptionService.triggerName, createdFormSubscription);
+    const data = {
+      ...createFormSubscriptionInput,
+      target: subscriptionForm.target,
+    };
+    const createdFormSubscription = await this.formSubscriptionModel.create(data);
+    pubSub.publish(FormSubscriptionService.triggerName, { listenFormSubscription: createdFormSubscription });
     return createdFormSubscription;
   }
 
   subscribe() {
-    return pubSub.asyncIterator<FormSubscription>(FormSubscriptionService.triggerName);
+    return pubSub.asyncIterator<FormSubscription>([FormSubscriptionService.triggerName]);
   }
 
   async submit({ id, data }: SubmitFormSubscriptionArgs) {
     const subscription = await this.findOne(id);
     if(subscription.opened === false) throw new MethodNotAllowedException(`Subscription ${id} is already closed`);
     // If the doc id exists then we have to update it
-    let doc = subscription.doc;
-    await this.handleDocumentSubmit(subscription, data);
+    const document = await this.handleDocumentSubmit(subscription, data);
     const closedSubscription = await this.formSubscriptionModel.findByIdAndUpdate(id,
-      { opened: false, doc },
+      { opened: false, doc: document._id },
       { new: true }
     ).lean();
-    pubSub.publish(FormSubscriptionService.triggerName, closedSubscription);
+    pubSub.publish(FormSubscriptionService.triggerName, { listenFormSubscription: closedSubscription });
     return closedSubscription;
   }
 
-  async close(id: string) {
+  async close(id: string): Promise<FormSubscription> {
     const subscription = await this.findOne(id);
     if(subscription.opened === false) throw new MethodNotAllowedException(`Subscription ${id} is already closed`);
     const closedSubscription = await this.formSubscriptionModel.findByIdAndUpdate(id,
       { opened: false },
       { new: true }
     ).lean();
-    pubSub.publish(FormSubscriptionService.triggerName, closedSubscription);
+    pubSub.publish(FormSubscriptionService.triggerName, { listenFormSubscription: closedSubscription });
     return closedSubscription;
   }
 
-  private async handleDocumentSubmit(subscription: FormSubscription, data: any) {
-    switch(subscription.target) {
-      case FormCollections.entrepreneurs:
-        throw new NotImplementedException();
-      case FormCollections.resources:
-        throw new NotImplementedException();
-      case FormCollections.announcements:
-        throw new NotImplementedException();
-      case FormCollections.survey:
-        throw new NotImplementedException();
-      default:
-        throw new NotImplementedException(`There is no implementation to submit the form subscription ${subscription._id}`);
+  private async handleDocumentSubmit({ target, doc }: FormSubscription, data: any) {
+    const documentService = this.documentServiceProvider(target);
+    let document;
+    if(doc) {
+      document = await documentService.updateDocument(doc, data);
+    } else {
+      document = await documentService.createDocument(data);
     }
+    return document;
   }
 
   async getSubmittedDocument(id: string, target: FormCollections): Promise<any> {
-    // TODO: Get document based on its id and collection
-    return null;
+    const documentService = this.documentServiceProvider(target);
+    const document = await documentService.getDocument(id);
+    return document.item;
   }
 }

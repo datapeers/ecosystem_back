@@ -36,8 +36,8 @@ export class FormSubscriptionResolver {
 
   @Subscription(() => FormSubscription,
     {
-      filter(payload: FormSubscription, variables: { id: string } ) {
-        return payload._id === variables.id;
+      filter(payload: { listenFormSubscription: FormSubscription }, variables: { id: string } ) {
+        return payload.listenFormSubscription._id.toString() === variables.id;
       }
     }
   )
@@ -54,7 +54,7 @@ export class FormSubscriptionResolver {
   @ResolveField('submission', () => GraphQLJSON)
   async getSubmittedDocument (@Parent() subscription: FormSubscription) {
     const { doc, target } = subscription;
-    if(!doc || !target) return null;
+    if(!doc || !target) return {};
     return this.formSubscriptionService.getSubmittedDocument(doc, target);
   }
 }

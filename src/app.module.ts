@@ -18,6 +18,9 @@ import { StorageModule } from './storage/storage.module';
 import { ContentModule } from './content/content.module';
 import { FormsModule } from './forms/forms.module';
 import { AuthCodeModule } from './auth-code/auth-code.module';
+import { EntrepreneurModule } from './entrepreneur/entrepreneur.module';
+import { StartupModule } from './startup/startup.module';
+import { InvestorModule } from './investor/investor.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -61,7 +64,9 @@ import GraphQLJSON from 'graphql-type-json';
           debug: enableDebug,
           playground: false,
           subscriptions: {
-            'graphql-ws': true
+            'graphql-ws': {
+              path: '/subscriptions'
+            },
           },
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
           sortSchema: true,
@@ -84,6 +89,9 @@ import GraphQLJSON from 'graphql-type-json';
     ContentModule,
     FormsModule,
     AuthCodeModule,
+    EntrepreneurModule,
+    StartupModule,
+    InvestorModule,
   ],
   controllers: [],
   providers: [],

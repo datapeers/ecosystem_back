@@ -11,6 +11,7 @@ import { FormSubscriptionService } from './form-subscription/form-subscription.s
 import { UsersModule } from 'src/users/users.module';
 import { FormSubscription, FormSubscriptionSchema } from './form-subscription/entities/form-subscription.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { formDocumentServiceImports, formDocumentServiceProviders } from './factories/form-document-service-provider';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from 'src/auth/auth.module';
       { name: FormSubscription.name, schema: FormSubscriptionSchema },
     ]),
     UsersModule,
+    ...formDocumentServiceImports,
   ],
   providers: [
     FormsResolver,
@@ -29,6 +31,7 @@ import { AuthModule } from 'src/auth/auth.module';
     FormTagService,
     FormSubscriptionResolver,
     FormSubscriptionService,
+    ...formDocumentServiceProviders
   ]
 })
 export class FormsModule {}

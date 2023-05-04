@@ -11,8 +11,17 @@ export class ContentService {
     @InjectModel(Content.name) private readonly contentModel: Model<Content>,
   ) {}
 
-  create(createContentInput: CreateContentInput) {
-    return this.contentModel.create(createContentInput);
+  async create(createContentInput: CreateContentInput) {
+    if (createContentInput.extra_options?.parent) {
+      const newContent = await this.contentModel.create(createContentInput);
+      await this.contentModel.findByIdAndUpdate(
+        createContentInput.extra_options?.parent,
+        { $addToSet: { childs: newContent._id } },
+      );
+      return newContent;
+    } else {
+      return this.contentModel.create(createContentInput);
+    }
   }
 
   findAll(phase: string) {
@@ -24,7 +33,9 @@ export class ContentService {
   }
 
   findOne(id: string) {
-    return this.contentModel.findById(id);
+    return this.contentModel.findById(id).populate({
+      path: 'childs',
+    });
   }
 
   async update(id: string, updateContentInput: UpdateContentInput) {

@@ -33,7 +33,7 @@ export class ContentResolver {
     @Args('updateContentInput') updateContentInput: UpdateContentInput,
   ) {
     return this.contentService.update(
-      updateContentInput.id,
+      updateContentInput._id,
       updateContentInput,
     );
   }

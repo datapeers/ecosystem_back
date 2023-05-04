@@ -23,8 +23,8 @@ export class AwsService implements StorageService {
       endpoint,
       forcePathStyle: true,
       credentials: {
-        accessKeyId: 'AKIA6DI6GSY2VKXUUAAF',
-        secretAccessKey: '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',
+        accessKeyId: this.configService.get('awsS3Key'),
+        secretAccessKey: this.configService.get('awsS3Access'),
       },
     };
   }

@@ -9,27 +9,41 @@ export class ResourcesResolver {
   constructor(private readonly resourcesService: ResourcesService) {}
 
   @Mutation(() => Resource)
-  createResource(@Args('createResourceInput') createResourceInput: CreateResourceInput) {
+  createResource(
+    @Args('createResourceInput') createResourceInput: CreateResourceInput,
+  ) {
     return this.resourcesService.create(createResourceInput);
   }
 
-  @Query(() => [Resource], { name: 'resources' })
-  findAll() {
-    return this.resourcesService.findAll();
+  @Query(() => [Resource], { name: 'resourcesByResource' })
+  findAllByContent(
+    @Args('contentId', { type: () => String }) contentId: string,
+  ) {
+    return this.resourcesService.findAllByContent(contentId);
+  }
+
+  @Query(() => [Resource], { name: 'resourcesByPhase' })
+  findAllByPhase(@Args('phaseId', { type: () => String }) phaseId: string) {
+    return this.resourcesService.findAllByPhase(phaseId);
   }
 
   @Query(() => Resource, { name: 'resource' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.resourcesService.findOne(id);
   }
 
   @Mutation(() => Resource)
-  updateResource(@Args('updateResourceInput') updateResourceInput: UpdateResourceInput) {
-    return this.resourcesService.update(updateResourceInput.id, updateResourceInput);
+  updateResource(
+    @Args('updateResourceInput') updateResourceInput: UpdateResourceInput,
+  ) {
+    return this.resourcesService.update(
+      updateResourceInput._id,
+      updateResourceInput,
+    );
   }
 
   @Mutation(() => Resource)
-  removeResource(@Args('id', { type: () => Int }) id: number) {
+  removeResource(@Args('id', { type: () => String }) id: string) {
     return this.resourcesService.remove(id);
   }
 }

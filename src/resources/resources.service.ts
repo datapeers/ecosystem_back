@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { CreateResourceInput } from './dto/create-resource.input';
 import { UpdateResourceInput } from './dto/update-resource.input';
-
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Resource } from './entities/resource.entity';
 @Injectable()
 export class ResourcesService {
-  create(createResourceInput: CreateResourceInput) {
-    return 'This action adds a new resource';
+  constructor(
+    @InjectModel(Resource.name) private readonly resourceModel: Model<Resource>,
+  ) {}
+
+  async create(createResourceInput: CreateResourceInput) {
+    return this.resourceModel.create(createResourceInput);
   }
 
-  findAll() {
-    return `This action returns all resources`;
+  findAllByContent(content: string) {
+    return this.resourceModel.find({ content, isDeleted: false });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} resource`;
+  findAllByPhase(content: string) {
+    return this.resourceModel.find({ content, isDeleted: false });
   }
 
-  update(id: number, updateResourceInput: UpdateResourceInput) {
-    return `This action updates a #${id} resource`;
+  findOne(id: string) {
+    return this.resourceModel.findById(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} resource`;
+  async update(id: string, updateContentInput: UpdateResourceInput) {
+    delete updateContentInput['_id'];
+    const updatedContent = await this.resourceModel
+      .findOneAndUpdate({ _id: id }, { ...updateContentInput }, { new: true })
+
+      .lean();
+    return updatedContent;
+  }
+
+  async remove(id: string) {
+    const updatedContent = await this.resourceModel
+      .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+
+      .lean();
+    return updatedContent;
   }
 }

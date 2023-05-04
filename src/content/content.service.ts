@@ -26,7 +26,7 @@ export class ContentService {
 
   findAll(phase: string) {
     return this.contentModel
-      .find({ phase, 'extra_options.sprint': true })
+      .find({ phase, 'extra_options.sprint': true, isDeleted: false })
       .populate({
         path: 'childs',
       });
@@ -42,6 +42,9 @@ export class ContentService {
     delete updateContentInput['_id'];
     const updatedContent = await this.contentModel
       .findOneAndUpdate({ _id: id }, { ...updateContentInput }, { new: true })
+      .populate({
+        path: 'childs',
+      })
       .lean();
     return updatedContent;
   }
@@ -49,6 +52,9 @@ export class ContentService {
   async remove(id: string) {
     const updatedContent = await this.contentModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+      .populate({
+        path: 'childs',
+      })
       .lean();
     return updatedContent;
   }

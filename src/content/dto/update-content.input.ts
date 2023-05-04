@@ -19,4 +19,8 @@ export class UpdateContentInput extends PartialType(CreateContentInput) {
   @Field(() => GraphQLJSONObject, { nullable: true })
   @IsOptional()
   extra_options?: Record<string, any>;
+
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  isDeleted?: boolean;
 }

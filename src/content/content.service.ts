@@ -11,26 +11,40 @@ export class ContentService {
     @InjectModel(Content.name) private readonly contentModel: Model<Content>,
   ) {}
 
-  create(createContentInput: CreateContentInput) {
-    return this.contentModel.create(createContentInput);
+  async create(createContentInput: CreateContentInput) {
+    if (createContentInput.extra_options?.parent) {
+      const newContent = await this.contentModel.create(createContentInput);
+      await this.contentModel.findByIdAndUpdate(
+        createContentInput.extra_options?.parent,
+        { $addToSet: { childs: newContent._id } },
+      );
+      return newContent;
+    } else {
+      return this.contentModel.create(createContentInput);
+    }
   }
 
   findAll(phase: string) {
     return this.contentModel
-      .find({ phase, 'extra_options.sprint': true })
+      .find({ phase, 'extra_options.sprint': true, isDeleted: false })
       .populate({
         path: 'childs',
       });
   }
 
   findOne(id: string) {
-    return this.contentModel.findById(id);
+    return this.contentModel.findById(id).populate({
+      path: 'childs',
+    });
   }
 
   async update(id: string, updateContentInput: UpdateContentInput) {
     delete updateContentInput['_id'];
     const updatedContent = await this.contentModel
       .findOneAndUpdate({ _id: id }, { ...updateContentInput }, { new: true })
+      .populate({
+        path: 'childs',
+      })
       .lean();
     return updatedContent;
   }
@@ -38,6 +52,9 @@ export class ContentService {
   async remove(id: string) {
     const updatedContent = await this.contentModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+      .populate({
+        path: 'childs',
+      })
       .lean();
     return updatedContent;
   }

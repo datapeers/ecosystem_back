@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
+import { ResourceType } from '../enums/resources-types';
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -40,6 +41,13 @@ export class Resource {
   @Field(() => Boolean)
   @Prop({ type: 'boolean', default: false })
   isDeleted: boolean;
+
+  @Prop({
+    type: String,
+    enum: ResourceType,
+  })
+  @Field(() => String)
+  type: ResourceType[];
 }
 
 export const ResourceSchema = SchemaFactory.createForClass(Resource);

@@ -27,24 +27,23 @@ export class ContentService {
   findAll(phase: string) {
     return this.contentModel
       .find({ phase, 'extra_options.sprint': true, isDeleted: false })
-      .populate({
-        path: 'childs',
-      });
+      .populate({ path: 'childs', populate: 'resources' })
+      .populate('resources');
   }
 
   findOne(id: string) {
-    return this.contentModel.findById(id).populate({
-      path: 'childs',
-    });
+    return this.contentModel
+      .findById(id)
+      .populate({ path: 'childs', populate: 'resources' })
+      .populate('resources');
   }
 
   async update(id: string, updateContentInput: UpdateContentInput) {
     delete updateContentInput['_id'];
     const updatedContent = await this.contentModel
       .findOneAndUpdate({ _id: id }, { ...updateContentInput }, { new: true })
-      .populate({
-        path: 'childs',
-      })
+      .populate({ path: 'childs', populate: 'resources' })
+      .populate('resources')
       .lean();
     return updatedContent;
   }
@@ -52,10 +51,15 @@ export class ContentService {
   async remove(id: string) {
     const updatedContent = await this.contentModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
-      .populate({
-        path: 'childs',
-      })
+      .populate({ path: 'childs', populate: 'resources' })
+      .populate('resources')
       .lean();
     return updatedContent;
+  }
+
+  async addResource(contentID: string, id: string) {
+    return await this.contentModel.findByIdAndUpdate(contentID, {
+      $addToSet: { resources: id },
+    });
   }
 }

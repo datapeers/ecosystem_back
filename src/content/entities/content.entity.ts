@@ -2,14 +2,16 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
+import { Resource } from 'src/resources/entities/resource.entity';
 @Schema({ timestamps: true })
 @ObjectType()
 export class Content {
   @Field(() => ID)
   _id: string;
 
-  // @Prop([{ type: SchemaTypes.ObjectId, ref: 'resources' }])
-  // recursos: string[];
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Resource' }] })
+  @Field(() => [Resource])
+  resources: Resource[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Content' }] })
   @Field(() => [Content])

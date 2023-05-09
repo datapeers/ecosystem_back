@@ -22,5 +22,5 @@ export class UpdateResourceInput extends PartialType(CreateResourceInput) {
 
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
-  hide?: string;
+  hide?: boolean;
 }

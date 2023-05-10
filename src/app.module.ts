@@ -21,6 +21,7 @@ import { AuthCodeModule } from './auth-code/auth-code.module';
 import { EntrepreneurModule } from './entrepreneur/entrepreneur.module';
 import { StartupModule } from './startup/startup.module';
 import { InvestorModule } from './investor/investor.module';
+import { ResponsibleModule } from './responsible/responsible.module';
 import { ResourcesModule } from './resources/resources.module';
 import GraphQLJSON from 'graphql-type-json';
 
@@ -93,6 +94,7 @@ import GraphQLJSON from 'graphql-type-json';
     EntrepreneurModule,
     StartupModule,
     InvestorModule,
+    ResponsibleModule,
     ResourcesModule,
   ],
   controllers: [],

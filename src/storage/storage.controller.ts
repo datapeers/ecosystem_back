@@ -6,8 +6,11 @@ export class StorageController {
   constructor(private readonly storageService: StorageService) {}
 
   @Post()
-  async create(@Body() file: any): Promise<any> {
-    const result = await this.storageService.createPresignedUrl(file.name);
+  async create(@Body() body: any): Promise<any> {
+    const result = await this.storageService.createPresignedUrl(
+      body.name,
+      body.publicFile,
+    );
     return { url: result };
   }
 

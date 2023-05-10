@@ -13,14 +13,23 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AwsService implements StorageService {
   private readonly config: S3ClientConfig;
+  private readonly publicConfig: S3ClientConfig;
   private readonly defaultBucketName: string;
   constructor(private readonly configService: ConfigService<AppConfiguration>) {
-    const endpoint = this.configService.get('awsS3Uri');
-    this.defaultBucketName = this.configService.get('awsS3BucketName');
     const region = this.configService.get('awsS3Region');
+    this.defaultBucketName = this.configService.get('awsS3BucketName');
     this.config = {
       region,
-      endpoint,
+      endpoint: this.configService.get('awsS3Uri'),
+      forcePathStyle: true,
+      credentials: {
+        accessKeyId: this.configService.get('awsS3Key'),
+        secretAccessKey: this.configService.get('awsS3Access'),
+      },
+    };
+    this.publicConfig = {
+      region,
+      endpoint: this.configService.get('awsS3PublicUri'),
       forcePathStyle: true,
       credentials: {
         accessKeyId: this.configService.get('awsS3Key'),
@@ -29,15 +38,18 @@ export class AwsService implements StorageService {
     };
   }
 
-  async createPresignedUrl(key: string): Promise<string> {
-    const client = new S3Client(this.config);
-    const config = { Bucket: this.defaultBucketName, Key: key };
+  async createPresignedUrl(key: string, publicFile?: any): Promise<string> {
+    const client = new S3Client(publicFile ? this.publicConfig : this.config);
+    const config = {
+      Bucket: this.defaultBucketName,
+      Key: key,
+    };
     const command = new PutObjectCommand(config);
     return await getSignedUrl(client, command, { expiresIn: 60 * 3 });
   }
 
-  async getPresignedUrl(key: string) {
-    const client = new S3Client(this.config);
+  async getPresignedUrl(key: string, publicFile?: any) {
+    const client = new S3Client(publicFile ? this.publicConfig : this.config);
     const config = {
       Bucket: this.defaultBucketName,
       Key: key,

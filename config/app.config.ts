@@ -8,6 +8,7 @@ export const EnvConfiguration = () => ({
   sendGridNotificationTemplateId:
     process.env.SEND_GRID_NOTIFICATION_TEMPLATE_ID,
   awsS3Uri: process.env.AWS_S3_URI,
+  awsS3PublicUri: process.env.AWS_S3_PUBLIC_URI,
   awsS3BucketName: process.env.AWS_S3_BUCKET_NAME ?? 'default',
   awsS3Region: process.env.AWS_S3_REGION ?? 'eu-west-1',
   awsS3Key: process.env.AWS_S3_KEY,

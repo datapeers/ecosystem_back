@@ -9,21 +9,19 @@ import { FindFormsArgs } from './args/find-forms.args';
 @Injectable()
 export class FormsService {
   constructor(
-    @InjectModel(Form.name) private readonly formModel: Model<Form>
-  ) {
-    
-  }
+    @InjectModel(Form.name) private readonly formModel: Model<Form>,
+  ) {}
 
   async findMany(filters: FindFormsArgs) {
     return this.formModel.find({
       ...filters,
-      isDeleted: false
+      isDeleted: false,
     });
   }
 
   async findOne(id: string): Promise<Form> {
     const form = await this.formModel.findById(id).lean();
-    if(!form) throw new NotFoundException(`Couldn't find form with id ${id}`);
+    if (!form) throw new NotFoundException(`Couldn't find form with id ${id}`);
     return form;
   }
 
@@ -31,7 +29,7 @@ export class FormsService {
     const createdForm = await this.formModel.create(createFormInput);
     return createdForm;
   }
-  
+
   async clone(id: string) {
     const formToClone = await this.findOne(id);
     const { _id, ...data } = formToClone;
@@ -40,11 +38,15 @@ export class FormsService {
   }
 
   async update(id: string, updateFormInput: Partial<UpdateFormInput>) {
-    delete updateFormInput["_id"];
+    delete updateFormInput['_id'];
     const form = await this.formModel
-      .findByIdAndUpdate(id, {
-        ...updateFormInput
-      }, { new: true })
+      .findByIdAndUpdate(
+        id,
+        {
+          ...updateFormInput,
+        },
+        { new: true },
+      )
       .lean();
     return form;
   }

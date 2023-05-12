@@ -32,6 +32,10 @@ export class ActivitiesConfig {
 
   @Field(() => Date)
   updatedAt: Date;
+
+  @Field(() => Boolean)
+  @Prop({ type: 'boolean', default: false })
+  isDeleted: boolean;
 }
 
 @Schema()
@@ -48,3 +52,6 @@ export class activities {
   @Prop({ type: SchemaTypes.Mixed })
   options: any;
 }
+
+export const ActivitiesConfigSchema =
+  SchemaFactory.createForClass(ActivitiesConfig);

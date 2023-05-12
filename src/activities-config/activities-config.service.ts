@@ -1,24 +1,46 @@
 import { Injectable } from '@nestjs/common';
+import { CreateActivitiesConfigInput } from './dto/create-activities-config.input';
+import { UpdateActivitiesConfigInput } from './dto/update-activities-config.input';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { ActivitiesConfig } from './entities/activities-config.entity';
 
 @Injectable()
 export class ActivitiesConfigService {
-  create(createActivitiesConfigInput) {
-    return 'This action adds a new activitiesConfig';
+  constructor(
+    @InjectModel(ActivitiesConfig.name)
+    private readonly activitiesConfig: Model<ActivitiesConfig>,
+  ) {}
+
+  create(createActivitiesConfigInput: CreateActivitiesConfigInput) {
+    return this.activitiesConfig.create(createActivitiesConfigInput);
   }
 
   findAll() {
-    return `This action returns all activitiesConfig`;
+    return this.activitiesConfig.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} activitiesConfig`;
+  findOne(id: string) {
+    return this.activitiesConfig.findById(id);
   }
 
-  update(id: number, updateActivitiesConfigInput) {
-    return `This action updates a #${id} activitiesConfig`;
+  update(id: string, updateActivitiesConfigInput: UpdateActivitiesConfigInput) {
+    delete updateActivitiesConfigInput['_id'];
+
+    const updated = this.activitiesConfig
+      .findOneAndUpdate(
+        { _id: id },
+        { ...UpdateActivitiesConfigInput },
+        { new: true },
+      )
+      .lean();
+    return updated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} activitiesConfig`;
+  async remove(id: string) {
+    const updatedContent = await this.activitiesConfig
+      .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+      .lean();
+    return updatedContent;
   }
 }

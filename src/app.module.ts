@@ -27,8 +27,8 @@ import { StartupModule } from './startup/startup.module';
 import { InvestorModule } from './investor/investor.module';
 import { ResponsibleModule } from './responsible/responsible.module';
 import { ResourcesModule } from './resources/resources.module';
-import { ActivitiesConfigModule } from './activities-config/activities-config.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
+import { ActivitiesConfigModule } from './activities-config/activities-config.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -102,8 +102,8 @@ import GraphQLJSON from 'graphql-type-json';
     InvestorModule,
     ResponsibleModule,
     ResourcesModule,
-    ActivitiesConfigModule,
     AnnouncementsModule,
+    ActivitiesConfigModule,
   ],
   controllers: [],
   providers: [],

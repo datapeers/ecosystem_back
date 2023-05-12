@@ -1,8 +1,7 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
+import { CreateActivitiesConfigInput } from './create-activities-config.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-scalars';
-import { CreateActivitiesConfigInput } from './create-activities-config.input';
-
 @InputType()
 export class UpdateActivitiesConfigInput extends PartialType(
   CreateActivitiesConfigInput,
@@ -11,19 +10,19 @@ export class UpdateActivitiesConfigInput extends PartialType(
   @IsNotEmpty()
   _id: string;
 
-  // @Field(() => Boolean, { nullable: true })
-  // @IsOptional()
-  // hide?: string;
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  limit?: number;
 
-  // @Field(() => String, { nullable: true })
-  // @IsOptional()
-  // content?: string;
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  totalLimit?: number;
 
-  // @Field(() => GraphQLJSONObject, { nullable: true })
-  // @IsOptional()
-  // extra_options?: Record<string, any>;
+  @Field(() => GraphQLJSONObject, { nullable: true })
+  @IsOptional()
+  availability?: Record<string, any>;
 
-  // @Field(() => Boolean, { nullable: true })
-  // @IsOptional()
-  // isDeleted?: boolean;
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  isDeleted?: boolean;
 }

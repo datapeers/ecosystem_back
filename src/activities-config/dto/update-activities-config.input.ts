@@ -1,0 +1,29 @@
+import { IsNotEmpty, IsOptional } from 'class-validator';
+import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
+import { GraphQLJSONObject } from 'graphql-scalars';
+import { CreateActivitiesConfigInput } from './create-activities-config.input';
+
+@InputType()
+export class UpdateActivitiesConfigInput extends PartialType(
+  CreateActivitiesConfigInput,
+) {
+  @Field(() => ID)
+  @IsNotEmpty()
+  _id: string;
+
+  // @Field(() => Boolean, { nullable: true })
+  // @IsOptional()
+  // hide?: string;
+
+  // @Field(() => String, { nullable: true })
+  // @IsOptional()
+  // content?: string;
+
+  // @Field(() => GraphQLJSONObject, { nullable: true })
+  // @IsOptional()
+  // extra_options?: Record<string, any>;
+
+  // @Field(() => Boolean, { nullable: true })
+  // @IsOptional()
+  // isDeleted?: boolean;
+}

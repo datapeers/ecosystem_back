@@ -32,6 +32,9 @@ import { formDocumentServiceImports, formDocumentServiceProviders } from './fact
     FormSubscriptionResolver,
     FormSubscriptionService,
     ...formDocumentServiceProviders
-  ]
+  ],
+  exports: [
+    FormsService,
+  ],
 })
 export class FormsModule {}

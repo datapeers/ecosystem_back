@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
   PutObjectCommand,
   GetObjectCommand,
@@ -45,7 +45,12 @@ export class AwsService implements StorageService {
       Key: key,
     };
     const command = new PutObjectCommand(config);
-    return await getSignedUrl(client, command, { expiresIn: 60 * 3 });
+    try {
+      return await getSignedUrl(client, command, { expiresIn: 60 * 3 });
+    } catch(error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to create presigned Url for PUT request");
+    }
   }
 
   async getPresignedUrl(key: string, publicFile?: any) {
@@ -55,6 +60,11 @@ export class AwsService implements StorageService {
       Key: key,
     };
     const command = new GetObjectCommand(config);
-    return await getSignedUrl(client, command, { expiresIn: 60 * 60 * 24 });
+    try {
+      return await getSignedUrl(client, command, { expiresIn: 60 * 60 * 24 });
+    } catch(error) {
+      console.error(error);
+      throw new InternalServerErrorException("Failed to create presigned Url for GET request");
+    }
   }
 }

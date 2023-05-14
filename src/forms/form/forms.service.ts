@@ -5,6 +5,7 @@ import { Form } from './entities/form.entity';
 import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormInput } from './dto/update-form.input';
 import { FindFormsArgs } from './args/find-forms.args';
+import { AuthUser } from 'src/auth/types/auth-user';
 
 @Injectable()
 export class FormsService {
@@ -15,7 +16,7 @@ export class FormsService {
   async findMany(filters: FindFormsArgs) {
     return this.formModel.find({
       ...filters,
-      isDeleted: false,
+      deletedAt: null,
     });
   }
 
@@ -25,8 +26,12 @@ export class FormsService {
     return form;
   }
 
-  async create(createFormInput: CreateFormInput) {
-    const createdForm = await this.formModel.create(createFormInput);
+  async create(createFormInput: CreateFormInput, user: AuthUser) {
+    const createdForm = await this.formModel.create(
+      {
+        createFormInput,
+        createdBy: user.uid,
+      });
     return createdForm;
   }
 
@@ -37,13 +42,13 @@ export class FormsService {
     return clonedForm;
   }
 
-  async update(id: string, updateFormInput: Partial<UpdateFormInput>) {
+  async update(id: string, updateFormInput: Partial<UpdateFormInput>, user: AuthUser) {
     delete updateFormInput['_id'];
     const form = await this.formModel
       .findByIdAndUpdate(
         id,
         {
-          ...updateFormInput,
+          ...updateFormInput, updatedBy: user.uid,
         },
         { new: true },
       )
@@ -51,8 +56,8 @@ export class FormsService {
     return form;
   }
 
-  async delete(id: string) {
-    const deletedForm = await this.update(id, { isDeleted: true });
+  async delete(id: string, user: AuthUser) {
+    const deletedForm = await this.update(id, { deletedAt: new Date(), deletedBy: user.uid }, user);
     return deletedForm;
   }
 }

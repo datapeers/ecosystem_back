@@ -53,7 +53,8 @@ export class PhasesService {
     return updatedPhase;
   }
 
-  remove(id: string) {
-    this.phaseModel.updateOne({ _id: id }, { deleted: true });
+  async remove(id: string) {
+    const deletedPhase = await this.phaseModel.updateOne({ _id: id }, { deleted: true }, { new: true });
+    return deletedPhase;
   }
 }

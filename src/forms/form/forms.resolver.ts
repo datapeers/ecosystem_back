@@ -8,6 +8,8 @@ import { FormTagService } from '../form-tag/form-tag.service';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { FindFormsArgs } from './args/find-forms.args';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from 'src/auth/types/auth-user';
 
 @Resolver(() => Form)
 export class FormsResolver {
@@ -30,26 +32,38 @@ export class FormsResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
-  createForm(@Args('createFormInput') createFormInput: CreateFormInput) {
-    return this.formsService.create(createFormInput);
+  createForm(
+    @Args('createFormInput') createFormInput: CreateFormInput,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.formsService.create(createFormInput, user);
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
-  cloneForm(@Args('id', { type: () => String }) id: string) {
+  cloneForm(
+    @Args('id', { type: () => String }) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.formsService.clone(id);
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
-  updateForm(@Args('updateFormInput') updateFormInput: UpdateFormInput) {
-    return this.formsService.update(updateFormInput._id, updateFormInput);
+  updateForm(
+    @Args('updateFormInput') updateFormInput: UpdateFormInput,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.formsService.update(updateFormInput._id, updateFormInput, user);
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Form)
-  deleteForm(@Args('id', { type: () => String }) id: string) {
-    return this.formsService.delete(id);
+  deleteForm(
+    @Args('id', { type: () => String }) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.formsService.delete(id, user);
   }
 
   @ResolveField('tags', () => [FormTag])

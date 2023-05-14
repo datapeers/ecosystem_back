@@ -27,11 +27,7 @@ export class PhasesResolver {
     @Args('createPhaseInput') createPhaseInput: CreatePhaseInput,
     @CurrentUser() user: AuthUser,
   ) {
-    const PhaseInput = {
-      ...createPhaseInput,
-      createBy: user,
-    };
-    return this.phasesService.create(PhaseInput, user);
+    return this.phasesService.create(createPhaseInput, user);
   }
 
   @Mutation(() => Phase)

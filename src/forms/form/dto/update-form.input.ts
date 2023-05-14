@@ -36,7 +36,10 @@ export class UpdateFormInput {
   keys: string[];
   
   @IsEmpty()
-  isDeleted?: boolean;
+  deletedAt?: Date;
+
+  @IsEmpty()
+  deletedBy: string;
 
   @Field(() => [String], { nullable: true })
   @IsOptional()

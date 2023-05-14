@@ -1,26 +1,26 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Stage } from 'src/stages/entities/stage.entity';
 import { User } from 'src/users/entities/user.entity';
+
 @Schema({ timestamps: true })
 @ObjectType()
 export class Phase {
   @Field(() => ID)
   _id: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: "Stage the phase belongs to." })
   @Prop({ required: true })
   stage: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: "Phase name." })
   @Prop({ required: true })
   name: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String, { description: "Link to a small image to be used as thumbnail.", nullable: true })
   @Prop({ default: '' })
   thumbnail: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: "Phase description." })
   @Prop({ default: '' })
   description: string;
 
@@ -59,10 +59,10 @@ export class Phase {
   @Field(() => String, { nullable: true })
   childrenOf: string;
 
-  @Field(() => Date)
+  @Field(() => Date, { description: "Creation date of the entity."})
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { description: "Update date of the entity."})
   updatedAt: Date;
 }
 

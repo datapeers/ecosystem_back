@@ -33,19 +33,31 @@ export class Form {
   @Prop({ default: [] })
   keys: string[];
 
-  @Field(() => String)
-  @Prop({ type: Boolean, default: false })
-  isDeleted: boolean;
-
   @Field(() => [FormTag])
   @Prop({ default: [] })
   tags: string[];
+  
+  @Field(() => String, { description: "Unique Id of the user who created the entity" })
+  @Prop({ required: true })
+  createdBy: string;
 
-  @Field(() => Date)
+  @Field(() => String, { description: "If set, Unique Id of the user who last updated the entity.", nullable: true })
+  @Prop()
+  updatedBy: string;
+
+  @Field(() => String, { description: "If set, Unique Id of the user that deleted the entity.", nullable: true })
+  @Prop()
+  deletedBy: string;
+
+  @Field(() => Date, { description: "Date of entity creation."})
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { description: "Date of last entity update."})
   updatedAt: Date;
+  
+  @Field(() => Date, { description: "If set, The date the entity was deleted.", nullable: true })
+  @Prop()
+  deletedAt: Date;
 }
 
 @Schema()

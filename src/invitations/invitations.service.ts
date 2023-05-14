@@ -114,11 +114,10 @@ export class InvitationsService {
     if(!invitationUser || invitationUser?.passwordSet) throw new InternalServerErrorException("We were unable to complete the operation");
     await this.authService.updatePassword(invitationUser.uid, password);
 
-
     // Update Invitation and user states
     invitation.state = InvitationStates.accepted;
     await invitation.save(); 
-    await this.usersService.update({ uid: invitationUser.uid, }, { passwordSet: true, fullName: name });
+    await this.usersService.update({ uid: invitationUser.uid, }, { passwordSet: new Date(), fullName: name });
     return invitation;
   }
 }

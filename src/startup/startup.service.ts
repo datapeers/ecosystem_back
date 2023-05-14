@@ -58,7 +58,7 @@ export class StartupService implements FormDocumentService<Startup> {
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.startupModel.updateMany(
       { _id: { $in: ids.map(id => new Types.ObjectId(id)) } },
-      { isDeleted: true }
+      { deletedAt: Date.now() }
     );
     return {
       ...updateResult,

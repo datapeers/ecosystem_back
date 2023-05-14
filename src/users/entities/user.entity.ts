@@ -8,48 +8,48 @@ export class User {
   @Field( () => ID )
   _id: string;
 
+  @Field(() => String, { description: "User unique identifier." })
   @Prop({ unique: true, required: true })
-  @Field( () => String )
   uid: string;
 
+  @Field(() => String, { description: "User full name." })
   @Prop({ default: "" })
-  @Field( () => String)
   fullName: string;
 
+  @Field(() => String, { description: "Account email/username." })
   @Prop({ unique: true, required: true })
-  @Field( () => String )
   email: string;
+
+  @Field( () => String, { nullable: true })
+  @Prop()
+  profileImageUrl?: string;
 
   @Prop({ type: [String], array: true, enum: ValidRoles, default: [ValidRoles.user] })
   @Field( () => [ String ])
   roles: ValidRoles[];
 
   @Prop({ type: 'boolean', default: true })
-  @Field( () => Boolean )
+  @Field(() => Boolean)
   isActive: boolean;
 
-  @Field( () => Date )
+  @Field(() => Date, { description: "Date of entity creation."})
   createdAt: Date;
 
-  @Field( () => Date )
+  @Field(() => Date, { description: "Date of last entity update."})
   updatedAt: Date;
 
-  @Field(() => String)
-  @Prop({ default: "" })
+  @Field(() => String, { description: "If set, Unique Id of the user who last updated the entity.", nullable: true })
+  @Prop()
   updatedBy: string;
 
-  @Prop({ default: true })
-  @Field( () => Boolean )
-  passwordSet: boolean;
+  @Field(() => Date, { nullable: true })
+  @Prop({ description: "Determines when the user already set its own password." })
+  passwordSet?: Date;
 
   get rolValue(): number {
     const rolValues = this.roles.map(rol => rolValues[rol]);
     return Math.max(...rolValues);
   };
-
-  @Field( () => String, { nullable: true })
-  @Prop({ default: "" })
-  profileImageUrl?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

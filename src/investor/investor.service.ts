@@ -58,7 +58,7 @@ export class InvestorService implements FormDocumentService<Investor> {
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.investorModel.updateMany(
       { _id: { $in: ids.map(id => new Types.ObjectId(id)) } },
-      { isDeleted: true }
+      { deletedAt: Date.now() }
     );
     return {
       ...updateResult,

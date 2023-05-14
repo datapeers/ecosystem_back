@@ -66,7 +66,7 @@ export class AuthService {
       fullName: '',
       email: email,
       roles: [rol],
-      passwordSet: false,
+      passwordSet: new Date(),
     });
     return createdUser;
   }

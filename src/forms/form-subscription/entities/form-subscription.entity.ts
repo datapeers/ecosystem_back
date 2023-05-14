@@ -37,10 +37,10 @@ export class FormSubscription {
   @Prop({ enum: FormCollections })
   target: FormCollections;
 
-  @Field(() => Date)
+  @Field(() => Date, { description: "Date of entity creation."})
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { description: "Date of last entity update."})
   updatedAt: Date;
 }
 

@@ -20,7 +20,7 @@ export class FormTagService {
   }
 
   async findAll() {
-    const tags = await this.formTagModel.find({ isDeleted: false }).lean();
+    const tags = await this.formTagModel.find({ deletedAt: null }).lean();
     return tags;
   }
 
@@ -48,7 +48,7 @@ export class FormTagService {
   async delete(id: string) {
     const deletedForm = await this.formTagModel
     .findByIdAndUpdate(id,
-      { isDeleted: true },
+      { deletedAt: Date.now() },
       { new: true }
     ).lean();
     return deletedForm;

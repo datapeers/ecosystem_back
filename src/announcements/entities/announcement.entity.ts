@@ -9,15 +9,15 @@ export class Announcement {
   @Field(() => ID)
   _id: string;
   
-  @Field(() => String, { description: "Announcement name" })
+  @Field(() => String, { description: "Announcement name." })
   @Prop({ default: "" })
   name: string;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { description: "Boolean flag that defines if the announcement has been published." })
   @Prop({ default: false })
   published: boolean;
 
-  @Field(() => String, { description: "Announcement description" })
+  @Field(() => String, { description: "Announcement description." })
   @Prop({ default: "" })
   description: string;
 
@@ -29,19 +29,19 @@ export class Announcement {
   @Prop({ default: "" })
   landing: string;
 
-  @Field(() => Form, { description: "Id of the form to render for submissions", nullable: true })
+  @Field(() => Form, { description: "Id of the form to render for submissions.", nullable: true })
   @Prop()
   form: string;
 
-  @Field(() => String, { description: "Message text to include in the email after a form submit" })
+  @Field(() => String, { description: "Message text to include in the email after a form submit." })
   @Prop({ default: "" })
   emailMessage: string;
 
-  @Field(() => String, { description: "Link for redirect after a form submit" })
+  @Field(() => String, { description: "Link for redirect after a form submit." })
   @Prop({ default: "" })
   redirectLink: string;
 
-  @Field(() => AnnouncementTypes, { description: "Announcement type" })
+  @Field(() => AnnouncementTypes, { description: "Announcement type." })
   @Prop({ type: String, enum: AnnouncementTypes })
   type: AnnouncementTypes;
 
@@ -49,29 +49,29 @@ export class Announcement {
   @Prop({ type: Date })
   startAt: Date;
 
-  @Field(() => Date, { description: "End date for the announcent to be unavailable" })
+  @Field(() => Date, { description: "End date for the announcent to be unavailable." })
   @Prop({ type: Date })
   endAt: Date;
 
-  @Field(() => String)
+  @Field(() => String, { description: "Unique Id of the user who created the entity" })
   @Prop({ required: true })
   createdBy: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String, { description: "If set, Unique Id of the user who last updated the entity.", nullable: true })
   @Prop()
   updatedBy: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String, { description: "If set, Unique Id of the user that deleted the entity.", nullable: true })
   @Prop()
   deletedBy: string;
 
-  @Field(() => Date, { description: "Creation date of the entity"})
+  @Field(() => Date, { description: "Date of entity creation."})
   createdAt: Date;
 
-  @Field(() => Date, { description: "Date of the entity"})
+  @Field(() => Date, { description: "Date of last entity update."})
   updatedAt: Date;
 
-  @Field(() => Date, { nullable: true })
+  @Field(() => Date, { description: "If set, The date the entity was deleted.", nullable: true })
   @Prop()
   deletedAt: Date;
 }

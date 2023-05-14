@@ -21,18 +21,18 @@ export class Entrepreneur {
   @Prop({ type: Object })
   item: JSON;
 
-  @Field(() => Boolean)
-  @Prop({ default: false })
-  isDeleted: boolean;
+  @Field(() => Date, { description: "If set, The date the entity was deleted.", nullable: true })
+  @Prop()
+  deletedAt: Date;
 
-  @Field(() => User, { nullable: true })
-  @Prop({ default: "" })
+  @Field(() => User, { description: "If set, Details from user who last updated the entity.", nullable: true })
+  @Prop()
   updatedBy: string;
 
-  @Field(() => Date)
+  @Field(() => Date, { description: "Date of entity creation."})
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { description: "Date of last entity update."})
   updatedAt: Date;
 }
 

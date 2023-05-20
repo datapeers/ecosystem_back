@@ -3,7 +3,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppConfiguration, EnvConfiguration, AppEnvironments, } from 'config/app.config';
+import {
+  AppConfiguration,
+  EnvConfiguration,
+  AppEnvironments,
+} from 'config/app.config';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -24,6 +28,7 @@ import { InvestorModule } from './investor/investor.module';
 import { ResponsibleModule } from './responsible/responsible.module';
 import { ResourcesModule } from './resources/resources.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
+import { ActivitiesConfigModule } from './activities-config/activities-config.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -68,7 +73,7 @@ import GraphQLJSON from 'graphql-type-json';
           playground: false,
           subscriptions: {
             'graphql-ws': {
-              path: '/subscriptions'
+              path: '/subscriptions',
             },
           },
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -98,6 +103,7 @@ import GraphQLJSON from 'graphql-type-json';
     ResponsibleModule,
     ResourcesModule,
     AnnouncementsModule,
+    ActivitiesConfigModule,
   ],
   controllers: [],
   providers: [],

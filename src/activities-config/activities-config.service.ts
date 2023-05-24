@@ -16,8 +16,17 @@ export class ActivitiesConfigService {
     return this.activitiesConfig.create(createActivitiesConfigInput);
   }
 
-  findAll() {
-    return this.activitiesConfig.find();
+  async findByPhase(phase: string) {
+    let item = await this.activitiesConfig.findOne({ phase });
+    if (!item) {
+      item = await this.create({
+        limit: 0,
+        totalLimit: 0,
+        availability: {},
+        phase,
+      });
+    }
+    return item;
   }
 
   findOne(id: string) {

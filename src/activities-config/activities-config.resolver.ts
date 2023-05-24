@@ -18,9 +18,9 @@ export class ActivitiesConfigResolver {
     return this.activitiesConfigService.create(createActivitiesConfigInput);
   }
 
-  @Query(() => [ActivitiesConfig], { name: 'activitiesConfig' })
-  findAll() {
-    return this.activitiesConfigService.findAll();
+  @Query(() => ActivitiesConfig, { name: 'activitiesConfigPhase' })
+  findAll(@Args('phase', { type: () => String }) phase: string) {
+    return this.activitiesConfigService.findByPhase(phase);
   }
 
   @Query(() => ActivitiesConfig, { name: 'activitiesConfig' })

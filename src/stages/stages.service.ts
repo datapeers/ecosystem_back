@@ -25,10 +25,10 @@ export class StagesService {
 
   async update(id: string, updateStageInput: UpdateStageInput) {
     delete updateStageInput['_id'];
-    const updatedPhase = await this.stageModel
+    const updatedStage = await this.stageModel
       .findOneAndUpdate({ _id: id }, { ...updateStageInput }, { new: true })
       .lean();
-    return updatedPhase;
+    return updatedStage;
   }
 
   remove(id: number) {

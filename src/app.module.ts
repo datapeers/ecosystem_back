@@ -29,6 +29,7 @@ import { ResponsibleModule } from './responsible/responsible.module';
 import { ResourcesModule } from './resources/resources.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { ActivitiesConfigModule } from './activities-config/activities-config.module';
+import { TableModule } from './table/table.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -104,6 +105,7 @@ import GraphQLJSON from 'graphql-type-json';
     ResourcesModule,
     AnnouncementsModule,
     ActivitiesConfigModule,
+    TableModule,
   ],
   controllers: [],
   providers: [],

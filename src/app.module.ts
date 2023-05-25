@@ -29,6 +29,7 @@ import { ExpertModule } from './expert/expert.module';
 import { ResourcesModule } from './resources/resources.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { ActivitiesConfigModule } from './activities-config/activities-config.module';
+import { ApplicantModule } from './applicant/applicant.module';
 import { TableModule } from './table/table.module';
 import GraphQLJSON from 'graphql-type-json';
 
@@ -105,6 +106,7 @@ import GraphQLJSON from 'graphql-type-json';
     ResourcesModule,
     AnnouncementsModule,
     ActivitiesConfigModule,
+    ApplicantModule,
     TableModule,
   ],
   controllers: [],

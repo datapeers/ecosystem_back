@@ -5,7 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 
 @Schema({ timestamps: true })
 @ObjectType()
-export class Responsible {
+export class Expert {
   @Field(() => ID)
   _id: string;
 
@@ -32,4 +32,4 @@ export class Responsible {
   updatedAt: Date;
 }
 
-export const ResponsibleSchema = SchemaFactory.createForClass(Responsible);
+export const ExpertSchema = SchemaFactory.createForClass(Expert);

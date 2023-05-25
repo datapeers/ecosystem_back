@@ -29,7 +29,7 @@ export class FormsService {
   async create(createFormInput: CreateFormInput, user: AuthUser) {
     const createdForm = await this.formModel.create(
       {
-        createFormInput,
+        ...createFormInput,
         createdBy: user.uid,
       });
     return createdForm;

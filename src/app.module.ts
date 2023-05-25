@@ -25,7 +25,7 @@ import { AuthCodeModule } from './auth-code/auth-code.module';
 import { EntrepreneurModule } from './entrepreneur/entrepreneur.module';
 import { StartupModule } from './startup/startup.module';
 import { InvestorModule } from './investor/investor.module';
-import { ResponsibleModule } from './responsible/responsible.module';
+import { ExpertModule } from './expert/expert.module';
 import { ResourcesModule } from './resources/resources.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { ActivitiesConfigModule } from './activities-config/activities-config.module';
@@ -101,7 +101,7 @@ import GraphQLJSON from 'graphql-type-json';
     EntrepreneurModule,
     StartupModule,
     InvestorModule,
-    ResponsibleModule,
+    ExpertModule,
     ResourcesModule,
     AnnouncementsModule,
     ActivitiesConfigModule,

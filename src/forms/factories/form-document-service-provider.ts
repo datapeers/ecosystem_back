@@ -4,15 +4,16 @@ import { InternalServerErrorException } from "@nestjs/common";
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 import { StartupModule } from 'src/startup/startup.module';
 import { InvestorModule } from "src/investor/investor.module";
-import { ResponsibleModule } from "src/responsible/responsible.module";
+import { ExpertModule } from "src/expert/expert.module";
 
 import { EntrepreneurService } from "src/entrepreneur/entrepreneur.service";
 import { StartupService } from "src/startup/startup.service";
 import { InvestorService } from "src/investor/investor.service";
-import { ResponsibleService } from "src/responsible/responsible.service";
-
+import { ExpertService } from "src/expert/expert.service";
 import { FormDocumentService } from "./form-document-service";
 import { FormCollections } from "../form/enums/form-collections";
+import { ApplicantService } from "src/applicant/applicant.service";
+import { ApplicantModule } from "src/applicant/applicant.module";
 
 export const FORM_DOCUMENT_SERVICE_PROVIDER = "FORM_DOCUMENT_SERVICE_PROVIDER";
 export type FormDocumentServiceProvider = (target: FormCollections) => FormDocumentService;
@@ -21,7 +22,8 @@ export const formDocumentServiceImports = [
   EntrepreneurModule,
   StartupModule,
   InvestorModule,
-  ResponsibleModule,
+  ExpertModule,
+  ApplicantModule,
 ];
 
 export const formDocumentServiceProviders = [
@@ -41,5 +43,6 @@ export const formDocumentServiceProviders = [
   { provide: FormCollections.entrepreneurs, useExisting: EntrepreneurService },
   { provide: FormCollections.startups, useExisting: StartupService },
   { provide: FormCollections.investors, useExisting: InvestorService },
-  { provide: FormCollections.responsibles, useExisting: ResponsibleService },
+  { provide: FormCollections.experts, useExisting: ExpertService },
+  { provide: FormCollections.announcements, useExisting: ApplicantService },
 ];

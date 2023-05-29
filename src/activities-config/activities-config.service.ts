@@ -21,7 +21,6 @@ export class ActivitiesConfigService {
     if (!item) {
       item = await this.create({
         limit: 0,
-        totalLimit: 0,
         availability: {},
         phase,
       });
@@ -35,11 +34,10 @@ export class ActivitiesConfigService {
 
   update(id: string, updateActivitiesConfigInput: UpdateActivitiesConfigInput) {
     delete updateActivitiesConfigInput['_id'];
-
     const updated = this.activitiesConfig
       .findOneAndUpdate(
         { _id: id },
-        { ...UpdateActivitiesConfigInput },
+        { ...updateActivitiesConfigInput },
         { new: true },
       )
       .lean();

@@ -7,10 +7,6 @@ export class CreateActivitiesConfigInput {
   @IsNotEmpty()
   limit: number;
 
-  @Field(() => Int)
-  @IsNotEmpty()
-  totalLimit: number;
-
   @Field(() => GraphQLJSONObject)
   @IsOptional()
   availability: Record<string, any>;

@@ -13,10 +13,6 @@ export class ActivitiesConfig {
   @Prop({ type: 'number', default: 0 })
   limit: number;
 
-  @Field(() => Int)
-  @Prop({ type: 'number', default: 0 })
-  totalLimit: number;
-
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
   phase: string;
@@ -52,6 +48,12 @@ export class activities {
 
   @Field(() => GraphQLJSONObject)
   @Prop({ type: SchemaTypes.Mixed })
+  options: any;
+}
+
+export interface IActivities {
+  idActivity: string;
+  limit: number;
   options: any;
 }
 

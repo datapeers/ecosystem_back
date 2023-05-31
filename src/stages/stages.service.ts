@@ -16,7 +16,7 @@ export class StagesService {
   }
 
   findAll() {
-    return this.stageModel.find({});
+    return this.stageModel.find({ isDeleted: false });
   }
 
   findOne(id: string) {
@@ -31,7 +31,10 @@ export class StagesService {
     return updatedStage;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} stage`;
+  async remove(id: string) {
+    const updatedStage = await this.stageModel
+      .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+      .lean();
+    return updatedStage;
   }
 }

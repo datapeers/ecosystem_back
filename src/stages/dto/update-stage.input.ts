@@ -7,4 +7,8 @@ export class UpdateStageInput extends PartialType(CreateStageInput) {
   @Field(() => ID)
   @IsNotEmpty()
   _id: string;
+
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  isDeleted?: boolean;
 }

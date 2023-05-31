@@ -18,7 +18,7 @@ export class PhasesService {
   }
 
   async findOne(id: string): Promise<Phase> {
-    const phase = await this.phaseModel.findOne({ _id: id });
+    const phase = await this.phaseModel.findOne({ _id: id }).lean();
     if (!phase) throw new NotFoundException(`No phase found with id ${id}`);
     return phase;
   }
@@ -27,11 +27,28 @@ export class PhasesService {
     createPhaseInput: CreatePhaseInput,
     user: AuthUser,
   ): Promise<Phase> {
-    const createdPhase = await this.phaseModel.create({
-      ...createPhaseInput,
-      createdBy: user.uid,
-    });
-    return createdPhase;
+    if (createPhaseInput.childrenOf) {
+      const father = await this.findOne(createPhaseInput.childrenOf);
+      delete father['_id'];
+      delete father['name'];
+      delete father['description'];
+      delete father['startAt'];
+      delete father['endAt'];
+      delete createPhaseInput['stage'];
+      const createdBatch = await this.phaseModel.create({
+        ...father,
+        ...createPhaseInput,
+        createdBy: user.uid,
+      });
+      return createdBatch;
+    } else {
+      console.log('new');
+      const createdPhase = await this.phaseModel.create({
+        ...createPhaseInput,
+        createdBy: user.uid,
+      });
+      return createdPhase;
+    }
   }
 
   async clone(id: string, user: AuthUser) {
@@ -54,7 +71,11 @@ export class PhasesService {
   }
 
   async remove(id: string) {
-    const deletedPhase = await this.phaseModel.updateOne({ _id: id }, { deleted: true }, { new: true });
+    const deletedPhase = await this.phaseModel.updateOne(
+      { _id: id },
+      { deleted: true },
+      { new: true },
+    );
     return deletedPhase;
   }
 }

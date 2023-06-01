@@ -31,6 +31,7 @@ import { AnnouncementsModule } from './announcements/announcements.module';
 import { ActivitiesConfigModule } from './activities-config/activities-config.module';
 import { ApplicantModule } from './applicant/applicant.module';
 import { TableModule } from './table/table.module';
+import { BusinessModule } from './business/business.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -108,6 +109,7 @@ import GraphQLJSON from 'graphql-type-json';
     ActivitiesConfigModule,
     ApplicantModule,
     TableModule,
+    BusinessModule,
   ],
   controllers: [],
   providers: [],

@@ -59,7 +59,8 @@ export class Phase {
   @Field(() => Boolean)
   basePhase: boolean;
 
-  @Field(() => String, { nullable: true, defaultValue: null })
+  @Field(() => String)
+  @Prop({ default: '' })
   childrenOf: string;
 
   @Field(() => Date, { description: 'Creation date of the entity.' })

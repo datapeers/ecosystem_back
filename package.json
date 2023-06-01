@@ -44,6 +44,7 @@
     "graphql-subscriptions": "^2.0.0",
     "graphql-type-json": "^0.3.2",
     "joi": "^17.9.1",
+    "moment": "^2.29.4",
     "mongoose": "^7.0.3",
     "reflect-metadata": "^0.1.13",
     "uuid": "^9.0.0"

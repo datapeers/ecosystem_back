@@ -100,7 +100,7 @@ export class PhasesService {
       const contentSprint = [];
       for (const content of iterator.childs) {
         const newContent = {
-          ...iterator,
+          ...content,
           _id: new Types.ObjectId(),
           phase: phaseNew._id,
           childs: [],

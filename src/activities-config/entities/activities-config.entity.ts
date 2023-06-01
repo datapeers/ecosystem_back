@@ -46,8 +46,8 @@ export class activities {
   @Field(() => Int)
   limit: number;
 
-  @Field(() => GraphQLJSONObject)
-  @Prop({ type: SchemaTypes.Mixed })
+  @Field(() => GraphQLJSONObject, { nullable: true })
+  @Prop({ type: SchemaTypes.Mixed, default: {} })
   options: any;
 }
 

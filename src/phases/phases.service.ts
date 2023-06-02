@@ -52,6 +52,8 @@ export class PhasesService {
     delete father['startAt'];
     delete father['endAt'];
     delete createPhaseInput['stage'];
+    delete createPhaseInput['landing'];
+    delete createPhaseInput['thumbnail'];
     const createdBatch = await this.phaseModel.create({
       ...father,
       ...createPhaseInput,

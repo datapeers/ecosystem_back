@@ -59,7 +59,7 @@ export class Phase {
   @Field(() => Boolean)
   basePhase: boolean;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Prop({ default: '' })
   childrenOf: string;
 

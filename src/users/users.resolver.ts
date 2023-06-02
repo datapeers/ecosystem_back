@@ -31,7 +31,10 @@ export class UsersResolver {
     return this.usersService.findOne(uid);
   }
 
-  @Mutation(() => User, { description: "Creates a user using the current authenticated user details and a set of optional parameters to override." })
+  @Mutation(() => User, {
+    description:
+      'Creates a user using the current authenticated user details and a set of optional parameters to override.',
+  })
   createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
     @CurrentUser() user: AuthUser,
@@ -39,8 +42,8 @@ export class UsersResolver {
     //TODO: Should allow only users to be created with this endpoint
     createUserInput = {
       ...createUserInput,
-      ...user
-    }
+      ...user,
+    };
     return this.usersService.create(createUserInput);
   }
 
@@ -49,24 +52,27 @@ export class UsersResolver {
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
     @CurrentUser([]) user: User,
   ) {
-    return this.usersService.update({ _id: updateUserInput._id }, updateUserInput);
+    return this.usersService.update(
+      { _id: updateUserInput._id },
+      updateUserInput,
+    );
   }
 
   @Mutation(() => User)
   disableUser(
     @Args('uid', { type: () => String }) uid: string,
-    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User
+    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
   ) {
-    if(user.uid === uid) throw new MethodNotAllowedException("A user can't disable itself");
+    if (user.uid === uid)
+      throw new MethodNotAllowedException("A user can't disable itself");
     return this.usersService.updateState(uid, user, true);
   }
 
   @Mutation(() => User)
   enableUser(
     @Args('uid', { type: () => String }) uid: string,
-    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User
+    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
   ) {
     return this.usersService.updateState(uid, user, false);
   }
-
 }

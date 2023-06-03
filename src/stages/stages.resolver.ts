@@ -32,7 +32,7 @@ export class StagesResolver {
   }
 
   @Mutation(() => Stage)
-  removeStage(@Args('id', { type: () => Int }) id: number) {
+  removeStage(@Args('id', { type: () => String }) id: string) {
     return this.stagesService.remove(id);
   }
 }

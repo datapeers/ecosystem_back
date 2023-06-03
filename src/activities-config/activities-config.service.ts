@@ -17,11 +17,10 @@ export class ActivitiesConfigService {
   }
 
   async findByPhase(phase: string) {
-    let item = await this.activitiesConfig.findOne({ phase });
+    let item = await this.activitiesConfig.findOne({ phase }).lean();
     if (!item) {
       item = await this.create({
         limit: 0,
-        totalLimit: 0,
         availability: {},
         phase,
       });
@@ -30,16 +29,15 @@ export class ActivitiesConfigService {
   }
 
   findOne(id: string) {
-    return this.activitiesConfig.findById(id);
+    return this.activitiesConfig.findById(id).lean();
   }
 
   update(id: string, updateActivitiesConfigInput: UpdateActivitiesConfigInput) {
     delete updateActivitiesConfigInput['_id'];
-
     const updated = this.activitiesConfig
       .findOneAndUpdate(
         { _id: id },
-        { ...UpdateActivitiesConfigInput },
+        { ...updateActivitiesConfigInput },
         { new: true },
       )
       .lean();
@@ -51,5 +49,11 @@ export class ActivitiesConfigService {
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
       .lean();
     return updatedContent;
+  }
+
+  async duplicate(id: string, newPhaseID: string) {
+    const config = await this.findByPhase(id);
+    delete config['_id'];
+    return this.activitiesConfig.create({ ...config, phase: newPhaseID });
   }
 }

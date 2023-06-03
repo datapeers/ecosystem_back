@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateContentInput } from './dto/create-content.input';
 import { UpdateContentInput } from './dto/update-content.input';
 import { InjectModel } from '@nestjs/mongoose';
@@ -28,7 +28,8 @@ export class ContentService {
     return this.contentModel
       .find({ phase, 'extra_options.sprint': true, isDeleted: false })
       .populate({ path: 'childs', populate: 'resources' })
-      .populate('resources');
+      .populate('resources')
+      .lean();
   }
 
   findOne(id: string) {
@@ -61,5 +62,9 @@ export class ContentService {
     return await this.contentModel.findByIdAndUpdate(contentID, {
       $addToSet: { resources: id },
     });
+  }
+
+  createMany(content: Content[]) {
+    return this.contentModel.insertMany(content);
   }
 }

@@ -8,19 +8,22 @@ export class Phase {
   @Field(() => ID)
   _id: string;
 
-  @Field(() => String, { description: "Stage the phase belongs to." })
+  @Field(() => String, { description: 'Stage the phase belongs to.' })
   @Prop({ required: true })
   stage: string;
 
-  @Field(() => String, { description: "Phase name." })
+  @Field(() => String, { description: 'Phase name.' })
   @Prop({ required: true })
   name: string;
 
-  @Field(() => String, { description: "Link to a small image to be used as thumbnail.", nullable: true })
+  @Field(() => String, {
+    description: 'Link to a small image to be used as thumbnail.',
+    nullable: true,
+  })
   @Prop({ default: '' })
   thumbnail: string;
 
-  @Field(() => String, { description: "Phase description." })
+  @Field(() => String, { description: 'Phase description.' })
   @Prop({ default: '' })
   description: string;
 
@@ -57,12 +60,13 @@ export class Phase {
   basePhase: boolean;
 
   @Field(() => String, { nullable: true })
+  @Prop({ default: '' })
   childrenOf: string;
 
-  @Field(() => Date, { description: "Creation date of the entity."})
+  @Field(() => Date, { description: 'Creation date of the entity.' })
   createdAt: Date;
 
-  @Field(() => Date, { description: "Update date of the entity."})
+  @Field(() => Date, { description: 'Update date of the entity.' })
   updatedAt: Date;
 }
 

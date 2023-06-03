@@ -19,10 +19,14 @@ export class Stage {
   @Prop({ required: true })
   color: string;
 
-  @Field(() => Date, { description: "Date of entity creation."})
+  @Field(() => Boolean)
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Field(() => Date, { description: 'Date of entity creation.' })
   createdAt: Date;
 
-  @Field(() => Date, { description: "Date of last entity update."})
+  @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
 }
 

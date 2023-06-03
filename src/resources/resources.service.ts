@@ -49,4 +49,8 @@ export class ResourcesService {
       .lean();
     return updatedContent;
   }
+
+  createMany(resources: Resource[]) {
+    return this.resourceModel.insertMany(resources);
+  }
 }

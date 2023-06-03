@@ -41,6 +41,10 @@ export class Announcement {
   @Prop({ default: "" })
   redirectLink: string;
 
+  @Field(() => String, { description: "Text shown after the announcement has been submitted." })
+  @Prop({ default: "" })
+  exitText: string;
+
   @Field(() => AnnouncementTypes, { description: "Announcement type." })
   @Prop({ type: String, enum: AnnouncementTypes })
   type: AnnouncementTypes;

@@ -35,10 +35,17 @@ export class FormsService {
     return createdForm;
   }
 
-  async clone(id: string) {
+  async clone(id: string, user: AuthUser) {
     const formToClone = await this.findOne(id);
-    const { _id, ...data } = formToClone;
-    const clonedForm = await this.formModel.create(data);
+    const {
+      _id,
+      ...data
+    } = formToClone;
+    const clonedForm = await this.formModel.create({
+      ...data,
+      name: `Clon ${data.name}`,
+      createdBy: user.uid,
+    });
     return clonedForm;
   }
 

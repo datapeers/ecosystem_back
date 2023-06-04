@@ -19,6 +19,8 @@ import { rolNames } from 'src/auth/enums/valid-roles.enum';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { AcceptInvitationDto } from './dto/accept-invitation.dto';
+import { AppConfiguration } from 'config/app.config';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class InvitationsService {
@@ -29,6 +31,7 @@ export class InvitationsService {
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly logger: AppLogger,
+    private readonly configService: ConfigService<AppConfiguration>,
   ) {
     this.logger.setContext(InvitationsService.name);
   }
@@ -75,7 +78,7 @@ export class InvitationsService {
             },
           ],
           dynamicTemplateData: {
-            redirectUri: 'http://localhost:4200/register',
+            redirectUri: `${this.configService.get('appUri')}/register`,
             code: code,
             role: rolNames[invitation.rol],
           },
@@ -124,6 +127,7 @@ export class InvitationsService {
 
     invitation.state = InvitationStates.disabled;
     await invitation.save();
+    // await this.authService.deleteUser();
     return invitation;
   }
 

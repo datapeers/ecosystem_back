@@ -51,11 +51,15 @@ export class UsersService {
     filters: { _id?: string; uid?: string },
     userUpdates: Partial<User>,
   ) {
-    delete userUpdates["_id"];
+    delete userUpdates['_id'];
     const user = await this.userModel
-      .findOneAndUpdate(filters, {
-        ...userUpdates
-      }, { new: true })
+      .findOneAndUpdate(
+        filters,
+        {
+          ...userUpdates,
+        },
+        { new: true },
+      )
       .lean();
     return user;
   }
@@ -80,5 +84,9 @@ export class UsersService {
     user.updatedBy = adminUser.uid;
     await user.save();
     return user;
+  }
+
+  async deleteUser(uid: string) {
+    return this.userModel.deleteOne({ uid });
   }
 }

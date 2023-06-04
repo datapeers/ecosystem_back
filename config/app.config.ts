@@ -13,6 +13,7 @@ export const EnvConfiguration = () => ({
   awsS3Region: process.env.AWS_S3_REGION ?? 'eu-west-1',
   awsS3Key: process.env.AWS_S3_KEY,
   awsS3Access: process.env.AWS_S3_ACCESS,
+  appUri: process.env.APP_URI,
 });
 
 export type AppConfiguration = ReturnType<typeof EnvConfiguration>;

@@ -52,7 +52,7 @@ export class AuthService {
         `Error while verifying Firebase ID token: ${idToken}`,
         error,
       );
-      throw new Error("Failed to authorize request");
+      throw new Error('Failed to authorize request');
     }
   }
 
@@ -66,7 +66,7 @@ export class AuthService {
       fullName: '',
       email: email,
       roles: [rol],
-      passwordSet: new Date(),
+      passwordSet: null,
     });
     return createdUser;
   }
@@ -75,5 +75,9 @@ export class AuthService {
     return await admin.auth().updateUser(uid, {
       password: newPassword,
     });
+  }
+
+  async deleteUser(uid: string) {
+    return await admin.auth().deleteUser(uid);
   }
 }

@@ -7,7 +7,8 @@ export enum FormCollections {
   entrepreneurs = "entrepreneurs",
   startups = "startups",
   investors = "investors",
-  experts = "experts"
+  experts = "experts",
+  businesses = "businesses",
 }
 
 registerEnumType(FormCollections, {

@@ -32,6 +32,7 @@ import { ActivitiesConfigModule } from './activities-config/activities-config.mo
 import { TypesEventsModule } from './events/types-events/types-events.module';
 import { ApplicantModule } from './applicant/applicant.module';
 import { TableModule } from './table/table.module';
+import { BusinessModule } from './business/business.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -110,6 +111,7 @@ import GraphQLJSON from 'graphql-type-json';
     ActivitiesConfigModule,
     ApplicantModule,
     TableModule,
+    BusinessModule,
   ],
   controllers: [],
   providers: [],

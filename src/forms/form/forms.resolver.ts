@@ -45,7 +45,7 @@ export class FormsResolver {
     @Args('id', { type: () => String }) id: string,
     @CurrentUser() user: AuthUser,
   ) {
-    return this.formsService.clone(id);
+    return this.formsService.clone(id, user);
   }
 
   @UseGuards(GqlAuthGuard)

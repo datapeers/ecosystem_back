@@ -10,16 +10,20 @@ import { UpdateAnnouncementInput } from './dto/update-announcement.input';
 import { UsersService } from '../users/users.service';
 import { Form } from 'src/forms/form/entities/form.entity';
 import { FormsService } from '../forms/form/forms.service';
+import { ApplicantService } from 'src/applicant/applicant.service';
+import { SubmitAnnouncementDocInput } from './dto/submit-announcement-doc.input';
+import { FormSubmission } from 'src/forms/form/entities/form-submission';
 
-@UseGuards(GqlAuthGuard)
 @Resolver(() => Announcement)
 export class AnnouncementsResolver {
   constructor(
     private readonly announcementsService: AnnouncementsService,
     private readonly usersService: UsersService,
     private readonly formsService: FormsService,
+    private readonly applicantService: ApplicantService,
   ) {}
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Announcement], { name: 'announcements' })
   findAll() {
     return this.announcementsService.findAll();
@@ -30,6 +34,7 @@ export class AnnouncementsResolver {
     return this.announcementsService.findOne(id);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Announcement)
   createAnnouncement(
     @Args('createAnnouncementInput') createAnnouncementInput: CreateAnnouncementInput,
@@ -42,6 +47,7 @@ export class AnnouncementsResolver {
     return this.announcementsService.create(AnnouncementInput, user);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Announcement)
   updateAnnouncement(
     @Args('updateAnnouncementInput') updateAnnouncementInput: UpdateAnnouncementInput,
@@ -51,6 +57,7 @@ export class AnnouncementsResolver {
     return this.announcementsService.update(_id, updatedFields, user);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Announcement)
   publishAnnouncement(
     @Args('id', { type: () => String }) id: string,
@@ -59,6 +66,15 @@ export class AnnouncementsResolver {
     return this.announcementsService.publish(id, user);
   }
 
+  @Mutation(() => FormSubmission)
+  async submitAnnouncementDoc(
+    @Args('submitAnnouncementDocInput') submitAnnouncementDocInput: SubmitAnnouncementDocInput,
+  ) {
+    const document = await this.applicantService.handleDocumentSubmit(submitAnnouncementDocInput);
+    return { _id: document._id, submission: document.item };
+  }
+
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Announcement)
   removeAnnouncement(@Args('id', { type: () => String }) id: string) {
     return this.announcementsService.remove(id);

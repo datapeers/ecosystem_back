@@ -18,7 +18,7 @@ export class InvestorService implements FormDocumentService<Investor> {
     return document;
   };
 
-  async createDocument(submission: any) {
+  async createDocument(submission: any, context?: any) {
     const data = {
       item: submission
     };
@@ -26,7 +26,7 @@ export class InvestorService implements FormDocumentService<Investor> {
     return createdDocument;
   };
 
-  async updateDocument(id: string, submission: any) {
+  async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(
       id,
       { item: submission }

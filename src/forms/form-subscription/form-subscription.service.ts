@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, MethodNotAllowedException, Inject } from '@nestjs/common';
+import { Injectable, NotFoundException, MethodNotAllowedException, Inject, InternalServerErrorException } from '@nestjs/common';
 import { CreateFormSubscriptionInput } from './dto/create-form-subscription.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { FormSubscription } from './entities/form-subscription.entity';
@@ -8,6 +8,9 @@ import { SubmitFormSubscriptionArgs } from './args/submit-form-subscription.args
 import { FormCollections } from '../form/enums/form-collections';
 import { FormsService } from '../form/forms.service';
 import { FORM_DOCUMENT_SERVICE_PROVIDER, FormDocumentServiceProvider } from '../factories/form-document-service-provider';
+import { CloseFormSubscriptionArgs } from './args/close-form-subscription.args';
+import { SubmitFileInput } from './inputs/submit-file.input';
+import { FormSubmissionFiles } from '../form/entities/form-submission-files';
 
 const pubSub = new PubSub();
 
@@ -47,8 +50,10 @@ export class FormSubscriptionService {
   async submit({ id, data }: SubmitFormSubscriptionArgs) {
     const subscription = await this.findOne(id);
     if(subscription.opened === false) throw new MethodNotAllowedException(`Subscription ${id} is already closed`);
+    // Get the subscription context data
+    const context = subscription.data;
     // If the doc id exists then we have to update it
-    const document = await this.handleDocumentSubmit(subscription, data);
+    const document = await this.handleDocumentSubmit(subscription, data, context);
     const closedSubscription = await this.formSubscriptionModel.findByIdAndUpdate(id,
       { opened: false, doc: document._id },
       { new: true }
@@ -57,24 +62,24 @@ export class FormSubscriptionService {
     return closedSubscription;
   }
 
-  async close(id: string): Promise<FormSubscription> {
+  async close({ id, doc }: CloseFormSubscriptionArgs): Promise<FormSubscription> {
     const subscription = await this.findOne(id);
     if(subscription.opened === false) throw new MethodNotAllowedException(`Subscription ${id} is already closed`);
     const closedSubscription = await this.formSubscriptionModel.findByIdAndUpdate(id,
-      { opened: false },
+      { opened: false, doc },
       { new: true }
     ).lean();
     pubSub.publish(FormSubscriptionService.triggerName, { listenFormSubscription: closedSubscription });
     return closedSubscription;
   }
 
-  private async handleDocumentSubmit({ target, doc }: FormSubscription, data: any) {
+  private async handleDocumentSubmit({ target, doc }: FormSubscription, data: any, context: any) {
     const documentService = this.documentServiceProvider(target);
     let document;
     if(doc) {
-      document = await documentService.updateDocument(doc, data);
+      document = await documentService.updateDocument(doc, data, context);
     } else {
-      document = await documentService.createDocument(data);
+      document = await documentService.createDocument(data, context);
     }
     return document;
   }
@@ -83,5 +88,25 @@ export class FormSubscriptionService {
     const documentService = this.documentServiceProvider(target);
     const document = await documentService.getDocument(id);
     return document.item;
+  }
+
+  async submitFile({ doc, fileKey, fileUrl, form }: SubmitFileInput) {
+    const targetForm = await this.formsService.findOne(form);
+    const documentService = this.documentServiceProvider(targetForm.target);
+    const document = {
+      key: fileKey,
+      url: fileUrl,
+    };
+    if(!documentService.uploadFile) {
+      throw new InternalServerErrorException("Can't upload files to the current form submission.");
+    }
+    const docFiles = await documentService.uploadFile(doc, document);
+    return { documents: docFiles };
+  }
+
+  async getSubmittedFiles(id: string, target: FormCollections): Promise<FormSubmissionFiles> {
+    const documentService = this.documentServiceProvider(target);
+    const document = await documentService.getDocument(id);
+    return { documents: document?.documents };
   }
 }

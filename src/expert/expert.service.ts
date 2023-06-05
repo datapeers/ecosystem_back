@@ -18,7 +18,7 @@ export class ExpertService implements FormDocumentService {
     return document;
   };
 
-  async createDocument(submission: any) {
+  async createDocument(submission: any, context?: any) {
     const data = {
       item: submission
     };
@@ -26,7 +26,7 @@ export class ExpertService implements FormDocumentService {
     return createdDocument;
   };
 
-  async updateDocument(id: string, submission: any) {
+  async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(
       id,
       { item: submission }

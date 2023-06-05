@@ -1,8 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { User } from 'src/users/entities/user.entity';
 
+@Schema()
 @ObjectType()
 export class Business {
   @Field(() => ID)
@@ -11,6 +12,10 @@ export class Business {
   @Field(() => GraphQLJSON, { description: "Additional dynamic entity properties." })
   @Prop({ type: Object })
   item: JSON;
+
+  @Field(() => GraphQLJSON, { description: "List of entrepreneurs linked to the business." })
+  @Prop()
+  entrepreneurs: EntrepreneurRelationship[];
 
   @Field(() => Date, { description: "If set, The date the entity was deleted.", nullable: true })
   @Prop()
@@ -28,3 +33,15 @@ export class Business {
 }
 
 export const BusinessSchema = SchemaFactory.createForClass(Business);
+
+@Schema()
+@ObjectType()
+export class EntrepreneurRelationship {
+  @Field(() => String)
+  @Prop()
+  _id: string;
+  
+  @Field(() => GraphQLJSON)
+  @Prop({ type: Object })
+  item: JSON;
+}

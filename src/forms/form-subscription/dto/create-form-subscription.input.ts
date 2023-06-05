@@ -14,8 +14,8 @@ export class CreateFormSubscriptionInput {
   form: string;
 
   @Field(() => GraphQLJSON, { nullable: true })
-  data?: JSON;
   @IsOptional()
+  data?: JSON;
 
   @Field(() => String, { nullable: true })
   @IsOptional()

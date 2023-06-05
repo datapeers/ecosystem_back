@@ -15,7 +15,7 @@ export class Startup {
 
   @Field(() => [EntrepreneurRelationship])
   @Prop({ default: [] })
-  startups: EntrepreneurRelationship[];
+  entrepreneurs: EntrepreneurRelationship[];
 
   @Field(() => GraphQLJSON)
   @Prop({ type: Object })
@@ -42,10 +42,10 @@ export class EntrepreneurRelationship {
   @Field(() => String)
   @Prop()
   _id: string;
-  
-  @Field(() => String)
-  @Prop()
-  name: string;
+
+  @Field(() => GraphQLJSON)
+  @Prop({ type: Object })
+  item: JSON;
 }
 
 @Schema()

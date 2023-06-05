@@ -6,6 +6,11 @@ import { SubmitFormSubscriptionArgs } from './args/submit-form-subscription.args
 import { Form } from '../form/entities/form.entity';
 import { FormsService } from '../form/forms.service';
 import GraphQLJSON from 'graphql-type-json';
+import { CloseFormSubscriptionArgs } from './args/close-form-subscription.args';
+import { SubmitFileInput } from './inputs/submit-file.input';
+import { FormSubmissionFiles } from '../form/entities/form-submission-files';
+import { GetSubmittedFilesArgs } from './args/get-submitted-files.args';
+import { FormFileSubmission } from '../factories/form-file-submission';
 
 @Resolver(() => FormSubscription)
 export class FormSubscriptionResolver {
@@ -30,8 +35,8 @@ export class FormSubscriptionResolver {
   }
 
   @Mutation(() => FormSubscription)
-  closeFormSubscription(@Args('id', { type: () => String }) id: string) {
-    return this.formSubscriptionService.close(id);
+  closeFormSubscription(@Args() closeFormSubscriptionArgs: CloseFormSubscriptionArgs) {
+    return this.formSubscriptionService.close(closeFormSubscriptionArgs);
   }
 
   @Subscription(() => FormSubscription,
@@ -56,5 +61,24 @@ export class FormSubscriptionResolver {
     const { doc, target } = subscription;
     if(!doc || !target) return {};
     return this.formSubscriptionService.getSubmittedDocument(doc, target);
+  }
+
+  @ResolveField('documents', () => [FormFileSubmission])
+  async resolveSubmittedFiles (@Parent() subscription: FormSubscription) {
+    const { doc, target } = subscription;
+    if(!doc || !target) return {};
+    return this.formSubscriptionService.getSubmittedFiles(doc, target);
+  }
+  
+  @Query(() => FormSubmissionFiles, { name: 'formSubmissionFiles' })
+  async getSubmittedFiles(@Args() getSubmittedFilesArgs: GetSubmittedFilesArgs) {
+    const { doc, target } = getSubmittedFilesArgs;
+    if(!doc || !target) return [];
+    return this.formSubscriptionService.getSubmittedFiles(doc, target);
+  }
+
+  @Mutation(() => FormSubmissionFiles)
+  submitFile(@Args('submitFileInput') submitFileInput: SubmitFileInput) {
+    return this.formSubscriptionService.submitFile(submitFileInput);
   }
 }

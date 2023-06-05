@@ -42,7 +42,7 @@ export class Announcement {
   redirectLink: string;
 
   @Field(() => String, { description: "Text shown after the announcement has been submitted." })
-  @Prop({ default: "" })
+  @Prop({ default: "Sus respuestas se han registrado con exito, gracias por participar en la convocatoria." })
   exitText: string;
 
   @Field(() => AnnouncementTypes, { description: "Announcement type." })

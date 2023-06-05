@@ -19,6 +19,14 @@ export class UpdateAnnouncementInput extends PartialType(CreateAnnouncementInput
   @Field(() => String, { nullable: true })
   @IsString()
   landing?: string;
+  
+  @Field(() => String, { nullable: true })
+  @IsString()
+  redirectLink?: string;
+  
+  @Field(() => String, { nullable: true })
+  @IsString()
+  exitText?: string;
 
   published?: boolean;
 

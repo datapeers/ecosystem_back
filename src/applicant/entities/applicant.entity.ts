@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { User } from 'src/users/entities/user.entity';
 import { ApplicationStates } from '../enums/application-states.enum';
+import { FormFileSubmission } from 'src/forms/factories/form-file-submission';
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -14,13 +15,17 @@ export class Applicant {
   @Prop({ type: Object })
   item: JSON;
 
-  @Field(() => [Attachment])
+  @Field(() => [FormFileSubmission])
   @Prop({ default: [] })
-  documents: [];
+  documents: FormFileSubmission[];
 
   @Field(() => String, { description: "Id of the announcement this document is associated to." })
   @Prop({ required: true })
   announcement: string;
+
+  @Field(() => String, { description: "Unique identifier for non-anonymous submissions.", nullable: true })
+  @Prop()
+  participant: string;
 
   @Field(() => [ApplicantState], { description: "Id of the announcement this document is associated to." })
   @Prop({ required: true })
@@ -60,17 +65,13 @@ export class ApplicantState {
 
 @ObjectType()
 export class Attachment implements IAttachment {
-  @Field(() => String)
+  @Field(() => String, { description: "Name of the attachment file." })
   @Prop({ default: "" })
   name: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: "Additional details for the attachment." })
   @Prop({ default: "" })
   observation: string;
-
-  @Field(() => Boolean)
-  @Prop({ default: true })
-  optional: boolean;
 
   @Field(() => String)
   @Prop()
@@ -80,6 +81,5 @@ export class Attachment implements IAttachment {
 export interface IAttachment {
   name: string;
   observation: string;
-  optional: boolean;
   key: string;
 }

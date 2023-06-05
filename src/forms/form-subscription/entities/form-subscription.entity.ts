@@ -12,7 +12,7 @@ export class FormSubscription {
 
   @Field(() => String, { nullable: true })
   @Prop({ default: "" })
-  doc: string;
+  doc?: string;
 
   @Field(() => GraphQLJSON, { nullable: true })
   submission: JSON;

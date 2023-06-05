@@ -6,6 +6,7 @@ import { AnnouncementsService } from './announcements.service';
 import { AnnouncementsResolver } from './announcements.resolver';
 import { Announcement, AnnouncementSchema } from './entities/announcement.entity';
 import { FormsModule } from 'src/forms/forms.module';
+import { ApplicantModule } from 'src/applicant/applicant.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { FormsModule } from 'src/forms/forms.module';
     AuthModule,
     UsersModule,
     FormsModule,
+    ApplicantModule,
   ],
   providers: [AnnouncementsResolver, AnnouncementsService]
 })

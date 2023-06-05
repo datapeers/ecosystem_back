@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
-import { Startup } from './entities/startup.entity';
+import { EntrepreneurRelationship, Startup } from './entities/startup.entity';
 import { FormDocumentService } from 'src/forms/factories/form-document-service';
+import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
   constructor(
     @InjectModel(Startup.name) private readonly startupModel: Model<Startup>,
+    private readonly entrepreneurService: EntrepreneurService,
   ) {
 
   }
@@ -18,15 +20,49 @@ export class StartupService implements FormDocumentService<Startup> {
     return document;
   };
 
-  async createDocument(submission: any) {
+  async createDocument(submission: any, context?: any) {
     const data = {
       item: submission
     };
     const createdDocument = await this.create(data);
+    if(context && context.entrepreneur) {
+      const entrepreneur = context.entrepreneur;
+      const linkResult = await this.linkStartupsAndEntrepreneurs([createdDocument._id], [entrepreneur]);
+      if(!linkResult.acknowledged) throw new InternalServerErrorException("Failed to link entrepreneur with startup");
+    }
     return createdDocument;
   };
 
-  async updateDocument(id: string, submission: any) {
+  async linkStartupsAndEntrepreneurs(ids: string[], entrepreneurs: string[]): Promise<UpdateResultPayload> {
+    // Find bussinesses by ids
+    const startups = await this.findMany(ids);
+
+    // Link entrepreneurs to bussinesses by given relationships
+    const startupsToLink = startups.map(startup => {
+      return { _id: startup._id, item: startup.item, };
+    });
+    const entrepreneurUpdateResult = await this.entrepreneurService.linkToStartups(entrepreneurs, startupsToLink);
+
+    if(!entrepreneurUpdateResult.acknowledged) throw new InternalServerErrorException("Failed to create link between startups and entrepreneurs");
+
+    // Find entrepreneurs
+    const entrepreneurDocuments = await this.entrepreneurService.findMany(entrepreneurs);
+    const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
+      return { _id: document._id, item: document.item, }
+    });
+    const startupUpdateResult = await this.linkWithEntrepreneurs(ids, entrepreneurRelationships);
+    return startupUpdateResult;
+  }
+
+  async linkWithEntrepreneurs(ids: string[], entrepreneurRelationships: EntrepreneurRelationship[]): Promise<UpdateResultPayload> {
+    return this.startupModel.updateMany(
+      { _id: { $in: ids } },
+      { $addToSet: { entrepreneurs: { $each: entrepreneurRelationships } } },
+      { new: true }
+    ).lean();
+  }
+
+  async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(
       id,
       { item: submission }
@@ -36,6 +72,13 @@ export class StartupService implements FormDocumentService<Startup> {
 
   async findAll(): Promise<Startup[]> {
     const startups = await this.startupModel.find({});
+    return startups;
+  }
+
+  async findMany(ids: string[]): Promise<Startup[]> {
+    const startups = await this.startupModel.find({
+      _id: { $in: ids }
+    });
     return startups;
   }
 

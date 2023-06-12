@@ -53,6 +53,8 @@ export class TableService {
     const columns = tableUtilities.convertFormToColumns(
       formComponents.components,
     );
+    if (table.locator.includes('experts phase '))
+      columns.push(tableUtilities.rowStartupsExpert());
     return columns;
   }
 }

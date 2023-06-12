@@ -6,6 +6,7 @@ import { Expert } from './entities/expert.entity';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { PhaseRelationship } from 'src/startup/entities/startup.entity';
 import { LinkExpertsToPhaseArgs } from './args/link-phase-expert.args';
+import { LinkStartupsExpertsArgs } from './args/link-phase-startups-expert.args';
 
 @Injectable()
 export class ExpertService implements FormDocumentService {
@@ -95,9 +96,10 @@ export class ExpertService implements FormDocumentService {
   async linkWithPhase(
     linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs,
   ): Promise<UpdateResultPayload> {
-    const phaseRelationship: PhaseRelationship = {
+    const phaseRelationship = {
       _id: linkExpertsToPhaseArgs.phaseId,
       name: linkExpertsToPhaseArgs.name,
+      startUps: [],
     };
     return this.expertModel
       .updateMany(
@@ -106,5 +108,21 @@ export class ExpertService implements FormDocumentService {
         { new: true },
       )
       .lean();
+  }
+
+  linkStartupsToExperts(linkStartupsExpertsArgs: LinkStartupsExpertsArgs) {
+    try {
+      return this.expertModel.findOneAndUpdate(
+        {
+          _id: linkStartupsExpertsArgs.expertId,
+          phases: { $elemMatch: { _id: linkStartupsExpertsArgs.phase } },
+        },
+        { $set: { 'phases.$.startUps': linkStartupsExpertsArgs.startUps } },
+        { new: true, lean: true },
+      );
+    } catch (error) {
+      console.warn(error);
+      throw new NotFoundException(`Couldn't find expert`);
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
-import { PhaseRelationship } from 'src/startup/entities/startup.entity';
+import { SchemaTypes } from 'mongoose';
 import { User } from 'src/users/entities/user.entity';
 
 @Schema({ timestamps: true })
@@ -32,9 +32,9 @@ export class Expert {
   @Prop()
   updatedBy: string;
 
-  @Field(() => [PhaseRelationship])
+  @Field(() => [PhaseExpertRelationship])
   @Prop({ default: [] })
-  phases: PhaseRelationship[];
+  phases: PhaseExpertRelationship[];
 
   @Field(() => Date, { description: 'Date of entity creation.' })
   createdAt: Date;
@@ -45,6 +45,34 @@ export class Expert {
   @Field(() => Boolean)
   @Prop({ type: 'boolean', default: false })
   isDeleted: boolean;
+}
+
+@Schema()
+@ObjectType()
+export class PhaseExpertRelationship {
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
+  _id: string;
+
+  @Field(() => String)
+  @Prop()
+  name: string;
+
+  @Field(() => [StartupLink])
+  @Prop({ default: [] })
+  startUps: StartupLink[];
+}
+
+@Schema()
+@ObjectType()
+export class StartupLink {
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Startup' })
+  _id: string;
+
+  @Field(() => String)
+  @Prop()
+  name: string;
 }
 
 export const ExpertSchema = SchemaFactory.createForClass(Expert);

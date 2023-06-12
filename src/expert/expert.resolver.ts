@@ -5,6 +5,7 @@ import { Expert } from './entities/expert.entity';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { LinkExpertsToPhaseArgs } from './args/link-phase-expert.args';
+import { LinkStartupsExpertsArgs } from './args/link-phase-startups-expert.args';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Expert)
@@ -29,6 +30,13 @@ export class ExpertResolver {
   @Mutation(() => UpdateResultPayload)
   linkPhaseToExperts(@Args() linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs) {
     return this.expertService.linkWithPhase(linkExpertsToPhaseArgs);
+  }
+
+  @Mutation(() => Expert)
+  linkStartupsToExperts(
+    @Args() linkStartupsExpertsArgs: LinkStartupsExpertsArgs,
+  ) {
+    return this.expertService.linkStartupsToExperts(linkStartupsExpertsArgs);
   }
 
   @Mutation(() => UpdateResultPayload)

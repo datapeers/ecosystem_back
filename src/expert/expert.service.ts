@@ -5,6 +5,7 @@ import { FormDocumentService } from 'src/forms/factories/form-document-service';
 import { Expert } from './entities/expert.entity';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { PhaseRelationship } from 'src/startup/entities/startup.entity';
+import { LinkExpertsToPhaseArgs } from './args/link-phase-expert.args';
 
 @Injectable()
 export class ExpertService implements FormDocumentService {
@@ -32,6 +33,32 @@ export class ExpertService implements FormDocumentService {
 
   async findAll(): Promise<Expert[]> {
     const experts = await this.expertModel.find({});
+    return experts;
+  }
+
+  async findByPhase(phase: string): Promise<Expert[]> {
+    const initMatch = {
+      isDeleted: false,
+      'phases._id': phase,
+    };
+    const lookUps = [];
+    const project = {
+      $project: {
+        _id: 1,
+        item: 1,
+        phases: 1,
+      },
+    };
+    const experts = await this.expertModel.aggregate([
+      { $match: initMatch },
+      project,
+      ...lookUps,
+    ]);
+    // const util = require('util');
+    // console.log(
+    //   util.inspect(experts, { showHidden: false, depth: null, colors: true }),
+    // );
+
     return experts;
   }
 
@@ -65,14 +92,17 @@ export class ExpertService implements FormDocumentService {
     };
   }
 
-  async linkWithEntrepreneurs(
-    ids: string[],
-    phaseRelationships: PhaseRelationship[],
+  async linkWithPhase(
+    linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs,
   ): Promise<UpdateResultPayload> {
+    const phaseRelationship: PhaseRelationship = {
+      _id: linkExpertsToPhaseArgs.phaseId,
+      name: linkExpertsToPhaseArgs.name,
+    };
     return this.expertModel
       .updateMany(
-        { _id: { $in: ids } },
-        { $addToSet: { phases: { $each: phaseRelationships } } },
+        { _id: { $in: linkExpertsToPhaseArgs.experts } },
+        { $addToSet: { phases: { $each: [phaseRelationship] } } },
         { new: true },
       )
       .lean();

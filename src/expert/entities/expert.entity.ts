@@ -41,6 +41,10 @@ export class Expert {
 
   @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
+
+  @Field(() => Boolean)
+  @Prop({ type: 'boolean', default: false })
+  isDeleted: boolean;
 }
 
 export const ExpertSchema = SchemaFactory.createForClass(Expert);

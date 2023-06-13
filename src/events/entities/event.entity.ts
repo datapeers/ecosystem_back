@@ -1,9 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
-import { SchemaTypes, Types, Document } from 'mongoose';
-
+import { SchemaTypes } from 'mongoose';
 @Schema({ timestamps: true })
+@ObjectType()
 export class Event {
   @Field(() => ID)
   _id: string;
@@ -42,5 +42,21 @@ export class Event {
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
   phase: string;
 }
+
+// @Schema()
+// @ObjectType()
+// export class ParticipantRelationship {
+//   @Field(() => String)
+//   @Prop()
+//   _id: string;
+
+//   @Field(() => String)
+//   @Prop()
+//   name: string;
+
+//   @Field(() => GraphQLJSON)
+//   @Prop({ type: Object, default: {} })
+//   extra: JSON;
+// }
 
 export const EventSchema = SchemaFactory.createForClass(Event);

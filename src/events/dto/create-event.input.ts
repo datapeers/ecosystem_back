@@ -10,7 +10,7 @@ export class CreateEventInput {
 
   @Field(() => String)
   @IsNotEmpty()
-  stage: string;
+  type: string;
 
   @Field(() => Date)
   @IsNotEmpty()

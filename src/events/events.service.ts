@@ -3,11 +3,11 @@ import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Event } from './entities/event.entity';
+import { Event as EventEntity } from './entities/event.entity';
 @Injectable()
 export class EventsService {
   constructor(
-    @InjectModel(Event.name)
+    @InjectModel(EventEntity.name)
     private readonly eventModel: Model<Event>,
   ) {}
 

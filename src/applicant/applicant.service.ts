@@ -7,6 +7,11 @@ import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { AnnouncementApplicantArgs } from './args/announcement-applicant.args';
 import { SubmitAnnouncementDocInput } from 'src/announcements/dto/submit-announcement-doc.input';
 import { FormFileSubmission } from 'src/forms/factories/form-file-submission';
+import { UpdateApplicantStateInput } from './dto/update-applicant-state.input';
+import { AnnouncementApplicantsArgs } from './args/announcement-applicants.args';
+import { ApplicationStates } from './enums/application-states.enum';
+import { ApplicantArgs } from './args/applicant.args';
+
 @Injectable()
 export class ApplicantService implements FormDocumentService<Applicant> {
   constructor(
@@ -36,8 +41,13 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return updatedDocument;
   };
 
-  async findMany(announcement: string): Promise<Applicant[]> {
-    const applicants = await this.applicantModel.find({ announcement });
+  async findMany({ announcement, state }: AnnouncementApplicantsArgs): Promise<Applicant[]> {
+    const applicants = await this.applicantModel.aggregate([
+      { $match: { announcement, "states.type": state  } },
+      { $unwind: "$states" },
+      { $match: { "states.type": state  } },
+      { $addFields: { state: "$states" } }
+    ]);
     return applicants;
   }
 
@@ -80,6 +90,17 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return documents;
   }
 
+  async findOneByState({ id, state }: ApplicantArgs) {
+    const applicants = await this.applicantModel.aggregate([
+      { $match: { _id: new Types.ObjectId(id), "states.type": state  } },
+      { $unwind: "$states" },
+      { $match: { "states.type": state  } },
+      { $addFields: { state: "$states" } },
+    ]);
+    if(!applicants.length) throw new NotFoundException(`Couldn't find applicant with id ${id} and state ${state}`);
+    return applicants[0];
+  }
+
   async findOne(id: string): Promise<Applicant> {
     const applicant = await this.applicantModel.findById(id);
     if(!applicant) throw new NotFoundException(`Couldn't find applicant with id ${id}`);
@@ -105,5 +126,14 @@ export class ApplicantService implements FormDocumentService<Applicant> {
       ...updateResult,
       upsertedId: updateResult.upsertedId?.toString()
     };
+  }
+
+  async updateState({ id, notes, documents, type }: UpdateApplicantStateInput) {
+    const applicant = await this.findOne(id);
+    let { states } = applicant;
+    states = states.filter(state => state.type != type);
+    states.push({ notes, documents, type, });
+    const updateResult = await this.update(id, { states });
+    return updateResult;
   }
 }

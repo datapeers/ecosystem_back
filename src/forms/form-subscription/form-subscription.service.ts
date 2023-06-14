@@ -93,10 +93,7 @@ export class FormSubscriptionService {
   async submitFile({ doc, fileKey, fileUrl, form }: SubmitFileInput) {
     const targetForm = await this.formsService.findOne(form);
     const documentService = this.documentServiceProvider(targetForm.target);
-    const document = {
-      key: fileKey,
-      url: fileUrl,
-    };
+    const document = { key: fileKey, url: fileUrl };
     if(!documentService.uploadFile) {
       throw new InternalServerErrorException("Can't upload files to the current form submission.");
     }

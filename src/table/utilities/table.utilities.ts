@@ -1,6 +1,6 @@
 import { ConfigToColumn, RowConfigColumn } from '../models/row-config-column';
 
-const convertFormToColumns = (rowsForm: any[]): RowConfigColumn[] => {
+const convertFormToColumns = (rowsForm: any[], files: any[]): RowConfigColumn[] => {
   let displayColumnsTable: RowConfigColumn[] = [];
   if (rowsForm.length != 0) {
     const ignore = ['button', 'htmlelement', 'content'];
@@ -52,6 +52,11 @@ const convertFormToColumns = (rowsForm: any[]): RowConfigColumn[] => {
           );
           break;
       }
+    }
+  }
+  if(files?.length) {
+    for (const fileField of files) {
+      displayColumnsTable.push(new RowConfigColumn(fileField.name, "data", `documentsFields, ${fileField.key}`, "url"));
     }
   }
   return displayColumnsTable.map(ConfigToColumn);

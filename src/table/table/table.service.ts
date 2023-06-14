@@ -50,9 +50,7 @@ export class TableService {
   async resolveTableColumns(table: Table) {
     const form = await this.formsService.findOne(table.form);
     const formComponents = JSON.parse(form.formJson);
-    const columns = tableUtilities.convertFormToColumns(
-      formComponents.components,
-    );
+    const columns = tableUtilities.convertFormToColumns(formComponents.components, form.documents);
     if (table.locator.includes('experts phase '))
       columns.push(tableUtilities.rowStartupsExpert());
     return columns;

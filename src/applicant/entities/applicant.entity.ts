@@ -5,6 +5,21 @@ import { User } from 'src/users/entities/user.entity';
 import { ApplicationStates } from '../enums/application-states.enum';
 import { FormFileSubmission } from 'src/forms/factories/form-file-submission';
 
+@ObjectType()
+export class ApplicantState {
+  @Field(() => String)
+  @Prop({ default: "" })
+  notes: string;
+
+  @Field(() => [Attachment])
+  @Prop({ default: [] })
+  documents: Attachment[];
+
+  @Field(() => ApplicationStates)
+  @Prop({ required: true, enum: ApplicationStates })
+  type: ApplicationStates;
+}
+
 @Schema({ timestamps: true })
 @ObjectType()
 export class Applicant {
@@ -15,9 +30,12 @@ export class Applicant {
   @Prop({ type: Object })
   item: JSON;
 
-  @Field(() => [FormFileSubmission])
+  @Field(() => GraphQLJSON, { nullable: true })
+  documentsFields?: Record<string, string>;
+
+  @Field(() => [FormFileSubmission], { description: "Submitted files from announcement form.", nullable: true })
   @Prop({ default: [] })
-  documents: FormFileSubmission[];
+  documents?: FormFileSubmission[];
 
   @Field(() => String, { description: "Id of the announcement this document is associated to." })
   @Prop({ required: true })
@@ -27,8 +45,11 @@ export class Applicant {
   @Prop()
   participant: string;
 
+  @Field(() => ApplicantState, { nullable: true })
+  state?: ApplicantState;
+
   @Field(() => [ApplicantState], { description: "Id of the announcement this document is associated to." })
-  @Prop({ required: true })
+  @Prop({ required: true, default: [ { notes: "", documents: [], type: ApplicationStates.enrolled, } ] })
   states: ApplicantState[];
 
   @Field(() => Date, { description: "If set, The date the entity was deleted.", nullable: true })
@@ -49,37 +70,22 @@ export class Applicant {
 export const ApplicantSchema = SchemaFactory.createForClass(Applicant);
 
 @ObjectType()
-export class ApplicantState {
-  @Field(() => String)
-  @Prop({ default: "" })
-  notes: string;
-
-  @Field(() => [Attachment])
-  @Prop({ default: [] })
-  documents: [];
-
-  @Field(() => ApplicationStates)
-  @Prop({ required: true, enum: ApplicationStates })
-  type: ApplicationStates;
-}
-
-@ObjectType()
 export class Attachment implements IAttachment {
   @Field(() => String, { description: "Name of the attachment file." })
   @Prop({ default: "" })
   name: string;
 
-  @Field(() => String, { description: "Additional details for the attachment." })
+  @Field(() => String, { description: "Url for the attachment file." })
   @Prop({ default: "" })
-  observation: string;
+  url: string;
 
-  @Field(() => String)
-  @Prop()
+  @Field(() => String, { description: "Unique key used for the file." })
+  @Prop({ default: "" })
   key: string;
 }
 
 export interface IAttachment {
   name: string;
-  observation: string;
+  url: string;
   key: string;
 }

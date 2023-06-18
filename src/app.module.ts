@@ -34,6 +34,7 @@ import { ApplicantModule } from './applicant/applicant.module';
 import { TableModule } from './table/table.module';
 import { BusinessModule } from './business/business.module';
 import { EventsModule } from './events/events.module';
+import { ChallengerModule } from './challenger/challenger.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -114,6 +115,7 @@ import GraphQLJSON from 'graphql-type-json';
     TableModule,
     BusinessModule,
     EventsModule,
+    ChallengerModule,
   ],
   controllers: [],
   providers: [],

@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Form } from 'src/forms/form/entities/form.entity';
 import { AnnouncementTypes } from '../enums/announcement-types.enum';
+import { AnnouncementTargets } from '../enums/announcement-targets.enum';
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -48,6 +49,10 @@ export class Announcement {
   @Field(() => AnnouncementTypes, { description: "Announcement type." })
   @Prop({ type: String, enum: AnnouncementTypes })
   type: AnnouncementTypes;
+
+  @Field(() => AnnouncementTargets, { description: "Announcement target entity." })
+  @Prop({ type: String, enum: AnnouncementTargets, default: AnnouncementTargets.entrepreneurs })
+  target: AnnouncementTargets;
 
   @Field(() => Date, { description: "Start date for the announcement to be available." })
   @Prop({ type: Date })

@@ -1,4 +1,4 @@
-import { CreateEventInput } from './create-event.input';
+import { CreateEventInput, ExpertEventSubmit } from './create-event.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
@@ -28,4 +28,8 @@ export class UpdateEventInput extends PartialType(CreateEventInput) {
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
   isDeleted?: boolean;
+
+  @Field(() => [ExpertEventSubmit], { nullable: true })
+  @IsOptional()
+  experts?: ExpertEventSubmit[];
 }

@@ -41,22 +41,22 @@ export class Event {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
   phase: string;
+
+  @Field(() => [ExpertEventLink])
+  @Prop({ default: [] })
+  experts: ExpertEventLink[];
 }
 
-// @Schema()
-// @ObjectType()
-// export class ParticipantRelationship {
-//   @Field(() => String)
-//   @Prop()
-//   _id: string;
+@Schema()
+@ObjectType()
+export class ExpertEventLink {
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Expert' })
+  _id: string;
 
-//   @Field(() => String)
-//   @Prop()
-//   name: string;
-
-//   @Field(() => GraphQLJSON)
-//   @Prop({ type: Object, default: {} })
-//   extra: JSON;
-// }
+  @Field(() => String)
+  @Prop()
+  name: string;
+}
 
 export const EventSchema = SchemaFactory.createForClass(Event);

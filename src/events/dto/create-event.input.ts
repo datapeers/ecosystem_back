@@ -27,4 +27,19 @@ export class CreateEventInput {
   @Field(() => String)
   @IsNotEmpty()
   phase: string;
+
+  @Field(() => [ExpertEventSubmit])
+  @IsOptional()
+  experts: ExpertEventSubmit[];
+}
+
+@InputType()
+export class ExpertEventSubmit {
+  @Field(() => String)
+  @IsNotEmpty()
+  _id: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  name: string;
 }

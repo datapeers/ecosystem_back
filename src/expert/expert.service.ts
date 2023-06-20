@@ -22,6 +22,7 @@ export class ExpertService implements FormDocumentService {
   async createDocument(submission: any, context?: any) {
     const data = {
       item: submission,
+      ...context,
     };
     const createdDocument = await this.create(data);
     return createdDocument;
@@ -61,6 +62,10 @@ export class ExpertService implements FormDocumentService {
     // );
 
     return experts;
+  }
+
+  async findByAccount(accountId: string) {
+    return await this.expertModel.findOne({ accountId });
   }
 
   async findOne(id: string): Promise<Expert> {

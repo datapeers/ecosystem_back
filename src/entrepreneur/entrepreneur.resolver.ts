@@ -9,7 +9,7 @@ import { UpdateResultPayload } from 'src/shared/models/update-result';
 @Resolver(() => Entrepreneur)
 export class EntrepreneurResolver {
   constructor(private readonly entrepreneurService: EntrepreneurService) {}
-
+  entrepreneurAccount;
   @Query(() => [Entrepreneur], { name: 'entrepreneurs' })
   findAll() {
     return this.entrepreneurService.findAll();
@@ -18,6 +18,11 @@ export class EntrepreneurResolver {
   @Query(() => Entrepreneur, { name: 'entrepreneur' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.entrepreneurService.findOne(id);
+  }
+
+  @Query(() => Entrepreneur, { name: 'entrepreneurAccount', nullable: true })
+  findByAccount(@Args('accountId', { type: () => String }) accountId: string) {
+    return this.entrepreneurService.findByAccount(accountId);
   }
 
   @Mutation(() => UpdateResultPayload)

@@ -27,6 +27,11 @@ export class ExpertResolver {
     return this.expertService.findByPhase(phase);
   }
 
+  @Query(() => Expert, { name: 'expertsAccount', nullable: true })
+  findByAccount(@Args('accountId', { type: () => String }) accountId: string) {
+    return this.expertService.findByAccount(accountId);
+  }
+
   @Mutation(() => UpdateResultPayload)
   linkPhaseToExperts(@Args() linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs) {
     return this.expertService.linkWithPhase(linkExpertsToPhaseArgs);

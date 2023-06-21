@@ -21,6 +21,11 @@ export class EventsResolver {
     return this.eventsService.findAll();
   }
 
+  @Query(() => [EventEntity], { name: 'eventsPhase' })
+  findByPhase(@Args('phase', { type: () => String }) phase: string) {
+    return this.eventsService.findByPhase(phase);
+  }
+
   @Query(() => EventEntity, { name: 'event' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.eventsService.findOne(id);

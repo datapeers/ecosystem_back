@@ -19,6 +19,10 @@ export class EventsService {
     return this.eventModel.find({});
   }
 
+  findByPhase(phase: string) {
+    return this.eventModel.find({ phase, isDeleted: false });
+  }
+
   findOne(id: string) {
     return this.eventModel.findById(id);
   }

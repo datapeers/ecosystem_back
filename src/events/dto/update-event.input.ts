@@ -13,7 +13,7 @@ export class UpdateEventInput extends PartialType(CreateEventInput) {
   @IsNotEmpty()
   _id: string;
 
-  @Field(() => Boolean, { nullable: true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   name?: string;
 

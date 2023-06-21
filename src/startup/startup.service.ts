@@ -115,6 +115,7 @@ export class StartupService implements FormDocumentService<Startup> {
         _id: 1,
         item: 1,
         phases: 1,
+        entrepreneurs: 1,
       },
     };
     const startups = await this.startupModel.aggregate([

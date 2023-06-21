@@ -31,10 +31,25 @@ export class CreateEventInput {
   @Field(() => [ExpertEventSubmit])
   @IsOptional()
   experts: ExpertEventSubmit[];
+
+  @Field(() => [ParticipantEventSubmit])
+  @IsOptional()
+  participants: ParticipantEventSubmit[];
 }
 
 @InputType()
 export class ExpertEventSubmit {
+  @Field(() => String)
+  @IsNotEmpty()
+  _id: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  name: string;
+}
+
+@InputType()
+export class ParticipantEventSubmit {
   @Field(() => String)
   @IsNotEmpty()
   _id: string;

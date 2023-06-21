@@ -45,6 +45,10 @@ export class Event {
   @Field(() => [ExpertEventLink])
   @Prop({ default: [] })
   experts: ExpertEventLink[];
+
+  @Field(() => [ParticipantEventLink])
+  @Prop({ default: [] })
+  participants: ParticipantEventLink[];
 }
 
 @Schema()
@@ -52,6 +56,18 @@ export class Event {
 export class ExpertEventLink {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Expert' })
+  _id: string;
+
+  @Field(() => String)
+  @Prop()
+  name: string;
+}
+
+@Schema()
+@ObjectType()
+export class ParticipantEventLink {
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Entrepreneur' })
   _id: string;
 
   @Field(() => String)

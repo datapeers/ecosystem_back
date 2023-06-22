@@ -55,8 +55,13 @@ export class AnnouncementsService {
   }
 
   async publish(id: string, user: AuthUser) {
-    const publishedAnnouncement = await this.update(id, { published: true } , user);
+    const publishedAnnouncement = await this.update(id, { published: true }, user);
     return publishedAnnouncement;
+  }
+
+  async unpublish(id: string, user: AuthUser) {
+    const unpublishedAnnouncement = await this.update(id, { published: false }, user);
+    return unpublishedAnnouncement;
   }
 
   async remove(id: string) {

@@ -66,6 +66,15 @@ export class AnnouncementsResolver {
     return this.announcementsService.publish(id, user);
   }
 
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Announcement)
+  unpublishAnnouncement(
+    @Args('id', { type: () => String }) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.announcementsService.unpublish(id, user);
+  }
+
   @Mutation(() => FormSubmission)
   async submitAnnouncementDoc(
     @Args('submitAnnouncementDocInput') submitAnnouncementDocInput: SubmitAnnouncementDocInput,

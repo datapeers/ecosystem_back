@@ -5,6 +5,7 @@ import { LoggerModule } from 'src/logger/logger.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Event as EventEntity, EventSchema } from './entities/event.entity';
+import { ActaModule } from './acta/acta.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { Event as EventEntity, EventSchema } from './entities/event.entity';
     ]),
     AuthModule,
     LoggerModule,
+    ActaModule,
   ],
   providers: [EventsResolver, EventsService],
   exports: [EventsService],

@@ -16,6 +16,11 @@ export class StartupResolver {
     return this.startupService.findAll();
   }
 
+  @Query(() => [Startup], { name: 'startupsCommunities' })
+  findLikeCommunity() {
+    return this.startupService.findLikeCommunity();
+  }
+
   @Query(() => [Startup], { name: 'startupsPhase' })
   findByPhase(@Args('phase', { type: () => String }) phase: string) {
     return this.startupService.findByPhase(phase);

@@ -46,10 +46,6 @@ export class Startup {
 @Schema()
 @ObjectType()
 export class EntrepreneurRelationship {
-  // @Field(() => String)
-  // @Prop()
-  // _id: string;
-
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Entrepreneur' })
   _id: string;
@@ -57,6 +53,10 @@ export class EntrepreneurRelationship {
   @Field(() => GraphQLJSON)
   @Prop({ type: Object })
   item: JSON;
+
+  @Field(() => String)
+  @Prop()
+  rol: string;
 }
 
 @Schema()

@@ -73,7 +73,7 @@ export class StartupService implements FormDocumentService<Startup> {
       entrepreneurs,
     );
     const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
-      return { _id: document._id, item: document.item };
+      return { _id: document._id, item: document.item, rol: 'partner' };
     });
     const startupUpdateResult = await this.linkWithEntrepreneurs(
       ids,
@@ -103,6 +103,31 @@ export class StartupService implements FormDocumentService<Startup> {
   async findAll(): Promise<Startup[]> {
     const startups = await this.startupModel.find({});
     return startups;
+  }
+
+  async findLikeCommunity(): Promise<Startup[]> {
+    const startups = await this.startupModel.aggregate([
+      {
+        $addFields: {
+          leaderEntrepreneurs: {
+            $filter: {
+              input: '$entrepreneurs',
+              as: 'entrepreneur',
+              cond: { $eq: ['$$entrepreneur.rol', 'leader'] },
+            },
+          },
+        },
+      },
+      {
+        $match: {
+          leaderEntrepreneurs: { $size: 1 },
+        },
+      },
+    ]);
+
+    return startups.map((i) => {
+      return { ...i, entrepreneurs: i.leaderEntrepreneurs };
+    });
   }
 
   async findByPhase(phase: string): Promise<Startup[]> {

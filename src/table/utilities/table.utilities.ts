@@ -1,6 +1,9 @@
 import { ConfigToColumn, RowConfigColumn } from '../models/row-config-column';
 
-const convertFormToColumns = (rowsForm: any[], files: any[]): RowConfigColumn[] => {
+const convertFormToColumns = (
+  rowsForm: any[],
+  files: any[],
+): RowConfigColumn[] => {
   let displayColumnsTable: RowConfigColumn[] = [];
   if (rowsForm.length != 0) {
     const ignore = ['button', 'htmlelement', 'content'];
@@ -54,9 +57,16 @@ const convertFormToColumns = (rowsForm: any[], files: any[]): RowConfigColumn[] 
       }
     }
   }
-  if(files?.length) {
+  if (files?.length) {
     for (const fileField of files) {
-      displayColumnsTable.push(new RowConfigColumn(fileField.name, "data", `documentsFields, ${fileField.key}`, "url"));
+      displayColumnsTable.push(
+        new RowConfigColumn(
+          fileField.name,
+          'data',
+          `documentsFields, ${fileField.key}`,
+          'url',
+        ),
+      );
     }
   }
   return displayColumnsTable.map(ConfigToColumn);
@@ -129,7 +139,7 @@ export function set_row(label: string, format: string, key: any, row?: any) {
   }
 }
 
-export function rowStartupsExpert() {
+export function columnStartupsExpert() {
   return new RowConfigColumn(
     'Startups Asignadas',
     'array',
@@ -138,7 +148,25 @@ export function rowStartupsExpert() {
   );
 }
 
+export function columnsCommunities() {
+  return [
+    new RowConfigColumn(
+      'Líder',
+      'array',
+      'entrepreneurs; item, nombre',
+      'string',
+    ),
+    new RowConfigColumn(
+      'Contacto',
+      'array',
+      'entrepreneurs; item, telefono',
+      'string',
+    ),
+  ];
+}
+
 export const tableUtilities = {
   convertFormToColumns,
-  rowStartupsExpert,
+  columnStartupsExpert,
+  columnsCommunities,
 };

@@ -50,9 +50,16 @@ export class TableService {
   async resolveTableColumns(table: Table) {
     const form = await this.formsService.findOne(table.form);
     const formComponents = JSON.parse(form.formJson);
-    const columns = tableUtilities.convertFormToColumns(formComponents.components, form.documents);
+    const columns = tableUtilities.convertFormToColumns(
+      formComponents.components,
+      form.documents,
+    );
     if (table.locator.includes('experts phase '))
-      columns.push(tableUtilities.rowStartupsExpert());
+      columns.push(tableUtilities.columnStartupsExpert());
+    if (table.locator.includes('communities')) {
+      columns.push(...tableUtilities.columnsCommunities());
+    }
+
     return columns;
   }
 }

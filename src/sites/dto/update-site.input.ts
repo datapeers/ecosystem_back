@@ -25,7 +25,34 @@ export class UpdateSiteInput extends PartialType(CreateSiteInput) {
   @IsOptional()
   coords: Record<string, any>;
 
+  @Field(() => [ServicesSiteInput], { nullable: true })
+  @IsOptional()
+  services?: ServicesSiteInput[];
+
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
   isDeleted?: boolean;
+}
+
+@InputType()
+export class ServicesSiteInput {
+  @Field(() => String)
+  @IsNotEmpty()
+  name: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  description: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  email: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  contact: string;
+
+  @Field(() => GraphQLJSONObject)
+  @IsNotEmpty()
+  coords: Record<string, any>;
 }

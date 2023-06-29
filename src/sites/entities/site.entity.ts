@@ -30,6 +30,10 @@ export class Site {
   @Prop({ type: SchemaTypes.Mixed, required: true })
   coords: any;
 
+  @Field(() => [ServicesSiteLink])
+  @Prop({ default: [] })
+  services: ServicesSiteLink[];
+
   @Field(() => Boolean)
   @Prop({ default: false })
   isDeleted: boolean;
@@ -39,6 +43,30 @@ export class Site {
 
   @Field(() => Date, { description: 'Update date of the entity.' })
   updatedAt: Date;
+}
+
+@Schema()
+@ObjectType()
+export class ServicesSiteLink {
+  @Field(() => String)
+  @Prop()
+  name: string;
+
+  @Field(() => String)
+  @Prop()
+  description: string;
+
+  @Field(() => String)
+  @Prop()
+  email: string;
+
+  @Field(() => String)
+  @Prop()
+  contact: string;
+
+  @Field(() => GraphQLJSONObject)
+  @Prop({ type: SchemaTypes.Mixed, required: true })
+  coords: any;
 }
 
 export const SiteSchema = SchemaFactory.createForClass(Site);

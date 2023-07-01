@@ -8,7 +8,9 @@ import {
 import { Model, Types } from 'mongoose';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { FormDocumentService } from 'src/forms/factories/form-document-service';
-import { BusinessService } from '../business/business.service';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
+import { PageRequest } from '../shared/models/page-request';
+import { requestUtilities } from 'src/shared/utilities/request.utilities';
 
 @Injectable()
 export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
@@ -37,19 +39,26 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   }
 
   async findAll(): Promise<Entrepreneur[]> {
-    const entrepreneurs = await this.entrepreneurModel.find({});
+    const entrepreneurs = await this.entrepreneurModel.find({ deletedAt: null });
     return entrepreneurs;
+  }
+
+  async findManyPage(request: PageRequest): Promise<PaginatedResult<Entrepreneur>> {
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request);
+    const entrepreneurs = await this.entrepreneurModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    return entrepreneurs[0];
   }
 
   async findMany(ids: string[]): Promise<Entrepreneur[]> {
     const entrepreneurs = await this.entrepreneurModel.find({
       _id: { $in: ids },
+      deletedAt: null
     });
     return entrepreneurs;
   }
 
   async findOne(id: string): Promise<Entrepreneur> {
-    const entrepreneur = await this.entrepreneurModel.findById(id);
+    const entrepreneur = await this.entrepreneurModel.findOne({ _id: id, deletedAt: null });
     if (!entrepreneur)
       throw new NotFoundException(`Couldn't find entrepreneur with id ${id}`);
     return entrepreneur;

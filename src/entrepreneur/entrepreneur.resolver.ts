@@ -4,6 +4,8 @@ import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { EntrepreneurService } from './entrepreneur.service';
 import { Entrepreneur } from './entities/entrepreneur.entity';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
+import { PageRequest } from 'src/shared/models/page-request';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Entrepreneur)
@@ -13,6 +15,13 @@ export class EntrepreneurResolver {
   @Query(() => [Entrepreneur], { name: 'entrepreneurs' })
   findAll() {
     return this.entrepreneurService.findAll();
+  }
+
+  @Query(() => PaginatedResult<Entrepreneur>, { name: 'entrepreneursPage' })
+  findManyPage(
+    @Args('request') request: PageRequest,
+  ) {
+    return this.entrepreneurService.findManyPage(request);
   }
 
   @Query(() => Entrepreneur, { name: 'entrepreneur' })

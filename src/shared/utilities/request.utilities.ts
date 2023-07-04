@@ -1,7 +1,9 @@
 import { PageRequest } from "../models/page-request";
 import { FieldFilter } from "../models/field-order";
+import { AggregateBuildOptions } from "../models/aggregate-build-options";
 
-const buildAggregationFromRequest = (request: PageRequest, lookups: any[] = [], project: any = null, defaultMatch = { deletedAt: null }, paginated: boolean = true, outputProjection: any = null) => {
+// const buildAggregationFromRequest = (request: PageRequest, lookups: any[] = [], project: any = null, defaultMatch = { deletedAt: null }, paginated: boolean = true, outputProjection: any = null) => {
+const buildAggregationFromRequest = (request: PageRequest, { lookups, project, defaultMatch, paginated, outputProjection }: AggregateBuildOptions) => {
     const aggregation: any[] = [];
     const skip = request.skip != null ? { $skip: request.skip } : null;
     const limit = request.limit != null ? { $limit: request.limit } : null;

@@ -5,6 +5,8 @@ import { StartupService } from './startup.service';
 import { Startup } from './entities/startup.entity';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { LinkStartupToPhaseArgs } from './args/link-phase-startup.args';
+import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-by-request.args';
+import { LinkWithTargetsArgs } from 'src/shared/args/link-with-targets.args';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Startup)
@@ -39,5 +41,15 @@ export class StartupResolver {
   @Mutation(() => UpdateResultPayload)
   deleteStartups(@Args('ids', { type: () => [String] }) ids: [string]) {
     return this.startupService.delete(ids);
+  }
+
+  @Mutation(() => UpdateResultPayload, { name: 'linkStartupsWithEntrepreneursByRequest' })
+  linkStartupsWithEntrepreneursByRequest(@Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs ): Promise<UpdateResultPayload> {
+    return this.startupService.linkWithEntrepreneursByRequest(linkWithTargetsByRequestArgs);
+  }
+
+  @Mutation(() => UpdateResultPayload, { name: 'linkStartupsWithEntrepreneurs' })
+  linkStartupsWithEntrepreneurs(@Args() { ids, targetIds }: LinkWithTargetsArgs ): Promise<UpdateResultPayload> {
+    return this.startupService.linkStartupsAndEntrepreneurs(ids, targetIds);
   }
 }

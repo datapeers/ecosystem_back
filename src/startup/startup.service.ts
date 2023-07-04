@@ -1,24 +1,23 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import {Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
-import {
-  EntrepreneurRelationship,
-  PhaseRelationship,
-  Startup,
-} from './entities/startup.entity';
+import { EntrepreneurRelationship, PhaseRelationship, Startup, } from './entities/startup.entity';
 import { FormDocumentService } from 'src/forms/factories/form-document-service';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 import { LinkStartupToPhaseArgs } from './args/link-phase-startup.args';
+import { forwardRef } from '@nestjs/common';
+import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-by-request.args';
+import { AggregateBuildOptions } from 'src/shared/models/aggregate-build-options';
+import { PageRequest } from 'src/shared/models/page-request';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
+import { requestUtilities } from 'src/shared/utilities/request.utilities';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
   constructor(
     @InjectModel(Startup.name) private readonly startupModel: Model<Startup>,
+    @Inject(forwardRef(() => EntrepreneurService))
     private readonly entrepreneurService: EntrepreneurService,
   ) {}
 
@@ -46,6 +45,22 @@ export class StartupService implements FormDocumentService<Startup> {
     return createdDocument;
   }
 
+  async findManyPage(request: PageRequest): Promise<PaginatedResult<Startup>> {
+    const options = new AggregateBuildOptions();
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
+    const documents = await this.startupModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    return documents[0];
+  }
+
+  async findManyIdsByRequest(request: PageRequest): Promise<string[]> {
+    const options = new AggregateBuildOptions();
+    options.paginated = false;
+    options.outputProjection = { $project: { _id: 1 } };
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
+    const documents = await this.startupModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    return documents.map(doc => doc._id);
+  }
+
   async linkStartupsAndEntrepreneurs(
     ids: string[],
     entrepreneurs: string[],
@@ -58,7 +73,7 @@ export class StartupService implements FormDocumentService<Startup> {
       return { _id: startup._id, item: startup.item };
     });
     const entrepreneurUpdateResult =
-      await this.entrepreneurService.linkToStartups(
+      await this.entrepreneurService.linkWithStartups(
         entrepreneurs,
         startupsToLink,
       );
@@ -203,5 +218,10 @@ export class StartupService implements FormDocumentService<Startup> {
         { new: true },
       )
       .lean();
+  }
+
+  async linkWithEntrepreneursByRequest({ request, targetIds }: LinkWithTargetsByRequestArgs) {
+    const businesses = await this.findManyIdsByRequest(request);
+    return await this.linkStartupsAndEntrepreneurs(businesses, targetIds);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   BusinessRelationship,
@@ -11,12 +11,19 @@ import { FormDocumentService } from 'src/forms/factories/form-document-service';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { PageRequest } from '../shared/models/page-request';
 import { requestUtilities } from 'src/shared/utilities/request.utilities';
+import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-by-request.args';
+import { BusinessService } from 'src/business/business.service';
+import { AggregateBuildOptions } from 'src/shared/models/aggregate-build-options';
+import { StartupService } from 'src/startup/startup.service';
 
 @Injectable()
 export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   constructor(
-    @InjectModel(Entrepreneur.name)
-    private readonly entrepreneurModel: Model<Entrepreneur>,
+    @InjectModel(Entrepreneur.name) private readonly entrepreneurModel: Model<Entrepreneur>,
+    @Inject(forwardRef(() => BusinessService))
+    private readonly businessService: BusinessService,
+    @Inject(forwardRef(() => StartupService))
+    private readonly startupService: StartupService,
   ) {}
 
   async getDocument(id: string) {
@@ -44,9 +51,19 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   }
 
   async findManyPage(request: PageRequest): Promise<PaginatedResult<Entrepreneur>> {
-    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request);
-    const entrepreneurs = await this.entrepreneurModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
-    return entrepreneurs[0];
+    const options = new AggregateBuildOptions();
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
+    const documents = await this.entrepreneurModel.aggregate<PaginatedResult<Entrepreneur>>(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    return documents[0];
+  }
+
+  async findManyIdsByRequest(request: PageRequest): Promise<string[]> {
+    const options = new AggregateBuildOptions();
+    options.paginated = false;
+    options.outputProjection = { $project: { _id: 1 } };
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
+    const documents = await this.entrepreneurModel.aggregate<Entrepreneur>(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    return documents.map(doc => doc._id);
   }
 
   async findMany(ids: string[]): Promise<Entrepreneur[]> {
@@ -80,7 +97,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return createdEntrepreneur;
   }
 
-  async linkToBusinesses(
+  async linkWithBusinesses(
     ids: string[],
     businessesRelationships: BusinessRelationship[],
   ): Promise<UpdateResultPayload> {
@@ -93,7 +110,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       .lean();
   }
 
-  async linkToStartups(
+  async linkWithStartups(
     ids: string[],
     startupsRelationships: StartupRelationship[],
   ): Promise<UpdateResultPayload> {
@@ -115,5 +132,57 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       ...updateResult,
       upsertedId: updateResult.upsertedId?.toString(),
     };
+  }
+  
+  async linkWithBusinessesByRequest({ request, targetIds }: LinkWithTargetsByRequestArgs) {
+    const entrepreneurs = await this.findManyIdsByRequest(request);
+    return await this.linkEntrepreneursAndBusinesses(entrepreneurs, targetIds);
+  }
+
+  async linkEntrepreneursAndBusinesses(ids: string[], businesses: string[]) {
+    // Find entrepreneurs by ids
+    const entrepreneurs = await this.findMany(ids);
+
+    // Link entrepreneurs to businesses by given relationships
+    const entrepreneursToLink = entrepreneurs.map(document => {
+      return { _id: document._id, item: document.item, };
+    });
+    const businessUpdateResult = await this.businessService.linkWithEntrepreneurs(businesses, entrepreneursToLink);
+
+    if(!businessUpdateResult.acknowledged) throw new InternalServerErrorException("Failed to create link between businesses and entrepreneurs");
+
+    // Find entrepreneurs
+    const businessDocuments = await this.businessService.findMany(businesses);
+    const businessRelationships = businessDocuments.map((document) => {
+      return { _id: document._id, item: document.item, }
+    });
+    const entrepreneurUpdateResult = await this.linkWithBusinesses(ids, businessRelationships);
+    return entrepreneurUpdateResult;
+  }
+  
+  async linkWithStartupsByRequest({ request, targetIds }: LinkWithTargetsByRequestArgs) {
+    const entrepreneurs = await this.findManyIdsByRequest(request);
+    return await this.linkEntrepreneursAndStartups(entrepreneurs, targetIds);
+  }
+
+  async linkEntrepreneursAndStartups(ids: string[], startups: string[]) {
+    // Find entrepreneurs by ids
+    const entrepreneurs = await this.findMany(ids);
+
+    // Link entrepreneurs to startups by given relationships
+    const entrepreneursToLink = entrepreneurs.map(document => {
+      return { _id: document._id, item: document.item, rol: 'partner' };
+    });
+    const startupUpdateResult = await this.startupService.linkWithEntrepreneurs(startups, entrepreneursToLink);
+
+    if(!startupUpdateResult.acknowledged) throw new InternalServerErrorException("Failed to create link between startups and entrepreneurs");
+
+    // Find entrepreneurs
+    const startupDocuments = await this.startupService.findMany(startups);
+    const startupRelationships = startupDocuments.map((document) => {
+      return { _id: document._id, item: document.item, }
+    });
+    const entrepreneurUpdateResult = await this.linkWithStartups(ids, startupRelationships);
+    return entrepreneurUpdateResult;
   }
 }

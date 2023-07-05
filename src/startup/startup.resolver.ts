@@ -7,6 +7,8 @@ import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { LinkStartupToPhaseArgs } from './args/link-phase-startup.args';
 import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-by-request.args';
 import { LinkWithTargetsArgs } from 'src/shared/args/link-with-targets.args';
+import { PageRequest } from 'src/shared/models/page-request';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Startup)
@@ -16,6 +18,13 @@ export class StartupResolver {
   @Query(() => [Startup], { name: 'startups' })
   findAll() {
     return this.startupService.findAll();
+  }
+
+  @Query(() => PaginatedResult<Startup>, { name: 'startupsPage' })
+  findManyPage(
+    @Args('request') request: PageRequest,
+  ) {
+    return this.startupService.findManyPage(request);
   }
 
   @Query(() => [Startup], { name: 'startupsCommunities' })

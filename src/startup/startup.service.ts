@@ -116,7 +116,7 @@ export class StartupService implements FormDocumentService<Startup> {
   }
 
   async findAll(): Promise<Startup[]> {
-    const startups = await this.startupModel.find({});
+    const startups = await this.startupModel.find({ deletedAt: null });
     return startups;
   }
 

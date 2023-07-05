@@ -53,6 +53,7 @@ export class ApplicantService implements FormDocumentService<Applicant> {
 
   async findByAnnouncement(filters: AnnouncementApplicantArgs): Promise<Applicant | null> {
     const applicant = await this.applicantModel.findOne({
+      deletedAt: null,
       announcement: filters.announcement,
       participant: filters.participant,
     }).lean();

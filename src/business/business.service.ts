@@ -47,7 +47,7 @@ export class BusinessService {
   };
 
   async findAll(): Promise<Business[]> {
-    const businesses = await this.businessModel.find({});
+    const businesses = await this.businessModel.find({ deletedAt: null });
     return businesses;
   }
 

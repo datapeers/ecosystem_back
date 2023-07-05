@@ -4,6 +4,8 @@ import { InvestorService } from './investor.service';
 import { Investor } from './entities/investor.entity';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
+import { PageRequest } from 'src/shared/models/page-request';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Investor)
@@ -13,6 +15,13 @@ export class InvestorResolver {
   @Query(() => [Investor], { name: 'investors' })
   findAll() {
     return this.investorService.findAll();
+  }
+
+  @Query(() => PaginatedResult<Investor>, { name: 'investorsPage' })
+  findManyPage(
+    @Args('request') request: PageRequest,
+  ) {
+    return this.investorService.findManyPage(request);
   }
 
   @Query(() => Investor, { name: 'investor' })

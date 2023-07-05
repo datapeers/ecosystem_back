@@ -4,6 +4,10 @@ import { Model, Types } from 'mongoose';
 import { FormDocumentService } from 'src/forms/factories/form-document-service';
 import { Investor } from './entities/investor.entity';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
+import { AggregateBuildOptions } from 'src/shared/models/aggregate-build-options';
+import { PageRequest } from 'src/shared/models/page-request';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
+import { requestUtilities } from 'src/shared/utilities/request.utilities';
 
 @Injectable()
 export class InvestorService implements FormDocumentService<Investor> {
@@ -35,8 +39,15 @@ export class InvestorService implements FormDocumentService<Investor> {
   };
 
   async findAll(): Promise<Investor[]> {
-    const investors = await this.investorModel.find({});
+    const investors = await this.investorModel.find({ deletedAt: null });
     return investors;
+  }
+
+  async findManyPage(request: PageRequest): Promise<PaginatedResult<Investor>> {
+    const options = new AggregateBuildOptions();
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
+    const documents = await this.investorModel.aggregate<PaginatedResult<Investor>>(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    return documents[0];
   }
 
   async findOne(id: string): Promise<Investor> {

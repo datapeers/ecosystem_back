@@ -13,6 +13,10 @@ export class Rol {
   @Prop({ required: true })
   rol: string;
 
+  @Field(() => Boolean)
+  @Prop({ type: 'boolean', default: false })
+  default: boolean;
+
   @Field(() => GraphQLJSON)
   @Prop({ type: Object })
   permissions: JSON;

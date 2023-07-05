@@ -36,6 +36,7 @@ import { BusinessModule } from './business/business.module';
 import { EventsModule } from './events/events.module';
 // import { ChallengerModule } from './challenger/challenger.module';
 import { SitesModule } from './sites/sites.module';
+import { RolModule } from './rol/rol.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -117,6 +118,7 @@ import GraphQLJSON from 'graphql-type-json';
     BusinessModule,
     EventsModule,
     SitesModule,
+    RolModule,
     // ChallengerModule,
   ],
   controllers: [],

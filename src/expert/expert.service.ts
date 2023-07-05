@@ -4,9 +4,12 @@ import { Model, Types } from 'mongoose';
 import { FormDocumentService } from 'src/forms/factories/form-document-service';
 import { Expert } from './entities/expert.entity';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
-import { PhaseRelationship } from 'src/startup/entities/startup.entity';
 import { LinkExpertsToPhaseArgs } from './args/link-phase-expert.args';
 import { LinkStartupsExpertsArgs } from './args/link-phase-startups-expert.args';
+import { AggregateBuildOptions } from 'src/shared/models/aggregate-build-options';
+import { PageRequest } from 'src/shared/models/page-request';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
+import { requestUtilities } from 'src/shared/utilities/request.utilities';
 
 @Injectable()
 export class ExpertService implements FormDocumentService {
@@ -36,6 +39,13 @@ export class ExpertService implements FormDocumentService {
   async findAll(): Promise<Expert[]> {
     const experts = await this.expertModel.find({ deletedAt: null });
     return experts;
+  }
+
+  async findManyPage(request: PageRequest): Promise<PaginatedResult<Expert>> {
+    const options = new AggregateBuildOptions();
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
+    const documents = await this.expertModel.aggregate<PaginatedResult<Expert>>(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    return documents[0];
   }
 
   async findByPhase(phase: string): Promise<Expert[]> {

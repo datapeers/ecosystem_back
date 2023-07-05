@@ -6,6 +6,8 @@ import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
 import { LinkExpertsToPhaseArgs } from './args/link-phase-expert.args';
 import { LinkStartupsExpertsArgs } from './args/link-phase-startups-expert.args';
+import { PaginatedResult } from 'src/shared/models/paginated-result';
+import { PageRequest } from 'src/shared/models/page-request';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Expert)
@@ -15,6 +17,13 @@ export class ExpertResolver {
   @Query(() => [Expert], { name: 'experts' })
   findAll() {
     return this.expertService.findAll();
+  }
+  
+  @Query(() => PaginatedResult<Expert>, { name: 'expertsPage' })
+  findManyPage(
+    @Args('request') request: PageRequest,
+  ) {
+    return this.expertService.findManyPage(request);
   }
 
   @Query(() => Expert, { name: 'expert' })

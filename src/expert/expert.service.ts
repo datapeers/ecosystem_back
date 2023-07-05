@@ -34,13 +34,13 @@ export class ExpertService implements FormDocumentService {
   }
 
   async findAll(): Promise<Expert[]> {
-    const experts = await this.expertModel.find({});
+    const experts = await this.expertModel.find({ deletedAt: null });
     return experts;
   }
 
   async findByPhase(phase: string): Promise<Expert[]> {
     const initMatch = {
-      isDeleted: false,
+      deletedAt: null,
       'phases._id': phase,
     };
     const lookUps = [];

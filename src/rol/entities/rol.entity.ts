@@ -17,7 +17,7 @@ export class Rol {
   @Prop({ required: true })
   name: string;
 
-  @Field(() => GraphQLJSON)
+  @Field(() => GraphQLJSON, { nullable: true })
   @Prop({ type: Object })
   permissions: JSON;
 

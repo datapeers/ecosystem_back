@@ -21,7 +21,7 @@ export const CurrentUser = createParamDecorator(
 
     if (roles.length === 0) return user;
 
-    if (!user.roles || !user.roles.length) {
+    if (!user.rol) {
       throw new ForbiddenException(
         'Attempted to access a protected route with a user without roles or document',
       );
@@ -31,13 +31,6 @@ export const CurrentUser = createParamDecorator(
       throw new ForbiddenException(
         'Attempted to access a protected route with a disabled user',
       );
-    }
-
-    for (const role of user.roles) {
-      //TODO: Eliminar Valid Roles
-      if (roles.includes(role as ValidRoles)) {
-        return user;
-      }
     }
 
     throw new ForbiddenException(

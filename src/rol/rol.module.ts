@@ -4,14 +4,13 @@ import { RolResolver } from './rol.resolver';
 import { AuthModule } from 'src/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Rol, RolSchema } from './entities/rol.entity';
-import { RolInitializer } from './rol.initializer';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Rol.name, schema: RolSchema }]),
     AuthModule,
   ],
-  providers: [RolResolver, RolService, RolInitializer],
+  providers: [RolResolver, RolService],
   exports: [RolService],
 })
 export class RolModule {}

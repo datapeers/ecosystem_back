@@ -5,13 +5,9 @@ import { UsersModule } from 'src/users/users.module';
 import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
-  imports: [
-    forwardRef(() => UsersModule),
-    LoggerModule,
-  ],
+  imports: [forwardRef(() => UsersModule), LoggerModule],
   controllers: [AuthController],
-  providers: [AuthService,
-  ],
+  providers: [AuthService],
   exports: [AuthService],
 })
 export class AuthModule {}

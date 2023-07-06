@@ -56,11 +56,11 @@ export class InvitationsService {
       this.authService.createAccountWithDefaultPassword(email, rol);
     } else {
       // Update the user role with the role from the new invitation
-      if (!user.roles.includes(rol)) {
-        await this.usersService.update({ _id: user._id }, { roles: [rol] });
+      const rolDoc = await this.usersService.findRolByType(rol);
+      if (user.rol.toString() !== rolDoc._id.toString()) {
+        await this.usersService.update({ _id: user._id }, { rol: rolDoc._id });
       }
     }
-
     const invitationData = {
       email,
       rol,

@@ -1,7 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
-
+import { ValidRoles, rolValues } from 'src/auth/enums/valid-roles.enum';
+import { SchemaTypes } from 'mongoose';
+import { Rol } from 'src/rol/entities/rol.entity';
 @Schema({ timestamps: true })
 @ObjectType()
 export class User {
@@ -24,14 +25,18 @@ export class User {
   @Prop()
   profileImageUrl?: string;
 
-  @Prop({
-    type: [String],
-    array: true,
-    enum: ValidRoles,
-    default: [ValidRoles.user],
-  })
-  @Field(() => [String])
-  roles: ValidRoles[];
+  // @Prop({
+  //   type: [String],
+  //   array: true,
+  //   enum: ValidRoles,
+  //   default: [ValidRoles.user],
+  // })
+  // @Field(() => [String])
+  // roles: ValidRoles[];
+
+  @Field(() => Rol)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Rol' })
+  rol: string;
 
   @Prop({ type: 'boolean', default: true })
   @Field(() => Boolean)
@@ -61,11 +66,6 @@ export class User {
     description: 'Determines if user its registered with google',
   })
   googleIn?: Boolean;
-
-  get rolValue(): number {
-    const rolValues = this.roles.map((rol) => rolValues[rol]);
-    return Math.max(...rolValues);
-  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

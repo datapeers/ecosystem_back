@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { CreateRolInput } from './dto/create-rol.input';
 import { UpdateRolInput } from './dto/update-rol.input';
 import { InjectModel } from '@nestjs/mongoose';
@@ -6,20 +6,33 @@ import { Rol } from './entities/rol.entity';
 import { Model, Types } from 'mongoose';
 import { defaultRoles } from './model/rol';
 @Injectable()
-export class RolService {
+export class RolService implements OnModuleInit {
   constructor(@InjectModel(Rol.name) private readonly rolModel: Model<Rol>) {}
+
+  async onModuleInit() {
+    let roles = await this.rolModel.find({});
+    if (roles.length === 0) {
+      await this.rolModel.insertMany(defaultRoles);
+    }
+  }
 
   async create(createRolInput: CreateRolInput) {
     return this.rolModel.create(createRolInput);
   }
 
   async findAll() {
-    return this.rolModel.find({});
+    return this.rolModel.find({}).lean();
   }
 
   async findOne(id: string) {
     const rol = await this.rolModel.findOne({ _id: id }).lean();
     if (!rol) throw new NotFoundException(`No rol found with id ${id}`);
+    return rol;
+  }
+
+  async findByType(type: string) {
+    const rol = await this.rolModel.findOne({ type }).lean();
+    if (!rol) throw new NotFoundException(`No rol found with type ${type}`);
     return rol;
   }
 

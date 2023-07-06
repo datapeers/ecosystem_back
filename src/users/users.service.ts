@@ -3,24 +3,42 @@ import {
   Injectable,
   NotFoundException,
   MethodNotAllowedException,
+  OnModuleInit,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { User } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { FindUsersArgs } from './args/find-users.args';
+import { RolService } from '../rol/rol.service';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly rolService: RolService,
   ) {}
+
+  async onModuleInit() {
+    // ? Update old docs to new method to read rol
+    // const users = await this.userModel.find();
+    // const roles = await this.rolService.findAll();
+    // const rolesObj = {};
+    // for (const iterator of roles) {
+    //   rolesObj[iterator.type] = iterator._id;
+    // }
+    // for (const iterator of users) {
+    //   if (iterator.rol) continue;
+    //   iterator.rol = rolesObj[iterator.roles[0]];
+    //   await iterator.save();
+    // }
+  }
 
   async tryFindOne(filters: { uid?: string; email?: string }) {
     return await this.userModel.findOne(filters).lean();
   }
 
   async findOne(uid: string) {
-    const user = await this.userModel.findOne({ uid: uid });
+    const user = (await this.userModel.findOne({ uid: uid })).populate('rol');
     if (!user) throw new NotFoundException(`No user found with uid ${uid}`);
     return user;
   }
@@ -36,7 +54,7 @@ export class UsersService {
       filters['fullName'] = RegExp(`/.*${search}.*/`);
     }
 
-    const users = await this.userModel.find(filters).lean();
+    const users = await this.userModel.find(filters).populate('rol').lean();
     return users;
   }
 
@@ -44,7 +62,7 @@ export class UsersService {
     const user = await this.tryFindOne({ uid: createUserInput.uid });
     if (user) throw new ConflictException('Authenticated user already exist');
     const createdUser = await this.userModel.create(createUserInput);
-    return createdUser;
+    return await createdUser.populate('rol');
   }
 
   async update(
@@ -60,6 +78,7 @@ export class UsersService {
         },
         { new: true },
       )
+      .populate('rol')
       .lean();
     return user;
   }
@@ -72,14 +91,6 @@ export class UsersService {
           setActive ? 'enabled' : 'disabled'
         }`,
       );
-
-    if (user.rolValue >= adminUser.rolValue) {
-      throw new MethodNotAllowedException(
-        `Can't ${
-          setActive ? 'enabled' : 'disabled'
-        } a user with equal or higher privileges.`,
-      );
-    }
     user.isActive = setActive;
     user.updatedBy = adminUser.uid;
     await user.save();
@@ -87,6 +98,12 @@ export class UsersService {
   }
 
   async deleteUser(uid: string) {
-    return this.userModel.deleteOne({ uid });
+    return this.userModel.deleteOne({ uid }).populate('rol');
+  }
+
+  async findRolByType(type: string) {
+    const rol = await this.rolService.findByType(type);
+    if (!rol) throw new NotFoundException(`No rol found with type ${type}`);
+    return rol;
   }
 }

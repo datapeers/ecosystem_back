@@ -11,7 +11,7 @@ export class UpdateRolInput extends PartialType(CreateRolInput) {
 
   @Field(() => String, { nullable: true })
   @IsOptional()
-  rol?: string;
+  name?: string;
 
   @Field(() => GraphQLJSONObject, { nullable: true })
   @IsOptional()

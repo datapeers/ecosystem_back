@@ -1,6 +1,6 @@
 export const defaultRoles = [
   {
-    rol: 'superAdmin',
+    type: 'superAdmin',
     name: 'Super Admin',
     permissions: {
       view_startups: true,
@@ -52,9 +52,8 @@ export const defaultRoles = [
       },
     },
   },
-  ,
   {
-    rol: 'admin',
+    type: 'admin',
     name: 'Administrador',
     permissions: {
       view_startups: true,
@@ -107,7 +106,7 @@ export const defaultRoles = [
     },
   },
   {
-    rol: 'host',
+    type: 'host',
     name: 'Host',
     permissions: {
       view_startups: true,
@@ -160,7 +159,7 @@ export const defaultRoles = [
     },
   },
   {
-    rol: 'teamCoach',
+    type: 'teamCoach',
     name: 'Team Coach',
     permissions: {
       view_startups: true,
@@ -213,20 +212,18 @@ export const defaultRoles = [
     },
   },
   {
-    rol: 'expert',
+    type: 'expert',
     name: 'Experto',
     permissions: {},
   },
   {
-    rol: 'user',
+    type: 'user',
     name: 'Usuario',
-
     permissions: {},
   },
   {
-    rol: 'challenger',
+    type: 'challenger',
     name: 'Challenger',
-
     permissions: {},
   },
 ];

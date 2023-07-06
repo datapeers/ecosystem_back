@@ -39,7 +39,6 @@ export class UsersResolver {
     @Args('createUserInput') createUserInput: CreateUserInput,
     @CurrentUser() user: AuthUser,
   ) {
-    //TODO: Should allow only users to be created with this endpoint
     createUserInput = {
       ...createUserInput,
       ...user,

@@ -10,8 +10,8 @@ export class Rol {
   _id: string;
 
   @Field(() => String)
-  @Prop({ required: true, unique: true })
-  rol: string;
+  @Prop({ required: true })
+  type: string;
 
   @Field(() => String)
   @Prop({ required: true })

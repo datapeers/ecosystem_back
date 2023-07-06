@@ -11,13 +11,15 @@ import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Invitation.name, schema: InvitationSchema }]),
+    MongooseModule.forFeature([
+      { name: Invitation.name, schema: InvitationSchema },
+    ]),
     AuthModule,
     UsersModule,
     LoggerModule,
     EmailsModule,
   ],
   providers: [InvitationsResolver, InvitationsService],
-  controllers: [InvitationsController]
+  controllers: [InvitationsController],
 })
 export class InvitationsModule {}

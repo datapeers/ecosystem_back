@@ -61,11 +61,12 @@ export class AuthService {
       email: email,
       password: this.defaultUserPassword,
     });
+    const rolDoc = await this.usersService.findRolByType(rol);
     const createdUser = await this.usersService.create({
       uid: user.uid,
       fullName: '',
       email: email,
-      roles: [rol],
+      rol: rolDoc._id,
       passwordSet: null,
     });
     return createdUser;

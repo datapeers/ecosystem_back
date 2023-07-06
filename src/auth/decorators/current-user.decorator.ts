@@ -12,7 +12,7 @@ export const CurrentUser = createParamDecorator(
   (roles: ValidRoles[] = [], context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
     const user: AuthUser = ctx.getContext().req.user;
-
+    const rol = ctx.getContext().req.rol;
     if (!user) {
       throw new InternalServerErrorException(
         `No user inside the request - make sure that we used the AuthGuard`,
@@ -31,6 +31,10 @@ export const CurrentUser = createParamDecorator(
       throw new ForbiddenException(
         'Attempted to access a protected route with a disabled user',
       );
+    }
+
+    if (roles.includes(rol.type as ValidRoles)) {
+      return user;
     }
 
     throw new ForbiddenException(

@@ -81,4 +81,8 @@ export class AuthService {
   async deleteUser(uid: string) {
     return await admin.auth().deleteUser(uid);
   }
+
+  async getRol(id: string) {
+    return this.usersService.findRolByID(id);
+  }
 }

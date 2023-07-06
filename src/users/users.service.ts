@@ -101,9 +101,11 @@ export class UsersService implements OnModuleInit {
     return this.userModel.deleteOne({ uid }).populate('rol');
   }
 
+  async findRolByID(id: string) {
+    return await this.rolService.findOne(id);
+  }
+
   async findRolByType(type: string) {
-    const rol = await this.rolService.findByType(type);
-    if (!rol) throw new NotFoundException(`No rol found with type ${type}`);
-    return rol;
+    return await this.rolService.findByType(type);
   }
 }

@@ -18,8 +18,10 @@ export class GqlAuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
     const user = await this.authService.exchangeToken(token);
     if (!user) throw new UnauthorizedException();
+    const rol = await this.authService.getRol(user.rol);
     request.user = user;
     request.token = token;
+    request.rol = rol;
     return request;
   }
 

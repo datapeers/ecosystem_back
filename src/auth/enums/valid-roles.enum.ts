@@ -22,13 +22,12 @@ export const rolNames: Record<ValidRoles, string> = {
 };
 
 export const rolValues: Record<ValidRoles, number> = {
-  [ValidRoles.superAdmin]: 99999,
-  [ValidRoles.admin]: 9999,
+  [ValidRoles.superAdmin]: 9999,
+  [ValidRoles.admin]: 999,
+  [ValidRoles.host]: 99,
+  [ValidRoles.teamCoach]: 9,
   [ValidRoles.expert]: 3,
   [ValidRoles.user]: 2,
-  // [ValidRoles.investor]: 4,
-  [ValidRoles.host]: 9999,
-  [ValidRoles.teamCoach]: 9999,
 };
 
 registerEnumType(ValidRoles, {

@@ -10,12 +10,12 @@ export class Rol {
   _id: string;
 
   @Field(() => String)
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   rol: string;
 
-  @Field(() => Boolean)
-  @Prop({ type: 'boolean', default: false })
-  default: boolean;
+  @Field(() => String)
+  @Prop({ required: true })
+  name: string;
 
   @Field(() => GraphQLJSON)
   @Prop({ type: Object })

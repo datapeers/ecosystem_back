@@ -9,6 +9,7 @@ export enum ValidRoles {
   // investor = 'investor',
   host = 'host',
   teamCoach = 'teamCoach',
+  'challenger' = 'challenger',
 }
 
 export const rolNames: Record<ValidRoles, string> = {
@@ -19,6 +20,7 @@ export const rolNames: Record<ValidRoles, string> = {
   // [ValidRoles.investor]: "Inversionista",
   [ValidRoles.host]: 'Host',
   [ValidRoles.teamCoach]: 'Team Coach',
+  [ValidRoles.challenger]: 'Challenger',
 };
 
 export const rolValues: Record<ValidRoles, number> = {
@@ -28,6 +30,7 @@ export const rolValues: Record<ValidRoles, number> = {
   [ValidRoles.teamCoach]: 9,
   [ValidRoles.expert]: 3,
   [ValidRoles.user]: 2,
+  [ValidRoles.challenger]: 1,
 };
 
 registerEnumType(ValidRoles, {

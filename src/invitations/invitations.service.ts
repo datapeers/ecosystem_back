@@ -55,6 +55,7 @@ export class InvitationsService {
       // Create a new user
       this.authService.createAccountWithDefaultPassword(email, rol);
     } else {
+      console.log(rol);
       // Update the user role with the role from the new invitation
       const rolDoc = await this.usersService.findRolByType(rol);
       if (user.rol.toString() !== rolDoc._id.toString()) {

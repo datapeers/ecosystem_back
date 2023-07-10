@@ -13,7 +13,7 @@ export class RolResolver {
     return this.rolService.create(createRolInput);
   }
 
-  @Query(() => [Rol], { name: 'rol' })
+  @Query(() => [Rol], { name: 'roles' })
   findAll() {
     return this.rolService.findAll();
   }

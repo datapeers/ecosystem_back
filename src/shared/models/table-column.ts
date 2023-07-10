@@ -1,11 +1,14 @@
+import { TableColumnType } from "src/table/models/table-column-type.enum";
+
 export type TableColumn = {
   label: string;
   key: string;
+  type: TableColumnType;
   format: TableCellFormat;
   propConditionalClass?: { prop?: string; class?: any };
 };
   
-type TableCellFormat = 
+export type TableCellFormat = 
 | 'string'
 | 'url'
 | 'number'
@@ -13,4 +16,5 @@ type TableCellFormat =
 | 'boolean'
 | 'date'
 | 'dateAndTime'
-| 'time';
+| 'time'
+| 'arraysTags';

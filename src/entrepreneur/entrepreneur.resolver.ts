@@ -15,7 +15,7 @@ export class EntrepreneurResolver {
   constructor(
     private readonly entrepreneurService: EntrepreneurService,
   ) {}
-  entrepreneurAccount;
+
   @Query(() => [Entrepreneur], { name: 'entrepreneurs' })
   findAll() {
     return this.entrepreneurService.findAll();

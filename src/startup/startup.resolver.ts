@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { StartupService } from './startup.service';
@@ -60,5 +60,10 @@ export class StartupResolver {
   @Mutation(() => UpdateResultPayload, { name: 'linkStartupsWithEntrepreneurs' })
   linkStartupsWithEntrepreneurs(@Args() { ids, targetIds }: LinkWithTargetsArgs ): Promise<UpdateResultPayload> {
     return this.startupService.linkStartupsAndEntrepreneurs(ids, targetIds);
+  }
+
+  @ResolveField('isProspect', () => Boolean)
+  resolveIsProspect(@Parent() startup: Omit<Startup, "isProspect">) {
+    return !!startup.phases.length;
   }
 }

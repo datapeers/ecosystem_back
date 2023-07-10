@@ -17,6 +17,8 @@ export class ExpertService implements FormDocumentService {
     @InjectModel(Expert.name) private readonly expertModel: Model<Expert>,
   ) {}
 
+  private static readonly virtualFields = { $addFields: { isProspect: { $eq: [{ $size: "$phases" }, 0] } } };
+
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
@@ -43,6 +45,7 @@ export class ExpertService implements FormDocumentService {
 
   async findManyPage(request: PageRequest): Promise<PaginatedResult<Expert>> {
     const options = new AggregateBuildOptions();
+    options.virtualFields = ExpertService.virtualFields;
     const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
     const documents = await this.expertModel.aggregate<PaginatedResult<Expert>>(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
     return documents[0];

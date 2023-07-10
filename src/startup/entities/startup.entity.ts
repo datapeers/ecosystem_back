@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
-import { SchemaTypes, Types } from 'mongoose';
+import { SchemaTypes } from 'mongoose';
 import { User } from 'src/users/entities/user.entity';
 
 @Schema({ timestamps: true })
@@ -41,6 +41,9 @@ export class Startup {
 
   @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
+
+  @Field(() => Boolean)
+  isProspect: boolean;
 }
 
 @Schema()

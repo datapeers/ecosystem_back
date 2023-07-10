@@ -1,3 +1,6 @@
+import { TableCellFormat, TableColumn } from "src/shared/models/table-column";
+import { TableColumnType } from "./table-column-type.enum";
+
 export interface IColumn {
   label: string;
   key: string;
@@ -10,16 +13,11 @@ export interface IColumn {
   propConditionalClass?: { prop?: string; class?: any };
   children?: any[];
 }
-
-type TableCellFormat = "string" | "url" | "number" | "currency" | "boolean" | "date" | "dateAndTime" | "time";
-
-type TableColumnType = "data" | "array";
-
-export class RowConfigColumn {
+export class RowConfigColumn implements TableColumn {
   label: string;
-  type: string;
+  type: TableColumnType;
   key: any;
-  format: string;
+  format: TableCellFormat;
   children?: RowConfigColumn[];
   innerKeys?: { key: string; label: string }[];
   options?: string[];
@@ -27,9 +25,9 @@ export class RowConfigColumn {
   booleanText?: { true: string; false: string } | null | undefined;
   constructor(
       label: string,
-      type: string,
+      type: TableColumnType,
       key: any,
-      format: string,
+      format: TableCellFormat,
       extraOptions?: {
           children?: any[];
           innerKeys?: any;

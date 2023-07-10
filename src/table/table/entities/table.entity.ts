@@ -1,6 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
+import { TableJoin, TableJoinSchema } from './table-join';
+import { ColumnGroup } from './column-group';
+import { TableColumn } from 'src/shared/models/table-column';
 
 @Schema()
 @ObjectType()
@@ -16,8 +19,15 @@ export class Table {
   @Prop({ required: true })
   form: string;
 
-  @Field(() => GraphQLJSON, { description: "Configurable columns" })
-  columns?: JSON[];
+  @Field(() => [GraphQLJSON], { description: "Table joins with related forms.", nullable: true })
+  @Prop({ default: [], schema: TableJoinSchema })
+  joins?: TableJoin[];
+
+  @Field(() => [GraphQLJSON], { description: "Configurable columns." })
+  columns?: TableColumn[];
+
+  @Field(() => [GraphQLJSON], { description: "Configurable joined columns." })
+  columnGroups?: ColumnGroup[];
 }
 
 export const TableSchema = SchemaFactory.createForClass(Table);

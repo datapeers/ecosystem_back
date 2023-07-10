@@ -3,7 +3,8 @@ import { FieldFilter } from "../models/field-order";
 import { AggregateBuildOptions } from "../models/aggregate-build-options";
 
 // const buildAggregationFromRequest = (request: PageRequest, lookups: any[] = [], project: any = null, defaultMatch = { deletedAt: null }, paginated: boolean = true, outputProjection: any = null) => {
-const buildAggregationFromRequest = (request: PageRequest, { lookups, project, defaultMatch, paginated, outputProjection }: AggregateBuildOptions) => {
+const buildAggregationFromRequest = (request: PageRequest, options: AggregateBuildOptions) => {
+    const { lookups, project, defaultMatch, paginated, outputProjection, virtualFields } = options;
     const aggregation: any[] = [];
     const skip = request.skip != null ? { $skip: request.skip } : null;
     const limit = request.limit != null ? { $limit: request.limit } : null;
@@ -22,9 +23,6 @@ const buildAggregationFromRequest = (request: PageRequest, { lookups, project, d
     const idSorting = { $sort: { _id: 1 } };
 
     const match = _buildMatch(request.filter);
-    // const unwraps = request.unwrap?.concat(request?.foreignUnwrap ?? []) ?? [];
-    // const postUnwindFilters = request.filter.filter((opt) => opt.operations.some((operation) => unwraps.some((unwrappedField) => operation.field.startsWith(unwrappedField))));
-    // const postUnwindMatch = _buildMatch(postUnwindFilters);
     const foreignMatch = _buildMatch(request.foreignFilter, {});
     const globalMatch = request?.globalFilter ? _buildMatch([request.globalFilter]) : null;
 
@@ -41,15 +39,14 @@ const buildAggregationFromRequest = (request: PageRequest, { lookups, project, d
     } else {
         output = documentsFacet;
     }
-
-    // const unwinds = request.unwrap?.map((field) => ({ $unwind: { path: `$${field}`, preserveNullAndEmptyArrays: true } })) ?? [];
-    // const foreignUnwinds = request.foreignUnwrap?.map((field) => ({ $unwind: { path: `$${field}`, preserveNullAndEmptyArrays: true } })) ?? [];
-
     // Apply default match operations first, this should use indexes.
     aggregation.push({ $match: defaultMatch });
     // Project calculated fields (Like separate diferent types of an array element)
     if(project) {
         aggregation.push(project);
+    }
+    if(virtualFields) {
+        aggregation.push(virtualFields);
     }
     // Add non-foreign match operations to reduce amount of elements during lookups
     if (request.filter.length > 0) {
@@ -57,14 +54,7 @@ const buildAggregationFromRequest = (request: PageRequest, { lookups, project, d
     }
     // Apply lookups to search for additional fields
     aggregation.push(...lookups);
-    // Apply unwinds to de-normalize data if any
-    // aggregation.push(...unwinds);
-    // aggregation.push(...foreignUnwinds);
     // Apply filters that are related to array fields
-    // This allows to remove any field generated during the unwinds if there is a filter related to an inner field.
-    // if (postUnwindFilters.length > 0) {
-    //     aggregation.push(postUnwindMatch);
-    // }
     // Apply foreign filters, this should always go after lookups
     if (request.foreignFilter.length > 0) {
         aggregation.push(foreignMatch);

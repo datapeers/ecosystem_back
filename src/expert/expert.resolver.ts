@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { ExpertService } from './expert.service';
 import { Expert } from './entities/expert.entity';
@@ -56,5 +56,10 @@ export class ExpertResolver {
   @Mutation(() => UpdateResultPayload)
   deleteExperts(@Args('ids', { type: () => [String] }) ids: [string]) {
     return this.expertService.delete(ids);
+  }
+
+  @ResolveField('isProspect', () => Boolean)
+  resolveIsProspect(@Parent() expert: Omit<Expert, "isProspect">) {
+    return !!expert.phases.length;
   }
 }

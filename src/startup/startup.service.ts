@@ -21,6 +21,8 @@ export class StartupService implements FormDocumentService<Startup> {
     private readonly entrepreneurService: EntrepreneurService,
   ) {}
 
+  private static readonly virtualFields = { $addFields: { isProspect: { $eq: [{ $size: "$phases" }, 0] } } };
+
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
@@ -47,6 +49,7 @@ export class StartupService implements FormDocumentService<Startup> {
 
   async findManyPage(request: PageRequest): Promise<PaginatedResult<Startup>> {
     const options = new AggregateBuildOptions();
+    options.virtualFields = StartupService.virtualFields;
     const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
     const documents = await this.startupModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
     return documents[0];
@@ -54,6 +57,7 @@ export class StartupService implements FormDocumentService<Startup> {
 
   async findManyIdsByRequest(request: PageRequest): Promise<string[]> {
     const options = new AggregateBuildOptions();
+    options.virtualFields = StartupService.virtualFields;
     options.paginated = false;
     options.outputProjection = { $project: { _id: 1 } };
     const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);

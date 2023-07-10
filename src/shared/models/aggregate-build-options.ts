@@ -1,9 +1,10 @@
 export class AggregateBuildOptions {
   lookups: any[] = [];
-  project?: any;
+  project?: { $project: any };
   defaultMatch: any = { deletedAt: null };
   paginated?: boolean = true;
-  outputProjection?: any;
+  outputProjection?: { $project: any };
+  virtualFields: { $addFields: any };
 
   constructor() {
 

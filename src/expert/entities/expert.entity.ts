@@ -41,6 +41,9 @@ export class Expert {
 
   @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
+
+  @Field(() => Boolean)
+  isProspect: boolean;
 }
 
 @Schema()

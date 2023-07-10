@@ -42,7 +42,7 @@ export class Startup {
   @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   isProspect: boolean;
 }
 

@@ -48,6 +48,7 @@ export const defaultRoles = [
         view: true,
         create: true,
         close: true,
+        edit: true,
       },
       phases: {
         view: true,

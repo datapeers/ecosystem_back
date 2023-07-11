@@ -11,31 +11,38 @@ export const defaultRoles = [
       reports: {
         view: true,
         create: true,
+        edit: true,
       },
       community: {
         view: true,
         create: true,
+        edit: true,
       },
       formularios: {
         view: true,
         create: true,
+        edit: true,
       },
       help_desk: {
         view: true,
         create: true,
+        edit: true,
       },
       sites_and_services: {
         view: true,
         create: true,
+        edit: true,
       },
       announcements: {
         view: true,
         challenges: true,
         create: true,
+        edit: true,
       },
       events: {
         view: true,
         create: true,
+        edit: true,
       },
       actas: {
         view: true,
@@ -61,36 +68,43 @@ export const defaultRoles = [
       reports: {
         view: true,
         create: true,
+        edit: true,
       },
       community: {
         view: true,
         create: true,
+        edit: true,
       },
       formularios: {
         view: true,
         create: true,
+        edit: true,
       },
       help_desk: {
         view: true,
         create: true,
+        edit: true,
       },
       sites_and_services: {
         view: true,
         create: true,
+        edit: true,
       },
       announcements: {
         view: true,
         challenges: true,
         create: true,
+        edit: true,
       },
       events: {
         view: true,
         create: true,
+        edit: true,
       },
       actas: {
         view: true,
         create: true,
-
+        edit: true,
         close: true,
       },
       phases: {
@@ -112,6 +126,7 @@ export const defaultRoles = [
       reports: {
         view: true,
         create: true,
+        edit: true,
       },
       community: {
         view: false,
@@ -142,11 +157,12 @@ export const defaultRoles = [
       events: {
         view: true,
         create: true,
+        edit: true,
       },
       actas: {
         view: true,
         create: true,
-
+        edit: true,
         close: true,
       },
       phases: {
@@ -168,6 +184,7 @@ export const defaultRoles = [
       reports: {
         view: true,
         create: true,
+        edit: true,
       },
       community: {
         view: false,
@@ -198,11 +215,12 @@ export const defaultRoles = [
       events: {
         view: true,
         create: true,
+        edit: true,
       },
       actas: {
         view: true,
         create: true,
-
+        edit: true,
         close: true,
       },
       phases: {

@@ -12,6 +12,7 @@ import { FormsService } from 'src/forms/form/forms.service';
 import { tableUtilities } from '../utilities/table.utilities';
 import { AddTableJoinInput } from './dto/add-table-join.input';
 import { ColumnGroup } from './entities/column-group';
+import { RemoveTableJoinInput } from './dto/remove-table-join.input';
 
 @Injectable()
 export class TableService {
@@ -49,6 +50,15 @@ export class TableService {
     return updatedTable;
   }
 
+  async removeTableJoin({ id, key }: RemoveTableJoinInput): Promise<Table> {
+    const updatedTable = await this.tableModel.findByIdAndUpdate(
+      id,
+      { $pull: { joins: { key: key } } },
+      { new: true, lean: true },
+    );
+    return updatedTable;
+  }
+
   async findOne(filters: { _id?: string; locator?: string }): Promise<Table> {
     const table = await this.tableModel.findOne(filters);
     if (!table)
@@ -62,10 +72,16 @@ export class TableService {
       const joinForm = await this.formsService.findOne(join.form);
       const formComponents = JSON.parse(joinForm.formJson);
       const columns = tableUtilities.convertFormToColumns(formComponents.components, joinForm.documents, join.key);
+      const extraColumns = (join?.extraColumns ?? []).map(extraColumn => {
+        return {
+          ...extraColumn,
+          key: `${join.key}; ${extraColumn.key}`,
+        };
+      });
       return {
         name: joinForm.name,
         key: join.key,
-        columns,
+        columns: columns.concat(extraColumns),
       };
     });
     const joins = await Promise.all(joinsColumns);

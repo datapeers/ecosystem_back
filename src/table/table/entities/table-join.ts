@@ -1,6 +1,8 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
+import GraphQLJSON from "graphql-type-json";
+import { TableColumn } from "src/shared/models/table-column";
 
 @Schema()
 @InputType()
@@ -20,6 +22,11 @@ export class TableJoin {
   @Field()
   @Prop()
   form: string;
+
+  @Field(() => GraphQLJSON)
+  @IsOptional()
+  @Prop({ default: [] })
+  extraColumns: TableColumn[];
 }
 
 export const TableJoinSchema = SchemaFactory.createForClass(TableJoin);

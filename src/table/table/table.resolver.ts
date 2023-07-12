@@ -8,6 +8,7 @@ import GraphQLJSON from 'graphql-type-json';
 import { AddTableJoinInput } from './dto/add-table-join.input';
 import { ColumnGroup } from './entities/column-group';
 import { TableColumn } from 'src/shared/models/table-column';
+import { RemoveTableJoinInput } from './dto/remove-table-join.input';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Table)
@@ -24,6 +25,11 @@ export class TableResolver {
   @Mutation(() => Table)
   async addTableJoin(@Args('addTableJoinInput') addTableJoinInput: AddTableJoinInput): Promise<Table> {
     return await this.tableService.addTableJoin(addTableJoinInput);
+  }
+
+  @Mutation(() => Table)
+  async removeTableJoin(@Args('removeTableJoinInput') removeTableJoinInput: RemoveTableJoinInput): Promise<Table> {
+    return await this.tableService.removeTableJoin(removeTableJoinInput);
   }
 
   @Query(() => Table, { name: 'table' })

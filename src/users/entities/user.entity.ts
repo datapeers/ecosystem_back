@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ValidRoles, rolValues } from 'src/auth/enums/valid-roles.enum';
 import { SchemaTypes } from 'mongoose';
 import { Rol } from 'src/rol/entities/rol.entity';
+import { GraphQLJSONObject } from 'graphql-scalars';
 @Schema({ timestamps: true })
 @ObjectType()
 export class User {
@@ -67,64 +68,9 @@ export class User {
   })
   googleIn?: Boolean;
 
-  // @Field(() => RelationsAssign, { nullable: true, defaultValue: null })
-  // @Prop({
-  //   description:
-  //     'Displays whether the user has fixed assignments in the phase, batch and startup components',
-  // })
-  // relationsAssign?: any;
-}
-
-@Schema()
-@ObjectType()
-export class RelationsAssign {
-  // @Field(() => [FaseRelationships])
-  // @Prop({ default: [] })
-  // fases: FaseRelationships[];
-
-  // @Field(() => [BatchRelationships])
-  // @Prop({ default: [] })
-  // batches: BatchRelationships[];
-
-  @Field(() => [StartupRelationships])
-  @Prop({ default: [] })
-  startUps: StartupRelationships[];
-}
-
-// @Schema()
-// @ObjectType()
-// export class FaseRelationships {
-//   @Field(() => String)
-//   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
-//   _id: string;
-
-//   @Field(() => String)
-//   @Prop()
-//   name: string;
-// }
-
-// @Schema()
-// @ObjectType()
-// export class BatchRelationships {
-//   @Field(() => String)
-//   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
-//   _id: string;
-
-//   @Field(() => String)
-//   @Prop()
-//   name: string;
-// }
-
-@Schema()
-@ObjectType()
-export class StartupRelationships {
-  @Field(() => String)
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'Startup' })
-  _id: string;
-
-  @Field(() => String)
-  @Prop()
-  name: string;
+  @Field(() => GraphQLJSONObject, { nullable: true, defaultValue: {} })
+  @Prop({ type: SchemaTypes.Mixed })
+  relationsAssign: any;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

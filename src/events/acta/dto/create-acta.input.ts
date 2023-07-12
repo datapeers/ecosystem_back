@@ -39,4 +39,8 @@ export class CreateActaInput {
   @Field(() => GraphQLJSONObject)
   @IsOptional()
   extra_options: Record<string, any>;
+
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  closed?: boolean;
 }

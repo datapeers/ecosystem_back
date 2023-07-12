@@ -45,9 +45,13 @@ export class UsersService implements OnModuleInit {
 
   async findMany({ search, roles }: FindUsersArgs) {
     let filters = {};
-
+    let rolesDocs = [];
     if (roles?.length) {
-      filters['roles'] = { $in: roles };
+      for (const iterator of roles) {
+        const docRol = await this.findRolByType(iterator);
+        rolesDocs.push(docRol._id);
+      }
+      filters['rol'] = { $in: rolesDocs };
     }
 
     if (search) {

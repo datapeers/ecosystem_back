@@ -266,7 +266,68 @@ export const defaultRoles = [
   {
     type: 'expert',
     name: 'Experto',
-    permissions: {},
+    permissions: {
+      view_startups: true,
+      view_experts: false,
+      view_entrepreneurs: false,
+      view_business: false,
+      download_tables: true,
+      reports: {
+        view: false,
+        create: true,
+        edit: false,
+      },
+      community: {
+        view: false,
+        create: false,
+        edit: false,
+      },
+      formularios: {
+        view: false,
+        create: false,
+        edit: false,
+      },
+      help_desk: {
+        view: false,
+        create: false,
+        edit: false,
+      },
+      sites_and_services: {
+        view: false,
+        create: false,
+        edit: false,
+      },
+      announcements: {
+        view: false,
+        challenges: false,
+        create: false,
+        edit: false,
+      },
+      events: {
+        view: true,
+        create: true,
+        edit: true,
+      },
+      actas: {
+        view: true,
+        create: true,
+        edit: true,
+        close: true,
+      },
+      phases: {
+        view: true,
+        batch_create: false,
+        batch_edit: false,
+        phase_edit: false,
+      },
+      hours: {
+        view: false,
+        edit_main: false,
+        edit_activities: false,
+        edit_startups: false,
+        edit_experts: false,
+      },
+    },
   },
   {
     type: 'user',

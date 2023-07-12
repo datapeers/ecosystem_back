@@ -52,6 +52,7 @@ export const defaultRoles = [
       },
       phases: {
         view: true,
+        batch_create: true,
         batch_edit: true,
         phase_edit: true,
       },
@@ -117,6 +118,7 @@ export const defaultRoles = [
       },
       phases: {
         view: true,
+        batch_create: true,
         batch_edit: true,
         phase_edit: true,
       },
@@ -182,6 +184,7 @@ export const defaultRoles = [
       },
       phases: {
         view: true,
+        batch_create: true,
         batch_edit: true,
         phase_edit: false,
       },
@@ -247,6 +250,7 @@ export const defaultRoles = [
       },
       phases: {
         view: true,
+        batch_create: true,
         batch_edit: true,
         phase_edit: false,
       },

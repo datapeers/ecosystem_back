@@ -82,7 +82,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   }
 
   async findByAccount(accountId: string) {
-    return await this.entrepreneurModel.findOne({ accountId });
+    return await this.entrepreneurModel.findOne({ accountId }).lean();
   }
 
   async create(data: Partial<Entrepreneur>): Promise<Entrepreneur> {

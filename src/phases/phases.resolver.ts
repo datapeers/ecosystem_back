@@ -13,8 +13,8 @@ export class PhasesResolver {
   constructor(private readonly phasesService: PhasesService) {}
 
   @Query(() => [Phase], { name: 'phases' })
-  findAll() {
-    return this.phasesService.findAll();
+  findAll(@CurrentUser() user: AuthUser) {
+    return this.phasesService.findAll(user);
   }
 
   @Query(() => Phase, { name: 'phase' })

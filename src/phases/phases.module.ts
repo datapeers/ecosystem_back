@@ -9,6 +9,7 @@ import { LoggerModule } from 'src/logger/logger.module';
 import { ContentModule } from 'src/content/content.module';
 import { ActivitiesConfigModule } from 'src/activities-config/activities-config.module';
 import { ResourcesModule } from 'src/resources/resources.module';
+import { ExpertModule } from 'src/expert/expert.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Phase.name, schema: PhaseSchema }]),
@@ -17,6 +18,7 @@ import { ResourcesModule } from 'src/resources/resources.module';
     LoggerModule,
     ContentModule,
     ResourcesModule,
+    ExpertModule,
     ActivitiesConfigModule,
   ],
   providers: [PhasesResolver, PhasesService],

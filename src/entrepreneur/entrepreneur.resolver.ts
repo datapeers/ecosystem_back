@@ -8,13 +8,12 @@ import { PageRequest } from 'src/shared/models/page-request';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-by-request.args';
 import { LinkWithTargetsArgs } from 'src/shared/args/link-with-targets.args';
-
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Entrepreneur)
 export class EntrepreneurResolver {
-  constructor(
-    private readonly entrepreneurService: EntrepreneurService,
-  ) {}
+  constructor(private readonly entrepreneurService: EntrepreneurService) {}
 
   @Query(() => [Entrepreneur], { name: 'entrepreneurs' })
   findAll() {
@@ -24,8 +23,9 @@ export class EntrepreneurResolver {
   @Query(() => PaginatedResult<Entrepreneur>, { name: 'entrepreneursPage' })
   findManyPage(
     @Args('request') request: PageRequest,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.entrepreneurService.findManyPage(request);
+    return this.entrepreneurService.findManyPage(request, user);
   }
 
   @Query(() => Entrepreneur, { name: 'entrepreneur' })
@@ -39,27 +39,55 @@ export class EntrepreneurResolver {
   }
 
   @Mutation(() => UpdateResultPayload)
-  deleteEntrepreneurs(@Args('ids', { type: () => [String] }) ids: [string]): Promise<UpdateResultPayload> {
+  deleteEntrepreneurs(
+    @Args('ids', { type: () => [String] }) ids: [string],
+  ): Promise<UpdateResultPayload> {
     return this.entrepreneurService.delete(ids);
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkEntrepreneursWithBusinessesByRequest' })
-  linkEntrepreneursWithBusinessesByRequest(@Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs ): Promise<UpdateResultPayload> {
-    return this.entrepreneurService.linkWithBusinessesByRequest(linkWithTargetsByRequestArgs);
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkEntrepreneursWithBusinessesByRequest',
+  })
+  linkEntrepreneursWithBusinessesByRequest(
+    @Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs,
+  ): Promise<UpdateResultPayload> {
+    return this.entrepreneurService.linkWithBusinessesByRequest(
+      linkWithTargetsByRequestArgs,
+    );
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkEntrepreneursWithBusinesses' })
-  linkEntrepreneursWithBusinesses(@Args() { ids, targetIds }: LinkWithTargetsArgs ): Promise<UpdateResultPayload> {
-    return this.entrepreneurService.linkEntrepreneursAndBusinesses(ids, targetIds);
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkEntrepreneursWithBusinesses',
+  })
+  linkEntrepreneursWithBusinesses(
+    @Args() { ids, targetIds }: LinkWithTargetsArgs,
+  ): Promise<UpdateResultPayload> {
+    return this.entrepreneurService.linkEntrepreneursAndBusinesses(
+      ids,
+      targetIds,
+    );
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkEntrepreneursWithStartupsByRequest' })
-  linkEntrepreneursWithStartupsByRequest(@Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs ): Promise<UpdateResultPayload> {
-    return this.entrepreneurService.linkWithStartupsByRequest(linkWithTargetsByRequestArgs);
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkEntrepreneursWithStartupsByRequest',
+  })
+  linkEntrepreneursWithStartupsByRequest(
+    @Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs,
+  ): Promise<UpdateResultPayload> {
+    return this.entrepreneurService.linkWithStartupsByRequest(
+      linkWithTargetsByRequestArgs,
+    );
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkEntrepreneursWithStartups' })
-  linkEntrepreneursWithStartups(@Args() { ids, targetIds }: LinkWithTargetsArgs ): Promise<UpdateResultPayload> {
-    return this.entrepreneurService.linkEntrepreneursAndStartups(ids, targetIds);
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkEntrepreneursWithStartups',
+  })
+  linkEntrepreneursWithStartups(
+    @Args() { ids, targetIds }: LinkWithTargetsArgs,
+  ): Promise<UpdateResultPayload> {
+    return this.entrepreneurService.linkEntrepreneursAndStartups(
+      ids,
+      targetIds,
+    );
   }
 }

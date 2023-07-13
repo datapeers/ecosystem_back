@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { StartupService } from './startup.service';
@@ -9,6 +16,8 @@ import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-
 import { LinkWithTargetsArgs } from 'src/shared/args/link-with-targets.args';
 import { PageRequest } from 'src/shared/models/page-request';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Startup)
@@ -23,8 +32,9 @@ export class StartupResolver {
   @Query(() => PaginatedResult<Startup>, { name: 'startupsPage' })
   findManyPage(
     @Args('request') request: PageRequest,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.startupService.findManyPage(request);
+    return this.startupService.findManyPage(request, user);
   }
 
   @Query(() => [Startup], { name: 'startupsCommunities' })
@@ -33,8 +43,11 @@ export class StartupResolver {
   }
 
   @Query(() => [Startup], { name: 'startupsPhase' })
-  findByPhase(@Args('phase', { type: () => String }) phase: string) {
-    return this.startupService.findByPhase(phase);
+  findByPhase(
+    @Args('phase', { type: () => String }) phase: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.startupService.findByPhase(phase, user);
   }
 
   @Query(() => Startup, { name: 'startup' })
@@ -52,18 +65,28 @@ export class StartupResolver {
     return this.startupService.delete(ids);
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkStartupsWithEntrepreneursByRequest' })
-  linkStartupsWithEntrepreneursByRequest(@Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs ): Promise<UpdateResultPayload> {
-    return this.startupService.linkWithEntrepreneursByRequest(linkWithTargetsByRequestArgs);
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkStartupsWithEntrepreneursByRequest',
+  })
+  linkStartupsWithEntrepreneursByRequest(
+    @Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs,
+  ): Promise<UpdateResultPayload> {
+    return this.startupService.linkWithEntrepreneursByRequest(
+      linkWithTargetsByRequestArgs,
+    );
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkStartupsWithEntrepreneurs' })
-  linkStartupsWithEntrepreneurs(@Args() { ids, targetIds }: LinkWithTargetsArgs ): Promise<UpdateResultPayload> {
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkStartupsWithEntrepreneurs',
+  })
+  linkStartupsWithEntrepreneurs(
+    @Args() { ids, targetIds }: LinkWithTargetsArgs,
+  ): Promise<UpdateResultPayload> {
     return this.startupService.linkStartupsAndEntrepreneurs(ids, targetIds);
   }
 
   @ResolveField('isProspect', () => Boolean)
-  resolveIsProspect(@Parent() startup: Omit<Startup, "isProspect">) {
+  resolveIsProspect(@Parent() startup: Omit<Startup, 'isProspect'>) {
     return !!startup.phases.length;
   }
 }

@@ -1,8 +1,17 @@
-import {Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
-import { EntrepreneurRelationship, PhaseRelationship, Startup, } from './entities/startup.entity';
+import {
+  EntrepreneurRelationship,
+  PhaseRelationship,
+  Startup,
+} from './entities/startup.entity';
 import { FormDocumentService } from 'src/forms/factories/form-document-service';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 import { LinkStartupToPhaseArgs } from './args/link-phase-startup.args';
@@ -12,6 +21,10 @@ import { AggregateBuildOptions } from 'src/shared/models/aggregate-build-options
 import { PageRequest } from 'src/shared/models/page-request';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { requestUtilities } from 'src/shared/utilities/request.utilities';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { ExpertService } from '../expert/expert.service';
+import { Expert } from 'src/expert/entities/expert.entity';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -19,9 +32,12 @@ export class StartupService implements FormDocumentService<Startup> {
     @InjectModel(Startup.name) private readonly startupModel: Model<Startup>,
     @Inject(forwardRef(() => EntrepreneurService))
     private readonly entrepreneurService: EntrepreneurService,
+    private readonly expertService: ExpertService,
   ) {}
 
-  private static readonly virtualFields = { $addFields: { isProspect: { $eq: [{ $size: "$phases" }, 0] } } };
+  private static readonly virtualFields = {
+    $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
+  };
 
   async getDocument(id: string) {
     const document = await this.findOne(id);
@@ -47,11 +63,32 @@ export class StartupService implements FormDocumentService<Startup> {
     return createdDocument;
   }
 
-  async findManyPage(request: PageRequest): Promise<PaginatedResult<Startup>> {
+  async findManyPage(
+    request: PageRequest,
+    user: AuthUser,
+  ): Promise<PaginatedResult<Startup>> {
     const options = new AggregateBuildOptions();
     options.virtualFields = StartupService.virtualFields;
-    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
-    const documents = await this.startupModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(
+      request,
+      options,
+    );
+    if (user.rolDoc.type === ValidRoles.expert) {
+      const docExpert = await this.expertService.findByAccount(user.uid);
+      const idStartups = docExpert.phases.flatMap((phaseProfile) =>
+        phaseProfile.startUps.map((startup) => new Types.ObjectId(startup._id)),
+      );
+      aggregationPipeline[0]['$match']['_id'] = { $in: idStartups };
+    }
+    if (user.rolDoc.type === ValidRoles.teamCoach) {
+      let startupsTeamCoach =
+        user.relationsAssign?.startups.map((i) => new Types.ObjectId(i._id)) ??
+        [];
+      aggregationPipeline[0]['$match']['_id'] = { $in: startupsTeamCoach };
+    }
+    const documents = await this.startupModel
+      .aggregate(aggregationPipeline)
+      .collation({ locale: 'en_US', strength: 2 });
     return documents[0];
   }
 
@@ -60,9 +97,14 @@ export class StartupService implements FormDocumentService<Startup> {
     options.virtualFields = StartupService.virtualFields;
     options.paginated = false;
     options.outputProjection = { $project: { _id: 1 } };
-    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
-    const documents = await this.startupModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
-    return documents.map(doc => doc._id);
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(
+      request,
+      options,
+    );
+    const documents = await this.startupModel
+      .aggregate(aggregationPipeline)
+      .collation({ locale: 'en_US', strength: 2 });
+    return documents.map((doc) => doc._id);
   }
 
   async linkStartupsAndEntrepreneurs(
@@ -149,17 +191,66 @@ export class StartupService implements FormDocumentService<Startup> {
     });
   }
 
-  async findByPhase(phase: string): Promise<Startup[]> {
+  async findByPhase(phase: string, user: AuthUser): Promise<Startup[]> {
     const initMatch = {
       'phases._id': phase,
     };
-    const lookUps = [];
+    if (user.rolDoc.type === ValidRoles.expert) {
+      const docExpert = await this.expertService.findByAccount(user.uid);
+      const phaseProfileExpert = docExpert.phases.find((i) => i._id === phase);
+      let startUpsExpert = phaseProfileExpert.startUps.map(
+        (i) => new Types.ObjectId(i._id),
+      );
+      initMatch['_id'] = { $in: startUpsExpert };
+    }
+    if (user.rolDoc.type === ValidRoles.teamCoach) {
+      let startupsTeamCoach =
+        user.relationsAssign?.startups.map((i) => new Types.ObjectId(i._id)) ??
+        [];
+      initMatch['_id'] = { $in: startupsTeamCoach };
+    }
+    const lookUps = [
+      // {
+      //   $lookup: {
+      //     from: Expert.name,
+      //     let: { startupId: '$_id' },
+      //     pipeline: [
+      //       {
+      //         $match: {
+      //           $expr: {
+      //             $in: ['$$startupId', '$phases.startUps._id'],
+      //           },
+      //         },
+      //       },
+      //       {
+      //         $project: {
+      //           item: 1,
+      //         },
+      //       },
+      //     ],
+      //     as: 'experto',
+      //   },
+      // },
+      // {
+      //   $unwind: {
+      //     path: '$experto',
+      //     preserveNullAndEmptyArrays: true,
+      //   },
+      // },
+    ];
     const project = {
       $project: {
         _id: 1,
         item: 1,
         phases: 1,
         entrepreneurs: 1,
+        // experto: {
+        //   $cond: {
+        //     if: { $ne: ['$experto', null] },
+        //     then: '$experto.item.nombre',
+        //     else: null,
+        //   },
+        // },
       },
     };
     const startups = await this.startupModel.aggregate([
@@ -167,7 +258,6 @@ export class StartupService implements FormDocumentService<Startup> {
       project,
       ...lookUps,
     ]);
-
     return startups;
   }
 
@@ -224,7 +314,10 @@ export class StartupService implements FormDocumentService<Startup> {
       .lean();
   }
 
-  async linkWithEntrepreneursByRequest({ request, targetIds }: LinkWithTargetsByRequestArgs) {
+  async linkWithEntrepreneursByRequest({
+    request,
+    targetIds,
+  }: LinkWithTargetsByRequestArgs) {
     const businesses = await this.findManyIdsByRequest(request);
     return await this.linkStartupsAndEntrepreneurs(businesses, targetIds);
   }

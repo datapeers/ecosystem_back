@@ -5,11 +5,13 @@ import { StartupResolver } from './startup.resolver';
 import { Startup, StartupSchema } from './entities/startup.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
+import { ExpertModule } from 'src/expert/expert.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Startup.name, schema: StartupSchema }]),
     AuthModule,
+    ExpertModule,
     forwardRef(() => EntrepreneurModule),
   ],
   providers: [StartupResolver, StartupService],

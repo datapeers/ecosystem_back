@@ -27,4 +27,8 @@ export class UpdateUserInput {
   @Field(() => GraphQLJSONObject, { nullable: true })
   @IsOptional()
   relationsAssign?: Record<string, any>;
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  permissions: string[];
 }

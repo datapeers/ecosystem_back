@@ -17,9 +17,9 @@ export class Rol {
   @Prop({ required: true })
   name: string;
 
-  @Field(() => GraphQLJSON, { nullable: true })
-  @Prop({ type: Object })
-  permissions: JSON;
+  @Field(() => [String])
+  @Prop({ default: [] })
+  permissions: string[];
 
   @Field(() => Date, { description: 'Date of entity creation.' })
   createdAt: Date;

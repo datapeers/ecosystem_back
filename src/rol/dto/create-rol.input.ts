@@ -7,8 +7,4 @@ export class CreateRolInput {
   @Field(() => String)
   @IsNotEmpty()
   rol: string;
-
-  @Field(() => GraphQLJSONObject)
-  @IsOptional()
-  permissions: Record<string, any>;
 }

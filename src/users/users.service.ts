@@ -26,9 +26,13 @@ export class UsersService implements OnModuleInit {
     // for (const iterator of roles) {
     //   rolesObj[iterator.type] = iterator._id;
     // }
+    // console.log(rolesObj);
     // for (const iterator of users) {
-    //   if (iterator.rol) continue;
-    //   iterator.rol = rolesObj[iterator.roles[0]];
+    //   if (!iterator['roles'][0]) {
+    //     console.log('error con', iterator);
+    //   }
+    //   console.log(rolesObj[iterator['roles'][0]]);
+    //   iterator.rol = rolesObj[iterator['roles'][0]];
     //   await iterator.save();
     // }
   }

@@ -13,7 +13,7 @@ export class UpdateRolInput extends PartialType(CreateRolInput) {
   @IsOptional()
   name?: string;
 
-  @Field(() => GraphQLJSONObject, { nullable: true })
+  @Field(() => [String], { nullable: true })
   @IsOptional()
-  permissions?: Record<string, any>;
+  permissions: string[];
 }

@@ -2,341 +2,118 @@ export const defaultRoles = [
   {
     type: 'superAdmin',
     name: 'Super Admin',
-    permissions: {
-      view_startups: true,
-      view_experts: true,
-      view_entrepreneurs: true,
-      view_business: true,
-      download_tables: true,
-      reports: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      community: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      formularios: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      help_desk: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      sites_and_services: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      announcements: {
-        view: true,
-        challenges: true,
-        create: true,
-        edit: true,
-      },
-      events: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      actas: {
-        view: true,
-        create: true,
-        close: true,
-        edit: true,
-      },
-      phases: {
-        view: true,
-        batch_create: true,
-        batch_edit: true,
-        phase_edit: true,
-      },
-      hours: {
-        view: true,
-        edit_main: true,
-        edit_activities: true,
-        edit_startups: true,
-        edit_experts: true,
-      },
-    },
+    permissions: [],
   },
   {
     type: 'admin',
     name: 'Administrador',
-    permissions: {
-      view_startups: true,
-      view_experts: true,
-      view_entrepreneurs: true,
-      view_business: true,
-      download_tables: true,
-      reports: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      community: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      formularios: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      help_desk: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      sites_and_services: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      announcements: {
-        view: true,
-        challenges: true,
-        create: true,
-        edit: true,
-      },
-      events: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      actas: {
-        view: true,
-        create: true,
-        edit: true,
-        close: true,
-      },
-      phases: {
-        view: true,
-        batch_create: true,
-        batch_edit: true,
-        phase_edit: true,
-      },
-      hours: {
-        view: true,
-        edit_main: true,
-        edit_activities: true,
-        edit_startups: true,
-        edit_experts: true,
-      },
-    },
+    permissions: [],
   },
   {
     type: 'host',
     name: 'Host',
-    permissions: {
-      view_startups: true,
-      view_experts: true,
-      view_entrepreneurs: true,
-      view_business: true,
-      download_tables: true,
-      reports: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      community: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      formularios: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      help_desk: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      sites_and_services: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      announcements: {
-        view: false,
-        challenges: false,
-        create: false,
-        edit: false,
-      },
-      events: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      actas: {
-        view: true,
-        create: true,
-        edit: true,
-        close: true,
-      },
-      phases: {
-        view: true,
-        batch_create: true,
-        batch_edit: true,
-        phase_edit: false,
-      },
-      hours: {
-        view: true,
-        edit_main: true,
-        edit_activities: true,
-        edit_startups: true,
-        edit_experts: true,
-      },
-    },
+    permissions: [],
   },
   {
     type: 'teamCoach',
     name: 'Team Coach',
-    permissions: {
-      view_startups: true,
-      view_experts: true,
-      view_entrepreneurs: true,
-      view_business: true,
-      download_tables: true,
-      reports: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      community: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      formularios: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      help_desk: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      sites_and_services: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      announcements: {
-        view: false,
-        challenges: false,
-        create: false,
-        edit: false,
-      },
-      events: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      actas: {
-        view: true,
-        create: true,
-        edit: true,
-        close: true,
-      },
-      phases: {
-        view: true,
-        batch_create: true,
-        batch_edit: true,
-        phase_edit: false,
-      },
-      hours: {
-        view: true,
-        edit_main: true,
-        edit_activities: true,
-        edit_startups: true,
-        edit_experts: true,
-      },
-    },
+    permissions: [],
   },
   {
     type: 'expert',
     name: 'Experto',
-    permissions: {
-      view_startups: true,
-      view_experts: false,
-      view_entrepreneurs: false,
-      view_business: false,
-      download_tables: true,
-      reports: {
-        view: false,
-        create: true,
-        edit: false,
-      },
-      community: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      formularios: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      help_desk: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      sites_and_services: {
-        view: false,
-        create: false,
-        edit: false,
-      },
-      announcements: {
-        view: false,
-        challenges: false,
-        create: false,
-        edit: false,
-      },
-      events: {
-        view: true,
-        create: true,
-        edit: true,
-      },
-      actas: {
-        view: true,
-        create: true,
-        edit: true,
-        close: true,
-      },
-      phases: {
-        view: true,
-        batch_create: false,
-        batch_edit: false,
-        phase_edit: false,
-      },
-      hours: {
-        view: false,
-        edit_main: false,
-        edit_activities: false,
-        edit_startups: false,
-        edit_experts: false,
-      },
-    },
+    permissions: [],
   },
   {
     type: 'user',
     name: 'Usuario',
-    permissions: {},
+    permissions: [],
   },
   {
     type: 'challenger',
     name: 'Challenger',
-    permissions: {},
+    permissions: [],
   },
 ];
+
+export const listPermission = {
+  // Startups
+  view_startups: true,
+  create_startups: true,
+  edit_startups: true,
+
+  // Experts
+  view_experts: true,
+  create_experts: true,
+  edit_experts: true,
+
+  // Entrepreneurs
+  view_entrepreneurs: true,
+  create_entrepreneurs: true,
+  edit_entrepreneurs: true,
+
+  // Business
+  view_business: true,
+  create_business: true,
+  edit_business: true,
+
+  // Tables
+  download_all_tables: true,
+
+  // Reports
+  reports_view: true,
+  reports_create: true,
+  reports_edit: true,
+
+  // Community
+  community_view: true,
+  community_create: true,
+  community_edit: true,
+
+  // Forms
+  form_view: true,
+  form_create: true,
+  form_edit: true,
+
+  // Help Desk
+  help_desk_view: true,
+  help_desk_create: true,
+  help_desk_edit: true,
+
+  // Sites
+  sites_and_services_view: true,
+  sites_and_services_create: true,
+  sites_and_services_edit: true,
+
+  // Announcements
+  announcements_view: true,
+  announcements_challenges: true,
+  announcements_create: true,
+  announcements_edit: true,
+
+  // Phase and batch
+  phases_view: true,
+  phases_batch_create: true,
+  phases_batch_access: true,
+  phases_batch_edit: true,
+  phases_batch_content: true,
+  phases_phase_edit: true,
+
+  // Phase Events
+  events_view: true,
+  events_create: true,
+  events_edit: true,
+
+  // Phase Actas
+  actas_view: true,
+  actas_create: true,
+  actas_close: true,
+  actas_edit: true,
+
+  // Phase Hours bag
+  hours_view: true,
+  hours_edit_main: true,
+  hours_edit_activities: true,
+  hours_edit_startups: true,
+  hours_edit_experts: true,
+};

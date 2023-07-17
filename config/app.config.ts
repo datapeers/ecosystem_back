@@ -10,6 +10,7 @@ export const EnvConfiguration = () => ({
   awsS3Uri: process.env.AWS_S3_URI,
   awsS3PublicUri: process.env.AWS_S3_PUBLIC_URI,
   awsS3BucketName: process.env.AWS_S3_BUCKET_NAME ?? 'default',
+  awsS3TempBucketName: process.env.AWS_S3_TEMP_BUCKET_NAME ?? 'temp',
   awsS3Region: process.env.AWS_S3_REGION ?? 'eu-west-1',
   awsS3Key: process.env.AWS_S3_KEY,
   awsS3Access: process.env.AWS_S3_ACCESS,

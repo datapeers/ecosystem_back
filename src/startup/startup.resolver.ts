@@ -18,11 +18,21 @@ import { PageRequest } from 'src/shared/models/page-request';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
+import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
+import { DownloadResult } from 'src/shared/models/download-result';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Startup)
 export class StartupResolver {
   constructor(private readonly startupService: StartupService) {}
+
+  @Query(() => DownloadResult, { name: 'startupsDownload' })
+  downloadByRequest(
+    @Args() downloadRequest: DownloadRequestArgs,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.startupService.downloadByRequest(downloadRequest, user);
+  }
 
   @Query(() => [Startup], { name: 'startups' })
   findAll() {
@@ -70,9 +80,11 @@ export class StartupResolver {
   })
   linkStartupsWithEntrepreneursByRequest(
     @Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs,
+    @CurrentUser() user: AuthUser,
   ): Promise<UpdateResultPayload> {
     return this.startupService.linkWithEntrepreneursByRequest(
       linkWithTargetsByRequestArgs,
+      user
     );
   }
 

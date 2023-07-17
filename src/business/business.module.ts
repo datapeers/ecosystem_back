@@ -6,6 +6,8 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { Business, BusinessSchema } from './entities/business.entity';
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
+import { DownloadsModule } from 'src/downloads/downloads.module';
+import { TableModule } from 'src/table/table.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
     AuthModule,
     UsersModule,
     forwardRef(() => EntrepreneurModule),
+    DownloadsModule,
+    forwardRef(() => TableModule),
   ],
   providers: [BusinessResolver, BusinessService],
   exports: [BusinessService],

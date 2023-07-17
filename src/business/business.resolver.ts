@@ -8,11 +8,23 @@ import { PageRequest } from 'src/shared/models/page-request';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { LinkWithTargetsArgs } from 'src/shared/args/link-with-targets.args';
 import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-by-request.args';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
+import { DownloadResult } from 'src/shared/models/download-result';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Business)
 export class BusinessResolver {
   constructor(private readonly businessService: BusinessService) {}
+
+  @Query(() => DownloadResult, { name: 'businessesDownload' })
+  downloadByRequest(
+    @Args() downloadRequest: DownloadRequestArgs,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.businessService.downloadByRequest(downloadRequest, user);
+  }
 
   @Query(() => [Business], { name: 'businesses' })
   findAll() {
@@ -22,8 +34,9 @@ export class BusinessResolver {
   @Query(() => PaginatedResult<Business>, { name: 'businessesPage' })
   findManyPage(
     @Args('request') request: PageRequest,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.businessService.findManyPage(request);
+    return this.businessService.findManyPage(request, user);
   }
 
   @Query(() => Business, { name: 'business' })

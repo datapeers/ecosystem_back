@@ -9,7 +9,6 @@ import { SubmitAnnouncementDocInput } from 'src/announcements/dto/submit-announc
 import { FormFileSubmission } from 'src/forms/factories/form-file-submission';
 import { UpdateApplicantStateInput } from './dto/update-applicant-state.input';
 import { AnnouncementApplicantsArgs } from './args/announcement-applicants.args';
-import { ApplicationStates } from './enums/application-states.enum';
 import { ApplicantArgs } from './args/applicant.args';
 
 @Injectable()

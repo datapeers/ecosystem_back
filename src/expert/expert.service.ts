@@ -10,11 +10,19 @@ import { AggregateBuildOptions } from 'src/shared/models/aggregate-build-options
 import { PageRequest } from 'src/shared/models/page-request';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { requestUtilities } from 'src/shared/utilities/request.utilities';
+import { DownloadsService } from 'src/downloads/downloads.service';
+import { TableConfigService } from 'src/table/table-config/table-config.service';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
+import { DownloadResult } from 'src/shared/models/download-result';
+import { excelUtilities } from 'src/shared/utilities/excel.utilities';
 
 @Injectable()
 export class ExpertService implements FormDocumentService {
   constructor(
     @InjectModel(Expert.name) private readonly expertModel: Model<Expert>,
+    private readonly tableConfigService: TableConfigService,
+    private readonly downloadService: DownloadsService,
   ) {}
 
   private static readonly virtualFields = {
@@ -45,8 +53,12 @@ export class ExpertService implements FormDocumentService {
     return experts;
   }
 
-  async findManyPage(request: PageRequest): Promise<PaginatedResult<Expert>> {
+  async findManyPage(request: PageRequest, user: AuthUser, outputProjection?: any): Promise<PaginatedResult<Expert>> {
+    // TODO Implement filtering by user if required
     const options = new AggregateBuildOptions();
+    if(outputProjection) {
+      options.outputProjection = outputProjection;
+    }
     options.virtualFields = ExpertService.virtualFields;
     const aggregationPipeline = requestUtilities.buildAggregationFromRequest(
       request,
@@ -149,5 +161,19 @@ export class ExpertService implements FormDocumentService {
       console.warn(error);
       throw new NotFoundException(`Couldn't find expert`);
     }
+  }
+
+  async downloadByRequest({ request, configId, format }: DownloadRequestArgs, user: AuthUser): Promise<DownloadResult> {
+    const config = await this.tableConfigService.findOne(configId);
+    const tableColumns = config.columns;
+    const outputProjection = requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const pageResult = await this.findManyPage(request, user, outputProjection);
+    const rows = excelUtilities.parseDocumentsToRows(pageResult.documents, tableColumns);
+    const columns = tableColumns.map((col) => {
+        return { header: col.label, width: col.label.length + 3 };
+    });
+    const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
+    const fileUrl = await this.downloadService.uploadTempFile(data, format);
+    return { url: fileUrl };
   }
 }

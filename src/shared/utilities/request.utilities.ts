@@ -1,6 +1,7 @@
 import { PageRequest } from "../models/page-request";
 import { FieldFilter } from "../models/field-order";
 import { AggregateBuildOptions } from "../models/aggregate-build-options";
+import { TableColumn } from "../models/table-column";
 
 // const buildAggregationFromRequest = (request: PageRequest, lookups: any[] = [], project: any = null, defaultMatch = { deletedAt: null }, paginated: boolean = true, outputProjection: any = null) => {
 const buildAggregationFromRequest = (request: PageRequest, options: AggregateBuildOptions) => {
@@ -168,6 +169,36 @@ function _buildRegex(field: string, value: any, matchMode: string) {
     }
 }
 
+const getProjectionFromConfigTable = (config: TableColumn[]) => {
+    const projection = config.reduce(
+        (currentProjection, curr) => {
+            const keys = curr.key
+                .split(";")
+                .flatMap((key) => key.split(","))
+                .map((k) => k.trim());
+            keys.reduce(keysToProject, currentProjection);
+            return currentProjection;
+        },
+        { _id: 1 }
+    );
+    return { $project: projection };
+}
+
+const keysToProject = (currentProjection: any, key: any, index: number, arr: any[]) => {
+    if (index == arr.length - 1) {
+        currentProjection[key] = 1;
+        return currentProjection;
+    }
+    if (currentProjection[key]) {
+        currentProjection = currentProjection[key];
+        return currentProjection;
+    }
+    currentProjection[key] = {};
+    currentProjection = currentProjection[key];
+    return currentProjection;
+};
+
 export const requestUtilities = {
-  buildAggregationFromRequest
+  buildAggregationFromRequest,
+  getProjectionFromConfigTable,
 }

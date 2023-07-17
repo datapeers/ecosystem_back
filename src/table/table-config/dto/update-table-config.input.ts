@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { InputType, Field, ID } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
+import { TableColumn } from 'src/shared/models/table-column';
 
 @InputType()
 export class UpdateTableConfigInput {
@@ -16,7 +17,7 @@ export class UpdateTableConfigInput {
   @Field(() => [GraphQLJSON], { nullable: true })
   @IsOptional()
   @IsNotEmpty()
-  columns?: JSON[];
+  columns?: TableColumn[];
 
   @Field(() => GraphQLJSON, { nullable: true })
   @IsOptional()

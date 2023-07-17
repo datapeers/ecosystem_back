@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsDefined, IsInt, IsNotEmpty, IsOptional, IsPositive, Min, ValidateNested } from "class-validator";
+import { IsDefined, IsInt, IsOptional, IsPositive, Min, ValidateNested } from "class-validator";
 import { FieldSort } from "./field-filter";
 import { FieldFilter } from "./field-order";
 import { Type } from "class-transformer";

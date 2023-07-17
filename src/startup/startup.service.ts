@@ -26,6 +26,11 @@ import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { ExpertService } from '../expert/expert.service';
 import { Expert } from 'src/expert/entities/expert.entity';
 import { Permission, getPermissionList } from 'src/auth/enums/permissions.enum';
+import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
+import { DownloadResult } from 'src/shared/models/download-result';
+import { excelUtilities } from 'src/shared/utilities/excel.utilities';
+import { DownloadsService } from 'src/downloads/downloads.service';
+import { TableConfigService } from 'src/table/table-config/table-config.service';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -33,7 +38,10 @@ export class StartupService implements FormDocumentService<Startup> {
     @InjectModel(Startup.name) private readonly startupModel: Model<Startup>,
     @Inject(forwardRef(() => EntrepreneurService))
     private readonly entrepreneurService: EntrepreneurService,
+    @Inject(forwardRef(() => ExpertService))
     private readonly expertService: ExpertService,
+    private readonly tableConfigService: TableConfigService,
+    private readonly downloadService: DownloadsService,
   ) {}
 
   private static readonly virtualFields = {
@@ -67,13 +75,25 @@ export class StartupService implements FormDocumentService<Startup> {
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
+    outputProjection?: any
   ): Promise<PaginatedResult<Startup>> {
     const options = new AggregateBuildOptions();
+    if(outputProjection) {
+      options.outputProjection = outputProjection;
+    }
     options.virtualFields = StartupService.virtualFields;
-    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(
+    let aggregationPipeline = requestUtilities.buildAggregationFromRequest(
       request,
       options,
     );
+    aggregationPipeline = await this.updatePipelineForUser(aggregationPipeline, user);
+    const documents = await this.startupModel
+      .aggregate(aggregationPipeline)
+      .collation({ locale: 'en_US', strength: 2 });
+    return documents[0];
+  }
+  
+  async updatePipelineForUser(aggregationPipeline: any, user: AuthUser) {
     if (
       user.rolDoc.type === ValidRoles.expert &&
       !getPermissionList(user).includes(Permission.load_all_startups)
@@ -93,21 +113,19 @@ export class StartupService implements FormDocumentService<Startup> {
         [];
       aggregationPipeline[0]['$match']['_id'] = { $in: startupsTeamCoach };
     }
-    const documents = await this.startupModel
-      .aggregate(aggregationPipeline)
-      .collation({ locale: 'en_US', strength: 2 });
-    return documents[0];
+    return aggregationPipeline;
   }
 
-  async findManyIdsByRequest(request: PageRequest): Promise<string[]> {
+  async findManyIdsByRequest(request: PageRequest, user: AuthUser): Promise<string[]> {
     const options = new AggregateBuildOptions();
     options.virtualFields = StartupService.virtualFields;
     options.paginated = false;
     options.outputProjection = { $project: { _id: 1 } };
-    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(
+    let aggregationPipeline = requestUtilities.buildAggregationFromRequest(
       request,
       options,
     );
+    aggregationPipeline = await this.updatePipelineForUser(aggregationPipeline, user);
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
@@ -324,8 +342,22 @@ export class StartupService implements FormDocumentService<Startup> {
   async linkWithEntrepreneursByRequest({
     request,
     targetIds,
-  }: LinkWithTargetsByRequestArgs) {
-    const businesses = await this.findManyIdsByRequest(request);
+  }: LinkWithTargetsByRequestArgs, user: AuthUser) {
+    const businesses = await this.findManyIdsByRequest(request, user);
     return await this.linkStartupsAndEntrepreneurs(businesses, targetIds);
+  }
+
+  async downloadByRequest({ request, configId, format }: DownloadRequestArgs, user: AuthUser): Promise<DownloadResult> {
+    const config = await this.tableConfigService.findOne(configId);
+    const tableColumns = config.columns;
+    const outputProjection = requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const pageResult = await this.findManyPage(request, user, outputProjection);
+    const rows = excelUtilities.parseDocumentsToRows(pageResult.documents, tableColumns);
+    const columns = tableColumns.map((col) => {
+        return { header: col.label, width: col.label.length + 3 };
+    });
+    const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
+    const fileUrl = await this.downloadService.uploadTempFile(data, format);
+    return { url: fileUrl };
   }
 }

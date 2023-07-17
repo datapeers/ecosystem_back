@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { SchemaTypes } from 'mongoose';
+import { TableColumn } from 'src/shared/models/table-column';
 
 @Schema()
 @ObjectType()
@@ -19,7 +20,7 @@ export class TableConfig {
 
   @Field(() => [GraphQLJSON])
   @Prop({ required: true, default: [] })
-  columns: JSON[];
+  columns: TableColumn[];
 
   @Field(() => GraphQLJSON, { nullable: true })
   @Prop({ type: Object })

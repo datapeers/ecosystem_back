@@ -6,6 +6,7 @@ export type TableColumn = {
   type: TableColumnType;
   format: TableCellFormat;
   propConditionalClass?: { prop?: string; class?: any };
+  booleanText?: { true: string; false: string };
 };
   
 export type TableCellFormat = 

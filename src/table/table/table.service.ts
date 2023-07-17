@@ -1,7 +1,9 @@
 import {
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { CreateTableInput } from './dto/create-table.input';
 import { InjectModel } from '@nestjs/mongoose';
@@ -19,6 +21,7 @@ export class TableService {
   constructor(
     @InjectModel(Table.name) private readonly tableModel: Model<Table>,
     private readonly tableConfigService: TableConfigService,
+    @Inject(forwardRef(() => FormsService))
     private readonly formsService: FormsService,
   ) {}
 

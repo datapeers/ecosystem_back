@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { PhasesService } from './phases.service';
 import { PhasesResolver } from './phases.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -18,7 +18,7 @@ import { ExpertModule } from 'src/expert/expert.module';
     LoggerModule,
     ContentModule,
     ResourcesModule,
-    ExpertModule,
+    forwardRef(() => ExpertModule),
     ActivitiesConfigModule,
   ],
   providers: [PhasesResolver, PhasesService],

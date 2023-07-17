@@ -1,5 +1,5 @@
 import { ModuleRef } from "@nestjs/core";
-import { InternalServerErrorException } from "@nestjs/common";
+import { InternalServerErrorException, forwardRef } from '@nestjs/common';
 
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 import { BusinessModule } from "src/business/business.module";
@@ -21,12 +21,12 @@ export const FORM_DOCUMENT_SERVICE_PROVIDER = "FORM_DOCUMENT_SERVICE_PROVIDER";
 export type FormDocumentServiceProvider = (target: FormCollections) => FormDocumentService;
 
 export const formDocumentServiceImports = [
-  EntrepreneurModule,
-  BusinessModule,
-  StartupModule,
-  InvestorModule,
-  ExpertModule,
-  ApplicantModule,
+  forwardRef(() => EntrepreneurModule),
+  forwardRef(() => BusinessModule),
+  forwardRef(() => StartupModule),
+  forwardRef(() => InvestorModule),
+  forwardRef(() => ExpertModule),
+  forwardRef(() => ApplicantModule),
 ];
 
 export const formDocumentServiceProviders = [

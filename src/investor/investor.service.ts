@@ -8,11 +8,19 @@ import { AggregateBuildOptions } from 'src/shared/models/aggregate-build-options
 import { PageRequest } from 'src/shared/models/page-request';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { requestUtilities } from 'src/shared/utilities/request.utilities';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
+import { DownloadResult } from 'src/shared/models/download-result';
+import { excelUtilities } from 'src/shared/utilities/excel.utilities';
+import { DownloadsService } from 'src/downloads/downloads.service';
+import { TableConfigService } from 'src/table/table-config/table-config.service';
 
 @Injectable()
 export class InvestorService implements FormDocumentService<Investor> {
   constructor(
     @InjectModel(Investor.name) private readonly investorModel: Model<Investor>,
+    private readonly tableConfigService: TableConfigService,
+    private readonly downloadService: DownloadsService,
   ) {
 
   }
@@ -43,8 +51,12 @@ export class InvestorService implements FormDocumentService<Investor> {
     return investors;
   }
 
-  async findManyPage(request: PageRequest): Promise<PaginatedResult<Investor>> {
+  async findManyPage(request: PageRequest, user: AuthUser, outputProjection?: any): Promise<PaginatedResult<Investor>> {
+    // TODO Implement filtering by user if required
     const options = new AggregateBuildOptions();
+    if(outputProjection) {
+      options.outputProjection = outputProjection;
+    }
     const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
     const documents = await this.investorModel.aggregate<PaginatedResult<Investor>>(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
     return documents[0];
@@ -75,5 +87,19 @@ export class InvestorService implements FormDocumentService<Investor> {
       ...updateResult,
       upsertedId: updateResult.upsertedId?.toString()
     };
+  }
+
+  async downloadByRequest({ request, configId, format }: DownloadRequestArgs, user: AuthUser): Promise<DownloadResult> {
+    const config = await this.tableConfigService.findOne(configId);
+    const tableColumns = config.columns;
+    const outputProjection = requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const pageResult = await this.findManyPage(request, user, outputProjection);
+    const rows = excelUtilities.parseDocumentsToRows(pageResult.documents, tableColumns);
+    const columns = tableColumns.map((col) => {
+        return { header: col.label, width: col.label.length + 3 };
+    });
+    const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
+    const fileUrl = await this.downloadService.uploadTempFile(data, format);
+    return { url: fileUrl };
   }
 }

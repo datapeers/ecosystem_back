@@ -10,10 +10,20 @@ import { LinkWithTargetsByRequestArgs } from 'src/shared/args/link-with-targets-
 import { LinkWithTargetsArgs } from 'src/shared/args/link-with-targets.args';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
+import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
+import { DownloadResult } from 'src/shared/models/download-result';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Entrepreneur)
 export class EntrepreneurResolver {
   constructor(private readonly entrepreneurService: EntrepreneurService) {}
+
+  @Query(() => DownloadResult, { name: 'entrepreneursDownload' })
+  downloadByRequest(
+    @Args() downloadRequest: DownloadRequestArgs,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.entrepreneurService.downloadByRequest(downloadRequest, user);
+  }
 
   @Query(() => [Entrepreneur], { name: 'entrepreneurs' })
   findAll() {
@@ -50,9 +60,11 @@ export class EntrepreneurResolver {
   })
   linkEntrepreneursWithBusinessesByRequest(
     @Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs,
+    @CurrentUser() user: AuthUser,
   ): Promise<UpdateResultPayload> {
     return this.entrepreneurService.linkWithBusinessesByRequest(
       linkWithTargetsByRequestArgs,
+      user
     );
   }
 
@@ -73,9 +85,11 @@ export class EntrepreneurResolver {
   })
   linkEntrepreneursWithStartupsByRequest(
     @Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs,
+    @CurrentUser() user: AuthUser,
   ): Promise<UpdateResultPayload> {
     return this.entrepreneurService.linkWithStartupsByRequest(
       linkWithTargetsByRequestArgs,
+      user
     );
   }
 

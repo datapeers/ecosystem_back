@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TableResolver } from './table/table.resolver';
 import { TableConfigResolver } from './table-config/table-config.resolver';
 import { TableService } from './table/table.service';
@@ -18,12 +18,15 @@ import { FormsModule } from 'src/forms/forms.module';
     ]),
     AuthModule,
     UsersModule,
-    FormsModule,
+    forwardRef(() => FormsModule),
   ],
   providers: [
     TableResolver,
     TableConfigResolver,
     TableService,
+    TableConfigService,
+  ],
+  exports: [
     TableConfigService,
   ],
 })

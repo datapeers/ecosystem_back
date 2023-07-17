@@ -11,6 +11,8 @@ import {
 import { BusinessModule } from 'src/business/business.module';
 import { StartupModule } from 'src/startup/startup.module';
 import { ExpertModule } from 'src/expert/expert.module';
+import { DownloadsModule } from 'src/downloads/downloads.module';
+import { TableModule } from 'src/table/table.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { ExpertModule } from 'src/expert/expert.module';
     forwardRef(() => BusinessModule),
     forwardRef(() => StartupModule),
     forwardRef(() => ExpertModule),
+    DownloadsModule,
+    forwardRef(() => TableModule),
   ],
   providers: [EntrepreneurResolver, EntrepreneurService],
   exports: [EntrepreneurService],

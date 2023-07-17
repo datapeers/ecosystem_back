@@ -8,11 +8,23 @@ import { LinkExpertsToPhaseArgs } from './args/link-phase-expert.args';
 import { LinkStartupsExpertsArgs } from './args/link-phase-startups-expert.args';
 import { PaginatedResult } from 'src/shared/models/paginated-result';
 import { PageRequest } from 'src/shared/models/page-request';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
+import { DownloadResult } from 'src/shared/models/download-result';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Expert)
 export class ExpertResolver {
   constructor(private readonly expertService: ExpertService) {}
+
+  @Query(() => DownloadResult, { name: 'expertsDownload' })
+  downloadByRequest(
+    @Args() downloadRequest: DownloadRequestArgs,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.expertService.downloadByRequest(downloadRequest, user);
+  }
 
   @Query(() => [Expert], { name: 'experts' })
   findAll() {
@@ -22,8 +34,9 @@ export class ExpertResolver {
   @Query(() => PaginatedResult<Expert>, { name: 'expertsPage' })
   findManyPage(
     @Args('request') request: PageRequest,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.expertService.findManyPage(request);
+    return this.expertService.findManyPage(request, user);
   }
 
   @Query(() => Expert, { name: 'expert' })

@@ -11,6 +11,10 @@ export class AuthCode {
   @Prop({ required: true })
   token: string;
 
+  @Field(() => [String])
+  @Prop({ required: true })
+  permissions: string[];
+
   @Field(() => Date, { nullable: true })
   @Prop({ expires: 60 })
   createdAt: Date;

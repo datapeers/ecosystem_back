@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { AuthCodeService } from './auth-code.service';
 import { AuthCode } from './entities/auth-code.entity';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
@@ -13,10 +20,7 @@ export class AuthCodeResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => AuthCode)
-  createAuthCode(
-    @CurrentUser() user: AuthUser,
-    @BearerToken() jwt: string,
-  ) {
+  createAuthCode(@CurrentUser() user: AuthUser, @BearerToken() jwt: string) {
     return this.authCodeService.create(user, jwt);
   }
 

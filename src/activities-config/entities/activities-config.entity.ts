@@ -17,9 +17,17 @@ export class ActivitiesConfig {
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
   phase: string;
 
-  @Field(() => [GraphQLJSONObject])
-  @Prop({ type: SchemaTypes.Mixed, default: [] })
-  availability: any[];
+  @Field(() => [assigns])
+  @Prop({ default: [] })
+  startups: assigns[];
+
+  @Field(() => [assigns])
+  @Prop({ default: [] })
+  experts: assigns[];
+
+  @Field(() => [assigns])
+  @Prop({ default: [] })
+  teamCoaches: assigns[];
 
   @Field(() => [activities])
   @Prop({ default: [] })
@@ -34,6 +42,17 @@ export class ActivitiesConfig {
   @Field(() => Boolean)
   @Prop({ type: 'boolean', default: false })
   isDeleted: boolean;
+}
+
+@Schema()
+@ObjectType()
+export class assigns {
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId })
+  to: string;
+
+  @Field(() => Int)
+  limit: number;
 }
 
 @Schema()

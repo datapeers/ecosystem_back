@@ -46,9 +46,25 @@ export class Event {
   @Prop({ default: [] })
   experts: ExpertEventLink[];
 
+  @Field(() => [TeamCoachLink])
+  @Prop({ default: [] })
+  teamCoaches: TeamCoachLink[];
+
   @Field(() => [ParticipantEventLink])
   @Prop({ default: [] })
   participants: ParticipantEventLink[];
+}
+
+@Schema()
+@ObjectType()
+export class TeamCoachLink {
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
+  _id: string;
+
+  @Field(() => String)
+  @Prop()
+  name: string;
 }
 
 @Schema()

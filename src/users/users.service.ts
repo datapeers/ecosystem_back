@@ -47,7 +47,7 @@ export class UsersService implements OnModuleInit {
     return user;
   }
 
-  async findMany({ search, roles }: FindUsersArgs) {
+  async findMany({ search, roles, relationsAssign }: FindUsersArgs) {
     let filters = {};
     let rolesDocs = [];
     if (roles?.length) {
@@ -60,6 +60,12 @@ export class UsersService implements OnModuleInit {
 
     if (search) {
       filters['fullName'] = RegExp(`/.*${search}.*/`);
+    }
+    if (relationsAssign) {
+      const keys = Object.keys(relationsAssign);
+      for (const iterator of keys) {
+        filters[`relationsAssign.${iterator}._id`] = relationsAssign[iterator];
+      }
     }
 
     const users = await this.userModel.find(filters).populate('rol').lean();

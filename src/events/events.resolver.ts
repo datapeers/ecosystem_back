@@ -5,6 +5,8 @@ import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from 'src/auth/types/auth-user';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => EventEntity)
@@ -22,8 +24,11 @@ export class EventsResolver {
   }
 
   @Query(() => [EventEntity], { name: 'eventsPhase' })
-  findByPhase(@Args('phase', { type: () => String }) phase: string) {
-    return this.eventsService.findByPhase(phase);
+  findByPhase(
+    @Args('phase', { type: () => String }) phase: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.eventsService.findByPhase(phase, user);
   }
 
   @Query(() => EventEntity, { name: 'event' })

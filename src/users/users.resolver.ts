@@ -18,7 +18,7 @@ export class UsersResolver {
   @Query(() => [User], { name: 'users' })
   findAll(
     @Args() findUsersArgs: FindUsersArgs,
-    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
+    @CurrentUser() user: User,
   ): Promise<User[]> {
     return this.usersService.findMany(findUsersArgs);
   }

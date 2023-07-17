@@ -2,6 +2,7 @@ import {
   CreateEventInput,
   ExpertEventSubmit,
   ParticipantEventSubmit,
+  TeamCoachSubmit,
 } from './create-event.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
@@ -36,6 +37,10 @@ export class UpdateEventInput extends PartialType(CreateEventInput) {
   @Field(() => [ExpertEventSubmit], { nullable: true })
   @IsOptional()
   experts?: ExpertEventSubmit[];
+
+  @Field(() => [TeamCoachSubmit], { nullable: true })
+  @IsOptional()
+  teamCoaches?: TeamCoachSubmit[];
 
   @Field(() => [ParticipantEventSubmit], { nullable: true })
   @IsOptional()

@@ -24,6 +24,7 @@ import { StartupService } from 'src/startup/startup.service';
 import { AuthUser } from 'src/auth/types/auth-user';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { ExpertService } from 'src/expert/expert.service';
+import { Permission, getPermissionList } from 'src/auth/enums/permissions.enum';
 
 @Injectable()
 export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
@@ -73,14 +74,20 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       request,
       options,
     );
-    if (user.rolDoc.type === ValidRoles.expert) {
+    if (
+      user.rolDoc.type === ValidRoles.expert &&
+      !getPermissionList(user).includes(Permission.load_all_entrepreneurs)
+    ) {
       const docExpert = await this.expertService.findByAccount(user.uid);
       const idStartups = docExpert.phases.flatMap((phaseProfile) =>
         phaseProfile.startUps.map((startup) => new Types.ObjectId(startup._id)),
       );
       aggregationPipeline[0]['$match']['startups._id'] = { $in: idStartups };
     }
-    if (user.rolDoc.type === ValidRoles.teamCoach) {
+    if (
+      user.rolDoc.type === ValidRoles.teamCoach &&
+      !getPermissionList(user).includes(Permission.load_all_entrepreneurs)
+    ) {
       let startupsTeamCoach =
         user.relationsAssign?.startups.map((i) => new Types.ObjectId(i._id)) ??
         [];

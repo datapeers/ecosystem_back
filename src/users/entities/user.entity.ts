@@ -26,14 +26,14 @@ export class User {
   @Prop()
   profileImageUrl?: string;
 
-  @Prop({
-    type: [String],
-    array: true,
-    enum: ValidRoles,
-    default: [ValidRoles.user],
-  })
-  @Field(() => [String])
-  roles: ValidRoles[];
+  // @Prop({
+  //   type: [String],
+  //   array: true,
+  //   enum: ValidRoles,
+  //   default: [ValidRoles.user],
+  // })
+  // @Field(() => [String])
+  // roles: ValidRoles[];
 
   @Field(() => Rol)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Rol' })

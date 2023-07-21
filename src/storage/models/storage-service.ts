@@ -1,4 +1,4 @@
-import { Readable } from "stream";
+import { Readable } from 'stream';
 
 export abstract class StorageService {
   public abstract createPresignedUrl(
@@ -11,6 +11,6 @@ export abstract class StorageService {
   ): Promise<string>;
   public abstract uploadTemporaryFile(
     key: string,
-    data: Readable,
-  ): Promise<string>
+    data: Buffer,
+  ): Promise<string>;
 }

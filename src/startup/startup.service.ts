@@ -75,10 +75,10 @@ export class StartupService implements FormDocumentService<Startup> {
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
-    outputProjection?: any
+    outputProjection?: any,
   ): Promise<PaginatedResult<Startup>> {
     const options = new AggregateBuildOptions();
-    if(outputProjection) {
+    if (outputProjection) {
       options.outputProjection = outputProjection;
     }
     options.virtualFields = StartupService.virtualFields;
@@ -86,13 +86,16 @@ export class StartupService implements FormDocumentService<Startup> {
       request,
       options,
     );
-    aggregationPipeline = await this.updatePipelineForUser(aggregationPipeline, user);
+    aggregationPipeline = await this.updatePipelineForUser(
+      aggregationPipeline,
+      user,
+    );
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
     return documents[0];
   }
-  
+
   async updatePipelineForUser(aggregationPipeline: any, user: AuthUser) {
     if (
       user.rolDoc.type === ValidRoles.expert &&
@@ -116,7 +119,10 @@ export class StartupService implements FormDocumentService<Startup> {
     return aggregationPipeline;
   }
 
-  async findManyIdsByRequest(request: PageRequest, user: AuthUser): Promise<string[]> {
+  async findManyIdsByRequest(
+    request: PageRequest,
+    user: AuthUser,
+  ): Promise<string[]> {
     const options = new AggregateBuildOptions();
     options.virtualFields = StartupService.virtualFields;
     options.paginated = false;
@@ -125,7 +131,10 @@ export class StartupService implements FormDocumentService<Startup> {
       request,
       options,
     );
-    aggregationPipeline = await this.updatePipelineForUser(aggregationPipeline, user);
+    aggregationPipeline = await this.updatePipelineForUser(
+      aggregationPipeline,
+      user,
+    );
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
@@ -216,11 +225,11 @@ export class StartupService implements FormDocumentService<Startup> {
     });
   }
 
-  async findByPhase(phase: string, user: AuthUser): Promise<Startup[]> {
+  async findByPhase(phase: string, user?: AuthUser): Promise<Startup[]> {
     const initMatch = {
       'phases._id': phase,
     };
-    if (user.rolDoc.type === ValidRoles.expert) {
+    if (user?.rolDoc?.type === ValidRoles.expert) {
       const docExpert = await this.expertService.findByAccount(user.uid);
       const phaseProfileExpert = docExpert.phases.find((i) => i._id === phase);
       let startUpsExpert = phaseProfileExpert.startUps.map(
@@ -228,7 +237,7 @@ export class StartupService implements FormDocumentService<Startup> {
       );
       initMatch['_id'] = { $in: startUpsExpert };
     }
-    if (user.rolDoc.type === ValidRoles.teamCoach) {
+    if (user?.rolDoc?.type === ValidRoles.teamCoach) {
       let startupsTeamCoach =
         user.relationsAssign?.startups.map((i) => new Types.ObjectId(i._id)) ??
         [];
@@ -339,24 +348,35 @@ export class StartupService implements FormDocumentService<Startup> {
       .lean();
   }
 
-  async linkWithEntrepreneursByRequest({
-    request,
-    targetIds,
-  }: LinkWithTargetsByRequestArgs, user: AuthUser) {
+  async linkWithEntrepreneursByRequest(
+    { request, targetIds }: LinkWithTargetsByRequestArgs,
+    user: AuthUser,
+  ) {
     const businesses = await this.findManyIdsByRequest(request, user);
     return await this.linkStartupsAndEntrepreneurs(businesses, targetIds);
   }
 
-  async downloadByRequest({ request, configId, format }: DownloadRequestArgs, user: AuthUser): Promise<DownloadResult> {
+  async downloadByRequest(
+    { request, configId, format }: DownloadRequestArgs,
+    user: AuthUser,
+  ): Promise<DownloadResult> {
     const config = await this.tableConfigService.findOne(configId);
     const tableColumns = config.columns;
-    const outputProjection = requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const outputProjection =
+      requestUtilities.getProjectionFromConfigTable(tableColumns);
     const pageResult = await this.findManyPage(request, user, outputProjection);
-    const rows = excelUtilities.parseDocumentsToRows(pageResult.documents, tableColumns);
+    const rows = excelUtilities.parseDocumentsToRows(
+      pageResult.documents,
+      tableColumns,
+    );
     const columns = tableColumns.map((col) => {
-        return { header: col.label, width: col.label.length + 3 };
+      return { header: col.label, width: col.label.length + 3 };
     });
-    const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
+    const data = await excelUtilities.buildWorkbookBuffer(
+      columns,
+      rows,
+      format,
+    );
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
   }

@@ -1,9 +1,17 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ActivitiesConfigService } from './activities-config.service';
 import { ActivitiesConfig } from './entities/activities-config.entity';
 import { CreateActivitiesConfigInput } from './dto/create-activities-config.input';
 import { UpdateActivitiesConfigInput } from './dto/update-activities-config.input';
-
+import { GraphQLJSONObject } from 'graphql-scalars';
 @Resolver(() => ActivitiesConfig)
 export class ActivitiesConfigResolver {
   constructor(
@@ -42,5 +50,16 @@ export class ActivitiesConfigResolver {
   @Mutation(() => ActivitiesConfig)
   removeActivitiesConfig(@Args('id', { type: () => String }) id: string) {
     return this.activitiesConfigService.remove(id);
+  }
+
+  @ResolveField('calcHoursExperts', () => GraphQLJSONObject)
+  resolveIsProspect(
+    @Parent() config: Omit<ActivitiesConfig, 'calcHoursExperts'>,
+  ) {
+    return this.activitiesConfigService.calcExpertsHours(config);
+    // return [
+    //   { test: true, work: 'yeahhh' },
+    //   { test: false, work: 'other' },
+    // ];
   }
 }

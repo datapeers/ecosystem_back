@@ -19,15 +19,15 @@ export class ActivitiesConfig {
 
   @Field(() => [assigns])
   @Prop({ default: [] })
-  startups: assigns[];
-
-  @Field(() => [assigns])
-  @Prop({ default: [] })
   experts: assigns[];
 
   @Field(() => [assigns])
   @Prop({ default: [] })
   teamCoaches: assigns[];
+
+  @Field(() => [startUpHours])
+  @Prop({ default: [] })
+  startups: startUpHours[];
 
   @Field(() => [activities])
   @Prop({ default: [] })
@@ -49,7 +49,18 @@ export class ActivitiesConfig {
 export class assigns {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId })
-  to: string;
+  from: string;
+
+  @Field(() => Int)
+  limit: number;
+}
+
+@Schema()
+@ObjectType()
+export class startUpHours {
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId })
+  id: string;
 
   @Field(() => Int)
   limit: number;

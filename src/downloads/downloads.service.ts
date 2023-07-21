@@ -12,18 +12,19 @@ export class DownloadsService {
   constructor(
     @InjectModel(Download.name) private readonly downloadModel: Model<Download>,
     private readonly storageService: StorageService,
-  ) {
-
-  }
+  ) {}
 
   async uploadTempFile(data: Buffer, extension: string): Promise<string> {
     const fileId = uuid.v4();
     const fileName = `${fileId}.${extension}`;
-    const readable = new Readable();
-    readable._read = () => {} // _read is required but you can noop it
-    readable.push(data);
-    readable.push(null);
-    const fileUrl = await this.storageService.uploadTemporaryFile(fileName, readable);
+    // const readable = new Readable();
+    // readable._read = () => {} // _read is required but you can noop it
+    // readable.push(data);
+    // readable.push(null);
+    const fileUrl = await this.storageService.uploadTemporaryFile(
+      fileName,
+      data as any,
+    );
     const downloadData = {
       name: fileName,
       url: fileUrl,

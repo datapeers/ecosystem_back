@@ -17,10 +17,6 @@ export class UpdateActivitiesConfigInput extends PartialType(
   @IsOptional()
   limit?: number;
 
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  @IsOptional()
-  availability?: Record<string, any>;
-
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
   isDeleted?: boolean;
@@ -29,6 +25,21 @@ export class UpdateActivitiesConfigInput extends PartialType(
   @Type(() => ActivitySetup)
   @IsOptional()
   activities: ActivitySetup[];
+
+  @Field(() => [AssignSetup], { nullable: true })
+  @Type(() => AssignSetup)
+  @IsOptional()
+  experts: AssignSetup[];
+
+  @Field(() => [AssignSetup], { nullable: true })
+  @Type(() => AssignSetup)
+  @IsOptional()
+  teamCoaches: AssignSetup[];
+
+  @Field(() => [startUpHoursSetup], { nullable: true })
+  @Type(() => startUpHoursSetup)
+  @IsOptional()
+  startups: startUpHoursSetup[];
 }
 
 @InputType()
@@ -44,4 +55,26 @@ class ActivitySetup implements IActivities {
   @Field(() => GraphQLJSONObject, { nullable: true })
   @IsDefined()
   options: Record<string, any>;
+}
+
+@InputType()
+class AssignSetup {
+  @Field(() => String)
+  @IsDefined()
+  from: string;
+
+  @Field(() => Int)
+  @IsDefined()
+  limit: number;
+}
+
+@InputType()
+class startUpHoursSetup {
+  @Field(() => String)
+  @IsDefined()
+  id: string;
+
+  @Field(() => Int)
+  @IsDefined()
+  limit: number;
 }

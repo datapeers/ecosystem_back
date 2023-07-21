@@ -45,7 +45,9 @@ export class AwsService implements StorageService {
   }
 
   private getFileLocation(bucketName: string, fileKey: string): string {
-    return `${this.S3Uri}/${bucketName}/${fileKey}`;
+    return `${this.configService.get(
+      'awsS3PublicUri',
+    )}/${bucketName}/${fileKey}`;
   }
 
   async createPresignedUrl(key: string, publicFile?: boolean): Promise<string> {
@@ -57,9 +59,11 @@ export class AwsService implements StorageService {
     const command = new PutObjectCommand(config);
     try {
       return await getSignedUrl(client, command, { expiresIn: 60 * 3 });
-    } catch(error) {
+    } catch (error) {
       console.error(error);
-      throw new InternalServerErrorException("Failed to create presigned Url for PUT request");
+      throw new InternalServerErrorException(
+        'Failed to create presigned Url for PUT request',
+      );
     }
   }
 
@@ -72,25 +76,30 @@ export class AwsService implements StorageService {
     const command = new GetObjectCommand(config);
     try {
       return await getSignedUrl(client, command, { expiresIn: 60 * 60 * 24 });
-    } catch(error) {
+    } catch (error) {
       console.error(error);
-      throw new InternalServerErrorException("Failed to create presigned Url for GET request");
+      throw new InternalServerErrorException(
+        'Failed to create presigned Url for GET request',
+      );
     }
   }
 
-  async uploadTemporaryFile(key: string, data: Readable) {
+  async uploadTemporaryFile(key: string, data: Buffer) {
     const client = new S3Client(this.publicConfig);
     const command = new PutObjectCommand({
-      Bucket: this.tempBucketName,
+      Bucket: this.defaultBucketName,
       Key: key,
-      Body: data
+      Body: data,
     });
     try {
       const result = await client.send(command);
-      return this.getFileLocation(this.tempBucketName, key);
-    } catch(error) {
+      console.log(result);
+      return this.getFileLocation(this.defaultBucketName, key);
+    } catch (error) {
       console.error(error);
-      throw new InternalServerErrorException("Failed to create presigned Url for PUT request");
+      throw new InternalServerErrorException(
+        'Failed to create presigned Url for PUT request',
+      );
     }
   }
 }

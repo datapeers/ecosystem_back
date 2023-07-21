@@ -1,4 +1,10 @@
-import { Inject, Injectable, InternalServerErrorException, NotFoundException, forwardRef } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
@@ -24,35 +30,36 @@ export class BusinessService {
     private readonly entrepreneurService: EntrepreneurService,
     private readonly tableConfigService: TableConfigService,
     private readonly downloadService: DownloadsService,
-  ) {
-
-  }
+  ) {}
 
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
-  };
+  }
 
   async createDocument(submission: any, context?: any) {
     const data = {
-      item: submission
+      item: submission,
     };
     const createdDocument = await this.create(data);
-    if(context && context.entrepreneur) {
+    if (context && context.entrepreneur) {
       const entrepreneur = context.entrepreneur;
-      const linkResult = await this.linkBusinessesAndEntrepreneurs([createdDocument._id], [entrepreneur]);
-      if(!linkResult.acknowledged) throw new InternalServerErrorException("Failed to link entrepreneur with business");
+      const linkResult = await this.linkBusinessesAndEntrepreneurs(
+        [createdDocument._id],
+        [entrepreneur],
+      );
+      if (!linkResult.acknowledged)
+        throw new InternalServerErrorException(
+          'Failed to link entrepreneur with business',
+        );
     }
     return createdDocument;
-  };
+  }
 
   async updateDocument(id: string, submission: any, context: any) {
-    const updatedDocument = await this.update(
-      id,
-      { item: submission }
-    );
+    const updatedDocument = await this.update(id, { item: submission });
     return updatedDocument;
-  };
+  }
 
   async findAll(): Promise<Business[]> {
     const businesses = await this.businessModel.find({ deletedAt: null });
@@ -61,7 +68,7 @@ export class BusinessService {
 
   async findMany(ids: string[]): Promise<Business[]> {
     const businesses = await this.businessModel.find({
-      _id: { $in: ids }
+      _id: { $in: ids },
     });
     return businesses;
   }
@@ -69,15 +76,20 @@ export class BusinessService {
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
-    outputProjection?: any
+    outputProjection?: any,
   ): Promise<PaginatedResult<Business>> {
     // TODO Implement filtering by user if required
     const options = new AggregateBuildOptions();
-    if(outputProjection) {
+    if (outputProjection) {
       options.outputProjection = outputProjection;
     }
-    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
-    const documents = await this.businessModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(
+      request,
+      options,
+    );
+    const documents = await this.businessModel
+      .aggregate(aggregationPipeline)
+      .collation({ locale: 'en_US', strength: 2 });
     return documents[0];
   }
 
@@ -86,14 +98,20 @@ export class BusinessService {
     const options = new AggregateBuildOptions();
     options.paginated = false;
     options.outputProjection = { $project: { _id: 1 } };
-    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(request, options);
-    const documents = await this.businessModel.aggregate(aggregationPipeline).collation({ locale: "en_US", strength: 2 });
-    return documents.map(doc => doc._id);
+    const aggregationPipeline = requestUtilities.buildAggregationFromRequest(
+      request,
+      options,
+    );
+    const documents = await this.businessModel
+      .aggregate(aggregationPipeline)
+      .collation({ locale: 'en_US', strength: 2 });
+    return documents.map((doc) => doc._id);
   }
 
   async findOne(id: string): Promise<Business> {
     const business = await this.businessModel.findById(id);
-    if(!business) throw new NotFoundException(`Couldn't find business with id ${id}`);
+    if (!business)
+      throw new NotFoundException(`Couldn't find business with id ${id}`);
     return business;
   }
 
@@ -101,67 +119,103 @@ export class BusinessService {
     const createdBusiness = await this.businessModel.create(data);
     return createdBusiness;
   }
-  
+
   async update(id: string, data: Partial<Business>): Promise<Business> {
-    const createdBusiness = await this.businessModel.updateOne({ _id: id }, data, { new: true }).lean();
+    const createdBusiness = await this.businessModel
+      .updateOne({ _id: id }, data, { new: true })
+      .lean();
     return createdBusiness;
   }
 
-  async linkBusinessesAndEntrepreneurs(ids: string[], entrepreneurs: string[]): Promise<UpdateResultPayload> {
+  async linkBusinessesAndEntrepreneurs(
+    ids: string[],
+    entrepreneurs: string[],
+  ): Promise<UpdateResultPayload> {
     // Find businesses by ids
     const businesses = await this.findMany(ids);
 
     // Link entrepreneurs to businesses by given relationships
-    const businessesToLink = businesses.map(document => {
-      return { _id: document._id, item: document.item, };
+    const businessesToLink = businesses.map((document) => {
+      return { _id: document._id, item: document.item };
     });
-    const entrepreneurUpdateResult = await this.entrepreneurService.linkWithBusinesses(entrepreneurs, businessesToLink);
+    const entrepreneurUpdateResult =
+      await this.entrepreneurService.linkWithBusinesses(
+        entrepreneurs,
+        businessesToLink,
+      );
 
-    if(!entrepreneurUpdateResult.acknowledged) throw new InternalServerErrorException("Failed to create link between businesses and entrepreneurs");
+    if (!entrepreneurUpdateResult.acknowledged)
+      throw new InternalServerErrorException(
+        'Failed to create link between businesses and entrepreneurs',
+      );
 
     // Find entrepreneurs
-    const entrepreneurDocuments = await this.entrepreneurService.findMany(entrepreneurs);
+    const entrepreneurDocuments = await this.entrepreneurService.findMany(
+      entrepreneurs,
+    );
     const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
-      return { _id: document._id, item: document.item, }
+      return { _id: document._id, item: document.item };
     });
-    const businessUpdateResult = await this.linkWithEntrepreneurs(ids, entrepreneurRelationships);
+    const businessUpdateResult = await this.linkWithEntrepreneurs(
+      ids,
+      entrepreneurRelationships,
+    );
     return businessUpdateResult;
   }
 
-  async linkWithEntrepreneurs(ids: string[], entrepreneurRelationships: EntrepreneurRelationship[]): Promise<UpdateResultPayload> {
-    return this.businessModel.updateMany(
-      { _id: { $in: ids } },
-      { $addToSet: { entrepreneurs: { $each: entrepreneurRelationships } } },
-      { new: true }
-    ).lean();
+  async linkWithEntrepreneurs(
+    ids: string[],
+    entrepreneurRelationships: EntrepreneurRelationship[],
+  ): Promise<UpdateResultPayload> {
+    return this.businessModel
+      .updateMany(
+        { _id: { $in: ids } },
+        { $addToSet: { entrepreneurs: { $each: entrepreneurRelationships } } },
+        { new: true },
+      )
+      .lean();
   }
 
-  async linkWithEntrepreneursByRequest({ request, targetIds }: LinkWithTargetsByRequestArgs) {
+  async linkWithEntrepreneursByRequest({
+    request,
+    targetIds,
+  }: LinkWithTargetsByRequestArgs) {
     const businesses = await this.findManyIdsByRequest(request);
     return await this.linkBusinessesAndEntrepreneurs(businesses, targetIds);
   }
 
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.businessModel.updateMany(
-      { _id: { $in: ids.map(id => new Types.ObjectId(id)) } },
-      { deletedAt: Date.now() }
+      { _id: { $in: ids.map((id) => new Types.ObjectId(id)) } },
+      { deletedAt: Date.now() },
     );
     return {
       ...updateResult,
-      upsertedId: updateResult.upsertedId?.toString()
+      upsertedId: updateResult.upsertedId?.toString(),
     };
   }
 
-  async downloadByRequest({ request, configId, format }: DownloadRequestArgs, user: AuthUser): Promise<DownloadResult> {
+  async downloadByRequest(
+    { request, configId, format }: DownloadRequestArgs,
+    user: AuthUser,
+  ): Promise<DownloadResult> {
     const config = await this.tableConfigService.findOne(configId);
     const tableColumns = config.columns;
-    const outputProjection = requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const outputProjection =
+      requestUtilities.getProjectionFromConfigTable(tableColumns);
     const pageResult = await this.findManyPage(request, user, outputProjection);
-    const rows = excelUtilities.parseDocumentsToRows(pageResult.documents, tableColumns);
+    const rows = excelUtilities.parseDocumentsToRows(
+      pageResult.documents,
+      tableColumns,
+    );
     const columns = tableColumns.map((col) => {
-        return { header: col.label, width: col.label.length + 3 };
+      return { header: col.label, width: col.label.length + 3 };
     });
-    const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
+    const data = (await excelUtilities.buildWorkbookBuffer(
+      columns,
+      rows,
+      format,
+    )) as Buffer;
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
   }

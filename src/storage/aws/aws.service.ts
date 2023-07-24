@@ -87,14 +87,13 @@ export class AwsService implements StorageService {
   async uploadTemporaryFile(key: string, data: Buffer) {
     const client = new S3Client(this.publicConfig);
     const command = new PutObjectCommand({
-      Bucket: this.defaultBucketName,
+      Bucket: 'files',
       Key: key,
       Body: data,
     });
     try {
       const result = await client.send(command);
-      console.log(result);
-      return this.getFileLocation(this.defaultBucketName, key);
+      return this.getFileLocation('files', key);
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException(

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { EntrepreneurService } from './entrepreneur.service';
@@ -103,5 +103,10 @@ export class EntrepreneurResolver {
       ids,
       targetIds,
     );
+  }
+
+  @ResolveField('isProspect', () => Boolean)
+  resolveIsProspect(@Parent() entrepreneur: Omit<Entrepreneur, 'isProspect'>) {
+    return entrepreneur.startups.some(startup => !!startup.phases?.length);
   }
 }

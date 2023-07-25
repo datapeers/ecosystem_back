@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { UpdateWriteOpResult } from "mongoose";
 
 @ObjectType()
 export class UpdateResultPayload {
@@ -16,4 +17,11 @@ export class UpdateResultPayload {
 
   @Field(() => String, { nullable: true, description: "The identifier of the inserted document if an upsert took place" })
   upsertedId: string;
+
+  public static fromPayload(updateResult: UpdateWriteOpResult): UpdateResultPayload {
+    let payload = new UpdateResultPayload();
+    Object.assign(payload, updateResult);
+    payload.upsertedId = updateResult.upsertedId?.toString();
+    return payload;
+  }
 }

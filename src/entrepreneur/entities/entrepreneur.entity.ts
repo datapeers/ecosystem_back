@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from 'src/users/entities/user.entity';
 import GraphQLJSON from 'graphql-type-json';
+import { PhaseRelationship } from 'src/startup/entities/startup.entity';
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -38,6 +39,9 @@ export class Entrepreneur {
 
   @Field(() => Date, { description: "Date of last entity update."})
   updatedAt: Date;
+
+  @Field(() => Boolean, { nullable: true })
+  isProspect: boolean;
 }
 
 export const EntrepreneurSchema = SchemaFactory.createForClass(Entrepreneur);
@@ -52,6 +56,10 @@ export class StartupRelationship {
   @Field(() => GraphQLJSON)
   @Prop({ type: Object })
   item: JSON;
+
+  @Field(() => [PhaseRelationship], { defaultValue: [] })
+  @Prop({ default: [] })
+  phases: PhaseRelationship[];
 }
 
 @Schema()

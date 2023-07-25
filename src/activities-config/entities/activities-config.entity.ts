@@ -62,6 +62,10 @@ export class startUpHours {
   @Prop({ type: SchemaTypes.ObjectId })
   id: string;
 
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId })
+  from: string;
+
   @Field(() => Int)
   limit: number;
 }

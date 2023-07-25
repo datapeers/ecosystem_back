@@ -3,11 +3,16 @@ import { CreateActivitiesConfigInput } from './dto/create-activities-config.inpu
 import { UpdateActivitiesConfigInput } from './dto/update-activities-config.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ActivitiesConfig } from './entities/activities-config.entity';
+import {
+  ActivitiesConfig,
+  startUpHours,
+} from './entities/activities-config.entity';
 import { default_types_events } from 'src/events/types-events/model/type-events.default';
 import { ExpertService } from 'src/expert/expert.service';
 import { StartupService } from 'src/startup/startup.service';
 import { Assign_item } from './model/assign-item';
+import { UsersService } from 'src/users/users.service';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
 @Injectable()
 export class ActivitiesConfigService {
@@ -18,6 +23,8 @@ export class ActivitiesConfigService {
     private readonly expertsService: ExpertService,
     @Inject(forwardRef(() => StartupService))
     private readonly startupsService: StartupService,
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService,
   ) {}
 
   create(createActivitiesConfigInput: CreateActivitiesConfigInput) {
@@ -65,15 +72,11 @@ export class ActivitiesConfigService {
   }
 
   async calcExpertsHours(config: ActivitiesConfig) {
-    const teamCoachProfile = default_types_events.find(
-      (i) => i._id.toString() === '646f953cc2305c411d73f700',
-    );
     let totalActivitiesHours = 0;
     let limitTeamCoachHours = 0;
     for (const configActivity of config.activities) {
       totalActivitiesHours += configActivity.limit;
-
-      if (configActivity.idActivity === teamCoachProfile._id.toString())
+      if (configActivity.idActivity === '646f953cc2305c411d73f700')
         limitTeamCoachHours = configActivity.limit;
     }
     let expertHours = totalActivitiesHours - limitTeamCoachHours;
@@ -113,7 +116,8 @@ export class ActivitiesConfigService {
           (i) => i._id.toString() === startup._id,
         );
         const previousConfigStartup = config.startups.find(
-          (i) => i.id === startup._id,
+          (i) =>
+            i.id === startup._id && expert._id.toString() === i.from.toString(),
         );
         item.to.push({
           id: startup._id,
@@ -130,10 +134,14 @@ export class ActivitiesConfigService {
       if (!expertAssign.limit || expertAssign.limit === 0) {
         expertAssign.limit = hoursLeftToOthersExperts;
       }
-      const hoursToStartups = expertAssign.limit;
+      let hoursToStartups = expertAssign.limit;
       let numbOfStartups = 0;
       for (const startupAssign of expertAssign.to) {
-        if (startupAssign.limit === 0) numbOfStartups++;
+        if (startupAssign.limit === 0) {
+          numbOfStartups++;
+        } else {
+          hoursToStartups -= startupAssign.limit;
+        }
       }
       const hoursByStartupWithoutAssign = Math.round(
         hoursToStartups / (numbOfStartups ?? 1),
@@ -146,6 +154,93 @@ export class ActivitiesConfigService {
     return {
       expertHours: totalActivitiesHours - limitTeamCoachHours,
       hoursLeftToOthersExperts,
+      list: ans,
+    };
+  }
+
+  async calcTeamCoachHours(config: ActivitiesConfig) {
+    let configTeamCoachActivities = config.activities.find(
+      (i) => i.idActivity === '646f953cc2305c411d73f700',
+    );
+    let teamCoachHours = configTeamCoachActivities.limit;
+
+    const listTeamCoach = await this.usersService.findMany({
+      roles: [ValidRoles.teamCoach],
+      relationsAssign: { batches: config.phase.toString() },
+    });
+    const listStartups = await this.startupsService.findByPhase(
+      config.phase.toString(),
+    );
+    let ans: Assign_item[] = [];
+    let numbOfExpertWithoutAssign = 0;
+    let hoursLeftToOthersTeamCoaches = listTeamCoach.length
+      ? Math.round(teamCoachHours / listTeamCoach.length)
+      : 0;
+    for (const teamCoach of listTeamCoach) {
+      const previousConfig = config.teamCoaches.find(
+        (i) => i.from === teamCoach._id.toString(),
+      );
+      if (
+        previousConfig &&
+        previousConfig.limit !== hoursLeftToOthersTeamCoaches
+      ) {
+        teamCoachHours -= previousConfig.limit;
+      } else {
+        numbOfExpertWithoutAssign++;
+      }
+      const item = new Assign_item(
+        {
+          from: teamCoach._id.toString(),
+          to: [],
+          limit: previousConfig ? previousConfig.limit : 0,
+        },
+        teamCoach.fullName,
+      );
+      for (const startup of teamCoach.relationsAssign.startups) {
+        const docStartup = listStartups.find(
+          (i) => i._id.toString() === startup._id,
+        );
+        if (!docStartup) continue;
+        const previousConfigStartup = config.startups.find(
+          (i) =>
+            i.id === startup._id &&
+            teamCoach._id.toString() === i.from.toString(),
+        );
+        item.to.push({
+          id: startup._id,
+          limit: previousConfigStartup ? previousConfigStartup.limit : 0,
+          name: docStartup.item['nombre'],
+        });
+      }
+      ans.push(item);
+    }
+    hoursLeftToOthersTeamCoaches = Math.round(
+      teamCoachHours / (numbOfExpertWithoutAssign ?? 1),
+    );
+    for (const teamCoachAssign of ans) {
+      if (!teamCoachAssign.limit || teamCoachAssign.limit === 0) {
+        teamCoachAssign.limit = hoursLeftToOthersTeamCoaches;
+      }
+      let hoursToStartups = teamCoachAssign.limit;
+      let numbOfStartups = 0;
+      for (const startupAssign of teamCoachAssign.to) {
+        if (startupAssign.limit === 0) {
+          numbOfStartups++;
+        } else {
+          hoursToStartups -= startupAssign.limit;
+        }
+      }
+      const hoursByStartupWithoutAssign = Math.round(
+        hoursToStartups / (numbOfStartups ?? 1),
+      );
+      for (const startupAssign of teamCoachAssign.to) {
+        if (startupAssign.limit === 0)
+          startupAssign.limit = hoursByStartupWithoutAssign;
+      }
+    }
+    return {
+      teamCoachHours,
+      hoursLeftToOthersTeamCoaches,
       list: ans,
     };
   }

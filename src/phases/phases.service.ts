@@ -24,81 +24,11 @@ export class PhasesService {
   async findAll(user: AuthUser): Promise<Phase[]> {
     switch (user.rolDoc.type) {
       case ValidRoles.expert:
-        const docExpert = await this.expertService.findByAccount(user.uid);
-        const batchesExpert = await this.phaseModel
-          .find({
-            _id: { $in: docExpert.phases },
-            deleted: false,
-          })
-          .lean();
-        const phasesExpert = await this.phaseModel
-          .find({
-            _id: { $in: batchesExpert.map((i) => i.childrenOf) },
-            deleted: false,
-          })
-          .lean();
-        return [...phasesExpert, ...batchesExpert];
+        return this.getExpertBatchesAndPhases(user);
       case ValidRoles.host:
-        if (
-          !user.relationsAssign ||
-          Object.keys(user.relationsAssign).length === 0
-        )
-          return [];
-        const batchesHost = await this.phaseModel
-          .find({
-            _id: {
-              $in: user.relationsAssign?.batches?.map(
-                (i) => new Types.ObjectId(i._id),
-              ),
-            },
-            deleted: false,
-          })
-          .lean();
-        const idsPhases: Set<string> = new Set();
-        for (const iterator of batchesHost) {
-          idsPhases.add(iterator.childrenOf);
-        }
-        for (const iterator of user.relationsAssign.phases) {
-          idsPhases.add(iterator._id);
-        }
-        let arrayOfIds = Array.from(idsPhases);
-        const phasesHost = await this.phaseModel
-          .find({
-            $or: [
-              { _id: { $in: arrayOfIds.map((i) => new Types.ObjectId(i)) } },
-              { childrenOf: { $in: arrayOfIds } },
-            ],
-            deleted: false,
-          })
-          .lean();
-        return [...phasesHost, ...batchesHost];
+        return this.getHostBatchesAndPhases(user);
       case ValidRoles.teamCoach:
-        if (
-          !user.relationsAssign ||
-          Object.keys(user.relationsAssign).length === 0
-        )
-          return [];
-        const batchesTeamCoach = await this.phaseModel
-          .find({
-            _id: {
-              $in: user.relationsAssign?.batches?.map(
-                (i) => new Types.ObjectId(i._id),
-              ),
-            },
-            deleted: false,
-          })
-          .lean();
-        const phasesTeamCoach = await this.phaseModel
-          .find({
-            _id: {
-              $in: batchesTeamCoach.map(
-                (i) => new Types.ObjectId(i.childrenOf),
-              ),
-            },
-            deleted: false,
-          })
-          .lean();
-        return [...phasesTeamCoach, ...batchesTeamCoach];
+        return this.getTeamCoachBatchesAndHost(user);
       default:
         return await this.phaseModel.find({ deleted: false });
     }
@@ -232,5 +162,97 @@ export class PhasesService {
       { new: true },
     );
     return deletedPhase;
+  }
+
+  async getExpertBatchesAndPhases(user: AuthUser) {
+    const docExpert = await this.expertService.findByAccount(user.uid);
+    const batchesExpert = await this.phaseModel
+      .find({
+        _id: { $in: docExpert.phases },
+        deleted: false,
+      })
+      .lean();
+    const phasesExpert = await this.phaseModel
+      .find({
+        _id: { $in: batchesExpert.map((i) => i.childrenOf) },
+        deleted: false,
+      })
+      .lean();
+    return [...phasesExpert, ...batchesExpert];
+  }
+
+  async getHostBatchesAndPhases(user: AuthUser) {
+    if (!user.relationsAssign || Object.keys(user.relationsAssign).length === 0)
+      return [];
+    const batchesHost = await this.phaseModel
+      .find({
+        _id: {
+          $in: user.relationsAssign?.batches?.map(
+            (i) => new Types.ObjectId(i._id),
+          ),
+        },
+        deleted: false,
+      })
+      .lean();
+    const parentsBatches = await this.phaseModel
+      .find({
+        _id: {
+          $in: batchesHost.map((i) => i.childrenOf),
+        },
+        deleted: false,
+      })
+      .lean();
+    console.log(user.relationsAssign);
+    const listPhasesIds = user.relationsAssign.phases.map(
+      (i) => new Types.ObjectId(i._id),
+    );
+    const phasesHost = await this.phaseModel
+      .find({
+        $or: [
+          {
+            _id: {
+              $in: listPhasesIds,
+            },
+          },
+          { childrenOf: { $in: listPhasesIds } },
+        ],
+        deleted: false,
+      })
+      .lean();
+
+    const ansList = [...batchesHost, ...parentsBatches, ...phasesHost];
+    const ids: Set<string> = new Set();
+    const ans = [];
+    for (const iterator of ansList) {
+      if (ids.has(iterator._id.toString())) continue;
+      ans.push(iterator);
+      ids.add(iterator._id.toString());
+    }
+
+    return ans;
+  }
+
+  async getTeamCoachBatchesAndHost(user: AuthUser) {
+    if (!user.relationsAssign || Object.keys(user.relationsAssign).length === 0)
+      return [];
+    const batchesTeamCoach = await this.phaseModel
+      .find({
+        _id: {
+          $in: user.relationsAssign?.batches?.map(
+            (i) => new Types.ObjectId(i._id),
+          ),
+        },
+        deleted: false,
+      })
+      .lean();
+    const phasesTeamCoach = await this.phaseModel
+      .find({
+        _id: {
+          $in: batchesTeamCoach.map((i) => new Types.ObjectId(i.childrenOf)),
+        },
+        deleted: false,
+      })
+      .lean();
+    return [...phasesTeamCoach, ...batchesTeamCoach];
   }
 }

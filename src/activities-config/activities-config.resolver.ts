@@ -53,13 +53,16 @@ export class ActivitiesConfigResolver {
   }
 
   @ResolveField('calcHoursExperts', () => GraphQLJSONObject)
-  resolveIsProspect(
+  resolveExpertHours(
     @Parent() config: Omit<ActivitiesConfig, 'calcHoursExperts'>,
   ) {
     return this.activitiesConfigService.calcExpertsHours(config);
-    // return [
-    //   { test: true, work: 'yeahhh' },
-    //   { test: false, work: 'other' },
-    // ];
+  }
+
+  @ResolveField('calcHoursTeamCoaches', () => GraphQLJSONObject)
+  resolveTeamCoachHours(
+    @Parent() config: Omit<ActivitiesConfig, 'calcHoursExperts'>,
+  ) {
+    return this.activitiesConfigService.calcTeamCoachHours(config);
   }
 }

@@ -33,7 +33,6 @@ export enum Permission {
 
   // Community
   community_view = 'community_view',
-  community_create = 'community_create',
   community_edit = 'community_edit',
 
   // Forms
@@ -120,8 +119,7 @@ export const permissionDescriptions: Record<Permission, string> = {
 
   // Community
   [Permission.community_view]: 'Ver sección comunidad',
-  [Permission.community_create]: 'Crear comunidad',
-  [Permission.community_edit]: 'Editar comunidad',
+  [Permission.community_edit]: 'Editar visibilidad de comunidades',
 
   // Forms
   [Permission.form_view]: 'Ver sección formularios',

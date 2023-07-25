@@ -74,6 +74,10 @@ class startUpHoursSetup {
   @IsDefined()
   id: string;
 
+  @Field(() => String)
+  @IsDefined()
+  from: string;
+
   @Field(() => Int)
   @IsDefined()
   limit: number;

@@ -37,6 +37,7 @@ import { EventsModule } from './events/events.module';
 import { SitesModule } from './sites/sites.module';
 import { RolModule } from './rol/rol.module';
 import { DownloadsModule } from './downloads/downloads.module';
+import { EvaluationsModule } from './evaluations/evaluations.module';
 import GraphQLJSON from 'graphql-type-json';
 
 @Module({
@@ -120,6 +121,7 @@ import GraphQLJSON from 'graphql-type-json';
     SitesModule,
     RolModule,
     DownloadsModule,
+    EvaluationsModule,
   ],
   controllers: [],
   providers: [],

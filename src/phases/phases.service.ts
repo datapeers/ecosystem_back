@@ -202,7 +202,6 @@ export class PhasesService {
         deleted: false,
       })
       .lean();
-    console.log(user.relationsAssign);
     const listPhasesIds = user.relationsAssign.phases.map(
       (i) => new Types.ObjectId(i._id),
     );
@@ -228,7 +227,6 @@ export class PhasesService {
       ans.push(iterator);
       ids.add(iterator._id.toString());
     }
-
     return ans;
   }
 

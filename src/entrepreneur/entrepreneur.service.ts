@@ -46,6 +46,20 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     private readonly downloadService: DownloadsService,
   ) {}
 
+  private static readonly virtualFields = {
+    $addFields: {
+      isProspect: {
+        $anyElementTrue: {
+          $map: {
+            input: "$startups",
+            as: "startup",
+            in: { $eq: [{ $size: { $ifNull: ["$$startup.phases", []] } }, 0] }
+          }
+        }
+      }
+    }
+  };
+
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
@@ -78,6 +92,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     outputProjection?: any
   ): Promise<PaginatedResult<Entrepreneur>> {
     const options = new AggregateBuildOptions();
+    options.virtualFields = EntrepreneurService.virtualFields;
     if(outputProjection) {
       options.outputProjection = outputProjection;
     }
@@ -94,6 +109,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
 
   async findManyIdsByRequest(request: PageRequest, user: AuthUser): Promise<string[]> {
     const options = new AggregateBuildOptions();
+    options.virtualFields = EntrepreneurService.virtualFields;
     options.paginated = false;
     options.outputProjection = { $project: { _id: 1 } };
     let aggregationPipeline = requestUtilities.buildAggregationFromRequest(
@@ -271,7 +287,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     // Find entrepreneurs
     const startupDocuments = await this.startupService.findMany(startups);
     const startupRelationships = startupDocuments.map((document) => {
-      return { _id: document._id, item: document.item };
+      return { _id: document._id, item: document.item, phases: document.phases };
     });
     const entrepreneurUpdateResult = await this.linkWithStartups(
       ids,
@@ -292,5 +308,34 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
+  }
+  
+  async updatePhasesForStartupsRelationships(relationships: StartupRelationship[]) {
+    // Initialize the bulk operations array
+    const bulkOperations = [];
+
+    // Iterate through the arrayOfStartupsWithNewPhases
+    relationships.forEach((startup) => {
+      // Update operation for each startup
+      const updateOperation = {
+        updateMany: {
+          filter: { "startups._id": startup._id }, // Match documents that have the startup in their startups array
+          update: {
+            $set: {
+              "startups.$.phases": startup.phases, // Update the phases array for the matched startup
+            },
+          },
+        },
+      };
+      // Add the update operation to the bulkOperations array
+      bulkOperations.push(updateOperation);
+    });
+    
+    // Execute the bulkWrite operation to update all entrepreneurs
+    const bulkWriteResult = await this.entrepreneurModel.bulkWrite(bulkOperations);
+    if(!bulkWriteResult.ok) {
+      throw new InternalServerErrorException("Failed to update phases for startups relationship in entrepreneurs documents");
+    }
+    return bulkWriteResult;
   }
 }

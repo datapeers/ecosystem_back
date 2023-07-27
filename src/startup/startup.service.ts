@@ -31,6 +31,7 @@ import { DownloadResult } from 'src/shared/models/download-result';
 import { excelUtilities } from 'src/shared/utilities/excel.utilities';
 import { DownloadsService } from 'src/downloads/downloads.service';
 import { TableConfigService } from 'src/table/table-config/table-config.service';
+import { StartupRelationship } from 'src/entrepreneur/entities/entrepreneur.entity';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -150,7 +151,7 @@ export class StartupService implements FormDocumentService<Startup> {
 
     // Link entrepreneurs to bussinesses by given relationships
     const startupsToLink = startups.map((startup) => {
-      return { _id: startup._id, item: startup.item };
+      return { _id: startup._id, item: startup.item, phases: startup.phases };
     });
     const entrepreneurUpdateResult =
       await this.entrepreneurService.linkWithStartups(
@@ -339,13 +340,25 @@ export class StartupService implements FormDocumentService<Startup> {
       _id: linkStartUpsToPhaseArgs.phaseId,
       name: linkStartUpsToPhaseArgs.name,
     };
-    return this.startupModel
-      .updateMany(
-        { _id: { $in: linkStartUpsToPhaseArgs.startups } },
-        { $addToSet: { phases: { $each: [phaseRelationship] } } },
-        { new: true },
-      )
-      .lean();
+    const startups = linkStartUpsToPhaseArgs.startups;
+    const updateResult  = await this.startupModel
+    .updateMany(
+      { _id: { $in: startups } },
+      { $addToSet: { phases: { $each: [phaseRelationship] } } },
+      { new: true },
+    );
+    if(updateResult.acknowledged) {
+      const updatedStartupsRelationships = await this.getStartupsRelationships(startups);
+      await this.entrepreneurService.updatePhasesForStartupsRelationships(updatedStartupsRelationships);
+    }
+    return UpdateResultPayload.fromPayload(updateResult);
+  }
+
+  async getStartupsRelationships(ids: string[]): Promise<StartupRelationship[]> {
+    return await this.startupModel.find(
+      { _id: { $in: ids } },
+      { _id: 1, item: 1, phases: 1 }
+    );
   }
 
   async linkWithEntrepreneursByRequest(

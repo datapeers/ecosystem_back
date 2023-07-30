@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { User } from 'src/users/entities/user.entity';
 
+@Schema({ timestamps: true })
 @ObjectType()
 export class ConfigEvaluation {
   @Field(() => ID)
@@ -29,6 +30,10 @@ export class ConfigEvaluation {
   @Field(() => String)
   @Prop()
   form: string;
+
+  @Field(() => String)
+  @Prop()
+  phase: string;
 
   @Field(() => Date)
   @Prop({ required: true })

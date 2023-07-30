@@ -77,7 +77,7 @@ export class ActivitiesConfigService {
     for (const configActivity of config.activities) {
       totalActivitiesHours += configActivity.limit;
       if (configActivity.idActivity === '646f953cc2305c411d73f700')
-        limitTeamCoachHours = configActivity.limit;
+        limitTeamCoachHours = configActivity.limit ?? 0;
     }
     let expertHours = totalActivitiesHours - limitTeamCoachHours;
     const listExperts = await this.expertsService.findByPhase(
@@ -115,6 +115,7 @@ export class ActivitiesConfigService {
         const docStartup = listStartups.find(
           (i) => i._id.toString() === startup._id,
         );
+        if (!docStartup) continue;
         const previousConfigStartup = config.startups.find(
           (i) =>
             i.id === startup._id && expert._id.toString() === i.from.toString(),
@@ -127,8 +128,9 @@ export class ActivitiesConfigService {
       }
       ans.push(item);
     }
-    hoursLeftToOthersExperts = Math.round(
-      expertHours / (numbOfExpertWithoutAssign ?? 1),
+    hoursLeftToOthersExperts = this.getHoursForOthers(
+      expertHours,
+      numbOfExpertWithoutAssign ?? 1,
     );
     for (const expertAssign of ans) {
       if (!expertAssign.limit || expertAssign.limit === 0) {
@@ -143,8 +145,9 @@ export class ActivitiesConfigService {
           hoursToStartups -= startupAssign.limit;
         }
       }
-      const hoursByStartupWithoutAssign = Math.round(
-        hoursToStartups / (numbOfStartups ?? 1),
+      const hoursByStartupWithoutAssign = this.getHoursForOthers(
+        hoursToStartups,
+        numbOfStartups ?? 1,
       );
       for (const startupAssign of expertAssign.to) {
         if (startupAssign.limit === 0)
@@ -162,7 +165,7 @@ export class ActivitiesConfigService {
     let configTeamCoachActivities = config.activities.find(
       (i) => i.idActivity === '646f953cc2305c411d73f700',
     );
-    let teamCoachHours = configTeamCoachActivities.limit;
+    let teamCoachHours = configTeamCoachActivities?.limit ?? 0;
 
     const listTeamCoach = await this.usersService.findMany({
       roles: [ValidRoles.teamCoach],
@@ -172,7 +175,7 @@ export class ActivitiesConfigService {
       config.phase.toString(),
     );
     let ans: Assign_item[] = [];
-    let numbOfExpertWithoutAssign = 0;
+    let numbOfTeamCoachWithoutAssign = 0;
     let hoursLeftToOthersTeamCoaches = listTeamCoach.length
       ? Math.round(teamCoachHours / listTeamCoach.length)
       : 0;
@@ -186,7 +189,7 @@ export class ActivitiesConfigService {
       ) {
         teamCoachHours -= previousConfig.limit;
       } else {
-        numbOfExpertWithoutAssign++;
+        numbOfTeamCoachWithoutAssign++;
       }
       const item = new Assign_item(
         {
@@ -214,8 +217,9 @@ export class ActivitiesConfigService {
       }
       ans.push(item);
     }
-    hoursLeftToOthersTeamCoaches = Math.round(
-      teamCoachHours / (numbOfExpertWithoutAssign ?? 1),
+    hoursLeftToOthersTeamCoaches = this.getHoursForOthers(
+      teamCoachHours,
+      numbOfTeamCoachWithoutAssign ?? 1,
     );
     for (const teamCoachAssign of ans) {
       if (!teamCoachAssign.limit || teamCoachAssign.limit === 0) {
@@ -230,8 +234,9 @@ export class ActivitiesConfigService {
           hoursToStartups -= startupAssign.limit;
         }
       }
-      const hoursByStartupWithoutAssign = Math.round(
-        hoursToStartups / (numbOfStartups ?? 1),
+      const hoursByStartupWithoutAssign = this.getHoursForOthers(
+        hoursToStartups,
+        numbOfStartups ?? 1,
       );
       for (const startupAssign of teamCoachAssign.to) {
         if (startupAssign.limit === 0)
@@ -243,5 +248,13 @@ export class ActivitiesConfigService {
       hoursLeftToOthersTeamCoaches,
       list: ans,
     };
+  }
+
+  getHoursForOthers(limit: number, pending: number) {
+    let hoursForOthersStartups = Math.round(limit / pending);
+    if (hoursForOthersStartups * pending > limit) {
+      return this.getHoursForOthers(limit - 1, pending);
+    }
+    return hoursForOthersStartups;
   }
 }

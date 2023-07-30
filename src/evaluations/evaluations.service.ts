@@ -1,16 +1,36 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEvaluationInput } from './dto/create-evaluation.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Evaluation } from './entities/evaluation.entity';
 import { Model, Types } from 'mongoose';
 import { UpdateResultPayload } from 'src/shared/models/update-result';
-import { FormFileSubmission } from 'src/forms/factories/form-file-submission';
-
+import { AuthUser } from 'src/auth/types/auth-user';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import {
+  Inject,
+  Injectable,
+  forwardRef,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { ConfigEvaluationsService } from './config-evaluations/config-evaluations.service';
+import { ExpertService } from 'src/expert/expert.service';
+import { StartupService } from 'src/startup/startup.service';
+import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class EvaluationsService {
+  canBeEvaluated = [ValidRoles.user, ValidRoles.teamCoach, ValidRoles.expert];
+  canBeReviewer = [ValidRoles.host, ValidRoles.teamCoach, ValidRoles.expert];
   constructor(
     @InjectModel(Evaluation.name)
     private readonly evaluationModel: Model<Evaluation>,
+    @Inject(forwardRef(() => ConfigEvaluationsService))
+    private readonly configService: ConfigEvaluationsService,
+    @Inject(forwardRef(() => StartupService))
+    private readonly startupService: StartupService,
+    @Inject(forwardRef(() => ExpertService))
+    private readonly expertService: ExpertService,
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService,
   ) {}
 
   async getDocument(id: string) {
@@ -34,6 +54,34 @@ export class EvaluationsService {
 
   findAll() {
     return this.evaluationModel.find();
+  }
+
+  async findByConfig(config: string, user: AuthUser) {
+    const configEvaluation = await this.configService.findOne(config);
+    const evaluations = await this.evaluationModel.find({
+      config,
+      isDeleted: false,
+    });
+    if (!this.canBeEvaluated.includes(configEvaluation.evaluated as ValidRoles))
+      throw new BadRequestException('Invalid evaluated', {
+        cause: new Error(),
+        description: 'Evaluated its not a valid type for this endpoint',
+      });
+    if (!this.canBeReviewer.includes(configEvaluation.reviewer as ValidRoles))
+      throw new BadRequestException('Invalid reviewer', {
+        cause: new Error(),
+        description: 'Reviewer its not a valid type for this endpoint',
+      });
+    switch (configEvaluation.evaluated) {
+      case ValidRoles.user:
+        break;
+      case ValidRoles.teamCoach:
+        break;
+      case ValidRoles.expert:
+        break;
+      default:
+        return evaluations;
+    }
   }
 
   async findOne(id: string): Promise<Evaluation> {

@@ -3,7 +3,11 @@ import { ConfigEvaluationsService } from './config-evaluations.service';
 import { ConfigEvaluation } from './entities/config-evaluation.entity';
 import { CreateConfigEvaluationInput } from './dto/create-config-evaluation.input';
 import { UpdateConfigEvaluationInput } from './dto/update-config-evaluation.input';
-
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
+import { UseGuards } from '@nestjs/common';
+@UseGuards(GqlAuthGuard)
 @Resolver(() => ConfigEvaluation)
 export class ConfigEvaluationsResolver {
   constructor(
@@ -23,8 +27,16 @@ export class ConfigEvaluationsResolver {
     return this.configEvaluationsService.findAll();
   }
 
+  @Query(() => [ConfigEvaluation], { name: 'configEvaluationsByPhase' })
+  findByPhase(
+    @Args('phase', { type: () => String }) phase: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.configEvaluationsService.findByPhase(phase, user);
+  }
+
   @Query(() => ConfigEvaluation, { name: 'configEvaluation' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.configEvaluationsService.findOne(id);
   }
 

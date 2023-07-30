@@ -13,7 +13,6 @@ export class CreateSiteInput {
   thumbnail: string;
 
   @Field(() => String)
-  @IsNotEmpty()
   description: string;
 
   @Field(() => GraphQLJSONObject)

@@ -13,7 +13,7 @@ export const CurrentUser = createParamDecorator(
     const ctx = GqlExecutionContext.create(context);
     const user: AuthUser = ctx.getContext().req.user;
     const rol = ctx.getContext().req.rol;
-    user.rolDoc = rol;
+    user['rolDoc'] = rol;
     if (!user) {
       throw new InternalServerErrorException(
         `No user inside the request - make sure that we used the AuthGuard`,

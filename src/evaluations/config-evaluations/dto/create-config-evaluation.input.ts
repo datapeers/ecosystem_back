@@ -1,5 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 @InputType()
 export class CreateConfigEvaluationInput {
@@ -8,7 +8,7 @@ export class CreateConfigEvaluationInput {
   title: string;
 
   @Field(() => String)
-  @IsNotEmpty()
+  @IsOptional()
   description: string;
 
   @Field(() => String)
@@ -22,6 +22,10 @@ export class CreateConfigEvaluationInput {
   @Field(() => String)
   @IsNotEmpty()
   form: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  phase: string;
 
   @Field(() => Date)
   @IsNotEmpty()

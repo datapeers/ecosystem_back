@@ -84,6 +84,12 @@ export enum Permission {
   hours_edit_startups = 'hours_edit_startups',
   hours_edit_experts = 'hours_edit_experts',
   hours_edit_teamCoach = 'hours_edit_teamCoach',
+
+  // Evaluations
+  evaluation_view = 'evaluation_view',
+  evaluation_create = 'evaluation_create',
+  evaluation_edit = 'evaluation_edit',
+  evaluation_edit_docs = 'evaluation_edit_docs',
 }
 
 export const permissionDescriptions: Record<Permission, string> = {
@@ -171,6 +177,14 @@ export const permissionDescriptions: Record<Permission, string> = {
   [Permission.hours_edit_experts]: 'Editar horas necesarios de los experto',
   [Permission.hours_edit_teamCoach]:
     'Editar horas necesarios de los team coach',
+
+  // Evaluations
+  [Permission.evaluation_view]: 'Ver sección de valuaciones en batch',
+  [Permission.evaluation_create]:
+    'Permitir crear una configuración para evaluaciones',
+  [Permission.evaluation_edit]:
+    'Permitir editar las configuraciones de una evaluación',
+  [Permission.evaluation_edit_docs]: 'Permitir editar las evaluaciones',
 };
 
 export const permissionDescription = (permission: Permission) => {

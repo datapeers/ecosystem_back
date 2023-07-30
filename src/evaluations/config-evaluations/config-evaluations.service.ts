@@ -4,6 +4,7 @@ import { UpdateConfigEvaluationInput } from './dto/update-config-evaluation.inpu
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigEvaluation } from './entities/config-evaluation.entity';
 import { Model } from 'mongoose';
+import { AuthUser } from 'src/auth/types/auth-user';
 
 @Injectable()
 export class ConfigEvaluationsService {
@@ -20,7 +21,11 @@ export class ConfigEvaluationsService {
     return this.configEvaluationModel.find().lean();
   }
 
-  findOne(id: number) {
+  findByPhase(phase: string, user: AuthUser) {
+    return this.configEvaluationModel.find({ phase }).lean();
+  }
+
+  findOne(id: string) {
     return this.configEvaluationModel.findById(id).lean();
   }
 

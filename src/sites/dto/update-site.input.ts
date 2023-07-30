@@ -41,7 +41,6 @@ export class ServicesSiteInput {
   name: string;
 
   @Field(() => String)
-  @IsNotEmpty()
   description: string;
 
   @Field(() => String)

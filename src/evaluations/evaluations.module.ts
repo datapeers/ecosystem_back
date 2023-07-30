@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { EvaluationsService } from './evaluations.service';
 import { EvaluationsResolver } from './evaluations.resolver';
 
@@ -7,6 +7,9 @@ import { AuthModule } from 'src/auth/auth.module';
 import { LoggerModule } from 'src/logger/logger.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Evaluation, EvaluationSchema } from './entities/evaluation.entity';
+import { UsersModule } from 'src/users/users.module';
+import { ExpertModule } from 'src/expert/expert.module';
+import { StartupModule } from 'src/startup/startup.module';
 
 @Module({
   imports: [
@@ -15,7 +18,10 @@ import { Evaluation, EvaluationSchema } from './entities/evaluation.entity';
     ]),
     AuthModule,
     LoggerModule,
-    ConfigEvaluationsModule,
+    forwardRef(() => ConfigEvaluationsModule),
+    forwardRef(() => UsersModule),
+    forwardRef(() => ExpertModule),
+    forwardRef(() => StartupModule),
   ],
   providers: [EvaluationsResolver, EvaluationsService],
   exports: [EvaluationsService],

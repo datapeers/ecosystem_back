@@ -2,21 +2,11 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { User } from 'src/users/entities/user.entity';
-
+@Schema({ timestamps: true })
 @ObjectType()
 export class Evaluation {
   @Field(() => ID)
   _id: string;
-
-  @Field(() => String)
-  @Prop()
-  title: string;
-
-  @Field(() => String, {
-    nullable: true,
-  })
-  @Prop()
-  description: string;
 
   @Field(() => GraphQLJSON, {
     description: 'Set of additional dynamic properties.',
@@ -35,6 +25,14 @@ export class Evaluation {
   @Field(() => String)
   @Prop()
   form: string;
+
+  @Field(() => String)
+  @Prop()
+  config: string;
+
+  @Field(() => String)
+  @Prop({ default: 'pending' })
+  state: string;
 
   @Field(() => User, {
     description: 'If set, Details from user who last updated the entity.',

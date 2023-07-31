@@ -31,7 +31,7 @@ export class Evaluation {
   config: string;
 
   @Field(() => String)
-  @Prop({ default: 'pending' })
+  @Prop({ default: 'sent' })
   state: string;
 
   @Field(() => User, {

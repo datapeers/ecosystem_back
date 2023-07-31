@@ -58,10 +58,12 @@ export class EvaluationsService {
 
   async findByConfig(config: string, user: AuthUser) {
     const configEvaluation = await this.configService.findOne(config);
-    const evaluations = await this.evaluationModel.find({
-      config,
-      isDeleted: false,
-    });
+    const evaluations = await this.evaluationModel
+      .find({
+        config,
+        isDeleted: false,
+      })
+      .lean();
     if (!this.canBeEvaluated.includes(configEvaluation.evaluated as ValidRoles))
       throw new BadRequestException('Invalid evaluated', {
         cause: new Error(),
@@ -72,16 +74,74 @@ export class EvaluationsService {
         cause: new Error(),
         description: 'Reviewer its not a valid type for this endpoint',
       });
+    let ansList: Evaluation[] = [];
     switch (configEvaluation.evaluated) {
       case ValidRoles.user:
+        const startupList = await this.startupService.findByPhase(
+          configEvaluation.phase,
+          user,
+        );
+        for (const startup of startupList) {
+          let evaluation = evaluations.find(
+            (i) =>
+              i.evaluated === startup._id.toString() &&
+              i.config === configEvaluation._id.toString(),
+          );
+          if (!evaluation)
+            evaluation = this.createSimpleEvaluation(
+              startup._id.toString(),
+              configEvaluation._id.toString(),
+              'pending',
+              configEvaluation.form,
+            );
+          ansList.push(evaluation);
+        }
         break;
       case ValidRoles.teamCoach:
+        const teamCoachList = await this.usersService.findMany({
+          roles: [ValidRoles.teamCoach],
+          relationsAssign: { batches: configEvaluation.phase },
+        });
+        for (const teamCoach of teamCoachList) {
+          let evaluation = evaluations.find(
+            (i) =>
+              i.evaluated === teamCoach._id.toString() &&
+              i.config === configEvaluation._id.toString(),
+          );
+          if (!evaluation)
+            evaluation = this.createSimpleEvaluation(
+              teamCoach._id.toString(),
+              configEvaluation._id.toString(),
+              'pending',
+              configEvaluation.form,
+            );
+          ansList.push(evaluation);
+        }
         break;
       case ValidRoles.expert:
+        const expertList = await this.expertService.findByPhase(
+          configEvaluation.phase,
+        );
+        for (const expert of expertList) {
+          let evaluation = evaluations.find(
+            (i) =>
+              i.evaluated === expert._id.toString() &&
+              i.config === configEvaluation._id.toString(),
+          );
+          if (!evaluation)
+            evaluation = this.createSimpleEvaluation(
+              expert._id.toString(),
+              configEvaluation._id.toString(),
+              'pending',
+              configEvaluation.form,
+            );
+          ansList.push(evaluation);
+        }
         break;
       default:
-        return evaluations;
+        break;
     }
+    return ansList;
   }
 
   async findOne(id: string): Promise<Evaluation> {
@@ -112,5 +172,25 @@ export class EvaluationsService {
       ...updateResult,
       upsertedId: updateResult.upsertedId?.toString(),
     };
+  }
+
+  createSimpleEvaluation(
+    evaluated: string,
+    config: string,
+    state: string,
+    form: string,
+  ) {
+    const newEvaluation = new Evaluation();
+    newEvaluation._id = new Types.ObjectId().toString();
+    newEvaluation.item = {} as any;
+    newEvaluation.evaluated = evaluated;
+    newEvaluation.reviewer = '';
+    newEvaluation.form = form;
+    newEvaluation.config = config;
+    newEvaluation.state = state;
+    newEvaluation.createdAt = new Date();
+    newEvaluation.updatedAt = new Date();
+    newEvaluation.isDeleted = false;
+    return newEvaluation;
   }
 }

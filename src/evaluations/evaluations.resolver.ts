@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { EvaluationsService } from './evaluations.service';
 import { Evaluation } from './entities/evaluation.entity';
 import { CreateEvaluationInput } from './dto/create-evaluation.input';
@@ -41,4 +49,9 @@ export class EvaluationsResolver {
   removeEvaluation(@Args('ids', { type: () => [String] }) ids: [string]) {
     return this.evaluationsService.delete(ids);
   }
+
+  // @ResolveField('evaluatedName', () => String)
+  // resolveTeamCoachHours(@Parent() config: Omit<Evaluation, 'evaluatedName'>) {
+  //   return config['evaluatedName'];
+  // }
 }

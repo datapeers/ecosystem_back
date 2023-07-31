@@ -91,7 +91,7 @@ export class EvaluationsService {
             evaluation = this.createSimpleEvaluation(
               startup._id.toString(),
               configEvaluation._id.toString(),
-              'pending',
+              'pendiente',
               configEvaluation.form,
             );
           ansList.push(evaluation);
@@ -112,7 +112,7 @@ export class EvaluationsService {
             evaluation = this.createSimpleEvaluation(
               teamCoach._id.toString(),
               configEvaluation._id.toString(),
-              'pending',
+              'pendiente',
               configEvaluation.form,
             );
           ansList.push(evaluation);
@@ -132,7 +132,7 @@ export class EvaluationsService {
             evaluation = this.createSimpleEvaluation(
               expert._id.toString(),
               configEvaluation._id.toString(),
-              'pending',
+              'pendiente',
               configEvaluation.form,
             );
           ansList.push(evaluation);
@@ -192,5 +192,26 @@ export class EvaluationsService {
     newEvaluation.updatedAt = new Date();
     newEvaluation.isDeleted = false;
     return newEvaluation;
+  }
+
+  async getName(evaluation: Evaluation) {
+    const configEvaluation = await this.configService.findOne(
+      evaluation.config,
+    );
+    switch (configEvaluation.evaluated) {
+      case ValidRoles.user:
+        const startup = await this.startupService.findOne(evaluation.evaluated);
+        return startup.item['nombre'];
+      case ValidRoles.teamCoach:
+        const teamCoach = await this.usersService.findById(
+          evaluation.evaluated,
+        );
+        return teamCoach.fullName;
+      case ValidRoles.expert:
+        const expert = await this.expertService.findOne(evaluation.evaluated);
+        return expert.item['nombre'];
+      default:
+        return '';
+    }
   }
 }

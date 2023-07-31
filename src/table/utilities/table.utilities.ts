@@ -4,7 +4,7 @@ import { TableColumnType } from '../models/table-column-type.enum';
 const convertFormToColumns = (
   rowsForm: any[],
   files: any[],
-  prefix: string = ""
+  prefix: string = '',
 ): RowConfigColumn[] => {
   let displayColumnsTable: RowConfigColumn[] = [];
   if (rowsForm.length != 0) {
@@ -15,8 +15,7 @@ const convertFormToColumns = (
         case 'datagrid':
           for (const iteratorComponent of iterator) {
             let key = `item, ${iterator.key}; ${iteratorComponent.key}`;
-            if(prefix)
-              key = [prefix, key].join("; ");
+            if (prefix) key = [prefix, key].join('; ');
             const childGrid = set_row(
               `${iterator.label}, ${iteratorComponent.label}`,
               iterator.type,
@@ -30,8 +29,7 @@ const convertFormToColumns = (
         case 'panel':
           for (const iteratorComponent of iterator) {
             let key = `item, ${iteratorComponent.key}`;
-            if(prefix)
-              key = [prefix, key].join("; ");
+            if (prefix) key = [prefix, key].join('; ');
             const childPanel = set_row(
               iteratorComponent.label,
               iteratorComponent.type,
@@ -44,8 +42,7 @@ const convertFormToColumns = (
         case 'well':
           for (const iteratorComponent of iterator) {
             let key = `item, ${iteratorComponent.key}`;
-            if(prefix)
-              key = [prefix, key].join("; ");
+            if (prefix) key = [prefix, key].join('; ');
             const childWell = set_row(
               iteratorComponent.label,
               iteratorComponent.type,
@@ -57,15 +54,9 @@ const convertFormToColumns = (
           break;
         default:
           let key = `item, ${iterator.key}`;
-          if(prefix)
-            key = [prefix, key].join("; ");
+          if (prefix) key = [prefix, key].join('; ');
           displayColumnsTable.push(
-            set_row(
-              iterator.label,
-              iterator.type,
-              key,
-              iterator,
-            ),
+            set_row(iterator.label, iterator.type, key, iterator),
           );
           break;
       }
@@ -98,14 +89,24 @@ export function set_row(label: string, format: string, key: any, row?: any) {
     case 'currency':
       return new RowConfigColumn(label, TableColumnType.data, key, 'currency');
     case 'datetime':
-      return new RowConfigColumn(label, TableColumnType.data, key, 'dateAndTime');
+      return new RowConfigColumn(
+        label,
+        TableColumnType.data,
+        key,
+        'dateAndTime',
+      );
     case 'time':
       return new RowConfigColumn(label, TableColumnType.data, key, 'time');
     case 'checkbox':
       return new RowConfigColumn(label, TableColumnType.data, key, 'boolean');
     case 'tags':
       if (row.storeas) {
-        return new RowConfigColumn(label, TableColumnType.data, key, 'arraysTags');
+        return new RowConfigColumn(
+          label,
+          TableColumnType.data,
+          key,
+          'arraysTags',
+        );
       }
       return new RowConfigColumn(label, TableColumnType.data, key, 'string');
     case 'selectboxes':
@@ -127,9 +128,15 @@ export function set_row(label: string, format: string, key: any, row?: any) {
           ? row.data.json.map((val) => val?.value ?? val)
           : [];
       }
-      let itemSelect = new RowConfigColumn(label, TableColumnType.data, key, 'string', {
-        options,
-      });
+      let itemSelect = new RowConfigColumn(
+        label,
+        TableColumnType.data,
+        key,
+        'string',
+        {
+          options,
+        },
+      );
       if (row.multiple) {
         if (row.data.url !== '' && row.valueProperty === '') {
           itemSelect = new RowConfigColumn(
@@ -162,6 +169,18 @@ export function columnStartupsExpert() {
   );
 }
 
+export function columnsEvaluations() {
+  return [
+    new RowConfigColumn(
+      'Nombre',
+      TableColumnType.data,
+      'evaluatedName',
+      'string',
+    ),
+    new RowConfigColumn('Estado', TableColumnType.data, 'state', 'string'),
+  ];
+}
+
 export function columnsCommunities() {
   return [
     new RowConfigColumn(
@@ -183,4 +202,5 @@ export const tableUtilities = {
   convertFormToColumns,
   columnStartupsExpert,
   columnsCommunities,
+  columnsEvaluations,
 };

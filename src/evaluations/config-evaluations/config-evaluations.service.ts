@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ConfigEvaluation } from './entities/config-evaluation.entity';
 import { Model } from 'mongoose';
 import { AuthUser } from 'src/auth/types/auth-user';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
 @Injectable()
 export class ConfigEvaluationsService {
@@ -17,8 +18,19 @@ export class ConfigEvaluationsService {
     return this.configEvaluationModel.create(createConfigEvaluationInput);
   }
 
-  findAll() {
-    return this.configEvaluationModel.find().lean();
+  findAll(user?: AuthUser) {
+    switch (user.rolDoc.type) {
+      case ValidRoles.expert:
+        return this.configEvaluationModel
+          .find({ reviewer: ValidRoles.expert })
+          .lean();
+      case ValidRoles.teamCoach:
+        return this.configEvaluationModel
+          .find({ reviewer: ValidRoles.teamCoach })
+          .lean();
+      default:
+        return this.configEvaluationModel.find().lean();
+    }
   }
 
   findByPhase(phase: string, user: AuthUser) {

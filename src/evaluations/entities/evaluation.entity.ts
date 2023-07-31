@@ -31,15 +31,8 @@ export class Evaluation {
   config: string;
 
   @Field(() => String)
-  @Prop({ default: 'sent' })
+  @Prop({ default: 'evaluado' })
   state: string;
-
-  @Field(() => User, {
-    description: 'If set, Details from user who last updated the entity.',
-    nullable: true,
-  })
-  @Prop()
-  updatedBy: string;
 
   @Field(() => Date, { description: 'Date of entity creation.' })
   createdAt: Date;

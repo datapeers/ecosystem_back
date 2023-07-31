@@ -50,8 +50,8 @@ export class EvaluationsResolver {
     return this.evaluationsService.delete(ids);
   }
 
-  // @ResolveField('evaluatedName', () => String)
-  // resolveTeamCoachHours(@Parent() config: Omit<Evaluation, 'evaluatedName'>) {
-  //   return config['evaluatedName'];
-  // }
+  @ResolveField('evaluatedName', () => String)
+  resolveIsProspect(@Parent() ev: Omit<Evaluation, 'evaluatedName'>) {
+    return this.evaluationsService.getName(ev);
+  }
 }

@@ -65,28 +65,38 @@ export class TableService {
   async findOne(filters: { _id?: string; locator?: string }): Promise<Table> {
     const table = await this.tableModel.findOne(filters);
     if (!table)
-      throw new NotFoundException(`Couldn't find a table by the specified filters: ${filters}`);
+      throw new NotFoundException(
+        `Couldn't find a table by the specified filters: ${filters}`,
+      );
     return table;
   }
 
-  async resolveTableGroups(table: Omit<Table, 'columnGroups'>): Promise<ColumnGroup[]> {
+  async resolveTableGroups(
+    table: Omit<Table, 'columnGroups'>,
+  ): Promise<ColumnGroup[]> {
     const tableJoins = table?.joins ?? [];
-    const joinsColumns: Promise<ColumnGroup>[] = tableJoins.map(async join => {
-      const joinForm = await this.formsService.findOne(join.form);
-      const formComponents = JSON.parse(joinForm.formJson);
-      const columns = tableUtilities.convertFormToColumns(formComponents.components, joinForm.documents, join.key);
-      const extraColumns = (join?.extraColumns ?? []).map(extraColumn => {
+    const joinsColumns: Promise<ColumnGroup>[] = tableJoins.map(
+      async (join) => {
+        const joinForm = await this.formsService.findOne(join.form);
+        const formComponents = JSON.parse(joinForm.formJson);
+        const columns = tableUtilities.convertFormToColumns(
+          formComponents.components,
+          joinForm.documents,
+          join.key,
+        );
+        const extraColumns = (join?.extraColumns ?? []).map((extraColumn) => {
+          return {
+            ...extraColumn,
+            key: `${join.key}; ${extraColumn.key}`,
+          };
+        });
         return {
-          ...extraColumn,
-          key: `${join.key}; ${extraColumn.key}`,
+          name: joinForm.name,
+          key: join.key,
+          columns: columns.concat(extraColumns),
         };
-      });
-      return {
-        name: joinForm.name,
-        key: join.key,
-        columns: columns.concat(extraColumns),
-      };
-    });
+      },
+    );
     const joins = await Promise.all(joinsColumns);
     return joins;
   }
@@ -103,7 +113,9 @@ export class TableService {
     if (table.locator.includes('communities')) {
       columns.push(...tableUtilities.columnsCommunities());
     }
-
+    if (table.locator.includes('evaluation')) {
+      columns.unshift(...tableUtilities.columnsEvaluations());
+    }
     return columns;
   }
 }

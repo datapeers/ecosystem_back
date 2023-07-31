@@ -47,6 +47,12 @@ export class UsersService implements OnModuleInit {
     return user;
   }
 
+  async findById(id: string) {
+    const user = (await this.userModel.findById(id)).populate('rol');
+    if (!user) throw new NotFoundException(`No user found with id ${id}`);
+    return user;
+  }
+
   async findMany({ search, roles, relationsAssign }: FindUsersArgs) {
     let filters = {};
     let rolesDocs = [];

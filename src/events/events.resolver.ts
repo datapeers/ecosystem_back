@@ -19,7 +19,7 @@ export class EventsResolver {
   }
 
   @Query(() => [EventEntity], { name: 'events' })
-  findAll() {
+  findAll(@CurrentUser() user: AuthUser) {
     return this.eventsService.findAll();
   }
 
@@ -29,6 +29,11 @@ export class EventsResolver {
     @CurrentUser() user: AuthUser,
   ) {
     return this.eventsService.findByPhase(phase, user);
+  }
+
+  @Query(() => [EventEntity], { name: 'eventsUser' })
+  findByUser(@CurrentUser() user: AuthUser) {
+    return this.eventsService.findByUser(user);
   }
 
   @Query(() => EventEntity, { name: 'event' })

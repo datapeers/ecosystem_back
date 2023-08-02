@@ -233,7 +233,7 @@ export class PhasesService {
   async getTeamCoachBatchesAndHost(user: AuthUser) {
     if (!user.relationsAssign || Object.keys(user.relationsAssign).length === 0)
       return [];
-    const batchesTeamCoach = await this.phaseModel
+    const batches = await this.phaseModel
       .find({
         _id: {
           $in: user.relationsAssign?.batches?.map(
@@ -243,14 +243,72 @@ export class PhasesService {
         deleted: false,
       })
       .lean();
-    const phasesTeamCoach = await this.phaseModel
+    const phases = await this.phaseModel
       .find({
         _id: {
-          $in: batchesTeamCoach.map((i) => new Types.ObjectId(i.childrenOf)),
+          $in: batches.map((i) => new Types.ObjectId(i.childrenOf)),
         },
         deleted: false,
       })
       .lean();
-    return [...phasesTeamCoach, ...batchesTeamCoach];
+    return [...phases, ...batches];
+  }
+
+  async getAllBatchesAccessHost(user: AuthUser): Promise<Types.ObjectId[]> {
+    if (!user.relationsAssign || Object.keys(user.relationsAssign).length === 0)
+      return [];
+    const batchesHost = await this.phaseModel
+      .find(
+        {
+          _id: {
+            $in: user.relationsAssign?.batches?.map(
+              (i) => new Types.ObjectId(i._id),
+            ),
+          },
+          deleted: false,
+        },
+        { _id: 1 },
+      )
+      .lean();
+    const parentsBatches = await this.phaseModel
+      .find(
+        {
+          _id: {
+            $in: batchesHost.map((i) => i.childrenOf),
+          },
+          deleted: false,
+        },
+        { _id: 1 },
+      )
+      .lean();
+    const listPhasesIds = user.relationsAssign.phases.map(
+      (i) => new Types.ObjectId(i._id),
+    );
+    const phasesHost = await this.phaseModel
+      .find(
+        {
+          $or: [
+            {
+              _id: {
+                $in: listPhasesIds,
+              },
+            },
+            { childrenOf: { $in: listPhasesIds } },
+          ],
+          deleted: false,
+        },
+        { _id: 1 },
+      )
+      .lean();
+
+    const ansList = [...batchesHost, ...parentsBatches, ...phasesHost];
+    const ids: Set<string> = new Set();
+    const ans = [];
+    for (const iterator of ansList) {
+      if (ids.has(iterator._id.toString())) continue;
+      ans.push(iterator._id);
+      ids.add(iterator._id.toString());
+    }
+    return ans;
   }
 }

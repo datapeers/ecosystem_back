@@ -7,6 +7,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Event as EventEntity, EventSchema } from './entities/event.entity';
 import { ActaModule } from './acta/acta.module';
 import { ExpertModule } from 'src/expert/expert.module';
+import { StartupModule } from 'src/startup/startup.module';
+import { UsersModule } from 'src/users/users.module';
+import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
+import { PhasesModule } from 'src/phases/phases.module';
 
 @Module({
   imports: [
@@ -17,6 +21,9 @@ import { ExpertModule } from 'src/expert/expert.module';
     LoggerModule,
     ActaModule,
     forwardRef(() => ExpertModule),
+    forwardRef(() => StartupModule),
+    forwardRef(() => EntrepreneurModule),
+    forwardRef(() => PhasesModule),
   ],
   providers: [EventsResolver, EventsService],
   exports: [EventsService],

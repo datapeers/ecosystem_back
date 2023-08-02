@@ -2,20 +2,27 @@ import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Event as EventEntity } from './entities/event.entity';
 import { AuthUser } from 'src/auth/types/auth-user';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { Permission, getPermissionList } from 'src/auth/enums/permissions.enum';
 import { ExpertService } from 'src/expert/expert.service';
+import { StartupService } from 'src/startup/startup.service';
+import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
+import { PhasesService } from 'src/phases/phases.service';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectModel(EventEntity.name)
     private readonly eventModel: Model<Event>,
+    @Inject(forwardRef(() => EntrepreneurService))
+    private readonly entrepreneurService: EntrepreneurService,
     @Inject(forwardRef(() => ExpertService))
     private readonly expertService: ExpertService,
+    @Inject(forwardRef(() => PhasesService))
+    private readonly phasesService: PhasesService,
   ) {}
 
   create(createEventInput: CreateEventInput) {
@@ -24,6 +31,36 @@ export class EventsService {
 
   findAll() {
     return this.eventModel.find({});
+  }
+
+  async findByUser(user: AuthUser) {
+    let filters = {};
+    switch (user.rolDoc.type) {
+      case ValidRoles.user:
+        const docEntrepreneur = await this.entrepreneurService.findByAccount(
+          user.uid,
+        );
+        if (!docEntrepreneur) return [];
+        filters['participants._id'] = docEntrepreneur._id.toString();
+        break;
+      case ValidRoles.expert:
+        const docExpert = await this.expertService.findByAccount(user.uid);
+        if (!docEntrepreneur) return [];
+        filters['experts._id'] = docEntrepreneur._id.toString();
+        break;
+      case ValidRoles.teamCoach:
+        filters['teamCoach._id'] = user._id.toString();
+        break;
+      case ValidRoles.host:
+        const listBatchesAccess =
+          await this.phasesService.getAllBatchesAccessHost(user);
+        filters['phase'] = {
+          $in: listBatchesAccess,
+        };
+      default:
+        break;
+    }
+    return this.eventModel.find({ isDeleted: false, ...filters });
   }
 
   async findByPhase(phase: string, user: AuthUser) {

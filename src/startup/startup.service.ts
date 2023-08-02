@@ -201,6 +201,16 @@ export class StartupService implements FormDocumentService<Startup> {
     return startups;
   }
 
+  async findByEntrepreneur(idEntrepreneur: string): Promise<Startup> {
+    const startup = await this.startupModel
+      .findOne({
+        deletedAt: null,
+        'entrepreneurs._id': new Types.ObjectId(idEntrepreneur),
+      })
+      .lean();
+    return startup;
+  }
+
   async findLikeCommunity(): Promise<Startup[]> {
     const startups = await this.startupModel.aggregate([
       {
@@ -341,23 +351,28 @@ export class StartupService implements FormDocumentService<Startup> {
       name: linkStartUpsToPhaseArgs.name,
     };
     const startups = linkStartUpsToPhaseArgs.startups;
-    const updateResult  = await this.startupModel
-    .updateMany(
+    const updateResult = await this.startupModel.updateMany(
       { _id: { $in: startups } },
       { $addToSet: { phases: { $each: [phaseRelationship] } } },
       { new: true },
     );
-    if(updateResult.acknowledged) {
-      const updatedStartupsRelationships = await this.getStartupsRelationships(startups);
-      await this.entrepreneurService.updatePhasesForStartupsRelationships(updatedStartupsRelationships);
+    if (updateResult.acknowledged) {
+      const updatedStartupsRelationships = await this.getStartupsRelationships(
+        startups,
+      );
+      await this.entrepreneurService.updatePhasesForStartupsRelationships(
+        updatedStartupsRelationships,
+      );
     }
     return UpdateResultPayload.fromPayload(updateResult);
   }
 
-  async getStartupsRelationships(ids: string[]): Promise<StartupRelationship[]> {
+  async getStartupsRelationships(
+    ids: string[],
+  ): Promise<StartupRelationship[]> {
     return await this.startupModel.find(
       { _id: { $in: ids } },
-      { _id: 1, item: 1, phases: 1 }
+      { _id: 1, item: 1, phases: 1 },
     );
   }
 

@@ -46,7 +46,7 @@ export class EventsService {
       case ValidRoles.expert:
         const docExpert = await this.expertService.findByAccount(user.uid);
         if (!docEntrepreneur) return [];
-        filters['experts._id'] = docEntrepreneur._id.toString();
+        filters['experts._id'] = docExpert._id.toString();
         break;
       case ValidRoles.teamCoach:
         filters['teamCoach._id'] = user._id.toString();

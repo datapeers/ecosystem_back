@@ -166,7 +166,7 @@ export class ActivitiesConfigService {
       (i) => i.idActivity === '646f953cc2305c411d73f700',
     );
     let teamCoachHours = configTeamCoachActivities?.limit ?? 0;
-
+    let countHoursTeamCoaches = configTeamCoachActivities?.limit ?? 0;
     const listTeamCoach = await this.usersService.findMany({
       roles: [ValidRoles.teamCoach],
       relationsAssign: { batches: config.phase.toString() },
@@ -177,7 +177,7 @@ export class ActivitiesConfigService {
     let ans: Assign_item[] = [];
     let numbOfTeamCoachWithoutAssign = 0;
     let hoursLeftToOthersTeamCoaches = listTeamCoach.length
-      ? Math.round(teamCoachHours / listTeamCoach.length)
+      ? Math.round(countHoursTeamCoaches / listTeamCoach.length)
       : 0;
     for (const teamCoach of listTeamCoach) {
       const previousConfig = config.teamCoaches.find(
@@ -187,7 +187,7 @@ export class ActivitiesConfigService {
         previousConfig &&
         previousConfig.limit !== hoursLeftToOthersTeamCoaches
       ) {
-        teamCoachHours -= previousConfig.limit;
+        countHoursTeamCoaches -= previousConfig.limit;
       } else {
         numbOfTeamCoachWithoutAssign++;
       }
@@ -218,7 +218,7 @@ export class ActivitiesConfigService {
       ans.push(item);
     }
     hoursLeftToOthersTeamCoaches = this.getHoursForOthers(
-      teamCoachHours,
+      countHoursTeamCoaches,
       numbOfTeamCoachWithoutAssign ?? 1,
     );
     for (const teamCoachAssign of ans) {

@@ -49,11 +49,13 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   private static readonly virtualFields = {
     $addFields: {
       isProspect: {
-        $anyElementTrue: {
-          $map: {
-            input: "$startups",
-            as: "startup",
-            in: { $eq: [{ $size: { $ifNull: ["$$startup.phases", []] } }, 0] }
+        $not: { 
+          $anyElementTrue: {
+            $map: {
+              input: "$startups",
+              as: "startup",
+              in: { $gt: [{ $size: { $ifNull: ["$$startup.phases", []] } }, 0] }
+            }
           }
         }
       }

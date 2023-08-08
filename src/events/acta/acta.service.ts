@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateActaInput } from './dto/create-acta.input';
 import { UpdateActaInput } from './dto/update-acta.input';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Acta } from './entities/acta.entity';
 
 @Injectable()
@@ -22,6 +22,13 @@ export class ActaService {
 
   findByEvent(event: string) {
     return this.actaModel.findOne({ event, isDeleted: false });
+  }
+
+  findByEventsList(events: string[]) {
+    return this.actaModel.find({
+      isDeleted: false,
+      event: { $in: events.map((i) => new Types.ObjectId(i)) },
+    });
   }
 
   findOne(id: string) {

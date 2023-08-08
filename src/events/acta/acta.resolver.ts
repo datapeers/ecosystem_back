@@ -28,6 +28,11 @@ export class ActaResolver {
     return this.actaService.findByEvent(event);
   }
 
+  @Query(() => [Acta], { name: 'actaEventsList' })
+  findByEventsList(@Args('events', { type: () => [String] }) events: string[]) {
+    return this.actaService.findByEventsList(events);
+  }
+
   @Mutation(() => Acta)
   updateActa(@Args('updateActaInput') updateActaInput: UpdateActaInput) {
     return this.actaService.update(updateActaInput._id, updateActaInput);

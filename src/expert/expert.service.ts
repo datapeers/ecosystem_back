@@ -53,10 +53,14 @@ export class ExpertService implements FormDocumentService {
     return experts;
   }
 
-  async findManyPage(request: PageRequest, user: AuthUser, outputProjection?: any): Promise<PaginatedResult<Expert>> {
+  async findManyPage(
+    request: PageRequest,
+    user: AuthUser,
+    outputProjection?: any,
+  ): Promise<PaginatedResult<Expert>> {
     // TODO Implement filtering by user if required
     const options = new AggregateBuildOptions();
-    if(outputProjection) {
+    if (outputProjection) {
       options.outputProjection = outputProjection;
     }
     options.virtualFields = ExpertService.virtualFields;
@@ -93,7 +97,9 @@ export class ExpertService implements FormDocumentService {
     //   util.inspect(experts, { showHidden: false, depth: null, colors: true }),
     // );
 
-    return experts;
+    return experts.map((i) => {
+      return { ...i, phases: i.phases.filter((doc) => doc._id === phase) };
+    });
   }
 
   async findByAccount(accountId: string) {
@@ -163,16 +169,27 @@ export class ExpertService implements FormDocumentService {
     }
   }
 
-  async downloadByRequest({ request, configId, format }: DownloadRequestArgs, user: AuthUser): Promise<DownloadResult> {
+  async downloadByRequest(
+    { request, configId, format }: DownloadRequestArgs,
+    user: AuthUser,
+  ): Promise<DownloadResult> {
     const config = await this.tableConfigService.findOne(configId);
     const tableColumns = config.columns;
-    const outputProjection = requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const outputProjection =
+      requestUtilities.getProjectionFromConfigTable(tableColumns);
     const pageResult = await this.findManyPage(request, user, outputProjection);
-    const rows = excelUtilities.parseDocumentsToRows(pageResult.documents, tableColumns);
+    const rows = excelUtilities.parseDocumentsToRows(
+      pageResult.documents,
+      tableColumns,
+    );
     const columns = tableColumns.map((col) => {
-        return { header: col.label, width: col.label.length + 3 };
+      return { header: col.label, width: col.label.length + 3 };
     });
-    const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
+    const data = await excelUtilities.buildWorkbookBuffer(
+      columns,
+      rows,
+      format,
+    );
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
   }

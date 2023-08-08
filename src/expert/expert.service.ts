@@ -119,10 +119,13 @@ export class ExpertService implements FormDocumentService {
   }
 
   async update(id: string, data: Partial<Expert>): Promise<Expert> {
-    const createdExpert = await this.expertModel
-      .updateOne({ _id: id }, data, { new: true })
-      .lean();
-    return createdExpert;
+    delete data['_id'];
+    const updatedExpert = await this.expertModel.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+      { new: true, lean: true },
+    );
+    return updatedExpert;
   }
 
   async delete(ids: string[]): Promise<UpdateResultPayload> {

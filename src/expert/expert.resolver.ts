@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Parent,
+  ResolveField,
+} from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { ExpertService } from './expert.service';
 import { Expert } from './entities/expert.entity';
@@ -12,6 +19,7 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from 'src/auth/types/auth-user';
 import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
 import { DownloadResult } from 'src/shared/models/download-result';
+import { UpdateExpertInput } from './args/update-expert.input';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Expert)
@@ -30,7 +38,7 @@ export class ExpertResolver {
   findAll() {
     return this.expertService.findAll();
   }
-  
+
   @Query(() => PaginatedResult<Expert>, { name: 'expertsPage' })
   findManyPage(
     @Args('request') request: PageRequest,
@@ -72,7 +80,14 @@ export class ExpertResolver {
   }
 
   @ResolveField('isProspect', () => Boolean)
-  resolveIsProspect(@Parent() expert: Omit<Expert, "isProspect">) {
+  resolveIsProspect(@Parent() expert: Omit<Expert, 'isProspect'>) {
     return !!expert.phases.length;
+  }
+
+  @Mutation(() => Expert)
+  updateExpert(
+    @Args('updateExpertInput') updateExpertInput: UpdateExpertInput,
+  ) {
+    return this.expertService.update(updateExpertInput._id, updateExpertInput);
   }
 }

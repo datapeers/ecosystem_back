@@ -14,6 +14,10 @@ export class Expert {
   @Prop({ default: '' })
   accountId: string;
 
+  @Field(() => String, { nullable: true })
+  @Prop({ default: '' })
+  calendlyLink: string;
+
   @Field(() => GraphQLJSON)
   @Prop({ type: Object })
   item: JSON;

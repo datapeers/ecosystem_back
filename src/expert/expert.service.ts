@@ -102,6 +102,12 @@ export class ExpertService implements FormDocumentService {
     });
   }
 
+  async findByStartup(startupID: string) {
+    return await this.expertModel
+      .find({ 'phases.startUps._id': startupID })
+      .lean();
+  }
+
   async findByAccount(accountId: string) {
     return await this.expertModel.findOne({ accountId }).lean();
   }

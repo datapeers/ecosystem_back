@@ -33,6 +33,7 @@ export class EventsResolver {
 
   @Query(() => [EventEntity], { name: 'eventsUser' })
   findByUser(@CurrentUser() user: AuthUser) {
+    console.log('here');
     return this.eventsService.findByUser(user);
   }
 

@@ -3,7 +3,12 @@ import { ResourcesRepliesService } from './resources-replies.service';
 import { ResourcesReply } from './entities/resources-reply.entity';
 import { CreateResourcesReplyInput } from './dto/create-resources-reply.input';
 import { UpdateResourcesReplyInput } from './dto/update-resources-reply.input';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
+import { UseGuards } from '@nestjs/common';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => ResourcesReply)
 export class ResourcesRepliesResolver {
   constructor(
@@ -26,6 +31,15 @@ export class ResourcesRepliesResolver {
   @Query(() => ResourcesReply, { name: 'resourcesReply' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.resourcesRepliesService.findOne(id);
+  }
+
+  @Query(() => [ResourcesReply], { name: 'resourcesReplyByResource' })
+  findByConfig(
+    @Args('resource', { type: () => String }) resource: string,
+    @Args('sprint', { type: () => String }) sprint: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.resourcesRepliesService.findByResource(resource, sprint, user);
   }
 
   @Mutation(() => ResourcesReply)

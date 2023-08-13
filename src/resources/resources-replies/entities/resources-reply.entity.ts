@@ -6,6 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { Startup } from 'src/startup/entities/startup.entity';
 import { Content } from 'src/content/entities/content.entity';
+import { Phase } from 'src/phases/entities/phase.entity';
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -19,17 +20,21 @@ export class ResourcesReply {
   @Prop({ type: Object })
   item: JSON;
 
-  @Prop({ type: { type: Types.ObjectId, ref: 'Startup' } })
   @Field(() => Startup)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Startup' })
   startup: string;
 
-  @Prop({ type: { type: Types.ObjectId, ref: 'Resource' } })
   @Field(() => Resource)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Resource' })
   resource: string;
 
-  @Prop({ type: { type: Types.ObjectId, ref: 'Content' } })
   @Field(() => Content)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Content' })
   sprint: string;
+
+  @Field(() => Phase)
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
+  phase: string;
 
   @Field(() => String)
   @Prop({ default: '' })

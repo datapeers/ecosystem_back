@@ -17,6 +17,7 @@ import { Startup } from 'src/startup/entities/startup.entity';
 import { Resource } from '../entities/resource.entity';
 import { Content } from 'src/content/entities/content.entity';
 import { ContentService } from 'src/content/content.service';
+import { ResourceType } from '../enums/resources-types';
 
 @Injectable()
 export class ResourcesRepliesService {
@@ -37,8 +38,10 @@ export class ResourcesRepliesService {
   }
 
   async createDocument(submission: any, context?: any) {
+    console.log(context);
     const data = {
       ...context,
+      resource: new Types.ObjectId(context.resource),
       item: submission,
     };
     const createdDocument = await this.create(data);
@@ -64,7 +67,6 @@ export class ResourcesRepliesService {
       .find({ isDeleted: false })
       .populate('startup')
       .populate('resource')
-      .populate('sprint')
       .lean();
   }
 
@@ -73,7 +75,6 @@ export class ResourcesRepliesService {
       .findById(id)
       .populate('startup')
       .populate('resource')
-      .populate('sprint')
       .lean();
     if (!resourceReply)
       throw new NotFoundException(`Couldn't find resource reply with id ${id}`);
@@ -103,7 +104,6 @@ export class ResourcesRepliesService {
       )
       .populate('startup')
       .populate('resource')
-      .populate('sprint')
       .lean();
     return updatedReply;
   }
@@ -111,8 +111,8 @@ export class ResourcesRepliesService {
   async remove(id: string) {
     const updatedReply = await this.resourceReplyModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
-      .populate({ path: 'childs', populate: 'resources' })
-      .populate('resources')
+      .populate('startup')
+      .populate('resource')
       .lean();
     return updatedReply;
   }
@@ -124,6 +124,7 @@ export class ResourcesRepliesService {
       .find({
         resource: resource._id,
       })
+      .populate('startup')
       .lean();
     let ansList: ResourcesReply[] = [];
     const startupList = await this.startupService.findByPhase(
@@ -135,7 +136,7 @@ export class ResourcesRepliesService {
         (i) => i.startup.toString() === startup._id.toString(),
       );
       if (!reply) reply = this.createSimpleReply(startup, resource, sprint);
-      ansList.push(reply);
+      ansList.push({ ...reply, resource: resource as any });
     }
     return ansList;
   }
@@ -144,15 +145,32 @@ export class ResourcesRepliesService {
     const newReply = new ResourcesReply();
     newReply._id = new Types.ObjectId().toString();
     newReply.item = {} as any;
-    newReply.type = resource.type[0];
+    newReply.type = resource.type;
     newReply.observations = '';
-    newReply.resource = resource as any;
     newReply.startup = startup as any;
     newReply.sprint = sprint as any;
-    newReply.state = 'Pendiente';
     newReply.createdAt = new Date();
     newReply.updatedAt = new Date();
     newReply.isDeleted = false;
+    switch (resource.type) {
+      case ResourceType.downloadable:
+        newReply.state = 'Sin descargar';
+        break;
+      default:
+        newReply.state = 'Pendiente';
+        break;
+    }
     return newReply;
+  }
+
+  async findByStartup(startupID: string, phaseID: string) {
+    return this.resourceReplyModel
+      .find({
+        startup: new Types.ObjectId(startupID),
+        phase: new Types.ObjectId(phaseID),
+      })
+      .populate('startup')
+      .populate('resource')
+      .lean();
   }
 }

@@ -34,12 +34,20 @@ export class ResourcesRepliesResolver {
   }
 
   @Query(() => [ResourcesReply], { name: 'resourcesReplyByResource' })
-  findByConfig(
+  findByResource(
     @Args('resource', { type: () => String }) resource: string,
     @Args('sprint', { type: () => String }) sprint: string,
     @CurrentUser() user: AuthUser,
   ) {
     return this.resourcesRepliesService.findByResource(resource, sprint, user);
+  }
+
+  @Query(() => [ResourcesReply], { name: 'resourcesReplyByStartup' })
+  findByStartup(
+    @Args('startup', { type: () => String }) startup: string,
+    @Args('phase', { type: () => String }) phase: string,
+  ) {
+    return this.resourcesRepliesService.findByStartup(startup, phase);
   }
 
   @Mutation(() => ResourcesReply)

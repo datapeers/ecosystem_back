@@ -47,7 +47,7 @@ export class Resource {
     enum: ResourceType,
   })
   @Field(() => String)
-  type: ResourceType[];
+  type: ResourceType;
 }
 
 export const ResourceSchema = SchemaFactory.createForClass(Resource);

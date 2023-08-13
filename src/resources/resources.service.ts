@@ -30,7 +30,7 @@ export class ResourcesService {
   }
 
   findOne(id: string) {
-    return this.resourceModel.findById(id);
+    return this.resourceModel.findById(id).lean();
   }
 
   async update(id: string, updateContentInput: UpdateResourceInput) {

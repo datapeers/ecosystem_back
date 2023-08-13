@@ -10,12 +10,25 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { ResourcesReply } from './entities/resources-reply.entity';
 import { Model, Types } from 'mongoose';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { ResourcesService } from '../resources.service';
+import { StartupService } from 'src/startup/startup.service';
+import { Startup } from 'src/startup/entities/startup.entity';
+import { Resource } from '../entities/resource.entity';
+import { Content } from 'src/content/entities/content.entity';
+import { ContentService } from 'src/content/content.service';
 
 @Injectable()
 export class ResourcesRepliesService {
   constructor(
     @InjectModel(ResourcesReply.name)
     private readonly resourceReplyModel: Model<ResourcesReply>,
+    @Inject(forwardRef(() => ResourcesService))
+    private readonly resourceService: ResourcesService,
+    @Inject(forwardRef(() => StartupService))
+    private readonly startupService: StartupService,
+    @Inject(forwardRef(() => ContentService))
+    private readonly contentService: ContentService,
   ) {}
 
   async getDocument(id: string) {
@@ -102,5 +115,44 @@ export class ResourcesRepliesService {
       .populate('resources')
       .lean();
     return updatedReply;
+  }
+
+  async findByResource(resourceID: string, sprintID: string, user: AuthUser) {
+    const resource = await this.resourceService.findOne(resourceID);
+    const sprint = await this.contentService.findById(sprintID);
+    const replies = await this.resourceReplyModel
+      .find({
+        resource: resource._id,
+      })
+      .lean();
+    let ansList: ResourcesReply[] = [];
+    const startupList = await this.startupService.findByPhase(
+      resource.phase.toString(),
+      user,
+    );
+    for (const startup of startupList) {
+      let reply = replies.find(
+        (i) => i.startup.toString() === startup._id.toString(),
+      );
+      if (!reply) reply = this.createSimpleReply(startup, resource, sprint);
+      ansList.push(reply);
+    }
+    return ansList;
+  }
+
+  createSimpleReply(startup: Startup, resource: Resource, sprint: Content) {
+    const newReply = new ResourcesReply();
+    newReply._id = new Types.ObjectId().toString();
+    newReply.item = {} as any;
+    newReply.type = resource.type[0];
+    newReply.observations = '';
+    newReply.resource = resource as any;
+    newReply.startup = startup as any;
+    newReply.sprint = sprint as any;
+    newReply.state = 'Pendiente';
+    newReply.createdAt = new Date();
+    newReply.updatedAt = new Date();
+    newReply.isDeleted = false;
+    return newReply;
   }
 }

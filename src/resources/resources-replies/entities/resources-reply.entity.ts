@@ -32,6 +32,10 @@ export class ResourcesReply {
   sprint: string;
 
   @Field(() => String)
+  @Prop({ default: '' })
+  type: string;
+
+  @Field(() => String)
   @Prop({ default: 'En revisión' })
   state: string;
 

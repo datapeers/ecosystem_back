@@ -121,10 +121,10 @@ export class ResourcesRepliesService {
     const sprint = await this.contentService.findById(sprintID);
     const replies = await this.resourceReplyModel
       .find({
-        resource: resource._id,
+        resource: resource._id.toString(),
       })
-      .populate('startup')
       .lean();
+    // console.log(replies);
     let ansList: ResourcesReply[] = [];
     const startupList = await this.startupService.findByPhase(
       resource.phase.toString(),
@@ -135,7 +135,12 @@ export class ResourcesRepliesService {
         (i) => i.startup.toString() === startup._id.toString(),
       );
       if (!reply) reply = this.createSimpleReply(startup, resource, sprint);
-      ansList.push({ ...reply, resource: resource as any });
+      ansList.push({
+        ...reply,
+        resource: resource as any,
+        startup: startup as any,
+        sprint: sprint as any,
+      });
     }
     return ansList;
   }

@@ -41,6 +41,7 @@ import { EvaluationsModule } from './evaluations/evaluations.module';
 import { ConfigEvaluationsModule } from './evaluations/config-evaluations/config-evaluations.module';
 import { CalendarModule } from './calendar/calendar.module';
 import GraphQLJSON from 'graphql-type-json';
+import { ResourcesRepliesModule } from './resources/resources-replies/resources-replies.module';
 
 @Module({
   imports: [
@@ -113,6 +114,7 @@ import GraphQLJSON from 'graphql-type-json';
     InvestorModule,
     ExpertModule,
     ResourcesModule,
+    ResourcesRepliesModule,
     TypesEventsModule,
     AnnouncementsModule,
     ActivitiesConfigModule,

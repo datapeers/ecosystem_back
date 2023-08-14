@@ -5,7 +5,8 @@ import { CreateContentInput } from './dto/create-content.input';
 import { UpdateContentInput } from './dto/update-content.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
-
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Content)
 export class ContentResolver {
@@ -19,8 +20,11 @@ export class ContentResolver {
   }
 
   @Query(() => [Content], { name: 'allContent' })
-  findAll(@Args('phase', { type: () => String }) phase: string) {
-    return this.contentService.findAll(phase);
+  findAll(
+    @Args('phase', { type: () => String }) phase: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.contentService.findAll(phase, user);
   }
 
   @Query(() => Content, { name: 'content' })

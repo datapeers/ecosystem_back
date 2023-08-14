@@ -61,6 +61,8 @@ export const defaultRoles = [
       'evaluation_create',
       'evaluation_edit',
       'evaluation_edit_docs',
+      'homeworks_view',
+      'homeworks_evaluate',
     ],
   },
   {
@@ -125,6 +127,8 @@ export const defaultRoles = [
       'evaluation_create',
       'evaluation_edit',
       'evaluation_edit_docs',
+      'homeworks_view',
+      'homeworks_evaluate',
     ],
   },
   {
@@ -166,6 +170,8 @@ export const defaultRoles = [
       'evaluation_create',
       'evaluation_edit',
       'evaluation_edit_docs',
+      'homeworks_view',
+      'homeworks_evaluate',
     ],
   },
   {

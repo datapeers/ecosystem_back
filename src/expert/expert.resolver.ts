@@ -53,12 +53,12 @@ export class ExpertResolver {
   }
 
   @Query(() => [Expert], { name: 'expertsStartup' })
-  findByPhase(@Args('startup', { type: () => String }) startup: string) {
+  findByStartup(@Args('startup', { type: () => String }) startup: string) {
     return this.expertService.findByStartup(startup);
   }
 
   @Query(() => [Expert], { name: 'expertsPhase' })
-  findByStartup(@Args('phase', { type: () => String }) phase: string) {
+  findByPhase(@Args('phase', { type: () => String }) phase: string) {
     return this.expertService.findByPhase(phase);
   }
 

@@ -4,7 +4,8 @@ import { UpdateContentInput } from './dto/update-content.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Content } from './entities/content.entity';
 import { Model } from 'mongoose';
-
+import { AuthUser } from '../auth/types/auth-user';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 @Injectable()
 export class ContentService {
   constructor(
@@ -24,12 +25,30 @@ export class ContentService {
     }
   }
 
-  findAll(phase: string) {
-    return this.contentModel
-      .find({ phase, 'extra_options.sprint': true, isDeleted: false })
-      .populate({ path: 'childs', populate: 'resources' })
-      .populate('resources')
-      .lean();
+  async findAll(phase: string, user?: AuthUser) {
+    if (user.rolDoc.type === ValidRoles.user) {
+      let sprints = await this.contentModel
+        .find({
+          phase,
+          'extra_options.sprint': true,
+          isDeleted: false,
+          hide: false,
+        })
+        .populate({ path: 'childs', populate: 'resources' })
+        .populate('resources')
+        .lean();
+      return this.checkStateDisplayUser(sprints);
+    } else {
+      return this.contentModel
+        .find({ phase, 'extra_options.sprint': true, isDeleted: false })
+        .populate({ path: 'childs', populate: 'resources' })
+        .populate('resources')
+        .lean();
+    }
+  }
+
+  findById(id: string) {
+    return this.contentModel.findById(id).lean();
   }
 
   findOne(id: string) {
@@ -66,5 +85,28 @@ export class ContentService {
 
   createMany(content: Content[]) {
     return this.contentModel.insertMany(content);
+  }
+
+  checkStateDisplayUser(sprints: Content[]) {
+    let sprintsFiltered = [];
+    for (const sprint of sprints) {
+      const childsSprint = [];
+      for (const child of sprint.childs) {
+        if (child.isDeleted || child.hide) continue;
+        const resourcesChild = child.resources.filter(
+          (i) => !i.isDeleted && !i.hide,
+        );
+        childsSprint.push({ ...child, resources: resourcesChild });
+      }
+      const resourcesSprint = sprint.resources.filter(
+        (i) => !i.isDeleted && !i.hide,
+      );
+      sprintsFiltered.push({
+        ...sprint,
+        childs: childsSprint,
+        resources: resourcesSprint,
+      });
+    }
+    return sprintsFiltered;
   }
 }

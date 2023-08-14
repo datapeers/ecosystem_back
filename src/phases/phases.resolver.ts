@@ -17,6 +17,11 @@ export class PhasesResolver {
     return this.phasesService.findAll(user);
   }
 
+  @Query(() => [Phase], { name: 'phasesList' })
+  findByList(@Args('ids', { type: () => [String] }) ids: string[]) {
+    return this.phasesService.findList(ids);
+  }
+
   @Query(() => Phase, { name: 'phase' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.phasesService.findOne(id);

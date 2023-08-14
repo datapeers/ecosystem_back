@@ -73,7 +73,6 @@ export class FormSubscriptionService {
       );
     // Get the subscription context data
     const context = subscription.data;
-    console.log(context);
     // If the doc id exists then we have to update it
     const document = await this.handleDocumentSubmit(
       subscription,

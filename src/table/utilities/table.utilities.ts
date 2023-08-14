@@ -181,6 +181,24 @@ export function columnsEvaluations() {
   ];
 }
 
+export function columnsResourceReply() {
+  return [
+    new RowConfigColumn(
+      'Nombre',
+      TableColumnType.data,
+      'startup, item, nombre',
+      'string',
+    ),
+    new RowConfigColumn('Estado', TableColumnType.data, 'state', 'string'),
+    new RowConfigColumn(
+      'Observaciones',
+      TableColumnType.data,
+      'observations',
+      'string',
+    ),
+  ];
+}
+
 export function columnsCommunities() {
   return [
     new RowConfigColumn(
@@ -203,4 +221,5 @@ export const tableUtilities = {
   columnStartupsExpert,
   columnsCommunities,
   columnsEvaluations,
+  columnsResourceReply,
 };

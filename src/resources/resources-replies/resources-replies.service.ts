@@ -18,6 +18,7 @@ import { Resource } from '../entities/resource.entity';
 import { Content } from 'src/content/entities/content.entity';
 import { ContentService } from 'src/content/content.service';
 import { ResourceType } from '../enums/resources-types';
+import { ResourceReplyState } from './models/resorce-reply-statets';
 
 @Injectable()
 export class ResourcesRepliesService {
@@ -38,10 +39,8 @@ export class ResourcesRepliesService {
   }
 
   async createDocument(submission: any, context?: any) {
-    console.log(context);
     const data = {
       ...context,
-      resource: new Types.ObjectId(context.resource),
       item: submission,
     };
     const createdDocument = await this.create(data);
@@ -59,7 +58,7 @@ export class ResourcesRepliesService {
     const createdEvaluation = await this.resourceReplyModel.create(
       createResourcesReplyInput,
     );
-    return createdEvaluation;
+    return this.findOne(createdEvaluation._id);
   }
 
   findAll() {
@@ -154,10 +153,10 @@ export class ResourcesRepliesService {
     newReply.isDeleted = false;
     switch (resource.type) {
       case ResourceType.downloadable:
-        newReply.state = 'Sin descargar';
+        newReply.state = ResourceReplyState['Sin descargar'];
         break;
       default:
-        newReply.state = 'Pendiente';
+        newReply.state = ResourceReplyState.Pendiente;
         break;
     }
     return newReply;

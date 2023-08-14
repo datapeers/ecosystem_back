@@ -116,6 +116,10 @@ export class TableService {
     if (table.locator.includes('evaluation')) {
       columns.unshift(...tableUtilities.columnsEvaluations());
     }
+    if (table.locator.includes('resource replies')) {
+      columns.unshift(...tableUtilities.columnsResourceReply());
+    }
+
     return columns;
   }
 }

@@ -10,6 +10,7 @@ import { ContentModule } from 'src/content/content.module';
 import { ActivitiesConfigModule } from 'src/activities-config/activities-config.module';
 import { ResourcesModule } from 'src/resources/resources.module';
 import { ExpertModule } from 'src/expert/expert.module';
+import { StartupModule } from 'src/startup/startup.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Phase.name, schema: PhaseSchema }]),
@@ -19,6 +20,7 @@ import { ExpertModule } from 'src/expert/expert.module';
     ContentModule,
     ResourcesModule,
     forwardRef(() => ExpertModule),
+    forwardRef(() => StartupModule),
     ActivitiesConfigModule,
   ],
   providers: [PhasesResolver, PhasesService],

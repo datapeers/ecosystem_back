@@ -11,10 +11,12 @@ import { ResourcesService } from '../resources/resources.service';
 import * as moment from 'moment';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { ExpertService } from '../expert/expert.service';
+import { StartupService } from 'src/startup/startup.service';
 @Injectable()
 export class PhasesService {
   constructor(
     @InjectModel(Phase.name) private readonly phaseModel: Model<Phase>,
+    private readonly startupService: StartupService,
     private readonly expertService: ExpertService,
     private readonly contentService: ContentService,
     private readonly resourcesService: ResourcesService,
@@ -32,6 +34,19 @@ export class PhasesService {
       default:
         return await this.phaseModel.find({ deleted: false });
     }
+  }
+
+  async findList(ids: string[]) {
+    const phaseBases = await this.phaseModel
+      .find({ deleted: false, basePhase: true })
+      .lean();
+    const batches = await this.phaseModel
+      .find({
+        deleted: false,
+        _id: { $in: ids.map((i) => new Types.ObjectId(i)) },
+      })
+      .lean();
+    return [...phaseBases, ...batches];
   }
 
   async find(ids: string[]): Promise<Phase[]> {

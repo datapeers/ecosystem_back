@@ -16,6 +16,8 @@ import { FormDocumentService } from './form-document-service';
 import { FormCollections } from '../form/enums/form-collections';
 import { EvaluationsModule } from 'src/evaluations/evaluations.module';
 import { EvaluationsService } from '../../evaluations/evaluations.service';
+import { ResourcesRepliesModule } from 'src/resources/resources-replies/resources-replies.module';
+import { ResourcesRepliesService } from 'src/resources/resources-replies/resources-replies.service';
 
 export const FORM_DOCUMENT_SERVICE_PROVIDER = 'FORM_DOCUMENT_SERVICE_PROVIDER';
 export type FormDocumentServiceProvider = (
@@ -29,6 +31,7 @@ export const formDocumentServiceImports = [
   forwardRef(() => EvaluationsModule),
   forwardRef(() => ExpertModule),
   forwardRef(() => ApplicantModule),
+  forwardRef(() => ResourcesRepliesModule),
 ];
 
 export const formDocumentServiceProviders = [
@@ -53,4 +56,5 @@ export const formDocumentServiceProviders = [
   { provide: FormCollections.evaluations, useExisting: EvaluationsService },
   { provide: FormCollections.experts, useExisting: ExpertService },
   { provide: FormCollections.announcements, useExisting: ApplicantService },
+  { provide: FormCollections.resources, useExisting: ResourcesRepliesService },
 ];

@@ -22,4 +22,8 @@ export class UpdateResourcesReplyInput extends PartialType(
   @Field(() => GraphQLJSONObject, { nullable: true })
   @IsOptional()
   item?: Record<string, any>;
+
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  modified?: boolean;
 }

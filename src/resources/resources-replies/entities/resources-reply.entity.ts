@@ -57,6 +57,10 @@ export class ResourcesReply {
   @Field(() => Boolean)
   @Prop({ default: false })
   isDeleted: boolean;
+
+  @Field(() => Boolean)
+  @Prop({ default: true })
+  modified: boolean;
 }
 
 export const ResourceReplySchema = SchemaFactory.createForClass(ResourcesReply);

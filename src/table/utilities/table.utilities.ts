@@ -196,6 +196,12 @@ export function columnsResourceReply() {
       'observations',
       'string',
     ),
+    new RowConfigColumn(
+      'Ha sido modificado',
+      TableColumnType.data,
+      'modified',
+      'boolean',
+    ),
   ];
 }
 

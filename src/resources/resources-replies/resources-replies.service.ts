@@ -48,7 +48,10 @@ export class ResourcesRepliesService {
   }
 
   async updateDocument(id: string, submission: any, context: any) {
-    const updatedDocument = await this.update(id, { item: submission });
+    const updatedDocument = await this.update(id, {
+      item: submission,
+      modified: true,
+    });
     return updatedDocument;
   }
 
@@ -156,6 +159,7 @@ export class ResourcesRepliesService {
     newReply.createdAt = new Date();
     newReply.updatedAt = new Date();
     newReply.isDeleted = false;
+    newReply.modified = false;
     switch (resource.type) {
       case ResourceType.downloadable:
         newReply.state = ResourceReplyState['Sin descargar'];

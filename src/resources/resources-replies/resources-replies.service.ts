@@ -18,7 +18,7 @@ import { Resource } from '../entities/resource.entity';
 import { Content } from 'src/content/entities/content.entity';
 import { ContentService } from 'src/content/content.service';
 import { ResourceType } from '../enums/resources-types';
-import { ResourceReplyState } from './models/resorce-reply-statets';
+import { ResourceReplyState } from './models/resorce-reply-states';
 
 @Injectable()
 export class ResourcesRepliesService {

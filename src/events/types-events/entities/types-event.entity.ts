@@ -18,6 +18,10 @@ export class TypesEvent {
 
   @Field(() => Boolean)
   @Prop({ default: false })
+  expertFocus: boolean;
+
+  @Field(() => Boolean)
+  @Prop({ default: false })
   isDeleted: boolean;
 
   @Field(() => Date)

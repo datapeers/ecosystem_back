@@ -42,6 +42,7 @@ import { ConfigEvaluationsModule } from './evaluations/config-evaluations/config
 import { CalendarModule } from './calendar/calendar.module';
 import GraphQLJSON from 'graphql-type-json';
 import { ResourcesRepliesModule } from './resources/resources-replies/resources-replies.module';
+import { UserLogModule } from './user-log/user-log.module';
 
 @Module({
   imports: [
@@ -128,6 +129,7 @@ import { ResourcesRepliesModule } from './resources/resources-replies/resources-
     EvaluationsModule,
     ConfigEvaluationsModule,
     CalendarModule,
+    UserLogModule,
   ],
   controllers: [],
   providers: [],

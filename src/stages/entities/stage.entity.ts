@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({ timestamps: true })
@@ -6,6 +6,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export class Stage {
   @Field(() => ID)
   _id: string;
+
+  @Field(() => Int)
+  @Prop({ required: true })
+  index: string;
 
   @Field(() => String)
   @Prop({ required: true })
@@ -18,6 +22,10 @@ export class Stage {
   @Field(() => String)
   @Prop({ required: true })
   color: string;
+
+  @Field(() => String)
+  @Prop({ required: true })
+  icon: string;
 
   @Field(() => Boolean)
   @Prop({ default: false })

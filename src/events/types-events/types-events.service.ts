@@ -24,11 +24,11 @@ export class TypesEventsService implements OnModuleInit {
   }
 
   findAll() {
-    return this.typeEventModel.find({});
+    return this.typeEventModel.find({ isDeleted: false }).lean();
   }
 
   findOne(id: string) {
-    return this.typeEventModel.findById(id);
+    return this.typeEventModel.findById(id).lean();
   }
 
   async update(id: string, updateTypeEventInput: UpdateTypesEventInput) {

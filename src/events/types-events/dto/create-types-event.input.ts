@@ -10,4 +10,8 @@ export class CreateTypesEventInput {
   @Field(() => GraphQLJSONObject)
   @IsOptional()
   extra_options: Record<string, any>;
+
+  @Field(() => Boolean, { nullable: false })
+  @IsOptional()
+  expertFocus?: boolean;
 }

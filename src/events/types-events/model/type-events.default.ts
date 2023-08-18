@@ -7,6 +7,7 @@ export const default_types_events = [
       allow_acta: true,
       allow_files: true,
     },
+    expertFocus: true,
   },
   {
     _id: new Types.ObjectId('646f9538c2305c411d73f6fb'),
@@ -15,6 +16,7 @@ export const default_types_events = [
       allow_acta: true,
       allow_files: true,
     },
+    expertFocus: true,
   },
   {
     _id: new Types.ObjectId('646f953cc2305c411d73f700'),

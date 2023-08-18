@@ -15,4 +15,8 @@ export class UpdateTypesEventInput extends PartialType(CreateTypesEventInput) {
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
   isDeleted?: boolean;
+
+  @Field(() => Boolean, { nullable: false })
+  @IsOptional()
+  expertFocus?: boolean;
 }

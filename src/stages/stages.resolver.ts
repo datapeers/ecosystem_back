@@ -32,6 +32,15 @@ export class StagesResolver {
   }
 
   @Mutation(() => Stage)
+  updateStageIndex(
+    @Args('stageId', { type: () => String }) stageId: string,
+    @Args('newIndex', { type: () => Int }) newIndex: number,
+    @Args('typeChange', { type: () => String }) typeChange: 'up' | 'down',
+  ) {
+    return this.stagesService.modifyIndex(stageId, newIndex, typeChange);
+  }
+
+  @Mutation(() => Stage)
   removeStage(@Args('id', { type: () => String }) id: string) {
     return this.stagesService.remove(id);
   }

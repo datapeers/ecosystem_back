@@ -8,6 +8,26 @@ export class UpdateStageInput extends PartialType(CreateStageInput) {
   @IsNotEmpty()
   _id: string;
 
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  index?: number;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  name?: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  label?: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  color?: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  icon?: string;
+
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
   isDeleted?: boolean;

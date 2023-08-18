@@ -1,8 +1,12 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 @InputType()
 export class CreateStageInput {
+  @Field(() => Int)
+  @IsNotEmpty()
+  index: number;
+
   @Field(() => String)
   @IsNotEmpty()
   name: string;
@@ -14,4 +18,8 @@ export class CreateStageInput {
   @Field(() => String)
   @IsNotEmpty()
   color: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  icon: string;
 }

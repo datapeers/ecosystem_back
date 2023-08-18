@@ -23,12 +23,14 @@ export class StagesService implements OnModuleInit {
     return this.stageModel.create(createStageInput);
   }
 
-  findAll() {
-    return this.stageModel.find({ isDeleted: false });
+  async findAll() {
+    return (await this.stageModel.find({ isDeleted: false }).lean()).sort(
+      (firstItem, secondItem) => firstItem.index - secondItem.index,
+    );
   }
 
   findOne(id: string) {
-    return this.stageModel.findById(id);
+    return this.stageModel.findById(id).lean();
   }
 
   async update(id: string, updateStageInput: UpdateStageInput) {
@@ -36,6 +38,40 @@ export class StagesService implements OnModuleInit {
     const updatedStage = await this.stageModel
       .findOneAndUpdate({ _id: id }, { ...updateStageInput }, { new: true })
       .lean();
+    return updatedStage;
+  }
+
+  async modifyIndex(stageId: string, newIndex: number, type: 'up' | 'down') {
+    const updatedStage = await this.stageModel
+      .findOneAndUpdate(
+        { _id: stageId },
+        { $set: { index: newIndex } },
+        { new: true },
+      )
+      .lean();
+    switch (type) {
+      case 'up':
+        await this.stageModel.updateMany(
+          {
+            _id: { $ne: updatedStage._id },
+            index: newIndex,
+            isDeleted: false,
+          },
+          { $set: { index: newIndex - 1 } },
+        );
+
+        break;
+      case 'down':
+        await this.stageModel.updateMany(
+          {
+            _id: { $ne: updatedStage._id },
+            index: newIndex,
+            isDeleted: false,
+          },
+          { $set: { index: newIndex + 1 } },
+        );
+        break;
+    }
     return updatedStage;
   }
 

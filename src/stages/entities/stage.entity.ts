@@ -9,7 +9,7 @@ export class Stage {
 
   @Field(() => Int)
   @Prop({ required: true })
-  index: string;
+  index: number;
 
   @Field(() => String)
   @Prop({ required: true })

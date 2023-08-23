@@ -79,7 +79,6 @@ export enum Permission {
 
   // Phase Hours bag
   hours_view = 'hours_view',
-  hours_edit_main = 'hours_edit_main',
   hours_edit_activities = 'hours_edit_activities',
   hours_edit_startups = 'hours_edit_startups',
   hours_edit_experts = 'hours_edit_experts',
@@ -98,10 +97,10 @@ export enum Permission {
 
 export const permissionDescriptions: Record<Permission, string> = {
   // Startups
-  [Permission.view_startups]: 'Ver sección start ups',
-  [Permission.load_all_startups]: 'Permitir que vea todas las start ups',
-  [Permission.create_startups]: 'Crear start up',
-  [Permission.edit_startups]: 'Editar start up',
+  [Permission.view_startups]: 'Ver sección Startups',
+  [Permission.load_all_startups]: 'Permitir que vea todas las startups',
+  [Permission.create_startups]: 'Crear startup',
+  [Permission.edit_startups]: 'Editar startup',
 
   // Experts
   [Permission.view_experts]: 'Ver sección expertos',
@@ -154,9 +153,9 @@ export const permissionDescriptions: Record<Permission, string> = {
   [Permission.announcements_edit]: 'Editar convocatoria',
 
   // Phase and batch
-  [Permission.phases_batch_access]: 'Ver sección phases',
+  [Permission.phases_batch_access]: 'Ver sección fases',
   [Permission.phases_phase_access]: 'Ver configuración de fases base',
-  [Permission.phases_phase_edit]: 'Permitir crear fase base',
+  [Permission.phases_phase_edit]: 'Permitir editar fase base',
 
   [Permission.phases_batch_create]: 'Crear batch',
   [Permission.phases_batch_edit]: 'Editar batch',
@@ -175,9 +174,8 @@ export const permissionDescriptions: Record<Permission, string> = {
 
   // Phase Hours bag
   [Permission.hours_view]: 'Ver sección bolsa de horas en batch',
-  [Permission.hours_edit_main]: 'Editar limite general de horas en batch',
-  [Permission.hours_edit_activities]: 'Editar limite de horas por actividad',
-  [Permission.hours_edit_startups]: 'Editar horas esperadas de los start ups',
+  [Permission.hours_edit_activities]: 'Editar límite de horas por actividad',
+  [Permission.hours_edit_startups]: 'Editar horas esperadas de los startups',
   [Permission.hours_edit_experts]: 'Editar horas necesarios de los experto',
   [Permission.hours_edit_teamCoach]:
     'Editar horas necesarios de los team coach',
@@ -188,7 +186,8 @@ export const permissionDescriptions: Record<Permission, string> = {
     'Permitir crear una configuración para evaluaciones',
   [Permission.evaluation_edit]:
     'Permitir editar las configuraciones de una evaluación',
-  [Permission.evaluation_edit_docs]: 'Permitir editar las evaluaciones',
+  [Permission.evaluation_edit_docs]:
+    'Permitir evaluar en cualquiera de las evaluaciones',
 
   // Homeworks
   [Permission.homeworks_view]: 'Ver sección de tareas en batch',

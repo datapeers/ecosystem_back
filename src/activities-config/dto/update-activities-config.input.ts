@@ -1,8 +1,7 @@
 import { IsDefined, IsNotEmpty, IsOptional } from 'class-validator';
 import { CreateActivitiesConfigInput } from './create-activities-config.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
-import { GraphQLJSONObject } from 'graphql-scalars';
-import { IActivities, activities } from '../entities/activities-config.entity';
+import { IActivities, IAssign } from '../entities/activities-config.entity';
 import { Type } from 'class-transformer';
 
 @InputType()
@@ -29,39 +28,24 @@ export class UpdateActivitiesConfigInput extends PartialType(
   @Field(() => [AssignSetup], { nullable: true })
   @Type(() => AssignSetup)
   @IsOptional()
+  startups: AssignSetup[];
+
+  @Field(() => [AssignSetup], { nullable: true })
+  @Type(() => AssignSetup)
+  @IsOptional()
   experts: AssignSetup[];
 
   @Field(() => [AssignSetup], { nullable: true })
   @Type(() => AssignSetup)
   @IsOptional()
   teamCoaches: AssignSetup[];
-
-  @Field(() => [startUpHoursSetup], { nullable: true })
-  @Type(() => startUpHoursSetup)
-  @IsOptional()
-  startups: startUpHoursSetup[];
 }
 
 @InputType()
 class ActivitySetup implements IActivities {
   @Field(() => String)
   @IsDefined()
-  idActivity: string;
-
-  @Field(() => Int)
-  @IsDefined()
-  limit: number;
-
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  @IsDefined()
-  options: Record<string, any>;
-}
-
-@InputType()
-class AssignSetup {
-  @Field(() => String)
-  @IsDefined()
-  from: string;
+  id: string;
 
   @Field(() => Int)
   @IsDefined()
@@ -69,16 +53,16 @@ class AssignSetup {
 }
 
 @InputType()
-class startUpHoursSetup {
+class AssignSetup implements IAssign {
   @Field(() => String)
   @IsDefined()
   id: string;
 
-  @Field(() => String)
-  @IsDefined()
-  from: string;
-
   @Field(() => Int)
   @IsDefined()
   limit: number;
+
+  @Field(() => String)
+  @IsDefined()
+  activityID: string;
 }

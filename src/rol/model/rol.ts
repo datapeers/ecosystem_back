@@ -52,7 +52,6 @@ export const defaultRoles = [
       'actas_edit',
       'actas_close',
       'hours_view',
-      'hours_edit_main',
       'hours_edit_activities',
       'hours_edit_startups',
       'hours_edit_experts',
@@ -118,7 +117,6 @@ export const defaultRoles = [
       'actas_edit',
       'actas_close',
       'hours_view',
-      'hours_edit_main',
       'hours_edit_activities',
       'hours_edit_startups',
       'hours_edit_experts',
@@ -161,7 +159,6 @@ export const defaultRoles = [
       'actas_edit',
       'actas_close',
       'hours_view',
-      'hours_edit_main',
       'hours_edit_activities',
       'hours_edit_startups',
       'hours_edit_experts',
@@ -298,7 +295,6 @@ export const listPermission = {
 
   // Phase Hours bag
   hours_view: true,
-  hours_edit_main: true,
   hours_edit_activities: true,
   hours_edit_startups: true,
   hours_edit_experts: true,

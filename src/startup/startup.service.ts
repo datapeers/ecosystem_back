@@ -239,6 +239,7 @@ export class StartupService implements FormDocumentService<Startup> {
   async findByPhase(phase: string, user?: AuthUser): Promise<Startup[]> {
     const initMatch = {
       'phases._id': phase,
+      deletedAt: null,
     };
     if (user?.rolDoc?.type === ValidRoles.expert) {
       const docExpert = await this.expertService.findByAccount(user.uid);

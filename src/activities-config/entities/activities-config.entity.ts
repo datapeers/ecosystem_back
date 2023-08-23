@@ -17,21 +17,21 @@ export class ActivitiesConfig {
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
   phase: string;
 
-  @Field(() => [assigns])
-  @Prop({ default: [] })
-  experts: assigns[];
-
-  @Field(() => [assigns])
-  @Prop({ default: [] })
-  teamCoaches: assigns[];
-
-  @Field(() => [startUpHours])
-  @Prop({ default: [] })
-  startups: startUpHours[];
-
   @Field(() => [activities])
   @Prop({ default: [] })
   activities: activities[];
+
+  @Field(() => [Assign])
+  @Prop({ default: [] })
+  startups: Assign[];
+
+  @Field(() => [Assign])
+  @Prop({ default: [] })
+  experts: Assign[];
+
+  @Field(() => [Assign])
+  @Prop({ default: [] })
+  teamCoaches: Assign[];
 
   @Field(() => Date)
   createdAt: Date;
@@ -46,49 +46,39 @@ export class ActivitiesConfig {
 
 @Schema()
 @ObjectType()
-export class assigns {
-  @Field(() => String)
-  @Prop({ type: SchemaTypes.ObjectId })
-  from: string;
-
-  @Field(() => Int)
-  limit: number;
-}
-
-@Schema()
-@ObjectType()
-export class startUpHours {
+export class activities implements IActivities {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId })
   id: string;
 
-  @Field(() => String)
-  @Prop({ type: SchemaTypes.ObjectId })
-  from: string;
-
   @Field(() => Int)
   limit: number;
 }
 
 @Schema()
 @ObjectType()
-export class activities {
+export class Assign implements IAssign {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId })
-  idActivity: string;
+  id: string;
 
   @Field(() => Int)
   limit: number;
 
-  @Field(() => GraphQLJSONObject, { nullable: true })
-  @Prop({ type: SchemaTypes.Mixed, default: {} })
-  options: any;
+  @Field(() => String)
+  @Prop({ type: SchemaTypes.ObjectId })
+  activityID: string;
 }
 
 export interface IActivities {
-  idActivity: string;
+  id: string;
   limit: number;
-  options: any;
+}
+
+export interface IAssign {
+  id: string;
+  limit: number;
+  activityID: string;
 }
 
 export const ActivitiesConfigSchema =

@@ -11,6 +11,7 @@ import { LoggerModule } from 'src/logger/logger.module';
 import { ExpertModule } from 'src/expert/expert.module';
 import { UsersModule } from 'src/users/users.module';
 import { StartupModule } from 'src/startup/startup.module';
+import { TypesEventsModule } from '../events/types-events/types-events.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { StartupModule } from 'src/startup/startup.module';
     forwardRef(() => ExpertModule),
     forwardRef(() => StartupModule),
     forwardRef(() => UsersModule),
+    forwardRef(() => TypesEventsModule),
   ],
   providers: [ActivitiesConfigResolver, ActivitiesConfigService],
   exports: [ActivitiesConfigService],

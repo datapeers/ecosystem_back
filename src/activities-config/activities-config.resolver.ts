@@ -52,17 +52,22 @@ export class ActivitiesConfigResolver {
     return this.activitiesConfigService.remove(id);
   }
 
-  @ResolveField('calcHoursExperts', () => GraphQLJSONObject)
-  resolveExpertHours(
-    @Parent() config: Omit<ActivitiesConfig, 'calcHoursExperts'>,
-  ) {
-    return this.activitiesConfigService.calcExpertsHours(config);
+  @ResolveField('calcHours', () => GraphQLJSONObject)
+  resolveExpertHours(@Parent() config: Omit<ActivitiesConfig, 'calcHours'>) {
+    return this.activitiesConfigService.calcHours(config);
   }
 
-  @ResolveField('calcHoursTeamCoaches', () => GraphQLJSONObject)
-  resolveTeamCoachHours(
-    @Parent() config: Omit<ActivitiesConfig, 'calcHoursExperts'>,
-  ) {
-    return this.activitiesConfigService.calcTeamCoachHours(config);
-  }
+  // @ResolveField('calcHoursExperts', () => GraphQLJSONObject)
+  // resolveExpertHours(
+  //   @Parent() config: Omit<ActivitiesConfig, 'calcHoursExperts'>,
+  // ) {
+  //   return this.activitiesConfigService.calcExpertsHours(config);
+  // }
+
+  // @ResolveField('calcHoursTeamCoaches', () => GraphQLJSONObject)
+  // resolveTeamCoachHours(
+  //   @Parent() config: Omit<ActivitiesConfig, 'calcHoursExperts'>,
+  // ) {
+  //   return this.activitiesConfigService.calcTeamCoachHours(config);
+  // }
 }

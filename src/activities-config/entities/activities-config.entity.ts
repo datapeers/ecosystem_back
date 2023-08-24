@@ -60,7 +60,7 @@ export class activities implements IActivities {
 export class Assign implements IAssign {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId })
-  id: string;
+  entityID: string;
 
   @Field(() => Int)
   limit: number;
@@ -76,7 +76,7 @@ export interface IActivities {
 }
 
 export interface IAssign {
-  id: string;
+  entityID: string;
   limit: number;
   activityID: string;
 }

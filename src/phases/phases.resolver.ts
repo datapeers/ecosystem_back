@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { PhasesService } from './phases.service';
 import { Phase } from './entities/phase.entity';
 import { CreatePhaseInput } from './dto/create-phase.input';
@@ -43,5 +50,10 @@ export class PhasesResolver {
   @Mutation(() => Phase)
   removePhase(@Args('id', { type: () => String }) id: string) {
     return this.phasesService.remove(id);
+  }
+
+  @ResolveField('calcEndDate', () => Date)
+  resolveEndDatePhase(@Parent() phase: Omit<Phase, 'calcEndDate'>) {
+    return this.phasesService.calcEndDate(phase);
   }
 }

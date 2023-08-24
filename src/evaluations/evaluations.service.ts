@@ -157,10 +157,10 @@ export class EvaluationsService {
   }
 
   async update(id: string, data: Partial<Evaluation>): Promise<Evaluation> {
-    const evaluation = await this.evaluationModel
+    await this.evaluationModel
       .updateOne({ _id: id }, data, { new: true })
       .lean();
-    return evaluation;
+    return this.findOne(id);
   }
 
   async delete(ids: string[]): Promise<UpdateResultPayload> {

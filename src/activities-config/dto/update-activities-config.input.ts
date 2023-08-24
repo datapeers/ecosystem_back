@@ -56,7 +56,7 @@ class ActivitySetup implements IActivities {
 class AssignSetup implements IAssign {
   @Field(() => String)
   @IsDefined()
-  id: string;
+  entityID: string;
 
   @Field(() => Int)
   @IsDefined()

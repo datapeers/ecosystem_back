@@ -12,6 +12,8 @@ import * as moment from 'moment';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { ExpertService } from '../expert/expert.service';
 import { StartupService } from 'src/startup/startup.service';
+import { add, differenceInMilliseconds } from 'date-fns';
+
 @Injectable()
 export class PhasesService {
   constructor(
@@ -325,5 +327,12 @@ export class PhasesService {
       ids.add(iterator._id.toString());
     }
     return ans;
+  }
+
+  async calcEndDate(phase: Phase) {
+    if (phase.basePhase) return new Date(phase.endAt);
+    const docs = await this.contentService.findAll(phase._id.toString());
+    const lastSprint = docs[docs.length - 1];
+    return moment(lastSprint.extra_options.end).add(1, 'days').toDate();
   }
 }

@@ -1,3 +1,6 @@
+import { Expert } from 'src/expert/entities/expert.entity';
+import { Startup } from 'src/startup/entities/startup.entity';
+
 export interface IAssignHoursConfig {
   from: string;
   limit: number;
@@ -16,4 +19,33 @@ export class Assign_item {
     this.nameFrom = nameFrom;
     this.to = [];
   }
+}
+
+export interface IConfigStartup extends Startup {
+  hours: { [key: string]: number }; // key its activity id
+}
+
+export interface IConfigExpert extends Expert {
+  hours: {
+    [key: string]: {
+      allocated: number;
+      donated: number;
+      done: number;
+    };
+  }; // key its activity id
+  startups: Startup[];
+}
+
+export interface IConfigTeamCoach {
+  _id: string;
+  item: {
+    nombre: string;
+  };
+  hours: {
+    [key: string]: {
+      allocated: number;
+      done: number;
+    };
+  }; // key its activity id
+  startups: Startup[];
 }

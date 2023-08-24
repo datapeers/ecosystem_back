@@ -121,10 +121,8 @@ export class BusinessService {
   }
 
   async update(id: string, data: Partial<Business>): Promise<Business> {
-    const createdBusiness = await this.businessModel
-      .updateOne({ _id: id }, data, { new: true })
-      .lean();
-    return createdBusiness;
+    await this.businessModel.updateOne({ _id: id }, data, { new: true }).lean();
+    return this.findOne(id);
   }
 
   async linkBusinessesAndEntrepreneurs(

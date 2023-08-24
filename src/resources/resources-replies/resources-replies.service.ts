@@ -87,10 +87,10 @@ export class ResourcesRepliesService {
     id: string,
     data: Partial<ResourcesReply>,
   ): Promise<ResourcesReply> {
-    const evaluation = await this.resourceReplyModel
+    await this.resourceReplyModel
       .updateOne({ _id: id }, data, { new: true })
       .lean();
-    return evaluation;
+    return this.findOne(id);
   }
 
   async updateDoc(

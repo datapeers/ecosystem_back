@@ -9,7 +9,6 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { StorageService } from '../models/storage-service';
 import { AppConfiguration } from 'config/app.config';
 import { ConfigService } from '@nestjs/config';
-import { Readable } from 'stream';
 
 @Injectable()
 export class AwsService implements StorageService {

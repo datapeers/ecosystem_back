@@ -49,17 +49,19 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   private static readonly virtualFields = {
     $addFields: {
       isProspect: {
-        $not: { 
+        $not: {
           $anyElementTrue: {
             $map: {
-              input: "$startups",
-              as: "startup",
-              in: { $gt: [{ $size: { $ifNull: ["$$startup.phases", []] } }, 0] }
-            }
-          }
-        }
-      }
-    }
+              input: '$startups',
+              as: 'startup',
+              in: {
+                $gt: [{ $size: { $ifNull: ['$$startup.phases', []] } }, 0],
+              },
+            },
+          },
+        },
+      },
+    },
   };
 
   async getDocument(id: string) {
@@ -91,25 +93,31 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
-    outputProjection?: any
+    outputProjection?: any,
   ): Promise<PaginatedResult<Entrepreneur>> {
     const options = new AggregateBuildOptions();
     options.virtualFields = EntrepreneurService.virtualFields;
-    if(outputProjection) {
+    if (outputProjection) {
       options.outputProjection = outputProjection;
     }
     let aggregationPipeline = requestUtilities.buildAggregationFromRequest(
       request,
       options,
     );
-    aggregationPipeline = await this.updatePipelineForUser(aggregationPipeline, user);
+    aggregationPipeline = await this.updatePipelineForUser(
+      aggregationPipeline,
+      user,
+    );
     const documents = await this.entrepreneurModel
       .aggregate<PaginatedResult<Entrepreneur>>(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
     return documents[0];
   }
 
-  async findManyIdsByRequest(request: PageRequest, user: AuthUser): Promise<string[]> {
+  async findManyIdsByRequest(
+    request: PageRequest,
+    user: AuthUser,
+  ): Promise<string[]> {
     const options = new AggregateBuildOptions();
     options.virtualFields = EntrepreneurService.virtualFields;
     options.paginated = false;
@@ -118,7 +126,10 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       request,
       options,
     );
-    aggregationPipeline = await this.updatePipelineForUser(aggregationPipeline, user);
+    aggregationPipeline = await this.updatePipelineForUser(
+      aggregationPipeline,
+      user,
+    );
     const documents = await this.entrepreneurModel
       .aggregate<Entrepreneur>(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
@@ -161,7 +172,6 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   async findOne(id: string): Promise<Entrepreneur> {
     const entrepreneur = await this.entrepreneurModel.findOne({
       _id: id,
-      deletedAt: null,
     });
     if (!entrepreneur)
       throw new NotFoundException(`Couldn't find entrepreneur with id ${id}`);
@@ -178,10 +188,10 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   }
 
   async update(id: string, data: Partial<Entrepreneur>): Promise<Entrepreneur> {
-    const createdEntrepreneur = await this.entrepreneurModel
+    await this.entrepreneurModel
       .updateOne({ _id: id }, data, { new: true })
       .lean();
-    return createdEntrepreneur;
+    return this.findOne(id);
   }
 
   async linkWithBusinesses(
@@ -221,10 +231,10 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     };
   }
 
-  async linkWithBusinessesByRequest({
-    request,
-    targetIds,
-  }: LinkWithTargetsByRequestArgs, user: AuthUser) {
+  async linkWithBusinessesByRequest(
+    { request, targetIds }: LinkWithTargetsByRequestArgs,
+    user: AuthUser,
+  ) {
     const entrepreneurs = await this.findManyIdsByRequest(request, user);
     return await this.linkEntrepreneursAndBusinesses(entrepreneurs, targetIds);
   }
@@ -260,10 +270,10 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return entrepreneurUpdateResult;
   }
 
-  async linkWithStartupsByRequest({
-    request,
-    targetIds,
-  }: LinkWithTargetsByRequestArgs, user: AuthUser) {
+  async linkWithStartupsByRequest(
+    { request, targetIds }: LinkWithTargetsByRequestArgs,
+    user: AuthUser,
+  ) {
     const entrepreneurs = await this.findManyIdsByRequest(request, user);
     return await this.linkEntrepreneursAndStartups(entrepreneurs, targetIds);
   }
@@ -289,7 +299,11 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     // Find entrepreneurs
     const startupDocuments = await this.startupService.findMany(startups);
     const startupRelationships = startupDocuments.map((document) => {
-      return { _id: document._id, item: document.item, phases: document.phases };
+      return {
+        _id: document._id,
+        item: document.item,
+        phases: document.phases,
+      };
     });
     const entrepreneurUpdateResult = await this.linkWithStartups(
       ids,
@@ -298,21 +312,34 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return entrepreneurUpdateResult;
   }
 
-  async downloadByRequest({ request, configId, format }: DownloadRequestArgs, user: AuthUser): Promise<DownloadResult> {
+  async downloadByRequest(
+    { request, configId, format }: DownloadRequestArgs,
+    user: AuthUser,
+  ): Promise<DownloadResult> {
     const config = await this.tableConfigService.findOne(configId);
     const tableColumns = config.columns;
-    const outputProjection = requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const outputProjection =
+      requestUtilities.getProjectionFromConfigTable(tableColumns);
     const pageResult = await this.findManyPage(request, user, outputProjection);
-    const rows = excelUtilities.parseDocumentsToRows(pageResult.documents, tableColumns);
+    const rows = excelUtilities.parseDocumentsToRows(
+      pageResult.documents,
+      tableColumns,
+    );
     const columns = tableColumns.map((col) => {
-        return { header: col.label, width: col.label.length + 3 };
+      return { header: col.label, width: col.label.length + 3 };
     });
-    const data = await excelUtilities.buildWorkbookBuffer(columns, rows, format);
+    const data = await excelUtilities.buildWorkbookBuffer(
+      columns,
+      rows,
+      format,
+    );
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
   }
-  
-  async updatePhasesForStartupsRelationships(relationships: StartupRelationship[]) {
+
+  async updatePhasesForStartupsRelationships(
+    relationships: StartupRelationship[],
+  ) {
     // Initialize the bulk operations array
     const bulkOperations = [];
 
@@ -321,10 +348,10 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       // Update operation for each startup
       const updateOperation = {
         updateMany: {
-          filter: { "startups._id": startup._id }, // Match documents that have the startup in their startups array
+          filter: { 'startups._id': startup._id }, // Match documents that have the startup in their startups array
           update: {
             $set: {
-              "startups.$.phases": startup.phases, // Update the phases array for the matched startup
+              'startups.$.phases': startup.phases, // Update the phases array for the matched startup
             },
           },
         },
@@ -332,11 +359,15 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       // Add the update operation to the bulkOperations array
       bulkOperations.push(updateOperation);
     });
-    
+
     // Execute the bulkWrite operation to update all entrepreneurs
-    const bulkWriteResult = await this.entrepreneurModel.bulkWrite(bulkOperations);
-    if(!bulkWriteResult.ok) {
-      throw new InternalServerErrorException("Failed to update phases for startups relationship in entrepreneurs documents");
+    const bulkWriteResult = await this.entrepreneurModel.bulkWrite(
+      bulkOperations,
+    );
+    if (!bulkWriteResult.ok) {
+      throw new InternalServerErrorException(
+        'Failed to update phases for startups relationship in entrepreneurs documents',
+      );
     }
     return bulkWriteResult;
   }

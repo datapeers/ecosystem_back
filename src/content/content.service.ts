@@ -25,8 +25,8 @@ export class ContentService {
     }
   }
 
-  async findAll(phase: string, user?: AuthUser) {
-    if (user.rolDoc.type === ValidRoles.user) {
+  async findAll(phase: string, user?: AuthUser): Promise<Content[]> {
+    if (user?.rolDoc.type === ValidRoles.user) {
       let sprints = await this.contentModel
         .find({
           phase,

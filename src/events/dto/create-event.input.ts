@@ -12,6 +12,14 @@ export class CreateEventInput {
   @IsNotEmpty()
   type: string;
 
+  @Field(() => String)
+  @IsNotEmpty()
+  attendanceType: string;
+
+  @Field(() => String)
+  @IsOptional()
+  description?: string;
+
   @Field(() => Date)
   @IsNotEmpty()
   startAt: Date;
@@ -26,7 +34,7 @@ export class CreateEventInput {
 
   @Field(() => String)
   @IsNotEmpty()
-  phase: string;
+  batch: string;
 
   @Field(() => [ExpertEventSubmit])
   @IsOptional()

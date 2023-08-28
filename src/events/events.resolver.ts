@@ -23,12 +23,12 @@ export class EventsResolver {
     return this.eventsService.findAll();
   }
 
-  @Query(() => [EventEntity], { name: 'eventsPhase' })
-  findByPhase(
-    @Args('phase', { type: () => String }) phase: string,
+  @Query(() => [EventEntity], { name: 'eventsBatch' })
+  findByBatch(
+    @Args('batch', { type: () => String }) batch: string,
     @CurrentUser() user: AuthUser,
   ) {
-    return this.eventsService.findByPhase(phase, user);
+    return this.eventsService.findByBatch(batch, user);
   }
 
   @Query(() => [EventEntity], { name: 'eventsUser' })

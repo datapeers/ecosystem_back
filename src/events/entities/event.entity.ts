@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { SchemaTypes } from 'mongoose';
+
 @Schema({ timestamps: true })
 @ObjectType()
 export class Event {
@@ -15,6 +16,14 @@ export class Event {
   @Field(() => String)
   @Prop({ required: true })
   type: string;
+
+  @Field(() => String)
+  @Prop({ required: true })
+  attendanceType: string;
+
+  @Field(() => String)
+  @Prop({})
+  description: string;
 
   @Field(() => GraphQLJSONObject)
   @Prop({ type: SchemaTypes.Mixed })
@@ -30,6 +39,10 @@ export class Event {
 
   @Field(() => Boolean)
   @Prop({ default: false })
+  isCanceled: boolean;
+
+  @Field(() => Boolean)
+  @Prop({ default: false })
   isDeleted: boolean;
 
   @Field(() => Date)
@@ -40,7 +53,7 @@ export class Event {
 
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Phase' })
-  phase: string;
+  batch: string;
 
   @Field(() => [ExpertEventLink])
   @Prop({ default: [] })
@@ -57,7 +70,7 @@ export class Event {
 
 @Schema()
 @ObjectType()
-export class TeamCoachLink {
+export class TeamCoachLink implements IEntityEvent {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
   _id: string;
@@ -69,7 +82,7 @@ export class TeamCoachLink {
 
 @Schema()
 @ObjectType()
-export class ExpertEventLink {
+export class ExpertEventLink implements IEntityEvent {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Expert' })
   _id: string;
@@ -81,13 +94,18 @@ export class ExpertEventLink {
 
 @Schema()
 @ObjectType()
-export class ParticipantEventLink {
+export class ParticipantEventLink implements IEntityEvent {
   @Field(() => String)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Entrepreneur' })
   _id: string;
 
   @Field(() => String)
   @Prop()
+  name: string;
+}
+
+export interface IEntityEvent {
+  _id: string;
   name: string;
 }
 

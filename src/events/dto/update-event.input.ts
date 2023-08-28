@@ -18,6 +18,10 @@ export class UpdateEventInput extends PartialType(CreateEventInput) {
   @IsOptional()
   name?: string;
 
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  description?: string;
+
   @Field(() => GraphQLJSONObject, { nullable: true })
   @IsOptional()
   extra_options?: Record<string, any>;

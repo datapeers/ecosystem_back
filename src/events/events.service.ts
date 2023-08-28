@@ -63,13 +63,13 @@ export class EventsService {
     return this.eventModel.find({ isDeleted: false, ...filters });
   }
 
-  async findByPhase(phase: string, user: AuthUser) {
+  async findByBatch(batch: string, user: AuthUser) {
     if (
       ValidRoles.teamCoach === user.rolDoc.type &&
       !getPermissionList(user).includes(Permission.load_all_events)
     ) {
       return this.eventModel.find({
-        phase,
+        batch,
         isDeleted: false,
         'teamCoaches._id': user._id.toString(),
       });
@@ -80,12 +80,12 @@ export class EventsService {
     ) {
       const docExpert = await this.expertService.findByAccount(user.uid);
       return this.eventModel.find({
-        phase,
+        batch,
         isDeleted: false,
         'experts._id': docExpert._id.toString(),
       });
     }
-    return this.eventModel.find({ phase, isDeleted: false });
+    return this.eventModel.find({ batch, isDeleted: false });
   }
 
   findOne(id: string) {

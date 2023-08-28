@@ -14,23 +14,23 @@ export class Acta {
   name: string;
 
   @Field(() => Date)
-  @Prop({ required: true })
+  @Prop({})
   date: Date;
 
   @Field(() => String)
-  @Prop({ required: true })
+  @Prop({})
   objective: string;
 
   @Field(() => String)
-  @Prop({ required: true })
+  @Prop({})
   solution: string;
 
   @Field(() => String)
-  @Prop({ required: true })
+  @Prop({})
   topics_covered: string;
 
   @Field(() => String)
-  @Prop({ required: true })
+  @Prop({})
   conclusions: string;
 
   @Field(() => String)

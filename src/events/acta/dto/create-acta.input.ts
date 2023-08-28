@@ -9,24 +9,24 @@ export class CreateActaInput {
   name: string;
 
   @Field(() => String)
-  @IsNotEmpty()
-  objective: string;
+  @IsOptional()
+  objective?: string;
 
   @Field(() => String)
-  @IsNotEmpty()
-  solution: string;
+  @IsOptional()
+  solution?: string;
 
   @Field(() => Date)
   @IsNotEmpty()
   date: Date;
 
   @Field(() => String)
-  @IsNotEmpty()
-  topics_covered: string;
+  @IsOptional()
+  topics_covered?: string;
 
   @Field(() => String)
-  @IsNotEmpty()
-  conclusions: string;
+  @IsOptional()
+  conclusions?: string;
 
   @Field(() => String)
   @IsNotEmpty()

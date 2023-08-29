@@ -38,6 +38,10 @@ export class UpdateEventInput extends PartialType(CreateEventInput) {
   @IsOptional()
   isDeleted?: boolean;
 
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  isCanceled?: boolean;
+
   @Field(() => [ExpertEventSubmit], { nullable: true })
   @IsOptional()
   experts?: ExpertEventSubmit[];

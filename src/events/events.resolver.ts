@@ -36,7 +36,7 @@ export class EventsResolver {
     return this.eventsService.findByUser(user);
   }
 
-  @Query(() => EventEntity, { name: 'event' })
+  @Query(() => EventEntity, { name: 'event', nullable: true })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.eventsService.findOne(id);
   }

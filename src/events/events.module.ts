@@ -11,6 +11,7 @@ import { StartupModule } from 'src/startup/startup.module';
 import { UsersModule } from 'src/users/users.module';
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 import { PhasesModule } from 'src/phases/phases.module';
+import { ParticipationEventsModule } from './participation-events/participation-events.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PhasesModule } from 'src/phases/phases.module';
     AuthModule,
     LoggerModule,
     ActaModule,
+    ParticipationEventsModule,
     forwardRef(() => ExpertModule),
     forwardRef(() => StartupModule),
     forwardRef(() => EntrepreneurModule),

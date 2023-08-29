@@ -11,6 +11,7 @@ import { ExpertService } from 'src/expert/expert.service';
 import { StartupService } from 'src/startup/startup.service';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 import { PhasesService } from 'src/phases/phases.service';
+import { ParticipationEventsService } from './participation-events/participation-events.service';
 
 @Injectable()
 export class EventsService {
@@ -23,6 +24,8 @@ export class EventsService {
     private readonly expertService: ExpertService,
     @Inject(forwardRef(() => PhasesService))
     private readonly phasesService: PhasesService,
+    @Inject(forwardRef(() => ParticipationEventsService))
+    private readonly participationService: ParticipationEventsService,
   ) {}
 
   create(createEventInput: CreateEventInput) {
@@ -105,5 +108,9 @@ export class EventsService {
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
       .lean();
     return updatedType;
+  }
+
+  async getParticipation(event: EventEntity) {
+    return await this.participationService.findByEvent(event._id);
   }
 }

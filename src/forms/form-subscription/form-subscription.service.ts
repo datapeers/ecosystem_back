@@ -20,8 +20,9 @@ import {
 import { CloseFormSubscriptionArgs } from './args/close-form-subscription.args';
 import { SubmitFileInput } from './inputs/submit-file.input';
 import { FormSubmissionFiles } from '../form/entities/form-submission-files';
+import { pubSubInstance } from 'src/shared/sockets/socket-instance';
 
-const pubSub = new PubSub();
+const pubSub = pubSubInstance;
 
 @Injectable()
 export class FormSubscriptionService {

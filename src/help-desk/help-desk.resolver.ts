@@ -1,35 +1,47 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { HelpDeskService } from './help-desk.service';
-import { HelpDesk } from './entities/help-desk.entity';
+import { HelpDeskTicket } from './entities/help-desk.entity';
 import { CreateHelpDeskInput } from './dto/create-help-desk.input';
 import { UpdateHelpDeskInput } from './dto/update-help-desk.input';
+import { FilterRuleName } from '@aws-sdk/client-s3';
+import { HelpDeskFilterInput } from './dto/help-desk-filter.input';
 
-@Resolver(() => HelpDesk)
+@Resolver(() => HelpDeskTicket)
 export class HelpDeskResolver {
   constructor(private readonly helpDeskService: HelpDeskService) {}
 
-  @Mutation(() => HelpDesk)
-  createHelpDesk(@Args('createHelpDeskInput') createHelpDeskInput: CreateHelpDeskInput) {
+  @Mutation(() => HelpDeskTicket)
+  createHelpDesk(
+    @Args('createHelpDeskInput') createHelpDeskInput: CreateHelpDeskInput,
+  ) {
     return this.helpDeskService.create(createHelpDeskInput);
   }
 
-  @Query(() => [HelpDesk], { name: 'helpDesk' })
-  findAll() {
-    return this.helpDeskService.findAll();
+  @Query(() => [HelpDeskTicket], { name: 'helpDesk' })
+  findAll(
+    @Args('filter', { type: () => HelpDeskFilterInput })
+    filter: HelpDeskFilterInput,
+  ) {
+    return this.helpDeskService.findAll(filter);
   }
 
-  @Query(() => HelpDesk, { name: 'helpDesk' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(() => HelpDeskTicket, { name: 'helpDesk' })
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.helpDeskService.findOne(id);
   }
 
-  @Mutation(() => HelpDesk)
-  updateHelpDesk(@Args('updateHelpDeskInput') updateHelpDeskInput: UpdateHelpDeskInput) {
-    return this.helpDeskService.update(updateHelpDeskInput.id, updateHelpDeskInput);
+  @Mutation(() => HelpDeskTicket)
+  updateHelpDesk(
+    @Args('updateHelpDeskInput') updateHelpDeskInput: UpdateHelpDeskInput,
+  ) {
+    return this.helpDeskService.update(
+      updateHelpDeskInput.id,
+      updateHelpDeskInput,
+    );
   }
 
-  @Mutation(() => HelpDesk)
-  removeHelpDesk(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(() => HelpDeskTicket)
+  removeHelpDesk(@Args('id', { type: () => ID }) id: string) {
     return this.helpDeskService.remove(id);
   }
 }

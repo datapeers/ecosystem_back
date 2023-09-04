@@ -79,7 +79,7 @@ export class HelpDeskService {
     }
   }
 
-  async remove(id: number): Promise<HelpDeskTicket> {
+  async remove(id: string): Promise<HelpDeskTicket> {
     try {
       const updatedType = await this.ticketsModel
         .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })

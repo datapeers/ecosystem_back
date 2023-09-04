@@ -1,5 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateNotificationInput {
@@ -11,4 +11,9 @@ export class CreateNotificationInput {
   @IsString()
   @IsOptional()
   url: string;
+
+  @Field(() => String)
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 }

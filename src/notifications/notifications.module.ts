@@ -7,9 +7,14 @@ import {
   Notification,
   NotificationSchema,
 } from './entities/notification.entity';
+import { NotificationSubscritpionResolver } from './notifications-subscription.resolver';
 
 @Module({
-  providers: [NotificationsResolver, NotificationsService],
+  providers: [
+    NotificationsResolver,
+    NotificationsService,
+    NotificationSubscritpionResolver,
+  ],
   imports: [
     MongooseModule.forFeature([
       { name: Notification.name, schema: NotificationSchema },

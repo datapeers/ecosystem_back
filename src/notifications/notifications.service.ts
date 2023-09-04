@@ -9,7 +9,9 @@ import { UpdateNotificationInput } from './dto/update-notification.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Notification } from './entities/notification.entity';
 import { Model } from 'mongoose';
+import { pubSubInstance } from 'src/shared/sockets/socket-instance';
 
+const pubSub = pubSubInstance;
 @Injectable()
 export class NotificationsService {
   constructor(
@@ -21,8 +23,14 @@ export class NotificationsService {
 
   async create(createNotificationInput: CreateNotificationInput) {
     try {
-      var ans = await this.notificationModel.create(createNotificationInput);
-      return ans;
+      var newNotification = await this.notificationModel.create(
+        createNotificationInput,
+      );
+
+      pubSub.publish(`notification-${createNotificationInput.userId}`, {
+        notificationSubscription: newNotification.toObject(),
+      });
+      return newNotification;
     } catch (error) {
       this._logger.error(
         `Error saving notification ${createNotificationInput}`,
@@ -37,7 +45,7 @@ export class NotificationsService {
       if (!ans) {
         throw new NotFoundException(`Notification with di ${id} not found`);
       }
-      return ans;
+      return ans.toObject();
     } catch (error) {
       throw new InternalServerErrorException(`Error creating notification`);
     }
@@ -54,14 +62,17 @@ export class NotificationsService {
     try {
       await this.findOne(id);
 
-      delete UpdateNotificationInput['_id'];
+      delete updateNotificationInput['_id'];
       const updatedNotification = await this.notificationModel
         .findOneAndUpdate(
           { _id: id },
-          { ...UpdateNotificationInput },
+          { ...updateNotificationInput },
           { new: true },
         )
         .lean();
+      pubSub.publish(`notification-${updatedNotification.userId}`, {
+        notificationSubscription: updatedNotification,
+      });
       return updatedNotification;
     } catch (error) {
       this._logger.error(

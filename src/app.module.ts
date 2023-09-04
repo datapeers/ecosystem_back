@@ -43,6 +43,8 @@ import { CalendarModule } from './calendar/calendar.module';
 import GraphQLJSON from 'graphql-type-json';
 import { ResourcesRepliesModule } from './resources/resources-replies/resources-replies.module';
 import { UserLogModule } from './user-log/user-log.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { HelpDeskModule } from './help-desk/help-desk.module';
 
 @Module({
   imports: [
@@ -130,6 +132,8 @@ import { UserLogModule } from './user-log/user-log.module';
     ConfigEvaluationsModule,
     CalendarModule,
     UserLogModule,
+    NotificationsModule,
+    HelpDeskModule,
   ],
   controllers: [],
   providers: [],

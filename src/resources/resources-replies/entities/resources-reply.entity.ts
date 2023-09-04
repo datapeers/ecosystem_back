@@ -18,7 +18,7 @@ export class ResourcesReply {
     description: 'Set of additional dynamic properties.',
   })
   @Prop({ type: Object })
-  item: JSON;
+  item: Record<string, any>;
 
   @Field(() => Startup)
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Startup' })

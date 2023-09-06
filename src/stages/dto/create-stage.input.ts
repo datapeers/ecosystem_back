@@ -11,6 +11,10 @@ export class CreateStageInput {
   @IsNotEmpty()
   name: string;
 
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  description: string;
+
   @Field(() => String)
   @IsNotEmpty()
   label: string;

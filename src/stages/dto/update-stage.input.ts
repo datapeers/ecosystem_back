@@ -18,6 +18,10 @@ export class UpdateStageInput extends PartialType(CreateStageInput) {
 
   @Field(() => String, { nullable: true })
   @IsOptional()
+  description?: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   label?: string;
 
   @Field(() => String, { nullable: true })

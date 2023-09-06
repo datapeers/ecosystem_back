@@ -24,7 +24,7 @@ export class StagesService implements OnModuleInit {
   }
 
   async findAll() {
-    return (await this.stageModel.find({ isDeleted: false }).lean()).sort(
+    return (await this.stageModel.find({}).lean()).sort(
       (firstItem, secondItem) => firstItem.index - secondItem.index,
     );
   }
@@ -55,7 +55,6 @@ export class StagesService implements OnModuleInit {
           {
             _id: { $ne: updatedStage._id },
             index: newIndex,
-            isDeleted: false,
           },
           { $set: { index: newIndex - 1 } },
         );
@@ -66,7 +65,6 @@ export class StagesService implements OnModuleInit {
           {
             _id: { $ne: updatedStage._id },
             index: newIndex,
-            isDeleted: false,
           },
           { $set: { index: newIndex + 1 } },
         );

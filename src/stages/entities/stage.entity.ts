@@ -15,6 +15,10 @@ export class Stage {
   @Prop({ required: true })
   name: string;
 
+  @Field(() => String, { nullable: true })
+  @Prop({ default: '' })
+  description: string;
+
   @Field(() => String)
   @Prop({ required: true })
   label: string;

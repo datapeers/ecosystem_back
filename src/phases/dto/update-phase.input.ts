@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
-import { InputType, Field, ID } from '@nestjs/graphql';
+import { InputType, Field, ID, Int } from '@nestjs/graphql';
 
 @InputType()
 export class UpdatePhaseInput {
@@ -30,4 +30,8 @@ export class UpdatePhaseInput {
   @Field(() => Date, { nullable: true })
   @IsOptional()
   endAt?: Date;
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  index?: number;
 }

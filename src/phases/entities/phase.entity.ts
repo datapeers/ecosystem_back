@@ -53,11 +53,15 @@ export class Phase {
 
   @Prop({ type: 'boolean', default: false })
   @Field(() => Boolean)
-  deleted: boolean;
+  isDeleted: boolean;
 
   @Prop({ type: 'boolean', default: false })
   @Field(() => Boolean)
   basePhase: boolean;
+
+  @Prop({ default: 0 })
+  @Field(() => String, { nullable: true })
+  index: boolean;
 
   @Field(() => String, { nullable: true })
   @Prop({ default: '' })

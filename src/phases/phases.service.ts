@@ -34,7 +34,7 @@ export class PhasesService {
       case ValidRoles.teamCoach:
         return this.getTeamCoachBatchesAndHost(user);
       default:
-        return await this.phaseModel.find({ deleted: false });
+        return await this.phaseModel.find({ isDeleted: false });
     }
   }
 
@@ -44,15 +44,16 @@ export class PhasesService {
       .lean();
     const batches = await this.phaseModel
       .find({
-        deleted: false,
+        isDeleted: false,
         _id: { $in: ids.map((i) => new Types.ObjectId(i)) },
       })
       .lean();
+    // console.log(phaseBases);
     return [...phaseBases, ...batches];
   }
 
   async find(ids: string[]): Promise<Phase[]> {
-    const phases = await this.phaseModel.find({ deleted: false });
+    const phases = await this.phaseModel.find({ isDeleted: false });
     return phases;
   }
 
@@ -175,7 +176,7 @@ export class PhasesService {
   async remove(id: string) {
     const deletedPhase = await this.phaseModel.updateOne(
       { _id: id },
-      { deleted: true },
+      { isDeleted: true },
       { new: true },
     );
     return deletedPhase;
@@ -186,13 +187,13 @@ export class PhasesService {
     const batchesExpert = await this.phaseModel
       .find({
         _id: { $in: docExpert.phases },
-        deleted: false,
+        isDeleted: false,
       })
       .lean();
     const phasesExpert = await this.phaseModel
       .find({
         _id: { $in: batchesExpert.map((i) => i.childrenOf) },
-        deleted: false,
+        isDeleted: false,
       })
       .lean();
     return [...phasesExpert, ...batchesExpert];
@@ -208,7 +209,7 @@ export class PhasesService {
             (i) => new Types.ObjectId(i._id),
           ),
         },
-        deleted: false,
+        isDeleted: false,
       })
       .lean();
     const parentsBatches = await this.phaseModel
@@ -216,7 +217,7 @@ export class PhasesService {
         _id: {
           $in: batchesHost.map((i) => i.childrenOf),
         },
-        deleted: false,
+        isDeleted: false,
       })
       .lean();
     const listPhasesIds = user.relationsAssign.phases.map(
@@ -232,7 +233,7 @@ export class PhasesService {
           },
           { childrenOf: { $in: listPhasesIds } },
         ],
-        deleted: false,
+        isDeleted: false,
       })
       .lean();
 
@@ -257,7 +258,7 @@ export class PhasesService {
             (i) => new Types.ObjectId(i._id),
           ),
         },
-        deleted: false,
+        isDeleted: false,
       })
       .lean();
     const phases = await this.phaseModel
@@ -265,7 +266,7 @@ export class PhasesService {
         _id: {
           $in: batches.map((i) => new Types.ObjectId(i.childrenOf)),
         },
-        deleted: false,
+        isDeleted: false,
       })
       .lean();
     return [...phases, ...batches];
@@ -282,7 +283,7 @@ export class PhasesService {
               (i) => new Types.ObjectId(i._id),
             ),
           },
-          deleted: false,
+          isDeleted: false,
         },
         { _id: 1 },
       )
@@ -293,7 +294,7 @@ export class PhasesService {
           _id: {
             $in: batchesHost.map((i) => i.childrenOf),
           },
-          deleted: false,
+          isDeleted: false,
         },
         { _id: 1 },
       )
@@ -312,7 +313,7 @@ export class PhasesService {
             },
             { childrenOf: { $in: listPhasesIds } },
           ],
-          deleted: false,
+          isDeleted: false,
         },
         { _id: 1 },
       )

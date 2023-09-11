@@ -14,6 +14,7 @@ import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
+import { Stage } from 'src/stages/entities/stage.entity';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Phase)
 export class PhasesResolver {
@@ -55,5 +56,10 @@ export class PhasesResolver {
   @ResolveField('calcEndDate', () => Date)
   resolveEndDatePhase(@Parent() phase: Omit<Phase, 'calcEndDate'>) {
     return this.phasesService.calcEndDate(phase);
+  }
+
+  @ResolveField('stageDoc', () => Stage)
+  resolveStage(@Parent() phase: Omit<Phase, 'stageDoc'>) {
+    return this.phasesService.getStage(phase);
   }
 }

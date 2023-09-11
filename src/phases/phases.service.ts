@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { CreatePhaseInput } from './dto/create-phase.input';
 import { UpdatePhaseInput } from './dto/update-phase.input';
 import { Phase } from './entities/phase.entity';
@@ -13,6 +18,8 @@ import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { ExpertService } from '../expert/expert.service';
 import { StartupService } from 'src/startup/startup.service';
 import { add, differenceInMilliseconds } from 'date-fns';
+import { StagesService } from 'src/stages/stages.service';
+import { Stage } from 'src/stages/entities/stage.entity';
 
 @Injectable()
 export class PhasesService {
@@ -23,6 +30,8 @@ export class PhasesService {
     private readonly contentService: ContentService,
     private readonly resourcesService: ResourcesService,
     private readonly activitiesConfigService: ActivitiesConfigService,
+    @Inject(forwardRef(() => StagesService))
+    private readonly stagesService: StagesService,
   ) {}
 
   async findAll(user: AuthUser): Promise<Phase[]> {
@@ -335,5 +344,10 @@ export class PhasesService {
     const docs = await this.contentService.findAll(phase._id.toString());
     const lastSprint = docs[docs.length - 1];
     return moment(lastSprint.extra_options.end).add(1, 'days').toDate();
+  }
+
+  async getStage(phase: Phase): Promise<Stage> {
+    const stage = await this.stagesService.findOne(phase.stage);
+    return stage;
   }
 }

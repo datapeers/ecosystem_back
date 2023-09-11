@@ -11,6 +11,7 @@ import { ActivitiesConfigModule } from 'src/activities-config/activities-config.
 import { ResourcesModule } from 'src/resources/resources.module';
 import { ExpertModule } from 'src/expert/expert.module';
 import { StartupModule } from 'src/startup/startup.module';
+import { StagesModule } from 'src/stages/stages.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Phase.name, schema: PhaseSchema }]),
@@ -21,6 +22,7 @@ import { StartupModule } from 'src/startup/startup.module';
     ResourcesModule,
     forwardRef(() => ExpertModule),
     forwardRef(() => StartupModule),
+    forwardRef(() => StagesModule),
     ActivitiesConfigModule,
   ],
   providers: [PhasesResolver, PhasesService],

@@ -45,6 +45,7 @@ import { ResourcesRepliesModule } from './resources/resources-replies/resources-
 import { UserLogModule } from './user-log/user-log.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { HelpDeskModule } from './help-desk/help-desk.module';
+import { ConfigurationAppModule } from './configuration-app/configuration-app.module';
 
 @Module({
   imports: [
@@ -134,6 +135,7 @@ import { HelpDeskModule } from './help-desk/help-desk.module';
     UserLogModule,
     NotificationsModule,
     HelpDeskModule,
+    ConfigurationAppModule,
   ],
   controllers: [],
   providers: [],

@@ -15,6 +15,10 @@ export class ConfigurationApp {
 
   @Field(() => [GraphQLJSONObject])
   @Prop({ type: [{ type: SchemaTypes.Mixed }] })
+  verticals: Record<string, any>[];
+
+  @Field(() => [GraphQLJSONObject])
+  @Prop({ type: [{ type: SchemaTypes.Mixed }] })
   services: Record<string, any>[];
 
   @Field(() => [GraphQLJSONObject])

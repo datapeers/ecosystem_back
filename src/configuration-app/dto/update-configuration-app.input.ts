@@ -14,6 +14,10 @@ export class UpdateConfigurationAppInput {
 
   @Field(() => [GraphQLJSONObject], { nullable: true })
   @IsOptional()
+  verticals: Record<string, any>[];
+
+  @Field(() => [GraphQLJSONObject], { nullable: true })
+  @IsOptional()
   services: Record<string, any>[];
 
   @Field(() => [GraphQLJSONObject], { nullable: true })

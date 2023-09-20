@@ -4,6 +4,7 @@ import { TicketEnum } from '../enum/ticket-status.enum';
 import { TicketCategory } from '../enum/ticket-category.enum';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { SchemaTypes } from 'mongoose';
+import { IFileUpload } from 'src/shared/models/file';
 @Schema({ timestamps: true })
 @ObjectType()
 export class HelpDeskTicket {
@@ -55,9 +56,10 @@ export class HelpDeskTicket {
 
 export class TicketChild {
   body: string;
-  attachment: string[];
+  attachment: IFileUpload[];
   isResponse: boolean;
   answerBy: string;
+  answerById: string;
 }
 
 export const HelpDeskTicketSchema =

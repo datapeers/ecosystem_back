@@ -1,4 +1,10 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { CreateHelpDeskInput } from './dto/create-help-desk.input';
 import { UpdateHelpDeskInput } from './dto/update-help-desk.input';
 import { HelpDeskTicket } from './entities/help-desk.entity';
@@ -6,12 +12,20 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TicketEnum } from './enum/ticket-status.enum';
 import { HelpDeskFilterInput } from './dto/help-desk-filter.input';
+import { AuthUser } from 'src/auth/types/auth-user';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
+import { StartupService } from 'src/startup/startup.service';
 
 @Injectable()
 export class HelpDeskService {
   constructor(
     @InjectModel(HelpDeskTicket.name)
     private readonly ticketsModel: Model<HelpDeskTicket>,
+    @Inject(forwardRef(() => EntrepreneurService))
+    private readonly entrepreneurService: EntrepreneurService,
+    @Inject(forwardRef(() => StartupService))
+    private readonly startupService: StartupService,
   ) {}
 
   _logger = new Logger(HelpDeskService.name);
@@ -45,8 +59,25 @@ export class HelpDeskService {
     return query.exec();
   }
 
-  findByFilters(filters: JSON) {
-    return this.ticketsModel.find(filters).lean();
+  async findByFilters(user: AuthUser, filters: JSON) {
+    switch (user.rolDoc.type) {
+      case ValidRoles.user:
+        const docEntrepreneur = await this.entrepreneurService.findByAccount(
+          user.uid,
+        );
+        if (!docEntrepreneur) return [];
+        const docsStartups = await this.startupService.findByEntrepreneur(
+          docEntrepreneur._id,
+        );
+        if (docsStartups.length === 0) return [];
+        const idsStartups = docsStartups.map((i) => i._id);
+        return this.ticketsModel.find({
+          ...filters,
+          startupId: { $in: idsStartups },
+        });
+      default:
+        return this.ticketsModel.find(filters).lean();
+    }
   }
 
   async findOne(id: string): Promise<HelpDeskTicket> {
@@ -63,8 +94,6 @@ export class HelpDeskService {
 
   async update(id: string, updateHelpDeskInput: UpdateHelpDeskInput) {
     try {
-      await this.findOne(id);
-
       delete updateHelpDeskInput['_id'];
       const updatedHelpDeskTicket = await this.ticketsModel
         .findOneAndUpdate(

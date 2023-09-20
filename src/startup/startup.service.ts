@@ -165,9 +165,8 @@ export class StartupService implements FormDocumentService<Startup> {
       );
 
     // Find entrepreneurs
-    const entrepreneurDocuments = await this.entrepreneurService.findMany(
-      entrepreneurs,
-    );
+    const entrepreneurDocuments =
+      await this.entrepreneurService.findMany(entrepreneurs);
     const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
       return { _id: document._id, item: document.item, rol: 'partner' };
     });
@@ -201,9 +200,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return startups;
   }
 
-  async findByEntrepreneur(idEntrepreneur: string): Promise<Startup> {
+  async findByEntrepreneur(idEntrepreneur: string): Promise<Startup[]> {
     const startup = await this.startupModel
-      .findOne({
+      .find({
         deletedAt: null,
         'entrepreneurs._id': new Types.ObjectId(idEntrepreneur),
       })
@@ -356,9 +355,8 @@ export class StartupService implements FormDocumentService<Startup> {
       { new: true },
     );
     if (updateResult.acknowledged) {
-      const updatedStartupsRelationships = await this.getStartupsRelationships(
-        startups,
-      );
+      const updatedStartupsRelationships =
+        await this.getStartupsRelationships(startups);
       await this.entrepreneurService.updatePhasesForStartupsRelationships(
         updatedStartupsRelationships,
       );

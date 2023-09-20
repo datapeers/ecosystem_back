@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { HelpDeskService } from './help-desk.service';
 import { HelpDeskResolver } from './help-desk.resolver';
 import { TicketCategoriesModule } from './categories/categories.module';
@@ -9,6 +9,8 @@ import {
 } from './entities/help-desk.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { LoggerModule } from 'src/logger/logger.module';
+import { StartupModule } from 'src/startup/startup.module';
+import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { LoggerModule } from 'src/logger/logger.module';
     ]),
     AuthModule,
     LoggerModule,
+    forwardRef(() => StartupModule),
+    forwardRef(() => EntrepreneurModule),
   ],
   providers: [HelpDeskResolver, HelpDeskService],
   exports: [HelpDeskService],

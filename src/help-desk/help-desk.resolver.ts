@@ -4,8 +4,13 @@ import { HelpDeskTicket } from './entities/help-desk.entity';
 import { CreateHelpDeskInput } from './dto/create-help-desk.input';
 import { UpdateHelpDeskInput } from './dto/update-help-desk.input';
 import { HelpDeskFilterInput } from './dto/help-desk-filter.input';
+import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 import GraphQLJSON from 'graphql-type-json';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => HelpDeskTicket)
 export class HelpDeskResolver {
   constructor(private readonly helpDeskService: HelpDeskService) {}
@@ -26,8 +31,11 @@ export class HelpDeskResolver {
   }
 
   @Query(() => [HelpDeskTicket], { name: 'helpDeskFiltered' })
-  findByFilters(@Args('filters', { type: () => GraphQLJSON }) filters: any) {
-    return this.helpDeskService.findByFilters(filters);
+  findByFilters(
+    @Args('filters', { type: () => GraphQLJSON }) filters: any,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.helpDeskService.findByFilters(user, filters);
   }
 
   @Query(() => HelpDeskTicket, { name: 'helpDesk' })

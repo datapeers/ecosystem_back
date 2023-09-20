@@ -35,7 +35,7 @@ export class HelpDeskResolver {
     @Args('updateHelpDeskInput') updateHelpDeskInput: UpdateHelpDeskInput,
   ) {
     return this.helpDeskService.update(
-      updateHelpDeskInput.id,
+      updateHelpDeskInput._id,
       updateHelpDeskInput,
     );
   }

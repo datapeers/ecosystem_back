@@ -3,16 +3,16 @@ import { CreateHelpDeskInput } from './create-help-desk.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { IsEnum, IsOptional } from 'class-validator';
 import { TicketEnum } from '../enum/ticket-status.enum';
-import { TicektChild } from '../entities/help-desk.entity';
+import { TicketChild } from '../entities/help-desk.entity';
 
 @InputType()
 export class UpdateHelpDeskInput extends PartialType(CreateHelpDeskInput) {
   @Field(() => ID)
-  id: string;
+  _id: string;
 
   @Field(() => GraphQLJSON)
   @IsOptional()
-  newchild: TicektChild;
+  newChild: TicketChild;
 
   @Field(() => String)
   @IsEnum(TicketEnum)

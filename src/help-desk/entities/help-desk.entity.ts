@@ -1,9 +1,10 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import GraphQLJSON from 'graphql-type-json';
 import { Body } from '@nestjs/common';
 import { TicketEnum } from '../enum/ticket-status.enum';
-
+import { TicketCategory } from '../enum/ticket-category.enum';
+import { GraphQLJSONObject } from 'graphql-scalars';
+import { SchemaTypes } from 'mongoose';
 @ObjectType()
 export class HelpDeskTicket {
   @Field(() => ID)
@@ -13,17 +14,25 @@ export class HelpDeskTicket {
   @Prop({ required: true })
   title: string;
 
-  @Field(() => String)
   @Prop({
-    required: true,
-    enum: [TicketEnum.Open, TicketEnum.InProgress, TicketEnum.Closed],
-    default: 'Open',
+    type: String,
+    enum: TicketCategory,
+    default: TicketCategory.support,
   })
-  status: string;
+  @Field(() => String)
+  category: TicketCategory;
 
-  @Field(() => GraphQLJSON)
-  @Prop({ type: Object })
-  childs: TicektChild[];
+  @Prop({
+    type: String,
+    enum: TicketEnum,
+    default: TicketEnum.Open,
+  })
+  @Field(() => String)
+  status: TicketEnum;
+
+  @Field(() => [GraphQLJSONObject])
+  @Prop({ type: [{ type: SchemaTypes.Mixed }] })
+  childs: TicketChild[];
 
   @Field(() => String)
   @Prop({ required: true })
@@ -44,10 +53,10 @@ export class HelpDeskTicket {
   updatedAt: Date;
 }
 
-export class TicektChild {
+export class TicketChild {
   body: string;
   attachment: string[];
-  isResposne: boolean;
+  isResponse: boolean;
   answerBy: string;
 }
 

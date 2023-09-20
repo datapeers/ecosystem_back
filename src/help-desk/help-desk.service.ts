@@ -20,7 +20,7 @@ export class HelpDeskService {
     try {
       const newTicket = this.ticketsModel.create({
         ...createHelpDeskInput,
-        childs: [createHelpDeskInput.newchild],
+        childs: [createHelpDeskInput.newChild],
         status: TicketEnum.Open,
       });
     } catch (error) {}

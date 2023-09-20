@@ -1,6 +1,7 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsObject, IsString, MinLength } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
+import { TicketCategory } from '../enum/ticket-category.enum';
 
 @InputType()
 export class CreateHelpDeskInput {
@@ -11,7 +12,7 @@ export class CreateHelpDeskInput {
 
   @Field(() => GraphQLJSON)
   @IsObject()
-  newchild: {
+  newChild: {
     body: string;
     attachment: string[];
   };
@@ -25,4 +26,9 @@ export class CreateHelpDeskInput {
   @IsString()
   @MinLength(2)
   startupName: string;
+
+  // @Field(() => TicketCategory)
+  // @IsString()
+  // @MinLength(2)
+  // category: TicketCategory;
 }

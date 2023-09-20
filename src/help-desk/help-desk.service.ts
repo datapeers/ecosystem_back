@@ -16,34 +16,37 @@ export class HelpDeskService {
 
   _logger = new Logger(HelpDeskService.name);
 
-  create(createHelpDeskInput: CreateHelpDeskInput) {
+  async create(createHelpDeskInput: CreateHelpDeskInput) {
     try {
-      const newTicket = this.ticketsModel.create({
+      const newTicket = await this.ticketsModel.create({
         ...createHelpDeskInput,
         childs: [createHelpDeskInput.newChild],
         status: TicketEnum.Open,
       });
-    } catch (error) {}
+      return newTicket.toObject();
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 
   findAll(filter: HelpDeskFilterInput) {
     const { status, startupId, page, perPage } = filter;
-
     const query = this.ticketsModel.find();
-
     if (status) {
       query.where({ status: { $regex: new RegExp(status, 'i') } });
     }
-
     if (startupId) {
       query.where({ startupId });
     }
-
     if (page && perPage) {
       query.skip((page - 1) * perPage).limit(perPage);
     }
-
     return query.exec();
+  }
+
+  findByFilters(filters: JSON) {
+    return this.ticketsModel.find(filters).lean();
   }
 
   async findOne(id: string): Promise<HelpDeskTicket> {

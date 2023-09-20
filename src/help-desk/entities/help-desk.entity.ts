@@ -1,10 +1,10 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Body } from '@nestjs/common';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { TicketEnum } from '../enum/ticket-status.enum';
 import { TicketCategory } from '../enum/ticket-category.enum';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { SchemaTypes } from 'mongoose';
+@Schema({ timestamps: true })
 @ObjectType()
 export class HelpDeskTicket {
   @Field(() => ID)

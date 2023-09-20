@@ -3,8 +3,8 @@ import { HelpDeskService } from './help-desk.service';
 import { HelpDeskTicket } from './entities/help-desk.entity';
 import { CreateHelpDeskInput } from './dto/create-help-desk.input';
 import { UpdateHelpDeskInput } from './dto/update-help-desk.input';
-import { FilterRuleName } from '@aws-sdk/client-s3';
 import { HelpDeskFilterInput } from './dto/help-desk-filter.input';
+import GraphQLJSON from 'graphql-type-json';
 
 @Resolver(() => HelpDeskTicket)
 export class HelpDeskResolver {
@@ -17,12 +17,17 @@ export class HelpDeskResolver {
     return this.helpDeskService.create(createHelpDeskInput);
   }
 
-  @Query(() => [HelpDeskTicket], { name: 'helpDesk' })
+  @Query(() => [HelpDeskTicket], { name: 'helpDeskFilterUI' })
   findAll(
     @Args('filter', { type: () => HelpDeskFilterInput })
     filter: HelpDeskFilterInput,
   ) {
     return this.helpDeskService.findAll(filter);
+  }
+
+  @Query(() => [HelpDeskTicket], { name: 'helpDeskFiltered' })
+  findByFilters(@Args('filters', { type: () => GraphQLJSON }) filters: any) {
+    return this.helpDeskService.findByFilters(filters);
   }
 
   @Query(() => HelpDeskTicket, { name: 'helpDesk' })

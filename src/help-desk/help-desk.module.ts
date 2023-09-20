@@ -7,14 +7,18 @@ import {
   HelpDeskTicket,
   HelpDeskTicketSchema,
 } from './entities/help-desk.entity';
+import { AuthModule } from 'src/auth/auth.module';
+import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
-  providers: [HelpDeskResolver, HelpDeskService],
   imports: [
     MongooseModule.forFeature([
       { name: HelpDeskTicket.name, schema: HelpDeskTicketSchema },
     ]),
-    TicketCategoriesModule,
+    AuthModule,
+    LoggerModule,
   ],
+  providers: [HelpDeskResolver, HelpDeskService],
+  exports: [HelpDeskService],
 })
 export class HelpDeskModule {}

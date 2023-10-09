@@ -49,7 +49,7 @@ export class PhasesService {
 
   async findList(ids: string[]) {
     const phaseBases = await this.phaseModel
-      .find({ deleted: false, basePhase: true })
+      .find({ isDeleted: false, basePhase: true })
       .lean();
     const batches = await this.phaseModel
       .find({
@@ -59,6 +59,13 @@ export class PhasesService {
       .lean();
     // console.log(phaseBases);
     return [...phaseBases, ...batches];
+  }
+
+  async findPhaseBases() {
+    const phaseBases = await this.phaseModel
+      .find({ isDeleted: false, basePhase: true })
+      .lean();
+    return phaseBases;
   }
 
   async find(ids: string[]): Promise<Phase[]> {
@@ -343,6 +350,7 @@ export class PhasesService {
     if (phase.basePhase) return new Date(phase.endAt);
     const docs = await this.contentService.findAll(phase._id.toString());
     const lastSprint = docs[docs.length - 1];
+    if (!lastSprint) return new Date(phase.endAt);
     return moment(lastSprint.extra_options.end).add(1, 'days').toDate();
   }
 

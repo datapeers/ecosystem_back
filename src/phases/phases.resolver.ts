@@ -30,6 +30,11 @@ export class PhasesResolver {
     return this.phasesService.findList(ids);
   }
 
+  @Query(() => [Phase], { name: 'phasesBases' })
+  findBases() {
+    return this.phasesService.findPhaseBases();
+  }
+
   @Query(() => Phase, { name: 'phase' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.phasesService.findOne(id);

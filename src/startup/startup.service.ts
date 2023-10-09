@@ -377,8 +377,8 @@ export class StartupService implements FormDocumentService<Startup> {
     { request, targetIds }: LinkWithTargetsByRequestArgs,
     user: AuthUser,
   ) {
-    const businesses = await this.findManyIdsByRequest(request, user);
-    return await this.linkStartupsAndEntrepreneurs(businesses, targetIds);
+    const startups = await this.findManyIdsByRequest(request, user);
+    return await this.linkStartupsAndEntrepreneurs(startups, targetIds);
   }
 
   async downloadByRequest(

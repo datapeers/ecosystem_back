@@ -1,61 +1,34 @@
-import { SendEmailInput } from './dto/send-email.input';
+import { SendEmailInput } from '../dto/send-email.input';
+import { EmailsRepository } from '../repository/email.repository';
+import { Template } from '../templates/template';
+import * as SendGrid from '@sendgrid/mail';
+import * as SendGridClient from '@sendgrid/client';
 import { AppLogger } from 'src/logger/app-logger';
-import { Template } from './templates/template';
-import { EMAIL_TOKEN, EmailsRepository } from './repository/email.repository';
-import { EmailTemplates, templateNames } from './enums/email-templates';
 import {
-  Inject,
   BadRequestException,
-  Injectable,
   InternalServerErrorException,
   MethodNotAllowedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AppConfiguration } from 'config/app.config';
-import * as SendGrid from '@sendgrid/mail';
-import * as SendGridClient from '@sendgrid/client';
-@Injectable()
-export class EmailsService {
-  // constructor(
-  //   @Inject(EMAIL_TOKEN) private readonly emailService: EmailsRepository,
-  //   private readonly logger: AppLogger,
-  // ) {
-  //   this.logger.setContext(EmailsService.name);
-  // }
+import { EmailTemplates, templateNames } from '../enums/email-templates';
 
-  // async send(mail: SendEmailInput) {
-  //   return this.emailService.send(mail);
-  // }
-
-  // async sendFromTemplate(templateInput: Template) {
-  //   return this.emailService.sendFromTemplate(templateInput);
-  // }
+export class SendGridProvider implements EmailsRepository {
   private readonly templatesId: Record<EmailTemplates, string>;
   private readonly defaultVerifiedEmail: string;
   private readonly apiKey: string;
-  constructor(
-    private readonly configService: ConfigService<AppConfiguration>,
-    private readonly logger: AppLogger,
-  ) {
-    this.logger.setContext(EmailsService.name);
+  constructor(private readonly logger: AppLogger) {
     // Set api key
-    this.apiKey = this.configService.get<string>('sendGridKey');
+    this.apiKey = process.env.SEND_GRID_KEY;
     if (this.apiKey) {
       SendGrid.setApiKey(this.apiKey);
       SendGridClient.setApiKey(this.apiKey);
     }
     // Set available templates
     this.templatesId = {
-      [EmailTemplates.invitation]: configService.get(
-        'sendGridInvitationTemplateId',
-      ),
-      [EmailTemplates.notification]: configService.get(
-        'sendGridNotificationTemplateId',
-      ),
+      [EmailTemplates.invitation]: process.env.SEND_GRID_INVITATION_TEMPLATE_ID,
+      [EmailTemplates.notification]:
+        process.env.SEND_GRID_NOTIFICATION_TEMPLATE_ID,
     };
-    this.defaultVerifiedEmail = this.configService.get<string>(
-      'sendGridDefaultVerifiedEmail',
-    );
+    this.defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
   }
 
   async send(mail: SendEmailInput) {

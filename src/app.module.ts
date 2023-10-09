@@ -7,7 +7,7 @@ import {
   AppConfiguration,
   EnvConfiguration,
   AppEnvironments,
-} from 'config/app.config';
+} from '../config/app.config';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';

@@ -84,7 +84,7 @@ export class StartupResolver {
   ): Promise<UpdateResultPayload> {
     return this.startupService.linkWithEntrepreneursByRequest(
       linkWithTargetsByRequestArgs,
-      user
+      user,
     );
   }
 

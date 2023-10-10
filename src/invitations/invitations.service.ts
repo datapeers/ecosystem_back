@@ -88,6 +88,7 @@ export class InvitationsService {
       return invitation;
     } catch (ex) {
       this.logger.error(ex);
+      // console.log(ex);
       throw new InternalServerErrorException('Failed to create invitation');
     }
   }

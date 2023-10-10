@@ -168,7 +168,12 @@ export class StartupService implements FormDocumentService<Startup> {
     const entrepreneurDocuments =
       await this.entrepreneurService.findMany(entrepreneurs);
     const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
-      return { _id: document._id, item: document.item, rol: 'partner' };
+      return {
+        _id: document._id,
+        item: document.item,
+        rol: 'partner',
+        description: '',
+      };
     });
     const startupUpdateResult = await this.linkWithEntrepreneurs(
       ids,

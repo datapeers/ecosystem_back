@@ -15,7 +15,7 @@ export class SendGridProvider implements EmailsRepository {
   private readonly templatesId: Record<EmailTemplates, string>;
   private readonly defaultVerifiedEmail: string;
   private readonly apiKey: string;
-  constructor(private readonly logger: AppLogger) {
+  constructor() {
     // Set api key
     this.apiKey = process.env.SEND_GRID_KEY;
     if (this.apiKey) {
@@ -45,10 +45,10 @@ export class SendGridProvider implements EmailsRepository {
     }
     try {
       const transport = await SendGrid.send(mail);
-      this.logger.log(`Email successfully dispatched to ${mail.to}`);
+      console.log(`Email successfully dispatched to ${mail.to}`);
       return transport;
     } catch (ex) {
-      this.logger.error(ex);
+      console.log(ex);
       throw new InternalServerErrorException(
         'Got an unexpected exception while trying to send an email',
         ex,
@@ -79,12 +79,12 @@ export class SendGridProvider implements EmailsRepository {
         from: templateInput.from ?? this.defaultVerifiedEmail,
         templateId: templateId,
       });
-      this.logger.log(
+      console.log(
         `Email successfully dispatched with template ${templateInput.template}`,
       );
       return transport;
     } catch (ex) {
-      this.logger.error(ex);
+      console.log(ex);
       throw new InternalServerErrorException(
         'Got an unexpected exception while trying to send an email',
         ex,

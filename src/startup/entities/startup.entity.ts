@@ -60,6 +60,10 @@ export class EntrepreneurRelationship {
   @Field(() => String)
   @Prop()
   rol: string;
+
+  @Field(() => String)
+  @Prop()
+  description: string;
 }
 
 @Schema()

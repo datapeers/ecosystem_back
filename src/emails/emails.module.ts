@@ -10,8 +10,8 @@ import { EMAIL_TOKEN } from './repository/email.repository';
   controllers: [EmailsController],
   providers: [
     EmailsService,
-    // SendGridProvider,
-    // { provide: EMAIL_TOKEN, useExisting: SendGridProvider },
+    SendGridProvider,
+    { provide: EMAIL_TOKEN, useExisting: SendGridProvider },
   ],
   exports: [EmailsService],
 })

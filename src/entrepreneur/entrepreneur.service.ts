@@ -284,7 +284,12 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
 
     // Link entrepreneurs to startups by given relationships
     const entrepreneursToLink = entrepreneurs.map((document) => {
-      return { _id: document._id, item: document.item, rol: 'partner' };
+      return {
+        _id: document._id,
+        item: document.item,
+        rol: 'partner',
+        description: '',
+      };
     });
     const startupUpdateResult = await this.startupService.linkWithEntrepreneurs(
       startups,
@@ -361,9 +366,8 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     });
 
     // Execute the bulkWrite operation to update all entrepreneurs
-    const bulkWriteResult = await this.entrepreneurModel.bulkWrite(
-      bulkOperations,
-    );
+    const bulkWriteResult =
+      await this.entrepreneurModel.bulkWrite(bulkOperations);
     if (!bulkWriteResult.ok) {
       throw new InternalServerErrorException(
         'Failed to update phases for startups relationship in entrepreneurs documents',

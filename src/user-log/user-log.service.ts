@@ -22,7 +22,7 @@ export class UserLogService {
     return this.userLogModel.find().lean();
   }
 
-  findByFilters(filters: JSON) {
+  findByFilters(filters: Record<string, any>) {
     return this.userLogModel.find(filters).lean();
   }
 

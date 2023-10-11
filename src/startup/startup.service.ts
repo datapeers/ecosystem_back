@@ -352,6 +352,7 @@ export class StartupService implements FormDocumentService<Startup> {
     const phaseRelationship: PhaseRelationship = {
       _id: linkStartUpsToPhaseArgs.phaseId,
       name: linkStartUpsToPhaseArgs.name,
+      state: 'pending',
     };
     const startups = linkStartUpsToPhaseArgs.startups;
     const updateResult = await this.startupModel.updateMany(

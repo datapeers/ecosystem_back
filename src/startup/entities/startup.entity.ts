@@ -76,6 +76,10 @@ export class PhaseRelationship {
   @Field(() => String)
   @Prop()
   name: string;
+
+  @Field(() => String)
+  @Prop()
+  state: string;
 }
 
 export const StartupSchema = SchemaFactory.createForClass(Startup);

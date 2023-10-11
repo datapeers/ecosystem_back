@@ -6,10 +6,13 @@ import { Content } from './entities/content.entity';
 import { Model } from 'mongoose';
 import { AuthUser } from '../auth/types/auth-user';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { UserLogService } from 'src/user-log/user-log.service';
 @Injectable()
 export class ContentService {
   constructor(
     @InjectModel(Content.name) private readonly contentModel: Model<Content>,
+    @Inject(forwardRef(() => UserLogService))
+    private readonly userLogService: UserLogService,
   ) {}
 
   async create(createContentInput: CreateContentInput) {
@@ -56,6 +59,48 @@ export class ContentService {
       .findById(id)
       .populate({ path: 'childs', populate: 'resources' })
       .populate('resources');
+  }
+
+  async findLastContent(batchId: string, startupId: string) {
+    const logsBatch = await this.userLogService.findByFilters({
+      'metadata.batch': batchId,
+      'metadata.startup': startupId,
+    });
+    const contents = await this.contentModel
+      .find({ phase: batchId, 'extra_options.sprint': true, isDeleted: false })
+      .populate({ path: 'childs' })
+      .lean();
+    let lastContent = null;
+
+    // Busca del ultimo contenido sin completar
+    for (const sprint of contents) {
+      if (lastContent) continue;
+      for (const content of sprint.childs) {
+        if (lastContent) continue;
+        if (
+          logsBatch.find(
+            (i) =>
+              i.metadata['content'] === content._id.toString() &&
+              i.metadata['sprint'] === sprint._id.toString(),
+          )
+        )
+          continue;
+        lastContent = content;
+        break;
+      }
+    }
+    if (!lastContent) {
+      const lastSprint = contents[contents.length - 1];
+      lastContent = lastSprint.childs[lastSprint.childs.length - 1];
+    }
+    // Conteo de contenidos
+    let numberOfContent = 0;
+    for (const sprint of contents) {
+      for (const content of sprint.childs) {
+        ++numberOfContent;
+      }
+    }
+    return { lastContent, contentCompleted: logsBatch.length, numberOfContent };
   }
 
   async update(id: string, updateContentInput: UpdateContentInput) {

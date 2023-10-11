@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
+import { LastContentOutput } from './dto/last-content-output';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Content)
 export class ContentResolver {
@@ -30,6 +31,14 @@ export class ContentResolver {
   @Query(() => Content, { name: 'content' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.contentService.findOne(id);
+  }
+
+  @Query(() => LastContentOutput, { name: 'lastContent' })
+  findLastContent(
+    @Args('batchId', { type: () => String }) batchId: string,
+    @Args('startupId', { type: () => String }) startupId: string,
+  ) {
+    return this.contentService.findLastContent(batchId, startupId);
   }
 
   @Mutation(() => Content)

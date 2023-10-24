@@ -10,16 +10,44 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Notification } from './entities/notification.entity';
 import { Model } from 'mongoose';
 import { pubSubInstance } from 'src/shared/sockets/socket-instance';
+import { AuthUser } from '../auth/types/auth-user';
 
 const pubSub = pubSubInstance;
 @Injectable()
 export class NotificationsService {
+  private static readonly userNotification: string = 'userNotification';
+  private static readonly entrepreneurNotification: string =
+    'entrepreneurNotification';
+  private static readonly startupNotification: string = 'startupNotification';
+  private static readonly expertNotification: string = 'expertNotification';
   constructor(
     @InjectModel(Notification.name)
     private readonly notificationModel: Model<Notification>,
   ) {}
 
   _logger = new Logger(NotificationsService.name);
+
+  subscribe(
+    userId: string,
+    others?: { entrepreneurId?: string; startupId?: string; expertId?: string },
+  ) {
+    const listTriggerNotifications = [
+      `${NotificationsService.userNotification} ${userId}`,
+    ];
+    if (others?.entrepreneurId)
+      listTriggerNotifications.push(
+        `${NotificationsService.entrepreneurNotification} ${others?.entrepreneurId}`,
+      );
+    if (others?.startupId)
+      listTriggerNotifications.push(
+        `${NotificationsService.startupNotification} ${others?.startupId}`,
+      );
+    if (others?.expertId)
+      listTriggerNotifications.push(
+        `${NotificationsService.expertNotification} ${others?.expertId}`,
+      );
+    return pubSub.asyncIterator<any>(listTriggerNotifications);
+  }
 
   async create(createNotificationInput: CreateNotificationInput) {
     try {

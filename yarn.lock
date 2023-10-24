@@ -2559,6 +2559,13 @@
     tslib "2.6.2"
     uid "2.0.2"
 
+"@nestjs/event-emitter@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/@nestjs/event-emitter/-/event-emitter-2.0.2.tgz"
+  integrity sha512-qxJE+6yKSW/ReBzT1jKES2m3zZh6gmgunDtIvCl66G8i9zZ4TQciwoq01MigqnruTgXjH/AzNPqtr6ZUt207mg==
+  dependencies:
+    eventemitter2 "6.4.9"
+
 "@nestjs/graphql@^12.0.0", "@nestjs/graphql@^12.0.8":
   version "12.0.8"
   resolved "https://registry.npmjs.org/@nestjs/graphql/-/graphql-12.0.8.tgz"
@@ -5399,6 +5406,11 @@ event-target-shim@^5.0.0:
   version "5.0.1"
   resolved "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
+
+eventemitter2@6.4.9:
+  version "6.4.9"
+  resolved "https://registry.npmjs.org/eventemitter2/-/eventemitter2-6.4.9.tgz"
+  integrity sha512-JEPTiaOt9f04oa6NOkc4aH+nVp5I3wEjpHbIPqfgCdD5v5bUzy7xQqwcVO2aDQgOWhI28da57HksMrzK9HlRxg==
 
 eventemitter3@^3.1.0:
   version "3.1.2"

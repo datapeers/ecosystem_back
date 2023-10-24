@@ -64,6 +64,7 @@ export enum Permission {
 
   phases_batch_create = 'phases_batch_create',
   phases_batch_edit = 'phases_batch_edit',
+  phases_batch_close = 'phases_batch_close',
 
   // Phase Events
   events_view = 'events_view',
@@ -159,6 +160,8 @@ export const permissionDescriptions: Record<Permission, string> = {
 
   [Permission.phases_batch_create]: 'Crear batch',
   [Permission.phases_batch_edit]: 'Editar batch',
+  [Permission.phases_batch_close]:
+    'Puede cerrar un batch y asignar quienes pasan y quienes no',
 
   // Phase Events
   [Permission.events_view]: 'Ver sección eventos en los batch',

@@ -180,13 +180,9 @@ export class ActivitiesConfigService {
       (i) => (hoursAssignExpert[i._id] = { ...i, hours: {}, startups: [] }),
     );
     const listActivitiesExpert = listActivities.filter((i) => i.expertFocus);
-
     // Assign activities to expert
     for (const activity of listActivitiesExpert) {
-      let hoursBagForActivity = config.activities.find(
-        (i) => i.id === activity._id.toString(),
-      );
-      if (!hoursBagForActivity) continue; // means that if the activity is not found it is deleted and we must avoid it.
+      if (activity.isDeleted) continue; // means that if the activity is not found it is deleted and we must avoid it.
       for (const expert of listExpert) {
         const previousConfig = config.experts.find(
           (i) =>
@@ -251,10 +247,7 @@ export class ActivitiesConfigService {
 
     // Assign activities to expert
     for (const activity of listActivitiesTeamCoach) {
-      let hoursBagForActivity = config.activities.find(
-        (i) => i.id === activity._id.toString(),
-      );
-      if (!hoursBagForActivity) continue; // means that if the activity is not found it is deleted and we must avoid it.
+      if (activity.isDeleted) continue; // means that if the activity is not found it is deleted and we must avoid it.
       for (const teamCoach of listTeamCoaches) {
         const previousConfig = config.teamCoaches.find(
           (i) =>

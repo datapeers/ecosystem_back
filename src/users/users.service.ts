@@ -10,12 +10,13 @@ import { User } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { FindUsersArgs } from './args/find-users.args';
 import { RolService } from '../rol/rol.service';
-
+import { EventEmitter2 } from '@nestjs/event-emitter';
 @Injectable()
 export class UsersService implements OnModuleInit {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly rolService: RolService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async onModuleInit() {
@@ -49,6 +50,7 @@ export class UsersService implements OnModuleInit {
 
   async findById(id: string) {
     const user = (await this.userModel.findById(id)).populate('rol');
+
     if (!user) throw new NotFoundException(`No user found with id ${id}`);
     return user;
   }
@@ -100,6 +102,11 @@ export class UsersService implements OnModuleInit {
       )
       .populate('rol')
       .lean();
+    // this.eventEmitter.emit('set.notification', {
+    //   userId: filters._id,
+    //   text: 'Usuario Actualizo perfil',
+    //   url: '',
+    // });
     return user;
   }
 

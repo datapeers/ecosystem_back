@@ -46,6 +46,7 @@ import { UserLogModule } from './user-log/user-log.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { HelpDeskModule } from './help-desk/help-desk.module';
 import { ConfigurationAppModule } from './configuration-app/configuration-app.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -136,6 +137,7 @@ import { ConfigurationAppModule } from './configuration-app/configuration-app.mo
     NotificationsModule,
     HelpDeskModule,
     ConfigurationAppModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [],
   providers: [],

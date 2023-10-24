@@ -20,6 +20,8 @@ import { StartupService } from 'src/startup/startup.service';
 import { add, differenceInMilliseconds } from 'date-fns';
 import { StagesService } from 'src/stages/stages.service';
 import { Stage } from 'src/stages/entities/stage.entity';
+import { UserLogService } from 'src/user-log/user-log.service';
+import { ResourcesRepliesService } from 'src/resources/resources-replies/resources-replies.service';
 
 @Injectable()
 export class PhasesService {
@@ -32,6 +34,10 @@ export class PhasesService {
     private readonly activitiesConfigService: ActivitiesConfigService,
     @Inject(forwardRef(() => StagesService))
     private readonly stagesService: StagesService,
+    @Inject(forwardRef(() => UserLogService))
+    private readonly logsService: UserLogService,
+    @Inject(forwardRef(() => ResourcesRepliesService))
+    private readonly resourceRepliesService: ResourcesRepliesService,
   ) {}
 
   async findAll(user: AuthUser): Promise<Phase[]> {
@@ -357,5 +363,33 @@ export class PhasesService {
   async getStage(phase: Phase): Promise<Stage> {
     const stage = await this.stagesService.findOne(phase.stage);
     return stage;
+  }
+
+  async startupsPhaseProgress(batchId: string) {
+    const startups = await this.startupService.findByPhase(batchId);
+    const sprints = await this.contentService.findAll(batchId);
+    const logs = await this.logsService.findByFilters({
+      'metadata.batch': batchId,
+    });
+    let contentIds = [];
+    let sprintsCompleted = [];
+    let numContent = 0;
+    let numbContentCompleted = 0;
+    for (const sprint of sprints) {
+      const contentOfSprint = sprint.childs.map((i) => i._id);
+      numContent += contentOfSprint.length;
+      const contentCompletedOfSprint = logs.filter(
+        (i) => i.metadata['sprint'] === sprint._id.toString(),
+      );
+      let contentSprintCompleted = false;
+      if (contentOfSprint.length === contentCompletedOfSprint.length)
+        contentSprintCompleted = true;
+      // for (const iterator of contentOfSprint) {
+      //   if
+      // }
+    }
+    // for (const startupDoc of startups) {
+    //   const contentCompleted =
+    // }
   }
 }

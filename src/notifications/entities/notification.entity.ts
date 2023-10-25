@@ -1,5 +1,7 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { NotificationTypes } from '../enum/notification-types.enum';
+import { NotificationStates } from '../enum/notification-states.enum';
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -11,17 +13,25 @@ export class Notification {
   @Prop({ required: true })
   text: string;
 
-  @Field(() => String)
+  @Field(() => Date)
+  @Prop({ required: true })
+  date: Date;
+
+  @Field(() => String, { nullable: true })
   @Prop({})
   url: string;
 
   @Field(() => String)
-  @Prop({})
-  userId: string;
+  @Prop({ required: true })
+  target: string;
 
-  @Field(() => Boolean)
-  @Prop({ type: Boolean, default: false })
-  readed: boolean;
+  @Field(() => String)
+  @Prop({ required: true })
+  state: NotificationStates;
+
+  @Field(() => String)
+  @Prop({ required: true })
+  type: NotificationTypes;
 
   @Field(() => Boolean)
   @Prop({ default: false })

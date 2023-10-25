@@ -1,12 +1,43 @@
-import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ID,
+  Subscription,
+} from '@nestjs/graphql';
 import { NotificationsService } from './notifications.service';
 import { Notification } from './entities/notification.entity';
 import { CreateNotificationInput } from './dto/create-notification.input';
 import { UpdateNotificationInput } from './dto/update-notification.input';
+import { AuthUser } from '../auth/types/auth-user';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { OthersInput } from './dto/others.inpt';
 
 @Resolver(() => Notification)
 export class NotificationsResolver {
   constructor(private readonly notificationsService: NotificationsService) {}
+
+  @Subscription(() => Notification, {
+    filter(payload, variables) {
+      const notificationTargets = variables.target.split(';');
+      let notificationAccepted = false;
+      for (const iterator of notificationTargets) {
+        if (payload.notificationTarget.includes(iterator)) {
+          notificationAccepted = true;
+          break;
+        }
+      }
+      return notificationAccepted;
+    },
+  })
+  listenFormSubscription(
+    @Args('OthersInput') OthersInput: OthersInput,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.notificationsService.subscribe(user, OthersInput.others);
+  }
 
   @Mutation(() => Notification)
   createNotification(
@@ -19,6 +50,13 @@ export class NotificationsResolver {
   @Query(() => [Notification], { name: 'notifications' })
   findAllByUser(@Args('userId', { type: () => ID }) userId: string) {
     return this.notificationsService.findByUser(userId);
+  }
+
+  @Query(() => [Notification], { name: 'notificationsTargets' })
+  findNotificationsByTargets(
+    @Args('targets', { type: () => [String] }) targets: string[],
+  ) {
+    return this.notificationsService.findNotificationsByTargets(targets);
   }
 
   @Query(() => Notification, { name: 'notification' })

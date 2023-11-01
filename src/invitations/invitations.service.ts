@@ -98,7 +98,7 @@ export class InvitationsService {
   }
 
   async findOne(filters: { _id?: string; code?: string; email?: string }) {
-    const invitation = await this.invitationModel.findOne(filters);
+    const invitation = await this.invitationModel.findOne(filters).lean();
     if (!invitation)
       throw new NotFoundException(
         `No invitation found with filters ${filters}`,
@@ -117,8 +117,31 @@ export class InvitationsService {
     return invitation;
   }
 
-  async cancel(id: string) {
+  async resend(id: string) {
     const invitation = await this.findOne({ _id: id });
+    if (invitation.state !== InvitationStates.enabled)
+      throw new MethodNotAllowedException(`Invitation ${invitation.state}`);
+    const emailTemplate: InvitationTemplate = new InvitationTemplate();
+    emailTemplate.personalizations = [
+      {
+        to: [
+          {
+            email: invitation.email,
+          },
+        ],
+        dynamicTemplateData: {
+          redirectUri: `${this.configService.get('appUri')}/register`,
+          code: invitation.code,
+          role: rolNames[invitation.rol],
+        },
+      },
+    ];
+    await this.emailsService.sendFromTemplate(emailTemplate);
+    return invitation;
+  }
+
+  async cancel(id: string) {
+    const invitation = await this.invitationModel.findOne({ _id: id });
     if (invitation.state === InvitationStates.disabled)
       throw new MethodNotAllowedException('The invitation is already disabled');
     if (invitation.state === InvitationStates.accepted)
@@ -138,7 +161,7 @@ export class InvitationsService {
     password,
   }: AcceptInvitationDto): Promise<Invitation> {
     // Validate invitation state
-    const invitation = await this.findOne({ code });
+    const invitation = await this.invitationModel.findOne({ code });
     if (invitation.expired)
       throw new UnauthorizedException('The invitation has expired');
     if (invitation.state === InvitationStates.disabled)

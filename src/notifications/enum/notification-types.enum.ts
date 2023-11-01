@@ -4,4 +4,5 @@ export enum NotificationTypes {
   advise = 'advise',
   approved = 'approved',
   homework = 'homework',
+  rate = 'rate',
 }

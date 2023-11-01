@@ -5,6 +5,7 @@ import { NotificationStates } from '../enum/notification-states.enum';
 export class Notification {
   _id: string;
   text: string;
+  url?: string;
   date: Date;
   target: string;
   type: NotificationTypes;

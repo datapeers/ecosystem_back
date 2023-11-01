@@ -1,5 +1,12 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, Query, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Mutation,
+  Args,
+  Query,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { InvitationsService } from './invitations.service';
 import { Invitation } from './entities/invitation.entity';
 import { CreateInvitationArgs } from './args/create-invitation.args';
@@ -17,33 +24,44 @@ export class InvitationsResolver {
     private readonly invitationsService: InvitationsService,
     private readonly usersService: UsersService,
   ) {}
-  
+
   @Query(() => [Invitation], { name: 'invitations' })
   findAll(
     @Args() findInvitationArgs: FindInvitationArgs,
-    @CurrentUser([ ValidRoles.admin, ValidRoles.superAdmin ]) user: User
+    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
   ) {
-    return this.invitationsService.findAll(findInvitationArgs.skip, findInvitationArgs.limit);
+    return this.invitationsService.findAll(
+      findInvitationArgs.skip,
+      findInvitationArgs.limit,
+    );
   }
 
   @Mutation(() => Invitation)
   createInvitation(
     @Args() createInvitationArgs: CreateInvitationArgs,
-    @CurrentUser([ ValidRoles.admin, ValidRoles.superAdmin ]) user: User
+    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
   ) {
     return this.invitationsService.create(createInvitationArgs, user);
   }
 
   @Mutation(() => Invitation)
+  resendInvitation(
+    @Args('id', { type: () => String }) id: string,
+    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
+  ) {
+    return this.invitationsService.resend(id);
+  }
+
+  @Mutation(() => Invitation)
   cancelInvitation(
     @Args('id', { type: () => String }) id: string,
-    @CurrentUser([ ValidRoles.admin, ValidRoles.superAdmin ]) user: User
+    @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
   ) {
     return this.invitationsService.cancel(id);
   }
 
   @ResolveField('createdBy', () => User)
-  async getInvitationCreator (@Parent() invitation: Invitation) {
+  async getInvitationCreator(@Parent() invitation: Invitation) {
     const { createdBy: uid } = invitation;
     return await this.usersService.findOne(uid);
   }

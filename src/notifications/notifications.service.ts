@@ -60,7 +60,7 @@ export class NotificationsService {
           state: NotificationStates.pending,
           isDeleted: false,
           date: '2023-08-09T10:45:00.000Z' as any,
-          target: `${channelsNotificationEnum.userNotification} 647a0b2c73eba03e3e77ee44;`,
+          target: `${channelsNotificationEnum.userNotification} 6487ba2c91f11804c123ae2b;`,
         }),
         new NotificationC({
           text: 'Te restan dos días para completar a tiempo la entrega de la Fase 3',
@@ -68,7 +68,7 @@ export class NotificationsService {
           state: NotificationStates.pending,
           isDeleted: false,
           date: '2023-08-09T10:45:00.000Z' as any,
-          target: `${channelsNotificationEnum.userNotification} 647a0b2c73eba03e3e77ee44;`,
+          target: `${channelsNotificationEnum.userNotification} 6487ba2c91f11804c123ae2b;`,
         }),
         new NotificationC({
           text: '¡Felicidades! Has completado la Fase 2. No pierdas el ritmo',
@@ -76,7 +76,7 @@ export class NotificationsService {
           state: NotificationStates.pending,
           isDeleted: false,
           date: '2023-08-09T10:45:00.000Z' as any,
-          target: `${channelsNotificationEnum.userNotification} 647a0b2c73eba03e3e77ee44;`,
+          target: `${channelsNotificationEnum.userNotification} 6487ba2c91f11804c123ae2b;`,
         }),
         new NotificationC({
           text: 'Tienes el evento programado para hoy: "Fortalecimiento de habilidades y aptitudes"',
@@ -84,7 +84,16 @@ export class NotificationsService {
           state: NotificationStates.pending,
           isDeleted: false,
           date: '2023-08-09T10:45:00.000Z' as any,
-          target: `${channelsNotificationEnum.userNotification} 647a0b2c73eba03e3e77ee44;`,
+          target: `${channelsNotificationEnum.userNotification} 6487ba2c91f11804c123ae2b;`,
+        }),
+        new NotificationC({
+          text: 'Jhon Doe, califica a tus tutores y teamCoaches de la fase 2',
+          type: NotificationTypes.rate,
+          state: NotificationStates.pending,
+          isDeleted: false,
+          date: '2023-08-09T10:45:00.000Z' as any,
+          url: '',
+          target: `${channelsNotificationEnum.userNotification} 6487ba2c91f11804c123ae2b;`,
         }),
       ];
       await this.notificationModel.insertMany(notificationsList);

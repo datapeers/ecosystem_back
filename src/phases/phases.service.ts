@@ -22,6 +22,11 @@ import { StagesService } from 'src/stages/stages.service';
 import { Stage } from 'src/stages/entities/stage.entity';
 import { UserLogService } from 'src/user-log/user-log.service';
 import { ResourcesRepliesService } from 'src/resources/resources-replies/resources-replies.service';
+import {
+  searchResource,
+  searchResult,
+} from 'src/shared/models/search-result.model';
+import { Resource } from 'src/resources/entities/resource.entity';
 
 @Injectable()
 export class PhasesService {
@@ -365,31 +370,62 @@ export class PhasesService {
     return stage;
   }
 
-  async startupsPhaseProgress(batchId: string) {
-    const startups = await this.startupService.findByPhase(batchId);
-    const sprints = await this.contentService.findAll(batchId);
-    const logs = await this.logsService.findByFilters({
-      'metadata.batch': batchId,
-    });
-    let contentIds = [];
-    let sprintsCompleted = [];
-    let numContent = 0;
-    let numbContentCompleted = 0;
-    for (const sprint of sprints) {
-      const contentOfSprint = sprint.childs.map((i) => i._id);
-      numContent += contentOfSprint.length;
-      const contentCompletedOfSprint = logs.filter(
-        (i) => i.metadata['sprint'] === sprint._id.toString(),
-      );
-      let contentSprintCompleted = false;
-      if (contentOfSprint.length === contentCompletedOfSprint.length)
-        contentSprintCompleted = true;
-      // for (const iterator of contentOfSprint) {
-      //   if
-      // }
+  async search(user: AuthUser, batchIds: string[], searchValue: string) {
+    let phasesList: Phase[] = [];
+    if (ValidRoles.user === (user.rolDoc.type as ValidRoles)) {
+      phasesList = await this.findList(batchIds);
+    } else {
+      phasesList = await this.findAll(user);
     }
-    // for (const startupDoc of startups) {
-    //   const contentCompleted =
-    // }
+    phasesList = phasesList.filter((i) => !i.basePhase);
+    let ansPhases: searchResult[] = [];
+    let ansContent: searchResult[] = [];
+    let ansResource: searchResult[] = [];
+    for (const phase of phasesList) {
+      if (phase.name.match(new RegExp(searchValue, 'i')) !== null)
+        ansPhases.push(
+          new searchResult({
+            label: phase.name,
+            type: 'batch',
+            metadata: { _id: phase._id, tag: 'Batch' },
+          }),
+        );
+      let sprints = await this.contentService.findAll(
+        phase._id.toString(),
+        user,
+      );
+      for (const sprint of sprints) {
+        for (const content of sprint.childs) {
+          if (content.name.match(new RegExp(searchValue, 'i')) !== null)
+            ansContent.push(
+              new searchResult({
+                label: content.name,
+                type: 'content',
+                metadata: {
+                  _id: content._id,
+                  batch: phase._id,
+                  tag: 'Contenido',
+                },
+              }),
+            );
+          const resourcesContent = searchResource(
+            content.resources,
+            searchValue,
+            phase._id,
+            sprint._id,
+            content._id,
+          );
+          ansResource = ansResource.concat(resourcesContent);
+        }
+        const resourcesContent = searchResource(
+          sprint.resources,
+          searchValue,
+          phase._id,
+          sprint._id,
+        );
+        ansResource = ansResource.concat(resourcesContent);
+      }
+    }
+    return { ansPhases, ansContent, ansResource };
   }
 }

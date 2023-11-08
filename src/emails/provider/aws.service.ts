@@ -27,6 +27,7 @@ export class AWSSESProvider implements EmailsRepository {
   private logger = new Logger(AWSSESProvider.name);
   constructor() {
     // Set api key
+    console.log(process.env.AWS_SES_REGION);
     this.client = new SESClient({
       apiVersion: '2010-12-01',
       region: process.env.AWS_SES_REGION,
@@ -83,6 +84,7 @@ export class AWSSESProvider implements EmailsRepository {
   }
 
   async sendFromTemplate(templateInput: Template) {
+    //console.log(templateInput);
     const emailTemplate = new SendBulkTemplatedEmailCommand({
       Source: templateInput.from,
       Template: templateInput.template,

@@ -3,6 +3,8 @@ import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { Body } from '@nestjs/common';
 import { TicketEnum } from '../enum/ticket-status.enum';
+import { TicketCategory } from '../categories/entities/category.entity';
+import { Types } from 'mongoose';
 
 @ObjectType()
 export class HelpDeskTicket {
@@ -23,7 +25,7 @@ export class HelpDeskTicket {
 
   @Field(() => GraphQLJSON)
   @Prop({ type: Object })
-  childs: TicektChild[];
+  childs: TicketChild[];
 
   @Field(() => String)
   @Prop({ required: true })
@@ -42,9 +44,13 @@ export class HelpDeskTicket {
 
   @Field(() => Date)
   updatedAt: Date;
+
+  @Field(() => TicketCategory)
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'TicketCategory' }] })
+  category: TicketCategory;
 }
 
-export class TicektChild {
+export class TicketChild {
   body: string;
   attachment: string[];
   isResposne: boolean;

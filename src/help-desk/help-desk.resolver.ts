@@ -17,7 +17,7 @@ export class HelpDeskResolver {
     return this.helpDeskService.create(createHelpDeskInput);
   }
 
-  @Query(() => [HelpDeskTicket], { name: 'helpDesk' })
+  @Query(() => [HelpDeskTicket], { name: 'helpDeskTickets' })
   findAll(
     @Args('filter', { type: () => HelpDeskFilterInput })
     filter: HelpDeskFilterInput,
@@ -25,7 +25,7 @@ export class HelpDeskResolver {
     return this.helpDeskService.findAll(filter);
   }
 
-  @Query(() => HelpDeskTicket, { name: 'helpDesk' })
+  @Query(() => HelpDeskTicket, { name: 'helpDeskTicket' })
   findOne(@Args('id', { type: () => ID }) id: string) {
     return this.helpDeskService.findOne(id);
   }

@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
@@ -37,7 +44,8 @@ export class AnnouncementsResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Announcement)
   createAnnouncement(
-    @Args('createAnnouncementInput') createAnnouncementInput: CreateAnnouncementInput,
+    @Args('createAnnouncementInput')
+    createAnnouncementInput: CreateAnnouncementInput,
     @CurrentUser() user: AuthUser,
   ) {
     const AnnouncementInput = {
@@ -50,7 +58,8 @@ export class AnnouncementsResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Announcement)
   updateAnnouncement(
-    @Args('updateAnnouncementInput') updateAnnouncementInput: UpdateAnnouncementInput,
+    @Args('updateAnnouncementInput')
+    updateAnnouncementInput: UpdateAnnouncementInput,
     @CurrentUser() user: AuthUser,
   ) {
     const { _id, ...updatedFields } = updateAnnouncementInput;
@@ -77,9 +86,12 @@ export class AnnouncementsResolver {
 
   @Mutation(() => FormSubmission)
   async submitAnnouncementDoc(
-    @Args('submitAnnouncementDocInput') submitAnnouncementDocInput: SubmitAnnouncementDocInput,
+    @Args('submitAnnouncementDocInput')
+    submitAnnouncementDocInput: SubmitAnnouncementDocInput,
   ) {
-    const document = await this.applicantService.handleDocumentSubmit(submitAnnouncementDocInput);
+    const document = await this.applicantService.handleDocumentSubmit(
+      submitAnnouncementDocInput,
+    );
     return { _id: document._id, submission: document.item };
   }
 
@@ -90,26 +102,31 @@ export class AnnouncementsResolver {
   }
 
   @ResolveField('createdBy', () => String)
-  async getCreatedBy (@Parent() announcement: Announcement) {
+  async getCreatedBy(@Parent() announcement: Announcement) {
     const user = await this.usersService.findOne(announcement.createdBy);
     return user.fullName;
   }
 
   @ResolveField('updatedBy', () => String)
-  async getUpdatedBy (@Parent() announcement: Announcement) {
+  async getUpdatedBy(@Parent() announcement: Announcement) {
     const user = await this.usersService.findOne(announcement.updatedBy);
     return user.fullName;
   }
 
   @ResolveField('deletedBy', () => String)
-  async getDeletedBy (@Parent() announcement: Announcement) {
+  async getDeletedBy(@Parent() announcement: Announcement) {
     const user = await this.usersService.findOne(announcement.deletedBy);
     return user.fullName;
   }
 
   @ResolveField('form', () => Form)
-  async getAnnouncementForm (@Parent() announcement: Announcement) {
+  async getAnnouncementForm(@Parent() announcement: Announcement) {
     const form = await this.formsService.findOne(announcement.form);
     return form;
+  }
+
+  @ResolveField('participants', () => Number)
+  resolveStage(@Parent() announcement: Announcement) {
+    return this.applicantService.numbApplicants(announcement._id.toString());
   }
 }

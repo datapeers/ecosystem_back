@@ -29,6 +29,7 @@ export class ApplicantService implements FormDocumentService<Applicant> {
 
   async createDocument(submission: any, context?: any) {
     const data = {
+      ...context,
       item: submission,
     };
     const createdDocument = await this.create(data);
@@ -36,7 +37,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
   }
 
   async updateDocument(id: string, submission: any, context: any) {
-    const updatedDocument = await this.update(id, { item: submission });
+    const updatedDocument = await this.update(id, {
+      item: submission,
+    });
     return updatedDocument;
   }
 
@@ -68,6 +71,19 @@ export class ApplicantService implements FormDocumentService<Applicant> {
         `Couldn't find applicant for announcement ${filters.announcement}`,
       );
     return applicant;
+  }
+
+  async numbApplicants(announcement: string) {
+    const applicants = await this.applicantModel
+      .find(
+        {
+          deletedAt: null,
+          announcement: announcement,
+        },
+        { _id: 1 },
+      )
+      .lean();
+    return applicants.length;
   }
 
   async handleDocumentSubmit(

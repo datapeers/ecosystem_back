@@ -222,10 +222,22 @@ export function columnsCommunities() {
   ];
 }
 
+export function columnsAnnouncementSelected() {
+  return [
+    new RowConfigColumn(
+      'Batch seleccionado',
+      TableColumnType.data,
+      'batch, nombre',
+      'string',
+    ),
+  ];
+}
+
 export const tableUtilities = {
   convertFormToColumns,
   columnStartupsExpert,
   columnsCommunities,
   columnsEvaluations,
   columnsResourceReply,
+  columnsAnnouncementSelected,
 };

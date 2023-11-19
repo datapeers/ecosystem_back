@@ -26,11 +26,19 @@ export class ExpertService implements FormDocumentService {
   ) {}
 
   private static readonly virtualFields = {
-    $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
+    // $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
+    $addFields: {
+      isProspect: {
+        $cond: {
+          if: { $eq: [{ $size: '$phases' }, 0] },
+          then: true,
+          else: false,
+        },
+      },
+    },
   };
 
   async getDocument(id: string) {
-    console.log('getDocument');
     const document = await this.findOne(id);
     return document;
   }

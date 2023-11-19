@@ -19,6 +19,7 @@ import { SubmitFileInput } from './inputs/submit-file.input';
 import { FormSubmissionFiles } from '../form/entities/form-submission-files';
 import { GetSubmittedFilesArgs } from './args/get-submitted-files.args';
 import { FormFileSubmission } from '../factories/form-file-submission';
+import { FormCollections } from '../form/enums/form-collections';
 
 @Resolver(() => FormSubscription)
 export class FormSubscriptionResolver {
@@ -74,8 +75,12 @@ export class FormSubscriptionResolver {
 
   @ResolveField('submission', () => GraphQLJSON)
   async getSubmittedDocument(@Parent() subscription: FormSubscription) {
-    const { doc, target } = subscription;
+    let doc = subscription.doc;
+    let target = subscription.target;
     if (!doc || !target) return {};
+    if (subscription.data['announcement']) {
+      target = FormCollections.announcements;
+    }
     return this.formSubscriptionService.getSubmittedDocument(doc, target);
   }
 

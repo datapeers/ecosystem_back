@@ -428,4 +428,8 @@ export class PhasesService {
     }
     return { ansPhases, ansContent, ansResource };
   }
+
+  async numbParticipants(phase: string) {
+    return await this.startupService.findNumbParticipants(phase);
+  }
 }

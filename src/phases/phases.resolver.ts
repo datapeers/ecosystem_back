@@ -81,4 +81,9 @@ export class PhasesResolver {
   resolveStage(@Parent() phase: Omit<Phase, 'stageDoc'>) {
     return this.phasesService.getStage(phase);
   }
+
+  @ResolveField('participants', () => Number)
+  resolveNumbParticipants(@Parent() phase: Omit<Phase, 'participants'>) {
+    return this.phasesService.numbParticipants(phase._id.toString());
+  }
 }

@@ -311,6 +311,14 @@ export class StartupService implements FormDocumentService<Startup> {
     return startups;
   }
 
+  async findNumbParticipants(batch: string) {
+    const startups = await this.startupModel.find(
+      { 'phases._id': batch, deletedAt: null },
+      { _id: 1 },
+    );
+    return startups.length;
+  }
+
   async findMany(ids: string[]): Promise<Startup[]> {
     const startups = await this.startupModel.find({
       _id: { $in: ids },

@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
   InternalServerErrorException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -14,12 +16,16 @@ import { FormFileSubmission } from 'src/forms/factories/form-file-submission';
 import { UpdateApplicantStateInput } from './dto/update-applicant-state.input';
 import { AnnouncementApplicantsArgs } from './args/announcement-applicants.args';
 import { ApplicantArgs } from './args/applicant.args';
+import { AnnouncementTargets } from 'src/announcements/enums/announcement-targets.enum';
+import { ExpertService } from 'src/expert/expert.service';
 
 @Injectable()
 export class ApplicantService implements FormDocumentService<Applicant> {
   constructor(
     @InjectModel(Applicant.name)
     private readonly applicantModel: Model<Applicant>,
+    @Inject(forwardRef(() => ExpertService))
+    private readonly expertService: ExpertService,
   ) {}
 
   async getDocument(id: string) {
@@ -89,9 +95,23 @@ export class ApplicantService implements FormDocumentService<Applicant> {
   async handleDocumentSubmit(
     submitAnnouncementDocInput: SubmitAnnouncementDocInput,
   ): Promise<any> {
+    // const announcementDoc = await this.findOne(
+    //   submitAnnouncementDocInput.announcement,
+    // );
+    let docParticipant = submitAnnouncementDocInput.participant;
+    if (
+      submitAnnouncementDocInput.announcementTarget ===
+      AnnouncementTargets.experts
+    ) {
+      const expertDoc = await this.expertService.createDocument(
+        submitAnnouncementDocInput.submission,
+        {},
+      );
+      docParticipant = expertDoc._id.toString();
+    }
     const createdApplicant = await this.applicantModel.create({
       announcement: submitAnnouncementDocInput.announcement,
-      participant: submitAnnouncementDocInput.participant,
+      participant: docParticipant,
       item: submitAnnouncementDocInput.submission,
     });
     if (!createdApplicant)

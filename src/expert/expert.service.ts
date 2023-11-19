@@ -30,6 +30,7 @@ export class ExpertService implements FormDocumentService {
   };
 
   async getDocument(id: string) {
+    console.log('getDocument');
     const document = await this.findOne(id);
     return document;
   }

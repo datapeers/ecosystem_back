@@ -18,7 +18,12 @@ import { AnnouncementApplicantsArgs } from './args/announcement-applicants.args'
 import { ApplicantArgs } from './args/applicant.args';
 import { AnnouncementTargets } from 'src/announcements/enums/announcement-targets.enum';
 import { ExpertService } from 'src/expert/expert.service';
-
+import { StartupService } from 'src/startup/startup.service';
+import { InvitationsService } from 'src/invitations/invitations.service';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { ApplicationStates } from './enums/application-states.enum';
+import { User } from 'src/users/entities/user.entity';
+import { SelectApplicantsArgs } from './args/select-applicants.args';
 @Injectable()
 export class ApplicantService implements FormDocumentService<Applicant> {
   constructor(
@@ -26,6 +31,10 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     private readonly applicantModel: Model<Applicant>,
     @Inject(forwardRef(() => ExpertService))
     private readonly expertService: ExpertService,
+    @Inject(forwardRef(() => StartupService))
+    private readonly startupService: StartupService,
+    @Inject(forwardRef(() => InvitationsService))
+    private readonly invitationService: InvitationsService,
   ) {}
 
   async getDocument(id: string) {
@@ -55,9 +64,22 @@ export class ApplicantService implements FormDocumentService<Applicant> {
   }: AnnouncementApplicantsArgs): Promise<Applicant[]> {
     const applicants = await this.applicantModel.aggregate([
       { $match: { announcement, 'states.type': state } },
-      { $unwind: '$states' },
-      { $match: { 'states.type': state } },
-      { $addFields: { state: '$states' } },
+      {
+        $addFields: {
+          state: {
+            $filter: {
+              input: '$states',
+              as: 'state',
+              cond: { $eq: ['$$state.type', state] },
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          state: { $arrayElemAt: ['$state', 0] },
+        },
+      },
     ]);
     return applicants;
   }
@@ -145,9 +167,25 @@ export class ApplicantService implements FormDocumentService<Applicant> {
   async findOneByState({ id, state }: ApplicantArgs) {
     const applicants = await this.applicantModel.aggregate([
       { $match: { _id: new Types.ObjectId(id), 'states.type': state } },
-      { $unwind: '$states' },
-      { $match: { 'states.type': state } },
-      { $addFields: { state: '$states' } },
+      // { $unwind: '$states' },
+      // { $match: { 'states.type': state } },
+      // { $addFields: { state: '$states' } },
+      {
+        $addFields: {
+          state: {
+            $filter: {
+              input: '$states',
+              as: 'state',
+              cond: { $eq: ['$$state.type', state] },
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          state: { $arrayElemAt: ['$state', 0] },
+        },
+      },
     ]);
     if (!applicants.length)
       throw new NotFoundException(
@@ -193,6 +231,47 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     states = states.filter((state) => state.type != type);
     states.push({ notes, documents, type });
     const updateResult = await this.update(id, { states });
+    return updateResult;
+  }
+
+  async selectedApplicant(
+    selectApplicantsArgsInput: SelectApplicantsArgs,
+    adminUser: User,
+  ) {
+    const applicant = await this.findOne(selectApplicantsArgsInput.idApplicant);
+    switch (selectApplicantsArgsInput.typeApplicant) {
+      case AnnouncementTargets.entrepreneurs:
+        // if (!applicant.participant) this.inviteApplicant()
+        break;
+      case AnnouncementTargets.experts:
+        const invitationExpert = await this.invitationService.create(
+          {
+            email: applicant.item['correoElectronico'],
+            rol: ValidRoles.expert,
+          },
+          adminUser,
+        );
+        await this.expertService.assignAccountAndLinkBatch(
+          invitationExpert.metadata['uidAccount'],
+          {
+            phaseId: selectApplicantsArgsInput.idBatch,
+            name: selectApplicantsArgsInput.nameBatch,
+            experts: [applicant.participant],
+          },
+        );
+        break;
+      default:
+        break;
+    }
+    let { states } = applicant;
+    states.push({ notes: '', documents: [], type: ApplicationStates.selected });
+    const updateResult = await this.update(applicant._id, {
+      states,
+      batch: {
+        idDoc: selectApplicantsArgsInput.idBatch,
+        nombre: selectApplicantsArgsInput.nameBatch,
+      },
+    });
     return updateResult;
   }
 }

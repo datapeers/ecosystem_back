@@ -92,7 +92,7 @@ export class Applicant {
     nullable: true,
   })
   @Prop({ type: Object })
-  batch: JSON;
+  batch: Record<string, any>;
 }
 
 export const ApplicantSchema = SchemaFactory.createForClass(Applicant);

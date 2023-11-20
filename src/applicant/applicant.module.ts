@@ -6,6 +6,8 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { Applicant, ApplicantSchema } from './entities/applicant.entity';
 import { ExpertModule } from 'src/expert/expert.module';
+import { StartupModule } from 'src/startup/startup.module';
+import { InvitationsModule } from 'src/invitations/invitations.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { ExpertModule } from 'src/expert/expert.module';
     AuthModule,
     UsersModule,
     forwardRef(() => ExpertModule),
+    forwardRef(() => StartupModule),
+    forwardRef(() => InvitationsModule),
   ],
   providers: [ApplicantResolver, ApplicantService],
   exports: [ApplicantService],

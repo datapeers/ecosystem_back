@@ -211,4 +211,23 @@ export class ExpertService implements FormDocumentService {
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
   }
+
+  async assignAccountAndLinkBatch(
+    accountId: string,
+    linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs,
+  ) {
+    console.log(accountId);
+    const phaseRelationship = {
+      _id: linkExpertsToPhaseArgs.phaseId,
+      name: linkExpertsToPhaseArgs.name,
+      startUps: [],
+    };
+    return this.expertModel
+      .updateOne(
+        { _id: { $in: linkExpertsToPhaseArgs.experts } },
+        { $addToSet: { phases: { $each: [phaseRelationship] } }, accountId },
+        { new: true },
+      )
+      .lean();
+  }
 }

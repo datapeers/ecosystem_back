@@ -16,6 +16,9 @@ import { UpdateApplicantStateInput } from './dto/update-applicant-state.input';
 import { AnnouncementApplicantsArgs } from './args/announcement-applicants.args';
 import GraphQLJSON from 'graphql-type-json';
 import { ApplicantArgs } from './args/applicant.args';
+import { SelectApplicantsArgs } from './args/select-applicants.args';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => Applicant)
 export class ApplicantResolver {
@@ -53,6 +56,19 @@ export class ApplicantResolver {
     updateApplicantStateInput: UpdateApplicantStateInput,
   ) {
     return this.applicantService.updateState(updateApplicantStateInput);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Applicant)
+  selectApplicantState(
+    @Args()
+    selectApplicantsArgsInput: SelectApplicantsArgs,
+    @CurrentUser() user: User,
+  ) {
+    return this.applicantService.selectedApplicant(
+      selectApplicantsArgsInput,
+      user,
+    );
   }
 
   @ResolveField('documentsFields', () => GraphQLJSON)

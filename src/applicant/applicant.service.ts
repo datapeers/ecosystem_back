@@ -1,6 +1,7 @@
 import {
   Injectable,
   NotFoundException,
+  ForbiddenException,
   InternalServerErrorException,
   Inject,
   forwardRef,
@@ -24,6 +25,9 @@ import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { ApplicationStates } from './enums/application-states.enum';
 import { User } from 'src/users/entities/user.entity';
 import { SelectApplicantsArgs } from './args/select-applicants.args';
+import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
+import { Entrepreneur } from 'src/entrepreneur/entities/entrepreneur.entity';
+import { Startup } from 'src/startup/entities/startup.entity';
 @Injectable()
 export class ApplicantService implements FormDocumentService<Applicant> {
   constructor(
@@ -31,6 +35,8 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     private readonly applicantModel: Model<Applicant>,
     @Inject(forwardRef(() => ExpertService))
     private readonly expertService: ExpertService,
+    @Inject(forwardRef(() => EntrepreneurService))
+    private readonly entrepreneurService: EntrepreneurService,
     @Inject(forwardRef(() => StartupService))
     private readonly startupService: StartupService,
     @Inject(forwardRef(() => InvitationsService))
@@ -239,33 +245,31 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     adminUser: User,
   ) {
     const applicant = await this.findOne(selectApplicantsArgsInput.idApplicant);
+    let entrepreneur: Entrepreneur;
     switch (selectApplicantsArgsInput.typeApplicant) {
       case AnnouncementTargets.entrepreneurs:
-        // if (!applicant.participant) this.inviteApplicant()
+        entrepreneur = await this.inviteApplicantStartup(
+          selectApplicantsArgsInput,
+          adminUser,
+          applicant,
+        );
         break;
       case AnnouncementTargets.experts:
-        const invitationExpert = await this.invitationService.create(
-          {
-            email: applicant.item['correoElectronico'],
-            rol: ValidRoles.expert,
-          },
+        await this.inviteExpertApplicant(
+          selectApplicantsArgsInput,
           adminUser,
-        );
-        await this.expertService.assignAccountAndLinkBatch(
-          invitationExpert.metadata['uidAccount'],
-          {
-            phaseId: selectApplicantsArgsInput.idBatch,
-            name: selectApplicantsArgsInput.nameBatch,
-            experts: [applicant.participant],
-          },
+          applicant,
         );
         break;
       default:
         break;
     }
+    let otherChanges = {};
+    if (entrepreneur) otherChanges['participant'] = entrepreneur._id;
     let { states } = applicant;
     states.push({ notes: '', documents: [], type: ApplicationStates.selected });
     const updateResult = await this.update(applicant._id, {
+      ...otherChanges,
       states,
       batch: {
         idDoc: selectApplicantsArgsInput.idBatch,
@@ -273,5 +277,106 @@ export class ApplicantService implements FormDocumentService<Applicant> {
       },
     });
     return updateResult;
+  }
+
+  async inviteExpertApplicant(
+    selectApplicantsArgsInput: SelectApplicantsArgs,
+    adminUser: User,
+    applicant: Applicant,
+  ) {
+    const invitationExpert = await this.invitationService.create(
+      {
+        email: applicant.item['correoElectronico'],
+        rol: ValidRoles.expert,
+      },
+      adminUser,
+    );
+    await this.expertService.assignAccountAndLinkBatch(
+      invitationExpert.metadata['uidAccount'],
+      {
+        phaseId: selectApplicantsArgsInput.idBatch,
+        name: selectApplicantsArgsInput.nameBatch,
+        experts: [applicant.participant],
+      },
+    );
+    return;
+  }
+
+  async inviteApplicantStartup(
+    selectApplicantsArgsInput: SelectApplicantsArgs,
+    adminUser: User,
+    applicant: Applicant,
+  ) {
+    let entrepreneur: Entrepreneur;
+    if (!applicant.participant || applicant.participant === 'undefined') {
+      let item: any = {
+        nombre: applicant.item[selectApplicantsArgsInput.metadata['nameField']],
+        email: applicant.item[selectApplicantsArgsInput.metadata['emailField']],
+      };
+      entrepreneur = await this.entrepreneurService.create({
+        item,
+      });
+    } else {
+      entrepreneur = await this.entrepreneurService.findOne(
+        applicant.participant,
+      );
+    }
+    let startup = await this.findStartupApplicant(
+      selectApplicantsArgsInput,
+      entrepreneur,
+    );
+    // Participant have entrepreneur and a STARTUP
+    const invitationExpert = await this.invitationService.create(
+      {
+        email: applicant.item[selectApplicantsArgsInput.metadata['emailField']],
+        rol: ValidRoles.user,
+      },
+      adminUser,
+      {
+        idBatch: selectApplicantsArgsInput.idBatch,
+        idApplicant: selectApplicantsArgsInput.idApplicant,
+      },
+    );
+    await this.startupService.assignAccountAndLinkBatch(
+      invitationExpert.metadata['uidAccount'],
+      {
+        phaseId: selectApplicantsArgsInput.idBatch,
+        name: selectApplicantsArgsInput.nameBatch,
+        startups: [startup._id.toString()],
+      },
+    );
+    return entrepreneur;
+  }
+
+  async findStartupApplicant(
+    selectApplicantsArgsInput,
+    entrepreneurDoc: Entrepreneur,
+  ) {
+    if (
+      selectApplicantsArgsInput.metadata['phaseBase'] !==
+        '65242ea3baa24cae19bd5baf' &&
+      entrepreneurDoc.startups.length === 0
+    )
+      throw new ForbiddenException(
+        `No se puede agregar un participante sin startup a una fase superior a la 1`,
+      );
+    if (
+      selectApplicantsArgsInput.metadata['phaseBase'] ===
+        '65242ea3baa24cae19bd5baf' &&
+      entrepreneurDoc.startups.length === 0
+    ) {
+      // If the batch its phase 1 create generic startup
+      const docStartup = await this.startupService.genericStartup();
+      await this.startupService.linkStartupsAndEntrepreneurs(
+        [docStartup._id.toString()],
+        [entrepreneurDoc._id.toString()],
+      );
+      return docStartup;
+    } else {
+      const docStartupEntrepreneur = await this.startupService.findOne(
+        entrepreneurDoc.startups[0]._id.toString(),
+      );
+      return docStartupEntrepreneur;
+    }
   }
 }

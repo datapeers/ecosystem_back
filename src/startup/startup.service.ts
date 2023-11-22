@@ -31,7 +31,10 @@ import { DownloadResult } from 'src/shared/models/download-result';
 import { excelUtilities } from 'src/shared/utilities/excel.utilities';
 import { DownloadsService } from 'src/downloads/downloads.service';
 import { TableConfigService } from 'src/table/table-config/table-config.service';
-import { StartupRelationship } from 'src/entrepreneur/entities/entrepreneur.entity';
+import {
+  Entrepreneur,
+  StartupRelationship,
+} from 'src/entrepreneur/entities/entrepreneur.entity';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -427,5 +430,42 @@ export class StartupService implements FormDocumentService<Startup> {
     );
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
+  }
+
+  async assignAccountAndLinkBatch(
+    accountId: string,
+    linkStartUpsToPhaseArgs: LinkStartupToPhaseArgs,
+  ) {
+    const phaseRelationship: PhaseRelationship = {
+      _id: linkStartUpsToPhaseArgs.phaseId,
+      name: linkStartUpsToPhaseArgs.name,
+      state: 'pending',
+    };
+    const startups = linkStartUpsToPhaseArgs.startups;
+    return this.startupModel.updateOne(
+      { _id: { $in: startups } },
+      { $addToSet: { phases: { $each: [phaseRelationship] } }, accountId },
+      { new: true },
+    );
+  }
+
+  async genericStartup(entrepreneur?: Entrepreneur) {
+    const genericStartupItem: any = {
+      nombre: 'Sin startup',
+      generic: true,
+    };
+    const entrepreneurs = [];
+    if (entrepreneur) {
+      entrepreneurs.push({
+        _id: entrepreneur._id,
+        item: entrepreneur.item,
+        rol: 'leader',
+        description: '',
+      });
+    }
+    return await this.create({
+      entrepreneurs,
+      item: genericStartupItem,
+    });
   }
 }

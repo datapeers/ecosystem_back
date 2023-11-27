@@ -103,6 +103,7 @@ export class StartupService implements FormDocumentService<Startup> {
       aggregationPipeline,
       user,
     );
+    aggregationPipeline[0]['$match']['item.generic'] = null;
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
@@ -148,6 +149,7 @@ export class StartupService implements FormDocumentService<Startup> {
       aggregationPipeline,
       user,
     );
+    aggregationPipeline[0]['$match']['item.generic'] = null;
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
@@ -213,7 +215,10 @@ export class StartupService implements FormDocumentService<Startup> {
   }
 
   async findAll(): Promise<Startup[]> {
-    const startups = await this.startupModel.find({ deletedAt: null });
+    const startups = await this.startupModel.find({
+      deletedAt: null,
+      'item.generic': null,
+    });
     return startups;
   }
 

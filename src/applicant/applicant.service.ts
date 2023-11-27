@@ -245,10 +245,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     adminUser: User,
   ) {
     const applicant = await this.findOne(selectApplicantsArgsInput.idApplicant);
-    let entrepreneur: Entrepreneur;
     switch (selectApplicantsArgsInput.typeApplicant) {
       case AnnouncementTargets.entrepreneurs:
-        entrepreneur = await this.inviteApplicantStartup(
+        await this.inviteApplicantStartup(
           selectApplicantsArgsInput,
           adminUser,
           applicant,
@@ -264,12 +263,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
       default:
         break;
     }
-    let otherChanges = {};
-    if (entrepreneur) otherChanges['participant'] = entrepreneur._id;
     let { states } = applicant;
     states.push({ notes: '', documents: [], type: ApplicationStates.selected });
     const updateResult = await this.update(applicant._id, {
-      ...otherChanges,
       states,
       batch: {
         idDoc: selectApplicantsArgsInput.idBatch,
@@ -316,6 +312,7 @@ export class ApplicantService implements FormDocumentService<Applicant> {
       entrepreneur = await this.entrepreneurService.create({
         item,
       });
+      await this.update(applicant._id, { participant: entrepreneur._id });
     } else {
       entrepreneur = await this.entrepreneurService.findOne(
         applicant.participant,

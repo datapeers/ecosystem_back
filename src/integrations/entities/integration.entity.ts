@@ -17,6 +17,13 @@ export class Integration {
   @Field(() => String)
   code: string;
 
+  @Field(() => GraphQLJSON, {
+    description: 'Extra useful information',
+    nullable: true,
+  })
+  @Prop({ type: Object })
+  metadata: Record<string, any>;
+
   @Field(() => Date, { description: 'Date of entity creation.' })
   createdAt: Date;
 

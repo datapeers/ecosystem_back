@@ -48,6 +48,7 @@ import { HelpDeskModule } from './help-desk/help-desk.module';
 import { ConfigurationAppModule } from './configuration-app/configuration-app.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RatingModule } from './rating/rating.module';
+import { IntegrationsModule } from './integrations/integrations.module';
 
 @Module({
   imports: [
@@ -140,6 +141,7 @@ import { RatingModule } from './rating/rating.module';
     ConfigurationAppModule,
     EventEmitterModule.forRoot(),
     RatingModule,
+    IntegrationsModule,
   ],
   controllers: [],
   providers: [],

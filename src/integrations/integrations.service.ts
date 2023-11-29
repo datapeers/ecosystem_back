@@ -10,9 +10,12 @@ import { Model, Types } from 'mongoose';
 import { TypeIntegration } from './enum/types.enum';
 import { stringify } from 'querystring';
 import axios from 'axios';
+import { ZoomApiResponse } from './model/response-zoom-api';
+import { ZoomMeetingRequest } from './model/zoom-meeting-request';
 
 @Injectable()
 export class IntegrationsService {
+  apiZoom = 'https://api.zoom.us/v2';
   constructor(
     @InjectModel(Integration.name)
     private readonly integrationModel: Model<Integration>,
@@ -43,9 +46,8 @@ export class IntegrationsService {
     if (!integration)
       throw new NotFoundException(`Couldn't find integration with zoom`);
     let data = stringify({
-      code: integration.code,
-      grant_type: 'authorization_code',
-      redirect_uri: 'http://localhost:4200/home/admin/redirect_zoom',
+      grant_type: 'account_credentials',
+      account_id: integration.metadata['accountId'],
     });
 
     let config = {
@@ -56,21 +58,155 @@ export class IntegrationsService {
         Authorization:
           'Basic ' +
           Buffer.from(
-            `${integration.metadata['clientIdZoom']}:${integration.metadata['clientSecretZoom']}`,
+            `${integration.metadata['clientId']}:${integration.metadata['clientSecret']}`,
           ).toString('base64'),
       },
       data,
     };
-    axios(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-        console.log(response.data['access_token']);
-        return integration;
-      })
-      .catch((err) => {
-        console.log(err);
-        return integration;
-        throw new InternalServerErrorException(err);
-      });
+    try {
+      const response = await axios(config);
+      return response.data;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async zoomMeeting(
+    meetingName: string,
+    start_time,
+    duration: number,
+    hosting: { email: string; name: string }[],
+    participants: { email: string }[],
+    others?: {
+      alternative_hosts: string;
+    },
+  ) {
+    const integration = await this.zoomIntegration();
+    if (!integration)
+      throw new NotFoundException(`Couldn't find integration with zoom`);
+    const token: {
+      access_token: string;
+      token_type: 'string';
+      expires_in: number;
+      scope: string;
+    } = await this.tokenZoom();
+    let data: ZoomMeetingRequest = {
+      agenda: meetingName,
+      default_password: false,
+      duration: duration,
+      pre_schedule: false, // if integrate addon GSuite google to ZoomAPP
+      schedule_for: integration.metadata['email'],
+      settings: {
+        allow_multiple_devices: true,
+        alternative_hosts: others?.alternative_hosts,
+        alternative_hosts_email_notification: true,
+        approval_type: 2,
+        audio: 'telephony',
+        authentication_exception: hosting,
+        auto_recording: 'cloud',
+        breakout_room: {
+          enable: true,
+          rooms: [
+            {
+              name: 'room1',
+              participants: [...participants.map((i) => i.email)],
+            },
+          ],
+        },
+        calendar_type: 1,
+        close_registration: false,
+        contact_email: integration.metadata['email'],
+        contact_name: 'Ecosystem',
+        email_notification: true,
+        encryption_type: 'enhanced_encryption',
+        focus_mode: true,
+        host_video: true,
+        jbh_time: 0,
+        join_before_host: false,
+        meeting_authentication: true,
+        meeting_invitees: participants,
+        mute_upon_entry: false,
+        participant_video: false,
+        private_meeting: false,
+        registrants_confirmation_email: true,
+        registrants_email_notification: true,
+        registration_type: 1,
+        show_share_button: true,
+        use_pmi: false,
+        waiting_room: false,
+        watermark: false,
+        host_save_video_order: true,
+        alternative_host_update_polls: true,
+        internal_meeting: false,
+        continuous_meeting_chat: {
+          enable: true,
+          auto_add_invited_external_users: true,
+        },
+        participant_focused_meeting: false,
+        push_change_to_calendar: false,
+        resources: [
+          {
+            resource_type: 'whiteboard',
+            resource_id: 'X4Hy02w3QUOdskKofgb9Jg',
+            permission_level: 'editor',
+          },
+        ],
+      },
+      start_time,
+      template_id: 'Dv4YdINdTk+Z5RToadh5ug==',
+      timezone: 'America/Bogota',
+      topic: meetingName,
+      tracking_fields: [
+        {
+          field: 'field1',
+          value: 'value1',
+        },
+      ],
+      type: 2,
+    };
+    let config = {
+      method: 'post',
+      url: this.apiZoom + `/users/me/meetings`,
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+      data,
+    };
+
+    try {
+      const response = await axios(config);
+      let ansData: ZoomApiResponse = response.data;
+      return ansData;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async deleteMeeting(meetingId: string) {
+    const integration = await this.zoomIntegration();
+    if (!integration)
+      throw new NotFoundException(`Couldn't find integration with zoom`);
+    const token: {
+      access_token: string;
+      token_type: 'string';
+      expires_in: number;
+      scope: string;
+    } = await this.tokenZoom();
+    let config = {
+      method: 'delete',
+      url: this.apiZoom + `/meetings/${meetingId}`,
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    };
+    try {
+      const response = await axios(config);
+      let ansData: ZoomApiResponse = response.data;
+      return ansData;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(error);
+    }
   }
 }

@@ -12,6 +12,7 @@ import { UsersModule } from 'src/users/users.module';
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 import { PhasesModule } from 'src/phases/phases.module';
 import { ParticipationEventsModule } from './participation-events/participation-events.module';
+import { IntegrationsModule } from 'src/integrations/integrations.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ParticipationEventsModule } from './participation-events/participation-
     forwardRef(() => StartupModule),
     forwardRef(() => EntrepreneurModule),
     forwardRef(() => PhasesModule),
+    forwardRef(() => IntegrationsModule),
   ],
   providers: [EventsResolver, EventsService],
   exports: [EventsService],

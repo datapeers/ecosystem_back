@@ -26,6 +26,12 @@ export class IntegrationsResolver {
 
   @Query(() => Integration, { name: 'integrationTest' })
   test() {
-    return this.integrationsService.tokenZoom();
+    return this.integrationsService.zoomMeeting(
+      'prueba meeting',
+      '2023-11-30 11:26:45.018Z',
+      60,
+      [{ email: 'jaeducaba@gmail.com', name: 'Jairo' }],
+      [{ email: 'jairo.carmona@datapeers.co' }],
+    );
   }
 }

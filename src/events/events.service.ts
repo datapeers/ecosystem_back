@@ -12,6 +12,7 @@ import { StartupService } from 'src/startup/startup.service';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 import { PhasesService } from 'src/phases/phases.service';
 import { ParticipationEventsService } from './participation-events/participation-events.service';
+import { IntegrationsService } from 'src/integrations/integrations.service';
 
 @Injectable()
 export class EventsService {
@@ -26,10 +27,50 @@ export class EventsService {
     private readonly phasesService: PhasesService,
     @Inject(forwardRef(() => ParticipationEventsService))
     private readonly participationService: ParticipationEventsService,
+    @Inject(forwardRef(() => IntegrationsService))
+    private readonly integrationsService: IntegrationsService,
   ) {}
 
-  create(createEventInput: CreateEventInput) {
-    return this.eventModel.create(createEventInput);
+  async create(createEventInput: CreateEventInput) {
+    if (createEventInput.attendanceType === 'zoom') {
+      const hosting = [];
+      const participants = [];
+      for (const iterator of createEventInput.experts) {
+        hosting.push({ email: iterator.email, name: iterator.name });
+      }
+      for (const iterator of createEventInput.teamCoaches) {
+        hosting.push({ email: iterator.email, name: iterator.name });
+      }
+      for (const iterator of createEventInput.participants) {
+        participants.push({ email: iterator.email });
+      }
+      var startTime = new Date(createEventInput.startAt);
+      var endTime = new Date(createEventInput.endAt);
+      var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+      var resultInMinutes = Math.round(difference / 60000);
+      const createdMeeting = await this.integrationsService.zoomMeeting(
+        createEventInput.name
+          .normalize('NFD')
+          .replace(
+            /([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi,
+            '$1',
+          )
+          .normalize(),
+        createEventInput.startAt,
+        resultInMinutes,
+        hosting,
+        participants,
+      );
+      return this.eventModel.create({
+        ...createEventInput,
+        extra_options: {
+          ...createEventInput.extra_options,
+          zoom: createdMeeting,
+        },
+      });
+    } else {
+      return this.eventModel.create(createEventInput);
+    }
   }
 
   findAll() {
@@ -104,9 +145,14 @@ export class EventsService {
   }
 
   async remove(id: string) {
-    const updatedType = await this.eventModel
+    const updatedType: EventEntity = await this.eventModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
       .lean();
+    if (updatedType.attendanceType === 'zoom') {
+      await this.integrationsService.deleteMeeting(
+        updatedType.extra_options.zoom['id'],
+      );
+    }
     return updatedType;
   }
 

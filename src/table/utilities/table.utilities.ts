@@ -8,7 +8,7 @@ const convertFormToColumns = (
 ): RowConfigColumn[] => {
   let displayColumnsTable: RowConfigColumn[] = [];
   if (rowsForm.length != 0) {
-    const ignore = ['button', 'htmlelement', 'content'];
+    const ignore = ['button', 'htmlelement', 'content', 'fieldset'];
     const itemsForm = rowsForm.filter((i) => !ignore.includes(i.type));
     for (const iterator of itemsForm) {
       switch (iterator.type) {

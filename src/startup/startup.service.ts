@@ -71,7 +71,7 @@ export class StartupService implements FormDocumentService<Startup> {
       item: submission,
     };
     const createdDocument = await this.create(data);
-    if (context && context.entrepreneur) {
+    if (context && createdDocument && context.entrepreneur) {
       const entrepreneur = context.entrepreneur;
       const linkResult = await this.linkStartupsAndEntrepreneurs(
         [createdDocument._id],

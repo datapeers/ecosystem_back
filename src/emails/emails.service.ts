@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfiguration } from 'config/app.config';
 import * as SendGrid from '@sendgrid/mail';
 import * as SendGridClient from '@sendgrid/client';
+import { Event } from 'src/events/entities/event.entity';
 @Injectable()
 export class EmailsService {
   constructor(
@@ -29,6 +30,24 @@ export class EmailsService {
 
   async sendFromTemplate(templateInput: Template) {
     return this.emailService.sendFromTemplate(templateInput);
+  }
+
+  async sendIcs(
+    mail: {
+      to: string | string[];
+      subject: string;
+      text: string;
+      html: string;
+    },
+    event: Event,
+    others: {
+      nameOrganizer: string;
+      emailOrganizer: string;
+      urlRedirect: string;
+      country?: string;
+    },
+  ) {
+    return this.emailService.sendIcs(mail, event, others);
   }
   // private readonly templatesId: Record<EmailTemplates, string>;
   // private readonly defaultVerifiedEmail: string;

@@ -10,6 +10,8 @@ import {
   MethodNotAllowedException,
 } from '@nestjs/common';
 import { EmailTemplates, templateNames } from '../enums/email-templates';
+import { getIcsObjectInstance } from 'src/shared/utilities/ics';
+import { Event } from 'src/events/entities/event.entity';
 
 export class SendGridProvider implements EmailsRepository {
   private readonly templatesId: Record<EmailTemplates, string>;
@@ -82,6 +84,62 @@ export class SendGridProvider implements EmailsRepository {
       console.log(
         `Email successfully dispatched with template ${templateInput.template}`,
       );
+      return transport;
+    } catch (ex) {
+      console.log(ex);
+      throw new InternalServerErrorException(
+        'Got an unexpected exception while trying to send an email',
+        ex,
+      );
+    }
+  }
+
+  async sendIcs(
+    mail: {
+      to: string | string[];
+      subject: string;
+      text: string;
+      html: string;
+    },
+    event: Event,
+    others: {
+      nameOrganizer: string;
+      emailOrganizer: string;
+      urlRedirect: string;
+      country?: string;
+    },
+  ) {
+    if (!this.apiKey)
+      throw new MethodNotAllowedException('This service is not available');
+    const toSend: SendGrid.MailDataRequired = {
+      to: mail.to,
+      subject: mail.subject,
+      from: this.defaultVerifiedEmail,
+      text: mail.text,
+      html: mail.html,
+    };
+    const ics = getIcsObjectInstance(
+      event.startAt,
+      event.endAt,
+      event.name,
+      event.description,
+      others.country ?? 'Colombia',
+      others.urlRedirect,
+      others.nameOrganizer,
+      others.emailOrganizer,
+    );
+
+    const attachment = {
+      filename: `invite${event._id}.ics`,
+      name: `invite${event._id}.ics`,
+      content: Buffer.from(ics.toString()).toString('base64'),
+      disposition: 'attachment',
+      contentId: event._id.toString(),
+      type: 'text/calendar; method=REQUEST',
+    };
+    toSend['attachments'] = [attachment];
+    try {
+      const transport = await SendGrid.send(toSend);
       return transport;
     } catch (ex) {
       console.log(ex);

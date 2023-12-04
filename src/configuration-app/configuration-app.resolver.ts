@@ -1,12 +1,21 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ConfigurationAppService } from './configuration-app.service';
 import { ConfigurationApp } from './entities/configuration-app.entity';
 import { UpdateConfigurationAppInput } from './dto/update-configuration-app.input';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, forwardRef, Inject } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
-
+import { GraphQLJSONObject } from 'graphql-scalars';
+import { UserLogService } from 'src/user-log/user-log.service';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => ConfigurationApp)
 export class ConfigurationAppResolver {
@@ -29,5 +38,13 @@ export class ConfigurationAppResolver {
       updateConfigurationAppInput._id,
       updateConfigurationAppInput,
     );
+  }
+
+  @ResolveField('initGraph', () => GraphQLJSONObject)
+  resolveExpertHours(
+    @Parent() config: Omit<ConfigurationApp, 'initGraph'>,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.configurationAppService.initGraph(user);
   }
 }

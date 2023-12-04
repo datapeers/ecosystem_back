@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ConfigurationAppService } from './configuration-app.service';
 import { ConfigurationAppResolver } from './configuration-app.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,6 +8,7 @@ import {
   ConfigurationApp,
   ConfigurationAppSchema,
 } from './entities/configuration-app.entity';
+import { UserLogModule } from 'src/user-log/user-log.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import {
     ]),
     AuthModule,
     LoggerModule,
+    forwardRef(() => UserLogModule),
   ],
   providers: [ConfigurationAppResolver, ConfigurationAppService],
   exports: [ConfigurationAppService],

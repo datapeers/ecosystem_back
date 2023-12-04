@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
   InternalServerErrorException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { CreateIntegrationInput } from './dto/create-integration.input';
 import { Integration } from './entities/integration.entity';
@@ -12,6 +14,7 @@ import { stringify } from 'querystring';
 import axios from 'axios';
 import { ZoomApiResponse } from './model/response-zoom-api';
 import { ZoomMeetingRequest } from './model/zoom-meeting-request';
+import { EmailsService } from 'src/emails/emails.service';
 
 @Injectable()
 export class IntegrationsService {
@@ -19,6 +22,8 @@ export class IntegrationsService {
   constructor(
     @InjectModel(Integration.name)
     private readonly integrationModel: Model<Integration>,
+    @Inject(forwardRef(() => EmailsService))
+    private readonly emailsService: EmailsService,
   ) {}
 
   async updateOrCreate(data: CreateIntegrationInput) {
@@ -208,5 +213,17 @@ export class IntegrationsService {
       console.log(error);
       throw new InternalServerErrorException(error);
     }
+  }
+
+  async testIcs() {
+    const integration = await this.zoomIntegration();
+    if (!integration)
+      throw new NotFoundException(`Couldn't find integration with zoom`);
+    try {
+      // await this.emailsService.sendIcs();
+    } catch (error) {
+      console.log(error);
+    }
+    return integration;
   }
 }

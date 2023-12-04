@@ -76,6 +76,7 @@ export class StartupService implements FormDocumentService<Startup> {
       const linkResult = await this.linkStartupsAndEntrepreneurs(
         [createdDocument._id],
         [entrepreneur],
+        'leader',
       );
       if (!linkResult.acknowledged)
         throw new InternalServerErrorException(
@@ -159,6 +160,7 @@ export class StartupService implements FormDocumentService<Startup> {
   async linkStartupsAndEntrepreneurs(
     ids: string[],
     entrepreneurs: string[],
+    rol?: string,
   ): Promise<UpdateResultPayload> {
     // Find bussinesses by ids
     const startups = await this.findMany(ids);
@@ -185,7 +187,7 @@ export class StartupService implements FormDocumentService<Startup> {
       return {
         _id: document._id,
         item: document.item,
-        rol: 'partner',
+        rol: rol ? rol : 'partner',
         description: '',
       };
     });
@@ -248,6 +250,8 @@ export class StartupService implements FormDocumentService<Startup> {
       {
         $match: {
           leaderEntrepreneurs: { $size: 1 },
+          'item.generic': null,
+          deleteAt: null,
         },
       },
     ]);

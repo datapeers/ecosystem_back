@@ -17,6 +17,7 @@ import {
   SendBulkTemplatedEmailCommand,
 } from '@aws-sdk/client-ses';
 import { TemplateData } from '../templates/data';
+import { Event } from 'src/events/entities/event.entity';
 
 export class AWSSESProvider implements EmailsRepository {
   private readonly templatesId: Record<EmailTemplates, string>;
@@ -136,4 +137,21 @@ export class AWSSESProvider implements EmailsRepository {
   // } catch (ex) {
 
   // }
+  async sendIcs(
+    mail: {
+      to: string | string[];
+      subject: string;
+      text: string;
+      html: string;
+    },
+    event: Event,
+    others: {
+      nameOrganizer: string;
+      emailOrganizer: string;
+      urlRedirect: string;
+      country?: string;
+    },
+  ) {
+    return null;
+  }
 }

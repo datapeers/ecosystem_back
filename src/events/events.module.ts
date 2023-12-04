@@ -13,6 +13,7 @@ import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 import { PhasesModule } from 'src/phases/phases.module';
 import { ParticipationEventsModule } from './participation-events/participation-events.module';
 import { IntegrationsModule } from 'src/integrations/integrations.module';
+import { EmailsModule } from 'src/emails/emails.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { IntegrationsModule } from 'src/integrations/integrations.module';
     forwardRef(() => EntrepreneurModule),
     forwardRef(() => PhasesModule),
     forwardRef(() => IntegrationsModule),
+    forwardRef(() => EmailsModule),
   ],
   providers: [EventsResolver, EventsService],
   exports: [EventsService],

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTermsOfUseInput } from './dto/create-terms-of-use.input';
 import { UpdateTermsOfUseInput } from './dto/update-terms-of-use.input';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,9 +11,9 @@ export class TermsOfUseService {
     private readonly termsOfUseModel: Model<TermsOfUse>,
   ) {}
 
-  create(createTermsOfUseInput: CreateTermsOfUseInput) {
-    return this.termsOfUseModel.create(createTermsOfUseInput);
-  }
+  // create(createTermsOfUseInput: CreateTermsOfUseInput) {
+  //   return this.termsOfUseModel.create(createTermsOfUseInput);
+  // }
 
   findAll() {
     return this.termsOfUseModel.find().lean();

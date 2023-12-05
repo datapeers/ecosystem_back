@@ -4,7 +4,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
 
 @InputType()
-export class UpdateTermsOfUseInput extends PartialType(CreateTermsOfUseInput) {
+export class UpdateTermsOfUseInput {
   @Field(() => ID)
   @IsNotEmpty()
   _id: string;

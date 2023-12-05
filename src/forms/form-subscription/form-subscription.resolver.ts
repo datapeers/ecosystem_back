@@ -78,7 +78,7 @@ export class FormSubscriptionResolver {
     let doc = subscription.doc;
     let target = subscription.target;
     if (!doc || !target) return {};
-    if (subscription.data['announcement']) {
+    if (subscription.data && subscription.data['announcement']) {
       target = FormCollections.announcements;
     }
     return this.formSubscriptionService.getSubmittedDocument(doc, target);

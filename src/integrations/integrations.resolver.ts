@@ -24,8 +24,8 @@ export class IntegrationsResolver {
     return this.integrationsService.findAll();
   }
 
-  @Query(() => Integration, { name: 'integrationTest' })
-  test() {
-    return this.integrationsService.testIcs();
-  }
+  // @Query(() => Integration, { name: 'integrationTest' })
+  // test() {
+  //   return this.integrationsService.testIcs();
+  // }
 }

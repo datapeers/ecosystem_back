@@ -49,6 +49,7 @@ import { ConfigurationAppModule } from './configuration-app/configuration-app.mo
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RatingModule } from './rating/rating.module';
 import { IntegrationsModule } from './integrations/integrations.module';
+import { TermsOfUseModule } from './terms-of-use/terms-of-use.module';
 
 @Module({
   imports: [
@@ -142,6 +143,7 @@ import { IntegrationsModule } from './integrations/integrations.module';
     EventEmitterModule.forRoot(),
     RatingModule,
     IntegrationsModule,
+    TermsOfUseModule,
   ],
   controllers: [],
   providers: [],

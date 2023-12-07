@@ -87,6 +87,11 @@ export class UsersService implements OnModuleInit {
     return users;
   }
 
+  async countAll() {
+    const docs = await this.userModel.find({ isActive: true }).lean();
+    return docs.length;
+  }
+
   async create(createUserInput: Partial<User>) {
     const user = await this.tryFindOne({ uid: createUserInput.uid });
     if (user) throw new ConflictException('Authenticated user already exist');

@@ -16,6 +16,8 @@ import { IntegrationsService } from 'src/integrations/integrations.service';
 import { EmailsService } from 'src/emails/emails.service';
 import { AppConfiguration } from 'config/app.config';
 import { ConfigService } from '@nestjs/config';
+import { ActaService } from './acta/acta.service';
+import { infoWeekDates } from 'src/shared/utilities/dates.utilities';
 
 @Injectable()
 export class EventsService {
@@ -35,6 +37,8 @@ export class EventsService {
     @Inject(forwardRef(() => EmailsService))
     private readonly emailsService: EmailsService,
     private readonly configService: ConfigService<AppConfiguration>,
+    @Inject(forwardRef(() => ActaService))
+    private readonly actaService: ActaService,
   ) {}
 
   async create(createEventInput: CreateEventInput) {
@@ -188,4 +192,85 @@ export class EventsService {
   async getParticipation(event: EventEntity) {
     return await this.participationService.findByEvent(event._id);
   }
+
+  async registersExpert(user: AuthUser) {
+    const docExpert = await this.expertService.findByAccount(user.uid);
+    const idAsString = docExpert._id.toString();
+    let dates = infoWeekDates();
+    let labels = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ];
+    let countHoursDone = 0;
+    let countHoursDonated = 0;
+    let hoursWeeks = [];
+
+    for (const date of dates.fechasSemana) {
+      const begin = new Date(`${date}T00:00:00.000Z`);
+      const end = new Date(`${date}T23:59:59.999Z`);
+      const events = await this.eventModel.find({
+        'experts._id': idAsString,
+        isCanceled: false,
+        isDeleted: false,
+        endAt: {
+          $gte: begin,
+          $lt: end,
+        },
+      });
+      const actas = await this.actaService.findByEventsList(
+        events.map((i) => i._id.toString()),
+      );
+      let countsHoursInDay = 0;
+      for (const acta of actas) {
+        if (!acta.extra_options?.expertHours[idAsString]) continue;
+        countsHoursInDay += acta.extra_options.expertHours[idAsString].done;
+        countHoursDone += acta.extra_options.expertHours[idAsString].done;
+        countHoursDonated += acta.extra_options.expertHours[idAsString].donated;
+      }
+      hoursWeeks.push(countsHoursInDay);
+    }
+    return {
+      labels,
+      data: hoursWeeks,
+      dateLabels: dates,
+      countHoursDone,
+      countHoursDonated,
+    };
+  }
+
+  async getRegistersHorus(expertId: string) {
+    const events = await this.eventModel.find({
+      'experts._id': new Types.ObjectId(expertId),
+      isCanceled: false,
+      isDeleted: false,
+    });
+    const actas = await this.actaService.findByEventsList(
+      events.map((i) => i._id.toString()),
+    );
+    let countHoursDone = 0;
+    let countHoursDonated = 0;
+    for (const acta of actas) {
+      if (!acta.extra_options?.expertHours[expertId]) continue;
+      countHoursDone += acta.extra_options.expertHours[expertId].done;
+      countHoursDonated += acta.extra_options.expertHours[expertId].donated;
+    }
+    return { countHoursDone, countHoursDonated };
+  }
+
+  // async hoursRegisterHoursPhase(batchId: string, ) {
+  //   const events = await this.eventModel.find({
+  //     batch: new Types.ObjectId(batchId),
+  //     isCanceled: false,
+  //     isDeleted: false,
+  //   });
+  //   const actas = await this.actaService.findByEventsList(
+  //     events.map((i) => i._id.toString()),
+  //   );
+  //     const experts = await this.expertService.
+  // }
 }

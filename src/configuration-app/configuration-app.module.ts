@@ -9,6 +9,8 @@ import {
   ConfigurationAppSchema,
 } from './entities/configuration-app.entity';
 import { UserLogModule } from 'src/user-log/user-log.module';
+import { UsersModule } from 'src/users/users.module';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { UserLogModule } from 'src/user-log/user-log.module';
     AuthModule,
     LoggerModule,
     forwardRef(() => UserLogModule),
+    forwardRef(() => UsersModule),
+    forwardRef(() => EventsModule),
   ],
   providers: [ConfigurationAppResolver, ConfigurationAppService],
   exports: [ConfigurationAppService],

@@ -6,6 +6,7 @@ import { ConfigurationApp } from './entities/configuration-app.entity';
 import { UserLogService } from 'src/user-log/user-log.service';
 import { AuthUser } from '../auth/types/auth-user';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { EventsService } from 'src/events/events.service';
 
 @Injectable()
 export class ConfigurationAppService {
@@ -14,6 +15,8 @@ export class ConfigurationAppService {
     private readonly configurationApp: Model<ConfigurationApp>,
     @Inject(forwardRef(() => UserLogService))
     private readonly userLogService: UserLogService,
+    @Inject(forwardRef(() => EventsService))
+    private readonly eventsService: EventsService,
   ) {}
 
   async onModuleInit() {
@@ -48,10 +51,11 @@ export class ConfigurationAppService {
       case ValidRoles.user:
         break;
       case ValidRoles.expert:
+        ans = { ...(await this.eventsService.registersExpert(user)) };
         break;
       default:
-        ans['dataGraph'] = await this.userLogService.getRegistersUsers();
-        console.log(ans);
+        ans = { ...(await this.userLogService.getRegistersUsers()) };
+
         break;
     }
     return ans;

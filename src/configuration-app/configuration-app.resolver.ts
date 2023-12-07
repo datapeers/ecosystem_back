@@ -16,11 +16,14 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { UserLogService } from 'src/user-log/user-log.service';
+import { UsersService } from 'src/users/users.service';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => ConfigurationApp)
 export class ConfigurationAppResolver {
   constructor(
     private readonly configurationAppService: ConfigurationAppService,
+    private readonly userService: UsersService,
   ) {}
 
   @Query(() => ConfigurationApp, { name: 'configurationApp' })
@@ -46,5 +49,17 @@ export class ConfigurationAppResolver {
     @CurrentUser() user: AuthUser,
   ) {
     return this.configurationAppService.initGraph(user);
+  }
+
+  @ResolveField('countUsers', () => Number)
+  countUsers(
+    @Parent() config: Omit<ConfigurationApp, 'initGraph'>,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const ignore = [ValidRoles.user, ValidRoles.expert];
+    if (ignore.includes(user.rolDoc.type as ValidRoles)) {
+      return 0;
+    }
+    return this.userService.countAll();
   }
 }

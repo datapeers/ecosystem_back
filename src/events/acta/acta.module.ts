@@ -11,7 +11,6 @@ import { Acta, ActaSchema } from './entities/acta.entity';
     MongooseModule.forFeature([{ name: Acta.name, schema: ActaSchema }]),
     AuthModule,
     LoggerModule,
-    ActaModule,
   ],
   providers: [ActaResolver, ActaService],
   exports: [ActaService],

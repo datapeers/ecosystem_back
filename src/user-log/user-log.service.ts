@@ -69,10 +69,8 @@ export class UserLogService {
 
   /** @var date: date format YYYY-MM-DD */
   registerLoginByDate(date: string) {
-    const begin = new Date(date);
-    begin.setHours(0, 0, 0, 0);
-    const end = new Date(date);
-    end.setHours(23, 59, 59, 999);
+    const begin = new Date(`${date}T00:00:00.000Z`);
+    const end = new Date(`${date}T23:59:59.999Z`);
     return this.userLogModel
       .find({
         'metadata.logIn': {
@@ -85,7 +83,7 @@ export class UserLogService {
 
   async getRegistersUsers() {
     let dates = infoWeekDates();
-    let days = [
+    let labels = [
       'Domingo',
       'Lunes',
       'Martes',
@@ -94,13 +92,20 @@ export class UserLogService {
       'Viernes',
       'Sábado',
     ];
-    let infoUsers: { day: string; date; docs: number }[] = [];
+
     let index = 0;
+    let uniquesUsers = new Set();
+    let data = [];
     for (const iterator of dates.fechasSemana) {
       const docs = await this.registerLoginByDate(iterator);
-      infoUsers.push({ day: days[index], date: iterator, docs: docs.length });
+      // infoUsers.push({ day: labels[index], date: iterator, value: docs.length });
+      data.push(docs.length);
       index++;
+      for (const iterator of docs) {
+        if (uniquesUsers.has(iterator.metadata['user'].toString())) continue;
+        uniquesUsers.add(iterator.metadata['user'].toString());
+      }
     }
-    return infoUsers;
+    return { labels, data, dateLabels: dates, count: uniquesUsers.size };
   }
 }

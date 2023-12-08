@@ -49,13 +49,13 @@ export class ConfigurationAppService {
     let ans = {};
     switch (user.rolDoc.type) {
       case ValidRoles.user:
+        ans = { ...(await this.userLogService.getUserRegisterWeek(user)) };
         break;
       case ValidRoles.expert:
         ans = { ...(await this.eventsService.registersExpert(user)) };
         break;
       default:
         ans = { ...(await this.userLogService.getRegistersUsers()) };
-
         break;
     }
     return ans;

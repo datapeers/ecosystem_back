@@ -81,6 +81,36 @@ export class UserLogService {
       .lean();
   }
 
+  /** @var date: date format YYYY-MM-DD */
+  registerUserByDate(user, date: string) {
+    const begin = new Date(`${date}T00:00:00.000Z`);
+    const end = new Date(`${date}T23:59:59.999Z`);
+    return this.userLogModel
+      .find({
+        user,
+        createdAt: {
+          $gte: begin,
+          $lt: end,
+        },
+      })
+      .lean();
+  }
+
+  /** @var date: date format YYYY-MM-DD */
+  registerResourcesByUser(date: string, user) {
+    const begin = new Date(`${date}T00:00:00.000Z`);
+    const end = new Date(`${date}T23:59:59.999Z`);
+    return this.userLogModel
+      .find({
+        user,
+        createdAt: {
+          $gte: begin,
+          $lt: end,
+        },
+      })
+      .lean();
+  }
+
   async getRegistersUsers() {
     let dates = infoWeekDates();
     let labels = [
@@ -107,5 +137,27 @@ export class UserLogService {
       }
     }
     return { labels, data, dateLabels: dates, count: uniquesUsers.size };
+  }
+
+  async getUserRegisterWeek(user: AuthUser) {
+    let dates = infoWeekDates();
+    let labels = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ];
+    let data = [];
+    let countDocs = 0;
+    for (const iterator of dates.fechasSemana) {
+      const docs = await this.registerResourcesByUser(iterator, user);
+      // infoUsers.push({ day: labels[index], date: iterator, value: docs.length });
+      data.push(docs.length);
+      countDocs += docs.length;
+    }
+    return { labels, data, dateLabels: dates, count: countDocs };
   }
 }

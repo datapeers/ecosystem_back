@@ -20,6 +20,9 @@ import { TypesEvent } from 'src/events/types-events/entities/types-event.entity'
 import { Startup } from 'src/startup/entities/startup.entity';
 import { Expert } from 'src/expert/entities/expert.entity';
 import { User } from 'src/users/entities/user.entity';
+import { EventsService } from 'src/events/events.service';
+import { Acta } from 'src/events/acta/entities/acta.entity';
+import { Event as EventEntity } from 'src/events/entities/event.entity';
 
 @Injectable()
 export class ActivitiesConfigService {
@@ -33,6 +36,8 @@ export class ActivitiesConfigService {
     private readonly startupsService: StartupService,
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => EventsService))
+    private readonly eventsService: EventsService,
     @Inject(forwardRef(() => TypesEventsService))
     private readonly typesEventsService: TypesEventsService,
   ) {}
@@ -98,11 +103,16 @@ export class ActivitiesConfigService {
       listActivities,
       listStartups,
     );
+    const { events, actas } = await this.eventsService.getEventsAndActas(
+      config.phase,
+    );
     const hoursAssignExperts = this.calcHoursExpert(
       config,
       listActivities,
       listExperts,
       listStartups,
+      events,
+      actas,
     );
     const hoursAssignTeamCoaches = this.calcHoursTeamCoach(
       config,
@@ -174,6 +184,8 @@ export class ActivitiesConfigService {
     listActivities: TypesEvent[],
     listExpert: Expert[],
     listStartups: Startup[],
+    events: EventEntity[],
+    actas: Acta[],
   ) {
     let hoursAssignExpert: { [key: string]: IConfigExpert } = {};
     listExpert.forEach(
@@ -183,25 +195,33 @@ export class ActivitiesConfigService {
     // Assign activities to expert
     for (const activity of listActivitiesExpert) {
       if (activity.isDeleted) continue; // means that if the activity is not found it is deleted and we must avoid it.
+      const eventsActivity = events.filter(
+        (i) => !(i.type === activity._id.toString()),
+      );
       for (const expert of listExpert) {
         const previousConfig = config.experts.find(
           (i) =>
             i.entityID === expert._id.toString() &&
             i.activityID === activity._id.toString(),
         );
-        if (previousConfig) {
-          hoursAssignExpert[expert._id].hours[activity._id] = {
-            allocated: previousConfig.limit,
-            donated: 0,
-            done: 0,
-          };
-        } else {
-          hoursAssignExpert[expert._id].hours[activity._id] = {
-            allocated: 0,
-            donated: 0,
-            done: 0,
-          };
+        const eventsExpert = eventsActivity.filter((i) =>
+          i.experts.find((i) => i._id === expert._id.toString()),
+        );
+        const actasExpert = [];
+        for (const event of eventsExpert) {
+          const acta = actas.find(
+            (i) => i.event.toString() === event._id.toString(),
+          );
+          if (!acta) continue;
+          actasExpert.push(acta);
         }
+        const { countHoursDone, countHoursDonated } =
+          this.eventsService.getExpertHours(actasExpert, expert._id.toString());
+        hoursAssignExpert[expert._id].hours[activity._id] = {
+          allocated: previousConfig ? previousConfig.limit : 0,
+          donated: countHoursDonated,
+          done: countHoursDone,
+        };
       }
     }
 

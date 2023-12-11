@@ -1,5 +1,6 @@
 import {
   Injectable,
+  BadRequestException,
   NotFoundException,
   ForbiddenException,
   InternalServerErrorException,
@@ -280,6 +281,14 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     adminUser: User,
     applicant: Applicant,
   ) {
+    const prevInvitation = await this.invitationService.tryFindOneByEmail(
+      applicant.item[selectApplicantsArgsInput.metadata['emailField']],
+    );
+    if (prevInvitation) {
+      throw new BadRequestException(
+        'Este email ya ha sido invitado a entrar en ecosystem, por favor revizar la sección de invitaciones',
+      );
+    }
     const invitationExpert = await this.invitationService.create(
       {
         email: applicant.item['correoElectronico'],
@@ -322,6 +331,14 @@ export class ApplicantService implements FormDocumentService<Applicant> {
       selectApplicantsArgsInput,
       entrepreneur,
     );
+    const prevInvitation = await this.invitationService.tryFindOneByEmail(
+      applicant.item[selectApplicantsArgsInput.metadata['emailField']],
+    );
+    if (prevInvitation) {
+      throw new BadRequestException(
+        'Este email ya ha sido invitado a entrar en ecosystem, por favor revizar la sección de invitaciones',
+      );
+    }
     // Participant have entrepreneur and a STARTUP
     const invitationExpert = await this.invitationService.create(
       {

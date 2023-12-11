@@ -18,6 +18,7 @@ import { AppConfiguration } from 'config/app.config';
 import { ConfigService } from '@nestjs/config';
 import { ActaService } from './acta/acta.service';
 import { infoWeekDates } from 'src/shared/utilities/dates.utilities';
+import { Acta } from './acta/entities/acta.entity';
 
 @Injectable()
 export class EventsService {
@@ -89,20 +90,20 @@ export class EventsService {
         zoom: createdMeeting,
       },
     });
-    await this.emailsService.sendIcs(
-      {
-        to: to,
-        subject: `Has sido invitado a ${createEventInput.name}`,
-        text: 'Nuevo evento agendado',
-        html: `<p>Se ha agendado un proximo evento de zoom en ecosystem, se llama ${createEventInput.name}, puedes ingresar desde la app, o aquí tienes el <a href="${createdMeeting.join_url}">Visit our homepage</a> para el dia del evento  </p>`,
-      },
-      eventCreated.toObject(),
-      {
-        nameOrganizer: hosting[0].name,
-        emailOrganizer: hosting[0].email,
-        urlRedirect: this.configService.get('appUri'),
-      },
-    );
+    // await this.emailsService.sendIcs(
+    //   {
+    //     to: to,
+    //     subject: `Has sido invitado a ${createEventInput.name}`,
+    //     text: 'Nuevo evento agendado',
+    //     html: `<p>Se ha agendado un proximo evento de zoom en ecosystem, se llama ${createEventInput.name}, puedes ingresar desde la app, o aquí tienes el <a href="${createdMeeting.join_url}">Visit our homepage</a> para el dia del evento  </p>`,
+    //   },
+    //   eventCreated.toObject(),
+    //   {
+    //     nameOrganizer: hosting[0].name,
+    //     emailOrganizer: hosting[0].email,
+    //     urlRedirect: this.configService.get('appUri'),
+    //   },
+    // );
     return eventCreated;
   }
 
@@ -213,18 +214,20 @@ export class EventsService {
     for (const date of dates.fechasSemana) {
       const begin = new Date(`${date}T00:00:00.000Z`);
       const end = new Date(`${date}T23:59:59.999Z`);
-      const events = await this.eventModel.find({
-        'experts._id': idAsString,
-        isCanceled: false,
-        isDeleted: false,
-        endAt: {
-          $gte: begin,
-          $lt: end,
-        },
-      });
-      const actas = await this.actaService.findByEventsList(
-        events.map((i) => i._id.toString()),
-      );
+      const events = await this.eventModel
+        .find({
+          'experts._id': idAsString,
+          isCanceled: false,
+          isDeleted: false,
+          endAt: {
+            $gte: begin,
+            $lt: end,
+          },
+        })
+        .lean();
+      const actas = await this.actaService
+        .findByEventsList(events.map((i) => i._id.toString()))
+        .lean();
       let countsHoursInDay = 0;
       for (const acta of actas) {
         if (!acta.extra_options?.expertHours[idAsString]) continue;
@@ -244,14 +247,16 @@ export class EventsService {
   }
 
   async getRegistersHorus(expertId: string) {
-    const events = await this.eventModel.find({
-      'experts._id': new Types.ObjectId(expertId),
-      isCanceled: false,
-      isDeleted: false,
-    });
-    const actas = await this.actaService.findByEventsList(
-      events.map((i) => i._id.toString()),
-    );
+    const events = await this.eventModel
+      .find({
+        'experts._id': new Types.ObjectId(expertId),
+        isCanceled: false,
+        isDeleted: false,
+      })
+      .lean();
+    const actas = await this.actaService
+      .findByEventsList(events.map((i) => i._id.toString()))
+      .lean();
     let countHoursDone = 0;
     let countHoursDonated = 0;
     for (const acta of actas) {
@@ -262,15 +267,28 @@ export class EventsService {
     return { countHoursDone, countHoursDonated };
   }
 
-  // async hoursRegisterHoursPhase(batchId: string, ) {
-  //   const events = await this.eventModel.find({
-  //     batch: new Types.ObjectId(batchId),
-  //     isCanceled: false,
-  //     isDeleted: false,
-  //   });
-  //   const actas = await this.actaService.findByEventsList(
-  //     events.map((i) => i._id.toString()),
-  //   );
-  //     const experts = await this.expertService.
-  // }
+  async getEventsAndActas(phase: string) {
+    const events: EventEntity[] = await this.eventModel
+      .find({
+        batch: new Types.ObjectId(phase),
+        isCanceled: false,
+        isDeleted: false,
+      })
+      .lean();
+    const actas: Acta[] = await this.actaService
+      .findByEventsList(events.map((i) => i._id.toString()))
+      .lean();
+    return { events, actas };
+  }
+
+  getExpertHours(actas: Acta[], expertId: string) {
+    let countHoursDone = 0;
+    let countHoursDonated = 0;
+    for (const acta of actas) {
+      if (!acta.extra_options?.expertHours[expertId]) continue;
+      countHoursDone += acta.extra_options.expertHours[expertId].done;
+      countHoursDonated += acta.extra_options.expertHours[expertId].donated;
+    }
+    return { countHoursDone, countHoursDonated };
+  }
 }

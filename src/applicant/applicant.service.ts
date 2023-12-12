@@ -124,9 +124,6 @@ export class ApplicantService implements FormDocumentService<Applicant> {
   async handleDocumentSubmit(
     submitAnnouncementDocInput: SubmitAnnouncementDocInput,
   ): Promise<any> {
-    // const announcementDoc = await this.findOne(
-    //   submitAnnouncementDocInput.announcement,
-    // );
     let docParticipant = submitAnnouncementDocInput.participant;
     if (
       submitAnnouncementDocInput.announcementTarget ===
@@ -174,9 +171,6 @@ export class ApplicantService implements FormDocumentService<Applicant> {
   async findOneByState({ id, state }: ApplicantArgs) {
     const applicants = await this.applicantModel.aggregate([
       { $match: { _id: new Types.ObjectId(id), 'states.type': state } },
-      // { $unwind: '$states' },
-      // { $match: { 'states.type': state } },
-      // { $addFields: { state: '$states' } },
       {
         $addFields: {
           state: {

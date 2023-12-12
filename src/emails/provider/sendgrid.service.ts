@@ -47,10 +47,10 @@ export class SendGridProvider implements EmailsRepository {
     }
     try {
       const transport = await SendGrid.send(mail);
-      console.log(`Email successfully dispatched to ${mail.to}`);
+      // console.log(`Email successfully dispatched to ${mail.to}`);
       return transport;
     } catch (ex) {
-      console.log(ex);
+      console.log(ex.response.body.errors);
       throw new InternalServerErrorException(
         'Got an unexpected exception while trying to send an email',
         ex,
@@ -81,12 +81,9 @@ export class SendGridProvider implements EmailsRepository {
         from: templateInput.from ?? this.defaultVerifiedEmail,
         templateId: templateId,
       });
-      console.log(
-        `Email successfully dispatched with template ${templateInput.template}`,
-      );
       return transport;
     } catch (ex) {
-      console.log(ex);
+      console.log(ex.response.body.errors);
       throw new InternalServerErrorException(
         'Got an unexpected exception while trying to send an email',
         ex,

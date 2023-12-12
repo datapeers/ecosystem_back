@@ -46,7 +46,7 @@ export class EventsService {
     if (createEventInput.attendanceType === 'zoom') {
       return this.createEventAndZoom(createEventInput);
     } else {
-      return this.eventModel.create(createEventInput);
+      return this.createEventNormal(createEventInput);
     }
   }
 
@@ -90,20 +90,68 @@ export class EventsService {
         zoom: createdMeeting,
       },
     });
-    // await this.emailsService.sendIcs(
-    //   {
-    //     to: to,
-    //     subject: `Has sido invitado a ${createEventInput.name}`,
-    //     text: 'Nuevo evento agendado',
-    //     html: `<p>Se ha agendado un proximo evento de zoom en ecosystem, se llama ${createEventInput.name}, puedes ingresar desde la app, o aquí tienes el <a href="${createdMeeting.join_url}">Visit our homepage</a> para el dia del evento  </p>`,
-    //   },
-    //   eventCreated.toObject(),
-    //   {
-    //     nameOrganizer: hosting[0].name,
-    //     emailOrganizer: hosting[0].email,
-    //     urlRedirect: this.configService.get('appUri'),
-    //   },
-    // );
+    await this.emailsService.sendIcs(
+      {
+        to: to,
+        subject: `Has sido invitado a ${createEventInput.name}`,
+        text: 'Nuevo evento agendado',
+        html: `<p>Se ha agendado un proximo evento de zoom en ecosystem, se llama ${createEventInput.name}, puedes ingresar desde la app, o aquí tienes el <a href="${createdMeeting.join_url}">link</a> para el dia del evento  </p>`,
+      },
+      eventCreated.toObject(),
+      {
+        nameOrganizer: hosting[0].name,
+        emailOrganizer: hosting[0].email,
+        urlRedirect: this.configService.get('appUri'),
+      },
+    );
+    return eventCreated;
+  }
+
+  async createEventNormal(createEventInput: CreateEventInput) {
+    const hosting = [];
+    const participants = [];
+    const to = [];
+    for (const iterator of createEventInput.experts) {
+      hosting.push({ email: iterator.email, name: iterator.name });
+      to.push(iterator.email);
+    }
+    for (const iterator of createEventInput.teamCoaches) {
+      hosting.push({ email: iterator.email, name: iterator.name });
+      to.push(iterator.email);
+    }
+    for (const iterator of createEventInput.participants) {
+      participants.push({ email: iterator.email });
+      to.push(iterator.email);
+    }
+    var startTime = new Date(createEventInput.startAt);
+    var endTime = new Date(createEventInput.endAt);
+    var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+    var resultInMinutes = Math.round(difference / 60000);
+
+    const eventCreated = await this.eventModel.create({
+      ...createEventInput,
+      extra_options: {
+        ...createEventInput.extra_options,
+      },
+    });
+    await this.emailsService.sendIcs(
+      {
+        to: to,
+        subject: `Has sido invitado a ${createEventInput.name}`,
+        text: 'Nuevo evento agendado',
+        html: `<p>Se ha agendado un proximo evento en ecosystem, se llama ${
+          createEventInput.name
+        }, puedes ingresar desde la  <a href="${this.configService.get(
+          'appUri',
+        )}">app en calendario</a> </p> para mas detalles`,
+      },
+      eventCreated.toObject(),
+      {
+        nameOrganizer: hosting[0].name,
+        emailOrganizer: hosting[0].email,
+        urlRedirect: this.configService.get('appUri'),
+      },
+    );
     return eventCreated;
   }
 
@@ -172,9 +220,19 @@ export class EventsService {
 
   async update(id: string, updateEventInput: UpdateEventInput) {
     delete updateEventInput['_id'];
-    const updatedEvent = await this.eventModel
+    delete updateEventInput.extra_options[''];
+    const updatedEvent: EventEntity = await this.eventModel
       .findOneAndUpdate({ _id: id }, { ...updateEventInput }, { new: true })
       .lean();
+    if (updateEventInput.isCanceled) {
+      await this.cancelEventEmail(updatedEvent);
+    }
+    if (
+      updateEventInput.extra_options['editedDates'] &&
+      !updateEventInput.isCanceled
+    ) {
+      await this.changeEventEmail(updatedEvent);
+    }
     return updatedEvent;
   }
 
@@ -187,7 +245,82 @@ export class EventsService {
         updatedType.extra_options.zoom['id'],
       );
     }
+    await this.cancelEventEmail(updatedType);
     return updatedType;
+  }
+
+  async cancelEventEmail(updatedEvent: EventEntity) {
+    const hosting = [];
+    const participants = [];
+    const to = [];
+    for (const iterator of updatedEvent.experts) {
+      hosting.push({ email: iterator.email, name: iterator.name });
+      to.push(iterator.email);
+    }
+    for (const iterator of updatedEvent.teamCoaches) {
+      hosting.push({ email: iterator.email, name: iterator.name });
+      to.push(iterator.email);
+    }
+    for (const iterator of updatedEvent.participants) {
+      participants.push({ email: iterator.email });
+      to.push(iterator.email);
+    }
+    var startTime = new Date(updatedEvent.startAt);
+    var endTime = new Date(updatedEvent.endAt);
+    var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+    var resultInMinutes = Math.round(difference / 60000);
+    await this.emailsService.sendIcs(
+      {
+        to: to,
+        subject: `El evento ${updatedEvent.name} ha sido cancelado`,
+        text: 'Evento cancelado',
+        html: `<p>Se ha cancelado un proximo evento en ecosystem, se llama ${updatedEvent.name}, eliminarlo de tu agenda si es el caso.`,
+      },
+      updatedEvent,
+      {
+        nameOrganizer: hosting[0].name,
+        emailOrganizer: hosting[0].email,
+        urlRedirect: this.configService.get('appUri'),
+      },
+    );
+    return updatedEvent;
+  }
+
+  async changeEventEmail(updatedEvent: EventEntity) {
+    const hosting = [];
+    const participants = [];
+    const to = [];
+    for (const iterator of updatedEvent.experts) {
+      hosting.push({ email: iterator.email, name: iterator.name });
+      to.push(iterator.email);
+    }
+    for (const iterator of updatedEvent.teamCoaches) {
+      hosting.push({ email: iterator.email, name: iterator.name });
+      to.push(iterator.email);
+    }
+    for (const iterator of updatedEvent.participants) {
+      participants.push({ email: iterator.email });
+      to.push(iterator.email);
+    }
+    var startTime = new Date(updatedEvent.startAt);
+    var endTime = new Date(updatedEvent.endAt);
+    var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+    var resultInMinutes = Math.round(difference / 60000);
+    await this.emailsService.sendIcs(
+      {
+        to: to,
+        subject: `El evento ${updatedEvent.name} ha sido modificado`,
+        text: 'Evento modificado',
+        html: `<p>Se ha modificado las fechas de un proximo evento en ecosystem, se llama ${updatedEvent.name}, re-agendarlo en tu agenda si es el caso.`,
+      },
+      updatedEvent,
+      {
+        nameOrganizer: hosting[0].name,
+        emailOrganizer: hosting[0].email,
+        urlRedirect: this.configService.get('appUri'),
+      },
+    );
+    return updatedEvent;
   }
 
   async getParticipation(event: EventEntity) {

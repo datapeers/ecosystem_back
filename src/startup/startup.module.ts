@@ -8,6 +8,7 @@ import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 import { ExpertModule } from 'src/expert/expert.module';
 import { DownloadsModule } from 'src/downloads/downloads.module';
 import { TableModule } from 'src/table/table.module';
+import { EmailsModule } from 'src/emails/emails.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TableModule } from 'src/table/table.module';
     forwardRef(() => EntrepreneurModule),
     DownloadsModule,
     forwardRef(() => TableModule),
+    forwardRef(() => EmailsModule),
   ],
   providers: [StartupResolver, StartupService],
   exports: [StartupService],

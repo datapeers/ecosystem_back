@@ -4,7 +4,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
 
 @InputType()
-export class UpdateSiteInput extends PartialType(CreateSiteInput) {
+export class UpdateSiteInput {
   @Field(() => ID)
   @IsNotEmpty()
   _id: string;
@@ -21,13 +21,33 @@ export class UpdateSiteInput extends PartialType(CreateSiteInput) {
   @IsOptional()
   description: string;
 
-  @Field(() => GraphQLJSONObject)
+  @Field(() => String)
   @IsOptional()
-  coords: Record<string, any>;
+  directedTo: string;
 
-  @Field(() => [ServicesSiteInput], { nullable: true })
+  @Field(() => String)
   @IsOptional()
-  services?: ServicesSiteInput[];
+  methodology: string;
+
+  @Field(() => [String])
+  @IsOptional()
+  factors: string[];
+
+  @Field(() => String)
+  @IsOptional()
+  results: string;
+
+  @Field(() => [ContactServicesInput], { nullable: true })
+  @IsOptional()
+  contacts?: ContactServicesInput[];
+
+  // @Field(() => GraphQLJSONObject)
+  // @IsOptional()
+  // coords: Record<string, any>;
+
+  // @Field(() => [ServicesSiteInput], { nullable: true })
+  // @IsOptional()
+  // services?: ServicesSiteInput[];
 
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
@@ -54,4 +74,23 @@ export class ServicesSiteInput {
   @Field(() => GraphQLJSONObject)
   @IsNotEmpty()
   coords: Record<string, any>;
+}
+
+@InputType()
+export class ContactServicesInput {
+  @Field(() => String)
+  @IsNotEmpty()
+  name: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  email: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  contact: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  others: string;
 }

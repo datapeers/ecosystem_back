@@ -220,7 +220,6 @@ export class EventsService {
 
   async update(id: string, updateEventInput: UpdateEventInput) {
     delete updateEventInput['_id'];
-    delete updateEventInput.extra_options[''];
     const updatedEvent: EventEntity = await this.eventModel
       .findOneAndUpdate({ _id: id }, { ...updateEventInput }, { new: true })
       .lean();
@@ -228,6 +227,7 @@ export class EventsService {
       await this.cancelEventEmail(updatedEvent);
     }
     if (
+      updateEventInput?.extra_options &&
       updateEventInput.extra_options['editedDates'] &&
       !updateEventInput.isCanceled
     ) {

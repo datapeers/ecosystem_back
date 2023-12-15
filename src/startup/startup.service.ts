@@ -35,6 +35,8 @@ import {
   Entrepreneur,
   StartupRelationship,
 } from 'src/entrepreneur/entities/entrepreneur.entity';
+import { EmailsService } from 'src/emails/emails.service';
+import { ContactArgs } from './args/contact-startup.args';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -46,6 +48,8 @@ export class StartupService implements FormDocumentService<Startup> {
     private readonly expertService: ExpertService,
     private readonly tableConfigService: TableConfigService,
     private readonly downloadService: DownloadsService,
+    @Inject(forwardRef(() => EmailsService))
+    private readonly emailsService: EmailsService,
   ) {}
 
   private static readonly virtualFields = {
@@ -245,6 +249,9 @@ export class StartupService implements FormDocumentService<Startup> {
               cond: { $eq: ['$$entrepreneur.rol', 'leader'] },
             },
           },
+          lastPhase: {
+            $arrayElemAt: ['$phases', -1], // Obtiene el último elemento del array 'phases'
+          },
         },
       },
       {
@@ -255,9 +262,11 @@ export class StartupService implements FormDocumentService<Startup> {
         },
       },
     ]);
-
     return startups.map((i) => {
-      return { ...i, entrepreneurs: i.leaderEntrepreneurs };
+      return {
+        ...i,
+        entrepreneurs: i.leaderEntrepreneurs,
+      };
     });
   }
 
@@ -476,5 +485,29 @@ export class StartupService implements FormDocumentService<Startup> {
       entrepreneurs,
       item: genericStartupItem,
     });
+  }
+
+  async contactStartup(contactArgs: ContactArgs) {
+    try {
+      const defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
+      await this.emailsService.send({
+        from: defaultVerifiedEmail,
+        html: `
+          <p>
+            <span style="font-size:14px">
+              <a href="mailto:${contactArgs.from}">${contactArgs.from}</a>&nbsp;<em><strong>te quiere contactar en EcosystemBT</strong></em>
+            </span>
+          </p>
+          <p style="text-align:center">${contactArgs.body}</p>
+          <p><span style="font-size:11px"><em>Recuerda que este mensaje es un intermediario, y solo se envió por ecosystem, y no debes responder en este hilo.</em></span></p>
+        `,
+        subject: contactArgs.subject,
+        text: `${contactArgs.from} te quieren contactar en EcosystemBT`,
+        to: contactArgs.to,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

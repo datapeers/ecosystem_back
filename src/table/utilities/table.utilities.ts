@@ -208,13 +208,13 @@ export function columnsResourceReply() {
 export function columnsCommunities() {
   return [
     new RowConfigColumn(
-      'Líder',
+      'Founder',
       TableColumnType.array,
       'entrepreneurs; item, nombre',
       'string',
     ),
     new RowConfigColumn(
-      'Contacto',
+      'Teléfono',
       TableColumnType.array,
       'entrepreneurs; item, telefono',
       'string',

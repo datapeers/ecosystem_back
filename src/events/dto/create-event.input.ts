@@ -58,6 +58,9 @@ export class TeamCoachSubmit {
   @Field(() => String)
   @IsNotEmpty()
   name: string;
+
+  @Field(() => String)
+  email: string;
 }
 
 @InputType()
@@ -69,6 +72,9 @@ export class ExpertEventSubmit {
   @Field(() => String)
   @IsNotEmpty()
   name: string;
+
+  @Field(() => String)
+  email: string;
 }
 
 @InputType()
@@ -80,4 +86,7 @@ export class ParticipantEventSubmit {
   @Field(() => String)
   @IsNotEmpty()
   name: string;
+
+  @Field(() => String)
+  email: string;
 }

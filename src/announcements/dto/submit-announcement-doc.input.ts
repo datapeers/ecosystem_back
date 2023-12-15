@@ -4,15 +4,21 @@ import GraphQLJSON from 'graphql-type-json';
 
 @InputType()
 export class SubmitAnnouncementDocInput {
-  @Field(() => String, { description: "Announcement id." })
+  @Field(() => String, { description: 'Announcement id.' })
   @IsString()
   announcement: string;
 
-  @Field(() => String, { description: "Announcement participant id." })
+  @Field(() => String, { description: 'Announcement participant id.' })
   @IsString()
   participant: string;
 
-  @Field(() => GraphQLJSON, { description: "Id of the form to render for submissions" })
+  @Field(() => GraphQLJSON, {
+    description: 'Id of the form to render for submissions',
+  })
   @IsNotEmpty()
   submission: JSON;
+
+  @Field(() => String, { description: 'Announcement target.' })
+  @IsString()
+  announcementTarget: string;
 }

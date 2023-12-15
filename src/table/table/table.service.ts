@@ -119,6 +119,10 @@ export class TableService {
     if (table.locator.includes('resource replies')) {
       columns.unshift(...tableUtilities.columnsResourceReply());
     }
+    if (table.locator.includes('applicants')) {
+      if (table.locator.includes('selected'))
+        columns.push(...tableUtilities.columnsAnnouncementSelected());
+    }
 
     return columns;
   }

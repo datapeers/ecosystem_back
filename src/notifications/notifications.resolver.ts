@@ -19,25 +19,25 @@ import { OthersInput } from './dto/others.inpt';
 export class NotificationsResolver {
   constructor(private readonly notificationsService: NotificationsService) {}
 
-  @Subscription(() => Notification, {
-    filter(payload, variables) {
-      const notificationTargets = variables.target.split(';');
-      let notificationAccepted = false;
-      for (const iterator of notificationTargets) {
-        if (payload.notificationTarget.includes(iterator)) {
-          notificationAccepted = true;
-          break;
-        }
-      }
-      return notificationAccepted;
-    },
-  })
-  listenFormSubscription(
-    @Args('OthersInput') OthersInput: OthersInput,
-    @CurrentUser() user: AuthUser,
-  ) {
-    return this.notificationsService.subscribe(user, OthersInput.others);
-  }
+  // @Subscription(() => Notification, {
+  //   filter(payload, variables) {
+  //     const notificationTargets = variables.target.split(';');
+  //     let notificationAccepted = false;
+  //     for (const iterator of notificationTargets) {
+  //       if (payload.notificationTarget.includes(iterator)) {
+  //         notificationAccepted = true;
+  //         break;
+  //       }
+  //     }
+  //     return notificationAccepted;
+  //   },
+  // })
+  // listenFormSubscription(
+  //   @Args('OthersInput') OthersInput: OthersInput,
+  //   @CurrentUser() user: AuthUser,
+  // ) {
+  //   return this.notificationsService.subscribe(user, OthersInput.others);
+  // }
 
   @Mutation(() => Notification)
   createNotification(

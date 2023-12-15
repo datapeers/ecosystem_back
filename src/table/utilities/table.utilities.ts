@@ -8,7 +8,7 @@ const convertFormToColumns = (
 ): RowConfigColumn[] => {
   let displayColumnsTable: RowConfigColumn[] = [];
   if (rowsForm.length != 0) {
-    const ignore = ['button', 'htmlelement', 'content'];
+    const ignore = ['button', 'htmlelement', 'content', 'fieldset'];
     const itemsForm = rowsForm.filter((i) => !ignore.includes(i.type));
     for (const iterator of itemsForm) {
       switch (iterator.type) {
@@ -208,15 +208,26 @@ export function columnsResourceReply() {
 export function columnsCommunities() {
   return [
     new RowConfigColumn(
-      'Líder',
+      'Founder',
       TableColumnType.array,
       'entrepreneurs; item, nombre',
       'string',
     ),
     new RowConfigColumn(
-      'Contacto',
+      'Teléfono',
       TableColumnType.array,
       'entrepreneurs; item, telefono',
+      'string',
+    ),
+  ];
+}
+
+export function columnsAnnouncementSelected() {
+  return [
+    new RowConfigColumn(
+      'Batch seleccionado',
+      TableColumnType.data,
+      'batch, nombre',
       'string',
     ),
   ];
@@ -228,4 +239,5 @@ export const tableUtilities = {
   columnsCommunities,
   columnsEvaluations,
   columnsResourceReply,
+  columnsAnnouncementSelected,
 };

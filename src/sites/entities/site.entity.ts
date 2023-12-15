@@ -26,13 +26,41 @@ export class Site {
   @Prop({ default: '' })
   description: string;
 
-  @Field(() => GraphQLJSONObject)
-  @Prop({ type: SchemaTypes.Mixed, required: true })
-  coords: any;
+  @Field(() => String, {
+    nullable: true,
+  })
+  @Prop({ default: '' })
+  directedTo: string;
 
-  @Field(() => [ServicesSiteLink])
+  @Field(() => String, {
+    nullable: true,
+  })
+  @Prop({ default: '' })
+  methodology: string;
+
+  @Field(() => [String], {
+    nullable: true,
+  })
   @Prop({ default: [] })
-  services: ServicesSiteLink[];
+  factors: string[];
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  @Prop({ default: '' })
+  results: string;
+
+  // @Field(() => GraphQLJSONObject)
+  // @Prop({ type: SchemaTypes.Mixed, required: true })
+  // coords: any;
+
+  // @Field(() => [ServicesSiteLink])
+  // @Prop({ default: [] })
+  // services: ServicesSiteLink[];
+
+  @Field(() => [ContactServiceLink])
+  @Prop({ default: [] })
+  contacts: ContactServiceLink[];
 
   @Field(() => Boolean)
   @Prop({ default: false })
@@ -64,9 +92,33 @@ export class ServicesSiteLink {
   @Prop()
   contact: string;
 
-  @Field(() => GraphQLJSONObject)
-  @Prop({ type: SchemaTypes.Mixed, required: true })
-  coords: any;
+  // @Field(() => GraphQLJSONObject)
+  // @Prop({ type: SchemaTypes.Mixed, required: true })
+  // coords: any;
+}
+
+@Schema()
+@ObjectType()
+export class ContactServiceLink {
+  @Field(() => String)
+  @Prop()
+  name: string;
+
+  @Field(() => String)
+  @Prop()
+  others: string;
+
+  @Field(() => String)
+  @Prop()
+  email: string;
+
+  @Field(() => String)
+  @Prop()
+  contact: string;
+
+  // @Field(() => GraphQLJSONObject)
+  // @Prop({ type: SchemaTypes.Mixed, required: true })
+  // coords: any;
 }
 
 export const SiteSchema = SchemaFactory.createForClass(Site);

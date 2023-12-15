@@ -201,10 +201,10 @@ export class PhasesService {
   }
 
   async remove(id: string) {
-    const deletedPhase = await this.phaseModel.updateOne(
+    const deletedPhase = await this.phaseModel.findOneAndUpdate(
       { _id: id },
       { isDeleted: true },
-      { new: true },
+      { new: true, lean: true },
     );
     return deletedPhase;
   }
@@ -427,5 +427,9 @@ export class PhasesService {
       }
     }
     return { ansPhases, ansContent, ansResource };
+  }
+
+  async numbParticipants(phase: string) {
+    return await this.startupService.findNumbParticipants(phase);
   }
 }

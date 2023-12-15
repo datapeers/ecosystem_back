@@ -78,6 +78,10 @@ export class TeamCoachLink implements IEntityEvent {
   @Field(() => String)
   @Prop()
   name: string;
+
+  @Field(() => String)
+  @Prop()
+  email: string;
 }
 
 @Schema()
@@ -90,6 +94,10 @@ export class ExpertEventLink implements IEntityEvent {
   @Field(() => String)
   @Prop()
   name: string;
+
+  @Field(() => String)
+  @Prop()
+  email: string;
 }
 
 @Schema()
@@ -102,11 +110,16 @@ export class ParticipantEventLink implements IEntityEvent {
   @Field(() => String)
   @Prop()
   name: string;
+
+  @Field(() => String)
+  @Prop()
+  email: string;
 }
 
 export interface IEntityEvent {
   _id: string;
   name: string;
+  email: string;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);

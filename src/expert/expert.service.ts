@@ -26,7 +26,16 @@ export class ExpertService implements FormDocumentService {
   ) {}
 
   private static readonly virtualFields = {
-    $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
+    // $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
+    $addFields: {
+      isProspect: {
+        $cond: {
+          if: { $eq: [{ $size: '$phases' }, 0] },
+          then: true,
+          else: false,
+        },
+      },
+    },
   };
 
   async getDocument(id: string) {
@@ -49,7 +58,12 @@ export class ExpertService implements FormDocumentService {
   }
 
   async findAll(): Promise<Expert[]> {
-    const experts = await this.expertModel.find({ deletedAt: null });
+    const experts = await this.expertModel.find({
+      $or: [
+        { deletedAt: { $ne: undefined } },
+        { phases: { $exists: true, $not: { $size: 0 } } },
+      ],
+    });
     return experts;
   }
 
@@ -201,5 +215,24 @@ export class ExpertService implements FormDocumentService {
     );
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
+  }
+
+  async assignAccountAndLinkBatch(
+    accountId: string,
+    linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs,
+  ) {
+    console.log(accountId);
+    const phaseRelationship = {
+      _id: linkExpertsToPhaseArgs.phaseId,
+      name: linkExpertsToPhaseArgs.name,
+      startUps: [],
+    };
+    return this.expertModel
+      .updateOne(
+        { _id: { $in: linkExpertsToPhaseArgs.experts } },
+        { $addToSet: { phases: { $each: [phaseRelationship] } }, accountId },
+        { new: true },
+      )
+      .lean();
   }
 }

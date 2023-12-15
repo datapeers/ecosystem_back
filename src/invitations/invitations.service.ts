@@ -21,6 +21,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 import { AppConfiguration } from 'config/app.config';
 import { ConfigService } from '@nestjs/config';
+import { AuthUser } from 'src/auth/types/auth-user';
 
 @Injectable()
 export class InvitationsService {
@@ -36,7 +37,11 @@ export class InvitationsService {
     this.logger.setContext(InvitationsService.name);
   }
 
-  async create({ email, rol }: CreateInvitationArgs, adminUser: User) {
+  async create(
+    { email, rol }: CreateInvitationArgs,
+    adminUser: User,
+    metadata?,
+  ) {
     const currentInvitation = await this.tryFindOneByEmail(email);
     // Limited to only one active invitation per email;
     if (currentInvitation)
@@ -44,16 +49,19 @@ export class InvitationsService {
         `There is already one invitation pending acceptance for the email ${email}`,
       );
 
-    const user = await this.usersService.tryFindOne({ email });
-    if (user?.passwordSet)
-      throw new MethodNotAllowedException(
-        'A user with this email already exists',
-      );
+    let user = await this.usersService.tryFindOne({ email });
+    // if (user?.passwordSet)
+    //   throw new MethodNotAllowedException(
+    //     'A user with this email already exists',
+    //   );
 
     const code = uuid.v4();
     if (!user) {
       // Create a new user
-      this.authService.createAccountWithDefaultPassword(email, rol);
+      user = await this.authService.createAccountWithDefaultPassword(
+        email,
+        rol,
+      );
     } else {
       // Update the user role with the role from the new invitation
       const rolDoc = await this.usersService.findRolByType(rol);
@@ -66,6 +74,10 @@ export class InvitationsService {
       rol,
       createdBy: adminUser.uid,
       code: code,
+      metadata: {
+        ...metadata,
+        uidAccount: user.uid,
+      },
     };
     try {
       const invitation = await this.invitationModel.create(invitationData);

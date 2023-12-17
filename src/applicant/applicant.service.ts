@@ -346,6 +346,7 @@ export class ApplicantService implements FormDocumentService<Applicant> {
       },
     );
     await this.startupService.assignAccountAndLinkBatch(
+      entrepreneur._id.toString(),
       invitationExpert.metadata['uidAccount'],
       {
         phaseId: selectApplicantsArgsInput.idBatch,

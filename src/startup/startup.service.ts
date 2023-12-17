@@ -451,6 +451,7 @@ export class StartupService implements FormDocumentService<Startup> {
   }
 
   async assignAccountAndLinkBatch(
+    idEntrepreneur: string,
     accountId: string,
     linkStartUpsToPhaseArgs: LinkStartupToPhaseArgs,
   ) {
@@ -460,11 +461,13 @@ export class StartupService implements FormDocumentService<Startup> {
       state: 'pending',
     };
     const startups = linkStartUpsToPhaseArgs.startups;
-    return this.startupModel.updateOne(
+    const updated = await this.startupModel.updateOne(
       { _id: { $in: startups } },
-      { $addToSet: { phases: { $each: [phaseRelationship] } }, accountId },
+      { $addToSet: { phases: { $each: [phaseRelationship] } } },
       { new: true },
     );
+    await this.entrepreneurService.update(idEntrepreneur, { accountId });
+    return updated;
   }
 
   async genericStartup(entrepreneur?: Entrepreneur) {

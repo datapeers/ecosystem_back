@@ -68,7 +68,8 @@ export class ContentService {
     });
     const contents = await this.contentModel
       .find({ phase: batchId, 'extra_options.sprint': true, isDeleted: false })
-      .populate({ path: 'childs' })
+      .populate({ path: 'childs', populate: 'resources' })
+      .populate('resources')
       .lean();
     let lastContent = null;
 

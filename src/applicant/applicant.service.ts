@@ -345,15 +345,14 @@ export class ApplicantService implements FormDocumentService<Applicant> {
         idApplicant: selectApplicantsArgsInput.idApplicant,
       },
     );
-    await this.startupService.assignAccountAndLinkBatch(
-      entrepreneur._id.toString(),
-      invitationExpert.metadata['uidAccount'],
-      {
-        phaseId: selectApplicantsArgsInput.idBatch,
-        name: selectApplicantsArgsInput.nameBatch,
-        startups: [startup._id.toString()],
-      },
-    );
+    await this.entrepreneurService.update(entrepreneur._id.toString(), {
+      accountId: invitationExpert.metadata['uidAccount'],
+    });
+    await this.startupService.linkWithPhase({
+      phaseId: selectApplicantsArgsInput.idBatch,
+      name: selectApplicantsArgsInput.nameBatch,
+      startups: [startup._id.toString()],
+    });
     return entrepreneur;
   }
 

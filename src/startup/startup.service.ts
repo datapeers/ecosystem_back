@@ -450,26 +450,6 @@ export class StartupService implements FormDocumentService<Startup> {
     return { url: fileUrl };
   }
 
-  async assignAccountAndLinkBatch(
-    idEntrepreneur: string,
-    accountId: string,
-    linkStartUpsToPhaseArgs: LinkStartupToPhaseArgs,
-  ) {
-    const phaseRelationship: PhaseRelationship = {
-      _id: linkStartUpsToPhaseArgs.phaseId,
-      name: linkStartUpsToPhaseArgs.name,
-      state: 'pending',
-    };
-    const startups = linkStartUpsToPhaseArgs.startups;
-    const updated = await this.startupModel.updateOne(
-      { _id: { $in: startups } },
-      { $addToSet: { phases: { $each: [phaseRelationship] } } },
-      { new: true },
-    );
-    await this.entrepreneurService.update(idEntrepreneur, { accountId });
-    return updated;
-  }
-
   async genericStartup(entrepreneur?: Entrepreneur) {
     const genericStartupItem: any = {
       nombre: 'Sin startup',

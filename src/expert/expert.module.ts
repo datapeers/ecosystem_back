@@ -14,9 +14,10 @@ import { TableModule } from 'src/table/table.module';
     AuthModule,
     UsersModule,
     DownloadsModule,
+    UsersModule,
     forwardRef(() => TableModule),
   ],
   providers: [ExpertResolver, ExpertService],
-  exports: [ExpertService]
+  exports: [ExpertService],
 })
 export class ExpertModule {}

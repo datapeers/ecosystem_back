@@ -20,11 +20,15 @@ import { AuthUser } from 'src/auth/types/auth-user';
 import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
 import { DownloadResult } from 'src/shared/models/download-result';
 import { UpdateExpertInput } from './args/update-expert.input';
+import { UsersService } from 'src/users/users.service';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Expert)
 export class ExpertResolver {
-  constructor(private readonly expertService: ExpertService) {}
+  constructor(
+    private readonly expertService: ExpertService,
+    private readonly userService: UsersService,
+  ) {}
 
   @Query(() => DownloadResult, { name: 'expertsDownload' })
   downloadByRequest(
@@ -87,6 +91,18 @@ export class ExpertResolver {
   @ResolveField('isProspect', () => Boolean)
   resolveIsProspect(@Parent() expert: Omit<Expert, 'isProspect'>) {
     return !!expert.phases.length;
+  }
+
+  @ResolveField('image', () => String)
+  async getImage(@Parent() expert: Omit<Expert, 'image'>) {
+    if (!expert.accountId || expert.accountId == '') return '';
+
+    try {
+      const user = await this.userService.findOne(expert.accountId);
+      return user.profileImageUrl ?? '';
+    } catch (e) {
+      return '';
+    }
   }
 
   @Mutation(() => Expert)

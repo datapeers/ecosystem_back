@@ -1,6 +1,7 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
+import { ContactServicesInput } from './update-site.input';
 
 @InputType()
 export class CreateSiteInput {
@@ -9,13 +10,34 @@ export class CreateSiteInput {
   name: string;
 
   @Field(() => String, { nullable: true })
-  @IsNotEmpty()
+  @IsOptional()
   thumbnail: string;
 
   @Field(() => String)
+  @IsOptional()
   description: string;
 
-  @Field(() => GraphQLJSONObject)
+  @Field(() => String)
   @IsOptional()
-  coords: Record<string, any>;
+  directedTo: string;
+
+  @Field(() => String)
+  @IsOptional()
+  methodology: string;
+
+  @Field(() => [String])
+  @IsOptional()
+  factors: string[];
+
+  @Field(() => String)
+  @IsOptional()
+  results: string;
+
+  @Field(() => [ContactServicesInput], { nullable: true })
+  @IsOptional()
+  contacts: ContactServicesInput[];
+
+  // @Field(() => GraphQLJSONObject)
+  // @IsOptional()
+  // coords: Record<string, any>;
 }

@@ -25,10 +25,12 @@ export class ActaService {
   }
 
   findByEventsList(events: string[]) {
-    return this.actaModel.find({
-      isDeleted: false,
-      event: { $in: events.map((i) => new Types.ObjectId(i)) },
-    });
+    return this.actaModel
+      .find({
+        isDeleted: false,
+        event: { $in: events.map((i) => new Types.ObjectId(i)) },
+      })
+      .lean();
   }
 
   findOne(id: string) {

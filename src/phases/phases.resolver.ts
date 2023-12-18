@@ -15,6 +15,8 @@ import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import { Stage } from 'src/stages/entities/stage.entity';
+import { SearchBatchInput } from './dto/others.inpt';
+import { SearchInBatchOutput } from 'src/shared/models/search-result.model';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Phase)
 export class PhasesResolver {
@@ -30,9 +32,26 @@ export class PhasesResolver {
     return this.phasesService.findList(ids);
   }
 
+  @Query(() => [Phase], { name: 'phasesBases' })
+  findBases() {
+    return this.phasesService.findPhaseBases();
+  }
+
   @Query(() => Phase, { name: 'phase' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.phasesService.findOne(id);
+  }
+
+  @Query(() => SearchInBatchOutput, { name: 'searchInBatch' })
+  searchInBatch(
+    @Args('OthersInput') OthersInput: SearchBatchInput,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.phasesService.search(
+      user,
+      OthersInput.batchIds,
+      OthersInput.searchValue,
+    );
   }
 
   @Mutation(() => Phase)
@@ -61,5 +80,10 @@ export class PhasesResolver {
   @ResolveField('stageDoc', () => Stage)
   resolveStage(@Parent() phase: Omit<Phase, 'stageDoc'>) {
     return this.phasesService.getStage(phase);
+  }
+
+  @ResolveField('participants', () => Number)
+  resolveNumbParticipants(@Parent() phase: Omit<Phase, 'participants'>) {
+    return this.phasesService.numbParticipants(phase._id.toString());
   }
 }

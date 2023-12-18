@@ -51,9 +51,8 @@ export class FormSubscriptionService {
       ...createFormSubscriptionInput,
       target: subscriptionForm.target,
     };
-    const createdFormSubscription = await this.formSubscriptionModel.create(
-      data,
-    );
+    const createdFormSubscription =
+      await this.formSubscriptionModel.create(data);
     pubSub.publish(FormSubscriptionService.triggerName, {
       listenFormSubscription: createdFormSubscription,
     });

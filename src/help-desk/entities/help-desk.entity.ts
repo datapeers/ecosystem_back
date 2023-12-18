@@ -1,11 +1,11 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import GraphQLJSON from 'graphql-type-json';
-import { Body } from '@nestjs/common';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { TicketEnum } from '../enum/ticket-status.enum';
-import { TicketCategory } from '../categories/entities/category.entity';
-import { Types } from 'mongoose';
-
+import { TicketCategory } from '../enum/ticket-category.enum';
+import { GraphQLJSONObject } from 'graphql-scalars';
+import { SchemaTypes } from 'mongoose';
+import { IFileUpload } from 'src/shared/models/file';
+@Schema({ timestamps: true })
 @ObjectType()
 export class HelpDeskTicket {
   @Field(() => ID)
@@ -15,16 +15,24 @@ export class HelpDeskTicket {
   @Prop({ required: true })
   title: string;
 
-  @Field(() => String)
   @Prop({
-    required: true,
-    enum: [TicketEnum.Open, TicketEnum.InProgress, TicketEnum.Closed],
-    default: 'Open',
+    type: String,
+    enum: TicketCategory,
+    default: TicketCategory.support,
   })
-  status: string;
+  @Field(() => String)
+  category: TicketCategory;
 
-  @Field(() => GraphQLJSON)
-  @Prop({ type: Object })
+  @Prop({
+    type: String,
+    enum: TicketEnum,
+    default: TicketEnum.Open,
+  })
+  @Field(() => String)
+  status: TicketEnum;
+
+  @Field(() => [GraphQLJSONObject])
+  @Prop({ type: [{ type: SchemaTypes.Mixed }] })
   childs: TicketChild[];
 
   @Field(() => String)
@@ -44,17 +52,14 @@ export class HelpDeskTicket {
 
   @Field(() => Date)
   updatedAt: Date;
-
-  @Field(() => TicketCategory)
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'TicketCategory' }] })
-  category: TicketCategory;
 }
 
 export class TicketChild {
   body: string;
-  attachment: string[];
-  isResposne: boolean;
+  attachment: IFileUpload[];
+  isResponse: boolean;
   answerBy: string;
+  answerById: string;
 }
 
 export const HelpDeskTicketSchema =

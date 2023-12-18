@@ -12,6 +12,8 @@ import { ResourcesModule } from 'src/resources/resources.module';
 import { ExpertModule } from 'src/expert/expert.module';
 import { StartupModule } from 'src/startup/startup.module';
 import { StagesModule } from 'src/stages/stages.module';
+import { ResourcesRepliesModule } from 'src/resources/resources-replies/resources-replies.module';
+import { UserLogModule } from 'src/user-log/user-log.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Phase.name, schema: PhaseSchema }]),
@@ -23,6 +25,8 @@ import { StagesModule } from 'src/stages/stages.module';
     forwardRef(() => ExpertModule),
     forwardRef(() => StartupModule),
     forwardRef(() => StagesModule),
+    forwardRef(() => ResourcesRepliesModule),
+    forwardRef(() => UserLogModule),
     ActivitiesConfigModule,
   ],
   providers: [PhasesResolver, PhasesService],

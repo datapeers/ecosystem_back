@@ -21,5 +21,6 @@ import { UsersModule } from 'src/users/users.module';
   ],
   providers: [InvitationsResolver, InvitationsService],
   controllers: [InvitationsController],
+  exports: [InvitationsService],
 })
 export class InvitationsModule {}

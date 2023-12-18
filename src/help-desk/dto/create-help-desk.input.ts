@@ -1,6 +1,8 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsObject, IsString, MinLength } from 'class-validator';
+import { IsEnum, IsObject, IsString, MinLength } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
+import { TicketCategory } from '../enum/ticket-category.enum';
+import { IFileUpload } from 'src/shared/models/file';
 
 @InputType()
 export class CreateHelpDeskInput {
@@ -11,9 +13,12 @@ export class CreateHelpDeskInput {
 
   @Field(() => GraphQLJSON)
   @IsObject()
-  newchild: {
+  newChild: {
     body: string;
-    attachment: string[];
+    attachment: IFileUpload[];
+    isResponse: boolean;
+    answerBy: string;
+    answerById: string;
   };
 
   @Field(() => String)
@@ -25,4 +30,8 @@ export class CreateHelpDeskInput {
   @IsString()
   @MinLength(2)
   startupName: string;
+
+  @Field(() => String)
+  @IsEnum(TicketCategory)
+  category: TicketCategory;
 }

@@ -6,12 +6,10 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
-
-RUN npm run build
+COPY ./dist .
 
 ENV NODE_ENV production
 
 EXPOSE 3000 2500
 
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "src/main.js"]

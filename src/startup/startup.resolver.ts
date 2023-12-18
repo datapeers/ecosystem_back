@@ -20,7 +20,8 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
 import { DownloadResult } from 'src/shared/models/download-result';
-
+import { GraphQLJSONObject } from 'graphql-scalars';
+import { ContactArgs } from './args/contact-startup.args';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Startup)
 export class StartupResolver {
@@ -84,7 +85,7 @@ export class StartupResolver {
   ): Promise<UpdateResultPayload> {
     return this.startupService.linkWithEntrepreneursByRequest(
       linkWithTargetsByRequestArgs,
-      user
+      user,
     );
   }
 
@@ -100,5 +101,19 @@ export class StartupResolver {
   @ResolveField('isProspect', () => Boolean)
   resolveIsProspect(@Parent() startup: Omit<Startup, 'isProspect'>) {
     return !!startup.phases.length;
+  }
+
+  @ResolveField('lastPhase', () => GraphQLJSONObject, { nullable: true })
+  resolveLastPhase(@Parent() startup: Omit<Startup, 'lastPhase'>) {
+    return startup['lastPhase'];
+  }
+
+  @Query(() => Boolean, { name: 'contactCommunity' })
+  contactStartup(
+    @Args() contactInputs: ContactArgs,
+    @CurrentUser() user: AuthUser,
+  ) {
+    if (!user) return false;
+    return this.startupService.contactStartup(contactInputs);
   }
 }

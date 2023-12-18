@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { HelpDeskService } from './help-desk.service';
 import { HelpDeskResolver } from './help-desk.resolver';
 import { TicketCategoriesModule } from './categories/categories.module';
@@ -7,14 +7,22 @@ import {
   HelpDeskTicket,
   HelpDeskTicketSchema,
 } from './entities/help-desk.entity';
+import { AuthModule } from 'src/auth/auth.module';
+import { LoggerModule } from 'src/logger/logger.module';
+import { StartupModule } from 'src/startup/startup.module';
+import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 
 @Module({
-  providers: [HelpDeskResolver, HelpDeskService],
   imports: [
     MongooseModule.forFeature([
       { name: HelpDeskTicket.name, schema: HelpDeskTicketSchema },
     ]),
-    TicketCategoriesModule,
+    AuthModule,
+    LoggerModule,
+    forwardRef(() => StartupModule),
+    forwardRef(() => EntrepreneurModule),
   ],
+  providers: [HelpDeskResolver, HelpDeskService],
+  exports: [HelpDeskService],
 })
 export class HelpDeskModule {}

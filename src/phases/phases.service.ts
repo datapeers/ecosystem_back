@@ -20,6 +20,13 @@ import { StartupService } from 'src/startup/startup.service';
 import { add, differenceInMilliseconds } from 'date-fns';
 import { StagesService } from 'src/stages/stages.service';
 import { Stage } from 'src/stages/entities/stage.entity';
+import { UserLogService } from 'src/user-log/user-log.service';
+import { ResourcesRepliesService } from 'src/resources/resources-replies/resources-replies.service';
+import {
+  searchResource,
+  searchResult,
+} from 'src/shared/models/search-result.model';
+import { Resource } from 'src/resources/entities/resource.entity';
 
 @Injectable()
 export class PhasesService {
@@ -32,6 +39,10 @@ export class PhasesService {
     private readonly activitiesConfigService: ActivitiesConfigService,
     @Inject(forwardRef(() => StagesService))
     private readonly stagesService: StagesService,
+    @Inject(forwardRef(() => UserLogService))
+    private readonly logsService: UserLogService,
+    @Inject(forwardRef(() => ResourcesRepliesService))
+    private readonly resourceRepliesService: ResourcesRepliesService,
   ) {}
 
   async findAll(user: AuthUser): Promise<Phase[]> {
@@ -49,7 +60,7 @@ export class PhasesService {
 
   async findList(ids: string[]) {
     const phaseBases = await this.phaseModel
-      .find({ deleted: false, basePhase: true })
+      .find({ isDeleted: false, basePhase: true })
       .lean();
     const batches = await this.phaseModel
       .find({
@@ -59,6 +70,13 @@ export class PhasesService {
       .lean();
     // console.log(phaseBases);
     return [...phaseBases, ...batches];
+  }
+
+  async findPhaseBases() {
+    const phaseBases = await this.phaseModel
+      .find({ isDeleted: false, basePhase: true })
+      .lean();
+    return phaseBases;
   }
 
   async find(ids: string[]): Promise<Phase[]> {
@@ -183,10 +201,10 @@ export class PhasesService {
   }
 
   async remove(id: string) {
-    const deletedPhase = await this.phaseModel.updateOne(
+    const deletedPhase = await this.phaseModel.findOneAndUpdate(
       { _id: id },
       { isDeleted: true },
-      { new: true },
+      { new: true, lean: true },
     );
     return deletedPhase;
   }
@@ -343,11 +361,75 @@ export class PhasesService {
     if (phase.basePhase) return new Date(phase.endAt);
     const docs = await this.contentService.findAll(phase._id.toString());
     const lastSprint = docs[docs.length - 1];
+    if (!lastSprint) return new Date(phase.endAt);
     return moment(lastSprint.extra_options.end).add(1, 'days').toDate();
   }
 
   async getStage(phase: Phase): Promise<Stage> {
     const stage = await this.stagesService.findOne(phase.stage);
     return stage;
+  }
+
+  async search(user: AuthUser, batchIds: string[], searchValue: string) {
+    let phasesList: Phase[] = [];
+    if (ValidRoles.user === (user.rolDoc.type as ValidRoles)) {
+      phasesList = await this.findList(batchIds);
+    } else {
+      phasesList = await this.findAll(user);
+    }
+    phasesList = phasesList.filter((i) => !i.basePhase);
+    let ansPhases: searchResult[] = [];
+    let ansContent: searchResult[] = [];
+    let ansResource: searchResult[] = [];
+    for (const phase of phasesList) {
+      if (phase.name.match(new RegExp(searchValue, 'i')) !== null)
+        ansPhases.push(
+          new searchResult({
+            label: phase.name,
+            type: 'batch',
+            metadata: { _id: phase._id, tag: 'Batch' },
+          }),
+        );
+      let sprints = await this.contentService.findAll(
+        phase._id.toString(),
+        user,
+      );
+      for (const sprint of sprints) {
+        for (const content of sprint.childs) {
+          if (content.name.match(new RegExp(searchValue, 'i')) !== null)
+            ansContent.push(
+              new searchResult({
+                label: content.name,
+                type: 'content',
+                metadata: {
+                  _id: content._id,
+                  batch: phase._id,
+                  tag: 'Contenido',
+                },
+              }),
+            );
+          const resourcesContent = searchResource(
+            content.resources,
+            searchValue,
+            phase._id,
+            sprint._id,
+            content._id,
+          );
+          ansResource = ansResource.concat(resourcesContent);
+        }
+        const resourcesContent = searchResource(
+          sprint.resources,
+          searchValue,
+          phase._id,
+          sprint._id,
+        );
+        ansResource = ansResource.concat(resourcesContent);
+      }
+    }
+    return { ansPhases, ansContent, ansResource };
+  }
+
+  async numbParticipants(phase: string) {
+    return await this.startupService.findNumbParticipants(phase);
   }
 }

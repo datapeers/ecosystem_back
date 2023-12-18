@@ -4,51 +4,45 @@ import {
   NotFoundException,
   MethodNotAllowedException,
   OnModuleInit,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { User } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { FindUsersArgs } from './args/find-users.args';
 import { RolService } from '../rol/rol.service';
-
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserLogService } from 'src/user-log/user-log.service';
 @Injectable()
-export class UsersService implements OnModuleInit {
+export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly rolService: RolService,
+    @Inject(forwardRef(() => UserLogService))
+    private readonly userLogService: UserLogService,
   ) {}
 
-  async onModuleInit() {
-    // ? Update old docs to new method to read rol
-    // const users = await this.userModel.find();
-    // const roles = await this.rolService.findAll();
-    // const rolesObj = {};
-    // for (const iterator of roles) {
-    //   rolesObj[iterator.type] = iterator._id;
-    // }
-    // console.log(rolesObj);
-    // for (const iterator of users) {
-    //   if (!iterator['roles'][0]) {
-    //     console.log('error con', iterator);
-    //   }
-    //   console.log(rolesObj[iterator['roles'][0]]);
-    //   iterator.rol = rolesObj[iterator['roles'][0]];
-    //   await iterator.save();
-    // }
-  }
+  // async onModuleInit() {
+
+  // }
 
   async tryFindOne(filters: { uid?: string; email?: string }) {
     return await this.userModel.findOne(filters).lean();
   }
 
   async findOne(uid: string) {
-    const user = (await this.userModel.findOne({ uid: uid })).populate('rol');
+    const user = await (
+      await this.userModel.findOne({ uid: uid })
+    ).populate('rol');
     if (!user) throw new NotFoundException(`No user found with uid ${uid}`);
+    this.userLogService.registerLogin(user._id);
     return user;
   }
 
   async findById(id: string) {
     const user = (await this.userModel.findById(id)).populate('rol');
+
     if (!user) throw new NotFoundException(`No user found with id ${id}`);
     return user;
   }
@@ -78,6 +72,11 @@ export class UsersService implements OnModuleInit {
     return users;
   }
 
+  async countAll() {
+    const docs = await this.userModel.find({ isActive: true }).lean();
+    return docs.length;
+  }
+
   async create(createUserInput: Partial<User>) {
     const user = await this.tryFindOne({ uid: createUserInput.uid });
     if (user) throw new ConflictException('Authenticated user already exist');
@@ -100,6 +99,11 @@ export class UsersService implements OnModuleInit {
       )
       .populate('rol')
       .lean();
+    // this.eventEmitter.emit('set.notification', {
+    //   userId: filters._id,
+    //   text: 'Usuario Actualizo perfil',
+    //   url: '',
+    // });
     return user;
   }
 

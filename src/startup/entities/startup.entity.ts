@@ -60,6 +60,10 @@ export class EntrepreneurRelationship {
   @Field(() => String)
   @Prop()
   rol: string;
+
+  @Field(() => String)
+  @Prop()
+  description: string;
 }
 
 @Schema()
@@ -72,6 +76,10 @@ export class PhaseRelationship {
   @Field(() => String)
   @Prop()
   name: string;
+
+  @Field(() => String)
+  @Prop()
+  state: string;
 }
 
 export const StartupSchema = SchemaFactory.createForClass(Startup);

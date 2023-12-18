@@ -31,7 +31,12 @@ import { DownloadResult } from 'src/shared/models/download-result';
 import { excelUtilities } from 'src/shared/utilities/excel.utilities';
 import { DownloadsService } from 'src/downloads/downloads.service';
 import { TableConfigService } from 'src/table/table-config/table-config.service';
-import { StartupRelationship } from 'src/entrepreneur/entities/entrepreneur.entity';
+import {
+  Entrepreneur,
+  StartupRelationship,
+} from 'src/entrepreneur/entities/entrepreneur.entity';
+import { EmailsService } from 'src/emails/emails.service';
+import { ContactArgs } from './args/contact-startup.args';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -43,10 +48,21 @@ export class StartupService implements FormDocumentService<Startup> {
     private readonly expertService: ExpertService,
     private readonly tableConfigService: TableConfigService,
     private readonly downloadService: DownloadsService,
+    @Inject(forwardRef(() => EmailsService))
+    private readonly emailsService: EmailsService,
   ) {}
 
   private static readonly virtualFields = {
-    $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
+    // $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
+    $addFields: {
+      isProspect: {
+        $cond: {
+          if: { $eq: [{ $size: '$phases' }, 0] },
+          then: true,
+          else: false,
+        },
+      },
+    },
   };
 
   async getDocument(id: string) {
@@ -59,11 +75,12 @@ export class StartupService implements FormDocumentService<Startup> {
       item: submission,
     };
     const createdDocument = await this.create(data);
-    if (context && context.entrepreneur) {
+    if (context && createdDocument && context.entrepreneur) {
       const entrepreneur = context.entrepreneur;
       const linkResult = await this.linkStartupsAndEntrepreneurs(
         [createdDocument._id],
         [entrepreneur],
+        'leader',
       );
       if (!linkResult.acknowledged)
         throw new InternalServerErrorException(
@@ -91,6 +108,7 @@ export class StartupService implements FormDocumentService<Startup> {
       aggregationPipeline,
       user,
     );
+    aggregationPipeline[0]['$match']['item.generic'] = null;
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
@@ -136,6 +154,7 @@ export class StartupService implements FormDocumentService<Startup> {
       aggregationPipeline,
       user,
     );
+    aggregationPipeline[0]['$match']['item.generic'] = null;
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
@@ -145,6 +164,7 @@ export class StartupService implements FormDocumentService<Startup> {
   async linkStartupsAndEntrepreneurs(
     ids: string[],
     entrepreneurs: string[],
+    rol?: string,
   ): Promise<UpdateResultPayload> {
     // Find bussinesses by ids
     const startups = await this.findMany(ids);
@@ -165,11 +185,15 @@ export class StartupService implements FormDocumentService<Startup> {
       );
 
     // Find entrepreneurs
-    const entrepreneurDocuments = await this.entrepreneurService.findMany(
-      entrepreneurs,
-    );
+    const entrepreneurDocuments =
+      await this.entrepreneurService.findMany(entrepreneurs);
     const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
-      return { _id: document._id, item: document.item, rol: 'partner' };
+      return {
+        _id: document._id,
+        item: document.item,
+        rol: rol ? rol : 'partner',
+        description: '',
+      };
     });
     const startupUpdateResult = await this.linkWithEntrepreneurs(
       ids,
@@ -197,13 +221,16 @@ export class StartupService implements FormDocumentService<Startup> {
   }
 
   async findAll(): Promise<Startup[]> {
-    const startups = await this.startupModel.find({ deletedAt: null });
+    const startups = await this.startupModel.find({
+      deletedAt: null,
+      'item.generic': null,
+    });
     return startups;
   }
 
-  async findByEntrepreneur(idEntrepreneur: string): Promise<Startup> {
+  async findByEntrepreneur(idEntrepreneur: string): Promise<Startup[]> {
     const startup = await this.startupModel
-      .findOne({
+      .find({
         deletedAt: null,
         'entrepreneurs._id': new Types.ObjectId(idEntrepreneur),
       })
@@ -222,17 +249,24 @@ export class StartupService implements FormDocumentService<Startup> {
               cond: { $eq: ['$$entrepreneur.rol', 'leader'] },
             },
           },
+          lastPhase: {
+            $arrayElemAt: ['$phases', -1], // Obtiene el último elemento del array 'phases'
+          },
         },
       },
       {
         $match: {
           leaderEntrepreneurs: { $size: 1 },
+          'item.generic': null,
+          deleteAt: null,
         },
       },
     ]);
-
     return startups.map((i) => {
-      return { ...i, entrepreneurs: i.leaderEntrepreneurs };
+      return {
+        ...i,
+        entrepreneurs: i.leaderEntrepreneurs,
+      };
     });
   }
 
@@ -307,6 +341,14 @@ export class StartupService implements FormDocumentService<Startup> {
     return startups;
   }
 
+  async findNumbParticipants(batch: string) {
+    const startups = await this.startupModel.find(
+      { 'phases._id': batch, deletedAt: null },
+      { _id: 1 },
+    );
+    return startups.length;
+  }
+
   async findMany(ids: string[]): Promise<Startup[]> {
     const startups = await this.startupModel.find({
       _id: { $in: ids },
@@ -348,6 +390,7 @@ export class StartupService implements FormDocumentService<Startup> {
     const phaseRelationship: PhaseRelationship = {
       _id: linkStartUpsToPhaseArgs.phaseId,
       name: linkStartUpsToPhaseArgs.name,
+      state: 'pending',
     };
     const startups = linkStartUpsToPhaseArgs.startups;
     const updateResult = await this.startupModel.updateMany(
@@ -356,9 +399,8 @@ export class StartupService implements FormDocumentService<Startup> {
       { new: true },
     );
     if (updateResult.acknowledged) {
-      const updatedStartupsRelationships = await this.getStartupsRelationships(
-        startups,
-      );
+      const updatedStartupsRelationships =
+        await this.getStartupsRelationships(startups);
       await this.entrepreneurService.updatePhasesForStartupsRelationships(
         updatedStartupsRelationships,
       );
@@ -379,8 +421,8 @@ export class StartupService implements FormDocumentService<Startup> {
     { request, targetIds }: LinkWithTargetsByRequestArgs,
     user: AuthUser,
   ) {
-    const businesses = await this.findManyIdsByRequest(request, user);
-    return await this.linkStartupsAndEntrepreneurs(businesses, targetIds);
+    const startups = await this.findManyIdsByRequest(request, user);
+    return await this.linkStartupsAndEntrepreneurs(startups, targetIds);
   }
 
   async downloadByRequest(
@@ -406,5 +448,66 @@ export class StartupService implements FormDocumentService<Startup> {
     );
     const fileUrl = await this.downloadService.uploadTempFile(data, format);
     return { url: fileUrl };
+  }
+
+  async assignAccountAndLinkBatch(
+    accountId: string,
+    linkStartUpsToPhaseArgs: LinkStartupToPhaseArgs,
+  ) {
+    const phaseRelationship: PhaseRelationship = {
+      _id: linkStartUpsToPhaseArgs.phaseId,
+      name: linkStartUpsToPhaseArgs.name,
+      state: 'pending',
+    };
+    const startups = linkStartUpsToPhaseArgs.startups;
+    return this.startupModel.updateOne(
+      { _id: { $in: startups } },
+      { $addToSet: { phases: { $each: [phaseRelationship] } }, accountId },
+      { new: true },
+    );
+  }
+
+  async genericStartup(entrepreneur?: Entrepreneur) {
+    const genericStartupItem: any = {
+      nombre: 'Sin startup',
+      generic: true,
+    };
+    const entrepreneurs = [];
+    if (entrepreneur) {
+      entrepreneurs.push({
+        _id: entrepreneur._id,
+        item: entrepreneur.item,
+        rol: 'leader',
+        description: '',
+      });
+    }
+    return await this.create({
+      entrepreneurs,
+      item: genericStartupItem,
+    });
+  }
+
+  async contactStartup(contactArgs: ContactArgs) {
+    try {
+      const defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
+      await this.emailsService.send({
+        from: defaultVerifiedEmail,
+        html: `
+          <p>
+            <span style="font-size:14px">
+              <a href="mailto:${contactArgs.from}">${contactArgs.from}</a>&nbsp;<em><strong>te quiere contactar en EcosystemBT</strong></em>
+            </span>
+          </p>
+          <p style="text-align:center">${contactArgs.body}</p>
+          <p><span style="font-size:11px"><em>Recuerda que este mensaje es un intermediario, y solo se envió por ecosystem, y no debes responder en este hilo.</em></span></p>
+        `,
+        subject: contactArgs.subject,
+        text: `${contactArgs.from} te quieren contactar en EcosystemBT`,
+        to: contactArgs.to,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

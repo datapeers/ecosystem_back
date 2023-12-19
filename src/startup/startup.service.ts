@@ -302,7 +302,7 @@ export class StartupService implements FormDocumentService<Startup> {
           leaderEntrepreneurs: { $size: 1 },
           'item.generic': null,
           deleteAt: null,
-          members: { $size: 1 },
+          $expr: { $gte: [{ $size: '$members' }, 1] },
         },
       },
     ]);
@@ -392,7 +392,11 @@ export class StartupService implements FormDocumentService<Startup> {
           },
         },
       },
-      { $match: { members: { $size: 1 } } },
+      {
+        $match: {
+          $expr: { $gte: [{ $size: '$members' }, 1] },
+        },
+      },
       project,
       ...lookUps,
     ]);

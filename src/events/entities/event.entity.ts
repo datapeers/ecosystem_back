@@ -117,7 +117,7 @@ export class ParticipantEventLink implements IEntityEvent {
 
   @Field(() => String, { nullable: true })
   @Prop()
-  startup: string;
+  startupEntrepreneur: string;
 }
 
 export interface IEntityEvent {

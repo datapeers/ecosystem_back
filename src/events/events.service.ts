@@ -90,6 +90,8 @@ export class EventsService {
         zoom: createdMeeting,
       },
     });
+    const defaultEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
+    const splittedName = defaultEmail.split('@');
     await this.emailsService.sendIcs(
       {
         to: to,
@@ -99,8 +101,8 @@ export class EventsService {
       },
       eventCreated.toObject(),
       {
-        nameOrganizer: hosting[0].name,
-        emailOrganizer: hosting[0].email,
+        nameOrganizer: hosting[0] ? hosting[0].name : splittedName[0],
+        emailOrganizer: hosting[0] ? hosting[0].email : defaultEmail,
         urlRedirect: this.configService.get('appUri'),
       },
     );
@@ -134,6 +136,8 @@ export class EventsService {
         ...createEventInput.extra_options,
       },
     });
+    const defaultEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
+    const splittedName = defaultEmail.split('@');
     await this.emailsService.sendIcs(
       {
         to: to,
@@ -147,8 +151,8 @@ export class EventsService {
       },
       eventCreated.toObject(),
       {
-        nameOrganizer: hosting[0].name,
-        emailOrganizer: hosting[0].email,
+        nameOrganizer: hosting[0] ? hosting[0].name : splittedName[0],
+        emailOrganizer: hosting[0] ? hosting[0].email : defaultEmail,
         urlRedirect: this.configService.get('appUri'),
       },
     );

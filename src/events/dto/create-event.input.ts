@@ -91,5 +91,5 @@ export class ParticipantEventSubmit {
   email: string;
 
   @Field(() => String)
-  startup: string;
+  startupEntrepreneur: string;
 }

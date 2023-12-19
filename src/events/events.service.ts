@@ -400,6 +400,41 @@ export class EventsService {
     return { countHoursDone, countHoursDonated };
   }
 
+  async getConsumedHours(startup: string, batch: string) {
+    const events = await this.eventModel
+      .find({
+        batch: new Types.ObjectId(batch),
+        'participants.startupEntrepreneur': startup,
+        isCanceled: false,
+        isDeleted: false,
+      })
+      .lean();
+
+    const actas = await this.actaService
+      .findByEventsList(events.map((i) => i._id.toString()))
+      .lean();
+
+    let acc = {};
+    for (const acta of actas) {
+      if (
+        !acta.extra_options?.expertHours ||
+        Object.keys(acta.extra_options?.expertHours).length == 0
+      )
+        continue;
+      const event = events.filter(
+        (e) => e._id.toString() === acta.event.toString(),
+      );
+      Object.values(acta.extra_options.expertHours).forEach((element: any) => {
+        if (!acc[event[0].type]) {
+          acc[event[0].type] = element.done + element.donated;
+        } else {
+          acc[event[0].type] += element.done + element.donated;
+        }
+      });
+    }
+    return { hours: acc };
+  }
+
   async getEventsAndActas(phase: string) {
     const events: EventEntity[] = await this.eventModel
       .find({

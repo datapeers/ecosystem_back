@@ -8,10 +8,11 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ActivitiesConfigService } from './activities-config.service';
-import { ActivitiesConfig } from './entities/activities-config.entity';
+import { ActivitiesConfig, Assign } from './entities/activities-config.entity';
 import { CreateActivitiesConfigInput } from './dto/create-activities-config.input';
 import { UpdateActivitiesConfigInput } from './dto/update-activities-config.input';
 import { GraphQLJSONObject } from 'graphql-scalars';
+import { Hours } from './outputs/hours.model';
 @Resolver(() => ActivitiesConfig)
 export class ActivitiesConfigResolver {
   constructor(
@@ -34,6 +35,14 @@ export class ActivitiesConfigResolver {
   @Query(() => ActivitiesConfig, { name: 'activitiesConfig' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.activitiesConfigService.findOne(id);
+  }
+
+  @Query(() => Hours, { name: 'activitiesConfigPhasePerStartup' })
+  findOneStartup(
+    @Args('phase', { type: () => String }) phase: string,
+    @Args('startup', { type: () => String }) startup: string,
+  ) {
+    return this.activitiesConfigService.findByPhaseAndStartup(phase, startup);
   }
 
   @Mutation(() => ActivitiesConfig)

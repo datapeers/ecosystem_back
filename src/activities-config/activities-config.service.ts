@@ -1,4 +1,9 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { CreateActivitiesConfigInput } from './dto/create-activities-config.input';
 import { UpdateActivitiesConfigInput } from './dto/update-activities-config.input';
 import { InjectModel } from '@nestjs/mongoose';
@@ -55,6 +60,39 @@ export class ActivitiesConfigService {
       });
     }
     return item;
+  }
+
+  async findByPhaseAndStartup(phase: string, startup: string) {
+    let item = await this.activitiesConfig.findOne({ phase }).lean();
+    if (!item) {
+      item = await this.create({
+        limit: 0,
+        phase,
+      });
+    }
+
+    const hoursTarget = await this.calcHours(item);
+
+    const startupConfig = hoursTarget.hoursAssignStartups.filter(
+      (s) => s._id == startup,
+    );
+
+    if (startupConfig.length == 0)
+      throw new NotFoundException('Startup not found');
+    //console.log(startupConfig[0]);
+    const hoursConsumend = await this.eventsService.getConsumedHours(
+      startup,
+      phase,
+    );
+    const ans = {};
+
+    Object.keys(startupConfig[0].hours).forEach((k) => {
+      ans[k] = {
+        target: startupConfig[0].hours[k],
+        value: hoursConsumend.hours[k] ?? 0,
+      };
+    });
+    return { hours: ans };
   }
 
   findOne(id: string) {

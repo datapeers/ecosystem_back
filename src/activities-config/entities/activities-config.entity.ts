@@ -1,7 +1,6 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { SchemaTypes, Types, Document } from 'mongoose';
-import { GraphQLJSONObject } from 'graphql-scalars';
+import { SchemaTypes } from 'mongoose';
 
 @Schema({ timestamps: true })
 @ObjectType()

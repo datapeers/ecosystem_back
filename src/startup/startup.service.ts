@@ -37,6 +37,7 @@ import {
 } from 'src/entrepreneur/entities/entrepreneur.entity';
 import { EmailsService } from 'src/emails/emails.service';
 import { ContactArgs } from './args/contact-startup.args';
+import { EntrepreneurStartupArgs } from 'src/shared/args/entrepreneur-startup-data';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -51,6 +52,16 @@ export class StartupService implements FormDocumentService<Startup> {
     @Inject(forwardRef(() => EmailsService))
     private readonly emailsService: EmailsService,
   ) {}
+
+  // async onModuleInit() {
+  //   let startups = await this.startupModel.find({});
+  //   for (const iterator of startups) {
+  //     iterator.entrepreneurs = iterator.entrepreneurs.map((i) => {
+  //       return { ...i, state: 'member' };
+  //     });
+  //     await iterator.save();
+  //   }
+  // }
 
   private static readonly virtualFields = {
     // $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
@@ -166,13 +177,28 @@ export class StartupService implements FormDocumentService<Startup> {
     entrepreneurs: string[],
     rol?: string,
   ): Promise<UpdateResultPayload> {
-    // Find bussinesses by ids
+    // Find docs
+    const entrepreneurDocuments =
+      await this.entrepreneurService.findMany(entrepreneurs);
     const startups = await this.findMany(ids);
-
-    // Link entrepreneurs to bussinesses by given relationships
-    const startupsToLink = startups.map((startup) => {
-      return { _id: startup._id, item: startup.item, phases: startup.phases };
-    });
+    for (const entrepreneurDoc of entrepreneurDocuments) {
+      const lastStartup = entrepreneurDoc.startups.find(
+        (i) => i.state === 'member',
+      );
+      if (!lastStartup) continue;
+      await this.unlinkEntrepreneur(lastStartup._id, entrepreneurDoc._id);
+    }
+    // Link entrepreneurs to startups by given relationships
+    const startupsToLink = [];
+    for (const startupDoc of startups) {
+      const entrepreneurLink = {
+        _id: startupDoc._id,
+        item: startupDoc.item,
+        phases: startupDoc.phases,
+        state: 'member',
+      };
+      startupsToLink.push(entrepreneurLink);
+    }
     const entrepreneurUpdateResult =
       await this.entrepreneurService.linkWithStartups(
         entrepreneurs,
@@ -184,15 +210,13 @@ export class StartupService implements FormDocumentService<Startup> {
         'Failed to create link between startups and entrepreneurs',
       );
 
-    // Find entrepreneurs
-    const entrepreneurDocuments =
-      await this.entrepreneurService.findMany(entrepreneurs);
     const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
       return {
         _id: document._id,
         item: document.item,
         rol: rol ? rol : 'partner',
         description: '',
+        state: 'member',
       };
     });
     const startupUpdateResult = await this.linkWithEntrepreneurs(
@@ -470,6 +494,8 @@ export class StartupService implements FormDocumentService<Startup> {
     });
   }
 
+  async entrepreneursLeaveStartup(entrepreneurs) {}
+
   async contactStartup(contactArgs: ContactArgs) {
     try {
       const defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
@@ -492,5 +518,27 @@ export class StartupService implements FormDocumentService<Startup> {
     } catch (error) {
       return false;
     }
+  }
+
+  unlinkEntrepreneur(startupId, entrepreneurId) {
+    return this.startupModel.updateOne(
+      { _id: startupId, 'entrepreneurs._id': entrepreneurId },
+      { $set: { 'entrepreneurs.$.state': 'leaved' } },
+    );
+  }
+
+  updateDataEntrepreneur(entrepreneurData: EntrepreneurStartupArgs) {
+    return this.startupModel.updateOne(
+      {
+        _id: entrepreneurData.startup,
+        'entrepreneurs._id': new Types.ObjectId(entrepreneurData._id),
+      },
+      {
+        $set: {
+          'entrepreneurs.$.rol': entrepreneurData.rol,
+          'entrepreneurs.$.description': entrepreneurData.description,
+        },
+      },
+    );
   }
 }

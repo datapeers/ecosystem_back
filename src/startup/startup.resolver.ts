@@ -22,6 +22,7 @@ import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
 import { DownloadResult } from 'src/shared/models/download-result';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { ContactArgs } from './args/contact-startup.args';
+import { EntrepreneurStartupArgs } from 'src/shared/args/entrepreneur-startup-data';
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Startup)
 export class StartupResolver {
@@ -115,5 +116,14 @@ export class StartupResolver {
   ) {
     if (!user) return false;
     return this.startupService.contactStartup(contactInputs);
+  }
+
+  @Mutation(() => UpdateResultPayload, {
+    name: 'updateDataEntrepreneurStartup',
+  })
+  updateDataEntrepreneurStartup(
+    @Args() updateDataEntrepreneur: EntrepreneurStartupArgs,
+  ) {
+    return this.startupService.updateDataEntrepreneur(updateDataEntrepreneur);
   }
 }

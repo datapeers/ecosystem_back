@@ -120,9 +120,21 @@ export class StartupService implements FormDocumentService<Startup> {
       user,
     );
     aggregationPipeline[0]['$match']['item.generic'] = null;
+    // filtro personas
+    aggregationPipeline[1]['$addFields']['members'] = {
+      $filter: {
+        input: '$entrepreneurs',
+        as: 'entrepreneur',
+        cond: { $eq: ['$$entrepreneur.state', 'member'] },
+      },
+    };
+    // aggregationPipeline[2]['$match']['members'] = { $size: 1 };
     const documents = await this.startupModel
       .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
+    documents[0].documents = documents[0].documents.map((i) => {
+      return { ...i, entrepreneurs: i.members };
+    });
     return documents[0];
   }
 
@@ -276,6 +288,13 @@ export class StartupService implements FormDocumentService<Startup> {
           lastPhase: {
             $arrayElemAt: ['$phases', -1], // Obtiene el último elemento del array 'phases'
           },
+          members: {
+            $filter: {
+              input: '$entrepreneurs',
+              as: 'entrepreneur',
+              cond: { $eq: ['$$entrepreneur.state', 'member'] },
+            },
+          },
         },
       },
       {
@@ -283,6 +302,7 @@ export class StartupService implements FormDocumentService<Startup> {
           leaderEntrepreneurs: { $size: 1 },
           'item.generic': null,
           deleteAt: null,
+          members: { $size: 1 },
         },
       },
     ]);
@@ -348,6 +368,7 @@ export class StartupService implements FormDocumentService<Startup> {
         item: 1,
         phases: 1,
         entrepreneurs: 1,
+        members: 1,
         // experto: {
         //   $cond: {
         //     if: { $ne: ['$experto', null] },
@@ -359,10 +380,25 @@ export class StartupService implements FormDocumentService<Startup> {
     };
     const startups = await this.startupModel.aggregate([
       { $match: initMatch },
+      // filtro personas
+      {
+        $addFields: {
+          members: {
+            $filter: {
+              input: '$entrepreneurs',
+              as: 'entrepreneur',
+              cond: { $eq: ['$$entrepreneur.state', 'member'] },
+            },
+          },
+        },
+      },
+      { $match: { members: { $size: 1 } } },
       project,
       ...lookUps,
     ]);
-    return startups;
+    return startups.map((i) => {
+      return { ...i, entrepreneurs: i['members'] };
+    });
   }
 
   async findNumbParticipants(batch: string) {

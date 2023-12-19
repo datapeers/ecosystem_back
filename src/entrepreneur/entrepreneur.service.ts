@@ -118,9 +118,32 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       aggregationPipeline,
       user,
     );
+    // filtro personas
+    aggregationPipeline[1]['$addFields']['members'] = {
+      $filter: {
+        input: '$startups',
+        as: 'startup',
+        cond: { $eq: ['$$startup.state', 'member'] },
+      },
+    };
+    // Divide el array en dos partes en la posición deseada
+    let primeraParte = aggregationPipeline.slice(0, 2);
+    let segundaParte = aggregationPipeline.slice(2);
+
+    // Combina las dos partes con el nuevo elemento en el medio
+    // const miArray = [
+    //   ...primeraParte,
+    //   { $match: { members: { $size: 1 } } },
+    //   ...segundaParte,
+    // ];
+    // aggregationPipeline[2];
+
     const documents = await this.entrepreneurModel
-      .aggregate<PaginatedResult<Entrepreneur>>(aggregationPipeline)
+      .aggregate(aggregationPipeline)
       .collation({ locale: 'en_US', strength: 2 });
+    documents[0].documents = documents[0].documents.map((i) => {
+      return { ...i, startups: i['members'] };
+    });
     return documents[0];
   }
 

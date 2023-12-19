@@ -71,18 +71,13 @@ export class ActivitiesConfigService {
       });
     }
 
-    console.log(item);
-
     const hoursTarget = await this.calcHours(item);
 
     const startupConfig = hoursTarget.hoursAssignStartups.filter(
-      (s) => s._id == startup,
+      (s) => s._id.toString() == startup.toString(),
     );
-    console.log(startupConfig);
 
-    if (startupConfig.length == 0)
-      throw new NotFoundException('Startup not found');
-    //console.log(startupConfig[0]);
+    if (startupConfig.length == 0) return { hours: {} };
 
     let hoursConsumend: any = {};
 
@@ -100,10 +95,11 @@ export class ActivitiesConfigService {
         target: startupConfig[0].hours[k],
         value:
           hoursConsumend.hours && hoursConsumend.hours[k]
-            ? hoursConsumend.hours && hoursConsumend.hours[k].value
+            ? hoursConsumend.hours && hoursConsumend.hours[k]
             : 0,
       };
     });
+
     return { hours: ans };
   }
 

@@ -22,6 +22,18 @@ export class TypesEvent {
 
   @Field(() => Boolean)
   @Prop({ default: false })
+  isSchedulable: boolean;
+
+  @Field(() => String)
+  @Prop({ default: '' })
+  scheduleUrl: string;
+
+  @Field(() => String)
+  @Prop({ default: '' })
+  description: string;
+
+  @Field(() => Boolean)
+  @Prop({ default: false })
   isDeleted: boolean;
 
   @Field(() => Date)

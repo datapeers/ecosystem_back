@@ -114,6 +114,10 @@ export class ParticipantEventLink implements IEntityEvent {
   @Field(() => String)
   @Prop()
   email: string;
+
+  @Field(() => String, { nullable: true })
+  @Prop()
+  startupEntrepreneur: string;
 }
 
 export interface IEntityEvent {

@@ -97,12 +97,13 @@ export class UserLogService {
   }
 
   /** @var date: date format YYYY-MM-DD */
-  registerResourcesByUser(date: string, user) {
+  registerResourcesByUser(date: string, user: AuthUser) {
     const begin = new Date(`${date}T00:00:00.000Z`);
     const end = new Date(`${date}T23:59:59.999Z`);
     return this.userLogModel
       .find({
-        user,
+        'metadata.user': user._id,
+        'metadata.content': { $exists: true },
         createdAt: {
           $gte: begin,
           $lt: end,

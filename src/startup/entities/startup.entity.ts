@@ -64,6 +64,10 @@ export class EntrepreneurRelationship {
   @Field(() => String)
   @Prop()
   description: string;
+
+  @Field(() => String)
+  @Prop()
+  state: string;
 }
 
 @Schema()

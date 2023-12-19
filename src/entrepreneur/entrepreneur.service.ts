@@ -64,6 +64,16 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     },
   };
 
+  // async onModuleInit() {
+  //   let startups = await this.entrepreneurModel.find({});
+  //   for (const iterator of startups) {
+  //     iterator.startups = iterator.startups.map((i) => {
+  //       return { ...i, state: 'member' };
+  //     });
+  //     await iterator.save();
+  //   }
+  // }
+
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
@@ -161,7 +171,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return aggregationPipeline;
   }
 
-  async findMany(ids: string[]): Promise<Entrepreneur[]> {
+  async findMany(ids: string[]) {
     const entrepreneurs = await this.entrepreneurModel.find({
       _id: { $in: ids },
       deletedAt: null,
@@ -211,12 +221,23 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     ids: string[],
     startupsRelationships: StartupRelationship[],
   ): Promise<UpdateResultPayload> {
+    const filter = { _id: { $in: ids } };
+    // Actualizar el estado de las startups existentes
+    const setUpdate = {
+      $set: { 'startups.$[elem].state': 'leaved' },
+    };
+    const arrayFilters = [{ 'elem.state': { $ne: 'leaved' } }];
+    await this.entrepreneurModel
+      .updateMany(filter, setUpdate, {
+        arrayFilters,
+      })
+      .lean();
+    // Agregar la nueva startup
+    const addToSetUpdate = {
+      $addToSet: { startups: { $each: startupsRelationships } },
+    };
     return await this.entrepreneurModel
-      .updateMany(
-        { _id: { $in: ids } },
-        { $addToSet: { startups: { $each: startupsRelationships } } },
-        { new: true },
-      )
+      .updateMany(filter, addToSetUpdate, { new: true })
       .lean();
   }
 
@@ -283,14 +304,25 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     const entrepreneurs = await this.findMany(ids);
 
     // Link entrepreneurs to startups by given relationships
-    const entrepreneursToLink = entrepreneurs.map((document) => {
-      return {
-        _id: document._id,
-        item: document.item,
+    const entrepreneursToLink = [];
+    for (const entrepreneurDoc of entrepreneurs) {
+      const entrepreneurLink = {
+        _id: entrepreneurDoc._id,
+        item: entrepreneurDoc.item,
         rol: 'partner',
         description: '',
+        state: 'member',
       };
-    });
+      entrepreneursToLink.push(entrepreneurLink);
+      const lastStartup = entrepreneurDoc.startups.find(
+        (i) => i.state === 'member',
+      );
+      if (!lastStartup) continue;
+      await this.startupService.unlinkEntrepreneur(
+        lastStartup._id,
+        entrepreneurDoc._id,
+      );
+    }
     const startupUpdateResult = await this.startupService.linkWithEntrepreneurs(
       startups,
       entrepreneursToLink,
@@ -308,12 +340,14 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
         _id: document._id,
         item: document.item,
         phases: document.phases,
+        state: 'member',
       };
     });
     const entrepreneurUpdateResult = await this.linkWithStartups(
       ids,
       startupRelationships,
     );
+
     return entrepreneurUpdateResult;
   }
 
@@ -374,5 +408,12 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       );
     }
     return bulkWriteResult;
+  }
+
+  unlinkStartup(entrepreneurId, startupId) {
+    return this.entrepreneurModel.updateOne(
+      { _id: entrepreneurId, 'startups._id': startupId },
+      { $set: { 'startups.$.state': 'leaved' } },
+    );
   }
 }

@@ -71,25 +71,37 @@ export class ActivitiesConfigService {
       });
     }
 
+    console.log(item);
+
     const hoursTarget = await this.calcHours(item);
 
     const startupConfig = hoursTarget.hoursAssignStartups.filter(
       (s) => s._id == startup,
     );
+    console.log(startupConfig);
 
     if (startupConfig.length == 0)
       throw new NotFoundException('Startup not found');
     //console.log(startupConfig[0]);
-    const hoursConsumend = await this.eventsService.getConsumedHours(
-      startup,
-      phase,
-    );
+
+    let hoursConsumend: any = {};
+
+    try {
+      hoursConsumend = await this.eventsService.getConsumedHours(
+        startup,
+        phase,
+      );
+    } catch (error) {}
+
     const ans = {};
 
     Object.keys(startupConfig[0].hours).forEach((k) => {
       ans[k] = {
         target: startupConfig[0].hours[k],
-        value: hoursConsumend.hours[k] ?? 0,
+        value:
+          hoursConsumend.hours && hoursConsumend.hours[k]
+            ? hoursConsumend.hours && hoursConsumend.hours[k].value
+            : 0,
       };
     });
     return { hours: ans };

@@ -89,4 +89,7 @@ export class ParticipantEventSubmit {
 
   @Field(() => String)
   email: string;
+
+  @Field(() => String)
+  startup: string;
 }

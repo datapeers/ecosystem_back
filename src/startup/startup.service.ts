@@ -37,6 +37,7 @@ import {
 } from 'src/entrepreneur/entities/entrepreneur.entity';
 import { EmailsService } from 'src/emails/emails.service';
 import { ContactArgs } from './args/contact-startup.args';
+import { EntrepreneurStartupArgs } from 'src/shared/args/entrepreneur-startup-data';
 
 @Injectable()
 export class StartupService implements FormDocumentService<Startup> {
@@ -180,7 +181,6 @@ export class StartupService implements FormDocumentService<Startup> {
     const entrepreneurDocuments =
       await this.entrepreneurService.findMany(entrepreneurs);
     const startups = await this.findMany(ids);
-    console.log('a');
     for (const entrepreneurDoc of entrepreneurDocuments) {
       const lastStartup = entrepreneurDoc.startups.find(
         (i) => i.state === 'member',
@@ -188,7 +188,6 @@ export class StartupService implements FormDocumentService<Startup> {
       if (!lastStartup) continue;
       await this.unlinkEntrepreneur(lastStartup._id, entrepreneurDoc._id);
     }
-    console.log('ab');
     // Link entrepreneurs to startups by given relationships
     const startupsToLink = [];
     for (const startupDoc of startups) {
@@ -200,7 +199,6 @@ export class StartupService implements FormDocumentService<Startup> {
       };
       startupsToLink.push(entrepreneurLink);
     }
-    console.log('abc');
     const entrepreneurUpdateResult =
       await this.entrepreneurService.linkWithStartups(
         entrepreneurs,
@@ -526,6 +524,21 @@ export class StartupService implements FormDocumentService<Startup> {
     return this.startupModel.updateOne(
       { _id: startupId, 'entrepreneurs._id': entrepreneurId },
       { $set: { 'entrepreneurs.$.state': 'leaved' } },
+    );
+  }
+
+  updateDataEntrepreneur(entrepreneurData: EntrepreneurStartupArgs) {
+    return this.startupModel.updateOne(
+      {
+        _id: entrepreneurData.startup,
+        'entrepreneurs._id': new Types.ObjectId(entrepreneurData._id),
+      },
+      {
+        $set: {
+          'entrepreneurs.$.rol': entrepreneurData.rol,
+          'entrepreneurs.$.description': entrepreneurData.description,
+        },
+      },
     );
   }
 }

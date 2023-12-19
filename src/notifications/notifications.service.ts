@@ -106,11 +106,11 @@ export class NotificationsService {
         createNotificationInput,
       );
       const targets = newNotification.target.split(';');
-      for (const iterator of targets) {
-        pubSub.publish(iterator, {
-          newNotification: newNotification.toObject(),
-        });
-      }
+      // for (const iterator of targets) {
+      //   pubSub.publish(iterator, {
+      //     newNotification: newNotification.toObject(),
+      //   });
+      // }
       return newNotification;
     } catch (error) {
       this._logger.error(

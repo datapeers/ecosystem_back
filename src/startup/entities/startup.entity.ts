@@ -44,6 +44,10 @@ export class Startup {
 
   @Field(() => Boolean, { nullable: true })
   isProspect: boolean;
+
+  @Field(() => String, { nullable: true })
+  @Prop({ default: '' })
+  thumbnail: string;
 }
 
 @Schema()

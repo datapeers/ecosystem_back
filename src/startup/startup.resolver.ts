@@ -77,6 +77,14 @@ export class StartupResolver {
     return this.startupService.delete(ids);
   }
 
+  @Mutation(() => Startup)
+  changeThumbnailStartup(
+    @Args('id', { type: () => String }) id: string,
+    @Args('thumbnail', { type: () => String }) thumbnail: string,
+  ) {
+    return this.startupService.update(id, { thumbnail });
+  }
+
   @Mutation(() => UpdateResultPayload, {
     name: 'linkStartupsWithEntrepreneursByRequest',
   })

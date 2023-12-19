@@ -14,6 +14,11 @@ import { FindUsersArgs } from './args/find-users.args';
 import { RolService } from '../rol/rol.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UserLogService } from 'src/user-log/user-log.service';
+import { EmailsService } from 'src/emails/emails.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { ContactArgs } from 'src/startup/args/contact-startup.args';
+import { NotificationStates } from 'src/notifications/enum/notification-states.enum';
+import { NotificationTypes } from 'src/notifications/enum/notification-types.enum';
 @Injectable()
 export class UsersService {
   constructor(
@@ -21,6 +26,10 @@ export class UsersService {
     private readonly rolService: RolService,
     @Inject(forwardRef(() => UserLogService))
     private readonly userLogService: UserLogService,
+    @Inject(forwardRef(() => EmailsService))
+    private readonly emailsService: EmailsService,
+    @Inject(forwardRef(() => NotificationsService))
+    private readonly notificationService: NotificationsService,
   ) {}
 
   // async onModuleInit() {
@@ -131,5 +140,44 @@ export class UsersService {
 
   async findRolByType(type: string) {
     return await this.rolService.findByType(type);
+  }
+
+  async invite(contactArgs: ContactArgs) {
+    const user = await this.tryFindOne({ email: contactArgs.to });
+    if (!user)
+      throw new ConflictException(
+        `No se encuentra un usuario con el correo ${contactArgs.to}`,
+      );
+    try {
+      const defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
+      const urlInvitation =
+        process.env.APP_URI +
+        '/home/startup_invitation/' +
+        contactArgs.startupID;
+      await this.emailsService.send({
+        from: defaultVerifiedEmail,
+        html: `
+          <p><strong><em>${contactArgs.from} te quiere invitar a formar parte de ${contactArgs.startupName} en EcosystemBT</em></strong></p>
+          <p>Al hacer click <a href="${urlInvitation}">aqu&iacute;</a> o con el siguiente link para aceptar unirse a su startUp</p>
+          <p>&nbsp;</p>
+          <p>link: <a href="${urlInvitation}">${urlInvitation}</a></p>
+          <p><strong>Recuerda que este mensaje es un intermediario y solo se envi&oacute; por EcosystemBT, y no debes responder en este hilo</strong></p>
+          <p>&nbsp;</p>
+        `,
+        subject: contactArgs.subject,
+        text: `Forma parte de ${contactArgs.startupName} en EcosystemBT`,
+        to: contactArgs.to,
+      });
+      await this.notificationService.create({
+        text: `${contactArgs.from} te quiere invitar a formar parte de ${contactArgs.startupName}`,
+        url: urlInvitation,
+        target: `userNotification ${user._id};`,
+        state: NotificationStates.pending,
+        type: NotificationTypes.advise,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

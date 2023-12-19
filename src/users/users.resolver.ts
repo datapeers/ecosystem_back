@@ -9,6 +9,7 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { FindUsersArgs } from './args/find-users.args';
 import { UpdateUserInput } from './dto/update-user.input';
+import { ContactArgs } from 'src/startup/args/contact-startup.args';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -73,5 +74,10 @@ export class UsersResolver {
     @CurrentUser([ValidRoles.admin, ValidRoles.superAdmin]) user: User,
   ) {
     return this.usersService.updateState(uid, user, false);
+  }
+
+  @Mutation(() => Boolean)
+  inviteUser(@Args() contactInputs: ContactArgs) {
+    return this.usersService.invite(contactInputs);
   }
 }

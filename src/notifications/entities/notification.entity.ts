@@ -14,7 +14,7 @@ export class Notification {
   text: string;
 
   @Field(() => Date)
-  @Prop({ required: true })
+  @Prop({ required: true, default: new Date() })
   date: Date;
 
   @Field(() => String, { nullable: true })

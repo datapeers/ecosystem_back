@@ -21,4 +21,12 @@ export class ContactArgs {
   @IsNotEmpty()
   @Field(() => String)
   from: string;
+
+  @IsOptional()
+  @Field(() => String)
+  startupName?: string;
+
+  @IsOptional()
+  @Field(() => String)
+  startupID?: string;
 }

@@ -434,7 +434,8 @@ export class StartupService implements FormDocumentService<Startup> {
 
   async update(id: string, data: Partial<Startup>): Promise<Startup> {
     await this.startupModel.updateOne({ _id: id }, data, { new: true }).lean();
-    return this.findOne(id);
+    const doc = await this.findOne(id);
+    return doc;
   }
 
   async delete(ids: string[]): Promise<UpdateResultPayload> {

@@ -1,5 +1,7 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { NotificationStates } from '../enum/notification-states.enum';
+import { NotificationTypes } from '../enum/notification-types.enum';
 
 @InputType()
 export class CreateNotificationInput {
@@ -15,5 +17,13 @@ export class CreateNotificationInput {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
-  userId: string;
+  target: string;
+
+  @IsString()
+  @IsNotEmpty()
+  state: NotificationStates;
+
+  @IsString()
+  @IsNotEmpty()
+  type: NotificationTypes;
 }

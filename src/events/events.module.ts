@@ -14,6 +14,7 @@ import { PhasesModule } from 'src/phases/phases.module';
 import { ParticipationEventsModule } from './participation-events/participation-events.module';
 import { IntegrationsModule } from 'src/integrations/integrations.module';
 import { EmailsModule } from 'src/emails/emails.module';
+import { ConfigNotificationsModule } from 'src/notifications/config-notifications/config-notifications.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { EmailsModule } from 'src/emails/emails.module';
     forwardRef(() => PhasesModule),
     forwardRef(() => IntegrationsModule),
     forwardRef(() => EmailsModule),
+    forwardRef(() => ConfigNotificationsModule),
   ],
   providers: [EventsResolver, EventsService],
   exports: [EventsService],

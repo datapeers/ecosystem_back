@@ -2,8 +2,6 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  MethodNotAllowedException,
-  OnModuleInit,
   Inject,
   forwardRef,
 } from '@nestjs/common';
@@ -22,10 +20,6 @@ export class UsersService {
     @Inject(forwardRef(() => UserLogService))
     private readonly userLogService: UserLogService,
   ) {}
-
-  // async onModuleInit() {
-
-  // }
 
   async tryFindOne(filters: { uid?: string; email?: string }) {
     return await this.userModel.findOne(filters).lean();
@@ -99,11 +93,6 @@ export class UsersService {
       )
       .populate('rol')
       .lean();
-    // this.eventEmitter.emit('set.notification', {
-    //   userId: filters._id,
-    //   text: 'Usuario Actualizo perfil',
-    //   url: '',
-    // });
     return user;
   }
 

@@ -50,6 +50,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RatingModule } from './rating/rating.module';
 import { IntegrationsModule } from './integrations/integrations.module';
 import { TermsOfUseModule } from './terms-of-use/terms-of-use.module';
+import { UserConfigModule } from './user-config/user-config.module';
 
 @Module({
   imports: [
@@ -144,6 +145,7 @@ import { TermsOfUseModule } from './terms-of-use/terms-of-use.module';
     RatingModule,
     IntegrationsModule,
     TermsOfUseModule,
+    UserConfigModule,
   ],
   controllers: [],
   providers: [],

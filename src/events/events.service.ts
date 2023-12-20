@@ -19,6 +19,9 @@ import { ConfigService } from '@nestjs/config';
 import { ActaService } from './acta/acta.service';
 import { infoWeekDates } from 'src/shared/utilities/dates.utilities';
 import { Acta } from './acta/entities/acta.entity';
+import { ConfigNotificationsService } from 'src/notifications/config-notifications/config-notifications.service';
+import { default_notification_types } from 'src/notifications/types-notifications/model/types-notification.default';
+import { EmailNotificationTypes } from 'src/notifications/types-notifications/model/email-notification-types.enum';
 
 @Injectable()
 export class EventsService {
@@ -40,6 +43,8 @@ export class EventsService {
     private readonly configService: ConfigService<AppConfiguration>,
     @Inject(forwardRef(() => ActaService))
     private readonly actaService: ActaService,
+    @Inject(forwardRef(() => ConfigNotificationsService))
+    private readonly configNotificationsService: ConfigNotificationsService,
   ) {}
 
   async create(createEventInput: CreateEventInput) {
@@ -54,6 +59,10 @@ export class EventsService {
     const hosting = [];
     const participants = [];
     const to = [];
+
+    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.invitationToEvent);
+    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+
     for (const iterator of createEventInput.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
       to.push(iterator.email);
@@ -63,6 +72,7 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of createEventInput.participants) {
+      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
     }
@@ -113,6 +123,10 @@ export class EventsService {
     const hosting = [];
     const participants = [];
     const to = [];
+
+    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.invitationToEvent);
+    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+
     for (const iterator of createEventInput.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
       to.push(iterator.email);
@@ -122,6 +136,7 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of createEventInput.participants) {
+      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
     }
@@ -257,6 +272,10 @@ export class EventsService {
     const hosting = [];
     const participants = [];
     const to = [];
+
+    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.eventUpdate);
+    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+
     for (const iterator of updatedEvent.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
       to.push(iterator.email);
@@ -266,6 +285,7 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of updatedEvent.participants) {
+      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
     }
@@ -294,6 +314,10 @@ export class EventsService {
     const hosting = [];
     const participants = [];
     const to = [];
+
+    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.eventUpdate);
+    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+
     for (const iterator of updatedEvent.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
       to.push(iterator.email);
@@ -303,6 +327,7 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of updatedEvent.participants) {
+      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
     }

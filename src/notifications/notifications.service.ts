@@ -12,6 +12,13 @@ import { Model } from 'mongoose';
 import { pubSubInstance } from 'src/shared/sockets/socket-instance';
 import { AuthUser } from '../auth/types/auth-user';
 import { channelsNotificationEnum } from './enum/chanels-notification.enum';
+import { Entrepreneur } from 'src/entrepreneur/entities/entrepreneur.entity';
+import { Expert } from 'src/expert/entities/expert.entity';
+import { default_notification_types } from './types-notifications/model/types-notification.default';
+import { EmailNotificationTypes } from './types-notifications/model/email-notification-types.enum';
+import { ConfigNotificationsService } from './config-notifications/config-notifications.service';
+import { ExpertEventSubmit } from 'src/events/dto/create-event.input';
+import { Event as EventEntity } from 'src/events/entities/event.entity';
 
 const pubSub = pubSubInstance;
 @Injectable()
@@ -19,6 +26,7 @@ export class NotificationsService {
   constructor(
     @InjectModel(Notification.name)
     private readonly notificationModel: Model<Notification>,
+    private readonly configNotificationsService: ConfigNotificationsService,
   ) {}
 
   _logger = new Logger(NotificationsService.name);
@@ -123,5 +131,24 @@ export class NotificationsService {
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
       .lean();
     return updatedType;
+  }
+
+  async createMany(createNotificationInput: CreateNotificationInput[]) {
+    try {
+      var newNotification = await this.notificationModel.insertMany(
+        createNotificationInput,
+      );
+      // for (const iterator of targets) {
+      //   pubSub.publish(iterator, {
+      //     newNotification: newNotification.toObject(),
+      //   });
+      // }
+      return newNotification;
+    } catch (error) {
+      this._logger.error(
+        `Error creating notification ${createNotificationInput}`,
+      );
+      throw new InternalServerErrorException(`Error creating notification`);
+    }
   }
 }

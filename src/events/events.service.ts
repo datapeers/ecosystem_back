@@ -22,7 +22,11 @@ import { Acta } from './acta/entities/acta.entity';
 import { ConfigNotificationsService } from 'src/notifications/config-notifications/config-notifications.service';
 import { default_notification_types } from 'src/notifications/types-notifications/model/types-notification.default';
 import { EmailNotificationTypes } from 'src/notifications/types-notifications/model/email-notification-types.enum';
-
+import { Notification as NotificationEntity } from 'src/notifications/entities/notification.entity';
+import { NotificationStates } from 'src/notifications/enum/notification-states.enum';
+import { NotificationTypes } from 'src/notifications/enum/notification-types.enum';
+import { UsersService } from 'src/users/users.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 @Injectable()
 export class EventsService {
   constructor(
@@ -45,6 +49,10 @@ export class EventsService {
     private readonly actaService: ActaService,
     @Inject(forwardRef(() => ConfigNotificationsService))
     private readonly configNotificationsService: ConfigNotificationsService,
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService,
+    @Inject(forwardRef(() => NotificationsService))
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(createEventInput: CreateEventInput) {
@@ -58,10 +66,16 @@ export class EventsService {
   async createEventAndZoom(createEventInput: CreateEventInput) {
     const hosting = [];
     const participants = [];
+    const participantsId = [];
     const to = [];
 
-    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.invitationToEvent);
-    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+    const notificationType = default_notification_types.find(
+      (t) => t.type == EmailNotificationTypes.invitationToEvent,
+    );
+    const notificationsConfig =
+      await this.configNotificationsService.findByType(
+        notificationType._id.toString(),
+      );
 
     for (const iterator of createEventInput.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
@@ -72,9 +86,15 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of createEventInput.participants) {
-      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
+      if (
+        notificationsConfig.excluded.some(
+          (userEmail) => userEmail == iterator.email,
+        )
+      )
+        continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
+      participantsId.push(iterator._id);
     }
     var startTime = new Date(createEventInput.startAt);
     var endTime = new Date(createEventInput.endAt);
@@ -116,16 +136,29 @@ export class EventsService {
         urlRedirect: this.configService.get('appUri'),
       },
     );
+    this.sendNotificationDB(
+      participantsId,
+      createEventInput.experts.map((i) => i._id),
+      createEventInput.teamCoaches.map((i) => i._id),
+      eventCreated,
+      'creation',
+    );
     return eventCreated;
   }
 
   async createEventNormal(createEventInput: CreateEventInput) {
     const hosting = [];
     const participants = [];
+    const participantsId = [];
     const to = [];
 
-    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.invitationToEvent);
-    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+    const notificationType = default_notification_types.find(
+      (t) => t.type == EmailNotificationTypes.invitationToEvent,
+    );
+    const notificationsConfig =
+      await this.configNotificationsService.findByType(
+        notificationType._id.toString(),
+      );
 
     for (const iterator of createEventInput.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
@@ -136,9 +169,15 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of createEventInput.participants) {
-      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
+      if (
+        notificationsConfig.excluded.some(
+          (userEmail) => userEmail == iterator.email,
+        )
+      )
+        continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
+      participantsId.push(iterator._id);
     }
     var startTime = new Date(createEventInput.startAt);
     var endTime = new Date(createEventInput.endAt);
@@ -170,6 +209,13 @@ export class EventsService {
         emailOrganizer: hosting[0] ? hosting[0].email : defaultEmail,
         urlRedirect: this.configService.get('appUri'),
       },
+    );
+    this.sendNotificationDB(
+      participantsId,
+      createEventInput.experts.map((i) => i._id),
+      createEventInput.teamCoaches.map((i) => i._id),
+      eventCreated,
+      'creation',
     );
     return eventCreated;
   }
@@ -251,6 +297,30 @@ export class EventsService {
       !updateEventInput.isCanceled
     ) {
       await this.changeEventEmail(updatedEvent);
+      const notificationType = default_notification_types.find(
+        (t) => t.type == EmailNotificationTypes.invitationToEvent,
+      );
+      const notificationsConfig =
+        await this.configNotificationsService.findByType(
+          notificationType._id.toString(),
+        );
+      const participantsId = [];
+      for (const iterator of updatedEvent.participants) {
+        if (
+          notificationsConfig.excluded.some(
+            (userEmail) => userEmail == iterator.email,
+          )
+        )
+          continue;
+        participantsId.push(iterator._id);
+      }
+      this.sendNotificationDB(
+        participantsId,
+        updatedEvent.experts.map((i) => i._id.toString()),
+        updatedEvent.teamCoaches.map((i) => i._id.toString()),
+        updatedEvent,
+        'update',
+      );
     }
     return updatedEvent;
   }
@@ -259,22 +329,55 @@ export class EventsService {
     const updatedType: EventEntity = await this.eventModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
       .lean();
-    if (updatedType.attendanceType === 'zoom') {
+    if (updatedType.attendanceType === 'zoom' && !updatedType.isCanceled) {
       await this.integrationsService.deleteMeeting(
         updatedType.extra_options.zoom['id'],
       );
     }
-    await this.cancelEventEmail(updatedType);
+    if (!updatedType.isCanceled) {
+      const notificationType = default_notification_types.find(
+        (t) => t.type == EmailNotificationTypes.invitationToEvent,
+      );
+      const notificationsConfig =
+        await this.configNotificationsService.findByType(
+          notificationType._id.toString(),
+        );
+      const participantsId = [];
+      for (const iterator of updatedType.participants) {
+        if (
+          notificationsConfig.excluded.some(
+            (userEmail) => userEmail == iterator.email,
+          )
+        )
+          continue;
+        participantsId.push(iterator._id);
+      }
+      this.sendNotificationDB(
+        participantsId,
+        updatedType.experts.map((i) => i._id.toString()),
+        updatedType.teamCoaches.map((i) => i._id.toString()),
+        updatedType,
+        'delete',
+      );
+      await this.cancelEventEmail(updatedType);
+    }
+
     return updatedType;
   }
 
   async cancelEventEmail(updatedEvent: EventEntity) {
     const hosting = [];
     const participants = [];
+    const participantsId = [];
     const to = [];
 
-    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.eventUpdate);
-    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+    const notificationType = default_notification_types.find(
+      (t) => t.type == EmailNotificationTypes.eventUpdate,
+    );
+    const notificationsConfig =
+      await this.configNotificationsService.findByType(
+        notificationType._id.toString(),
+      );
 
     for (const iterator of updatedEvent.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
@@ -285,9 +388,15 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of updatedEvent.participants) {
-      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
+      if (
+        notificationsConfig.excluded.some(
+          (userEmail) => userEmail == iterator.email,
+        )
+      )
+        continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
+      participantsId.push(iterator._id);
     }
     var startTime = new Date(updatedEvent.startAt);
     var endTime = new Date(updatedEvent.endAt);
@@ -307,6 +416,13 @@ export class EventsService {
         urlRedirect: this.configService.get('appUri'),
       },
     );
+    this.sendNotificationDB(
+      participantsId,
+      updatedEvent.experts.map((i) => i._id),
+      updatedEvent.teamCoaches.map((i) => i._id),
+      updatedEvent,
+      'delete',
+    );
     return updatedEvent;
   }
 
@@ -315,8 +431,13 @@ export class EventsService {
     const participants = [];
     const to = [];
 
-    const notificationType = default_notification_types.find(t => t.type == EmailNotificationTypes.eventUpdate);
-    const notificationsConfig = await this.configNotificationsService.findByType(notificationType._id.toString());
+    const notificationType = default_notification_types.find(
+      (t) => t.type == EmailNotificationTypes.eventUpdate,
+    );
+    const notificationsConfig =
+      await this.configNotificationsService.findByType(
+        notificationType._id.toString(),
+      );
 
     for (const iterator of updatedEvent.experts) {
       hosting.push({ email: iterator.email, name: iterator.name });
@@ -327,7 +448,12 @@ export class EventsService {
       to.push(iterator.email);
     }
     for (const iterator of updatedEvent.participants) {
-      if(notificationsConfig.excluded.some(userEmail => userEmail == iterator.email)) continue;
+      if (
+        notificationsConfig.excluded.some(
+          (userEmail) => userEmail == iterator.email,
+        )
+      )
+        continue;
       participants.push({ email: iterator.email });
       to.push(iterator.email);
     }
@@ -487,5 +613,66 @@ export class EventsService {
       countHoursDonated += acta.extra_options.expertHours[expertId].donated;
     }
     return { countHoursDone, countHoursDonated };
+  }
+
+  async sendNotificationDB(
+    participantsId: string[],
+    experts: string[],
+    teamCoach: string[],
+    event,
+    type: 'creation' | 'update' | 'delete',
+  ) {
+    const entrepreneursDocs =
+      await this.entrepreneurService.findMany(participantsId);
+    const expertsDoc = await this.expertService.findMany(experts);
+    const users = await this.usersService.findManyByUUID([
+      ...entrepreneursDocs.filter((i) => i.accountId).map((i) => i.accountId),
+      ...expertsDoc.filter((i) => i.accountId).map((i) => i.accountId),
+    ]);
+    const notificationList = [];
+    for (const iterator of users) {
+      const notification = this.buildNotification(
+        type,
+        iterator._id.toString(),
+        event,
+      );
+      notificationList.push(notification);
+    }
+    for (const iterator of teamCoach) {
+      const notification = this.buildNotification(type, iterator, event);
+      notificationList.push(notification);
+    }
+    return this.notificationsService.createMany(notificationList);
+  }
+
+  buildNotification(
+    type: 'creation' | 'update' | 'delete',
+    accountId: string,
+    event: EventEntity,
+  ) {
+    let text = `Estas en el evento ${event.name}`;
+    switch (type) {
+      case 'creation':
+        text = `Tienes un nuevo evento llamado ${event.name}, míralo ahora en tu agenda`;
+        break;
+      case 'update':
+        text = `El evento ${event.name} ha sido modificado`;
+        break;
+      case 'delete':
+        text = `El evento ${event.name} ha sido cancelado`;
+        break;
+      default:
+        break;
+    }
+    const urlInvitation = process.env.APP_URI + '/home/calendar';
+    return {
+      text,
+      date: new Date(),
+      target: `userNotification ${accountId};`,
+      state: NotificationStates.pending,
+      type: NotificationTypes.calendar,
+      isDeleted: false,
+      url: urlInvitation,
+    };
   }
 }

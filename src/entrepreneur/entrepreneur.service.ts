@@ -195,6 +195,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   }
 
   async findMany(ids: string[]) {
+    if (!ids.length) return [];
     const entrepreneurs = await this.entrepreneurModel.find({
       _id: { $in: ids },
       deletedAt: null,

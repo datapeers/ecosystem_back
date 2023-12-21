@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { NotificationsResolver } from './notifications.resolver';
 import { Mongoose } from 'mongoose';
@@ -8,6 +8,10 @@ import {
   NotificationSchema,
 } from './entities/notification.entity';
 import { NotificationListenerService } from './listener/notification-listener.service';
+import { TypesNotificationsModule } from './types-notifications/types-notifications.module';
+import { ConfigNotificationsModule } from './config-notifications/config-notifications.module';
+import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
+import { ExpertModule } from 'src/expert/expert.module';
 
 @Module({
   providers: [
@@ -19,6 +23,8 @@ import { NotificationListenerService } from './listener/notification-listener.se
     MongooseModule.forFeature([
       { name: Notification.name, schema: NotificationSchema },
     ]),
+    TypesNotificationsModule,
+    ConfigNotificationsModule,
   ],
   exports: [NotificationListenerService, NotificationsService],
 })

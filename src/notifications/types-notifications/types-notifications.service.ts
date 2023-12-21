@@ -13,9 +13,12 @@ export class TypesNotificationsService implements OnModuleInit {
 
   async onModuleInit() {
     let types = await this.typesNotificationModel.find({});
-    console.log(types);
     if (types.length === 0) {
       await this.typesNotificationModel.insertMany(default_notification_types);
     }
+  }
+
+  async getTypes() {
+    return this.typesNotificationModel.find({}).lean();
   }
 }

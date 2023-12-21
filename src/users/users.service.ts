@@ -169,4 +169,24 @@ export class UsersService {
       return false;
     }
   }
+
+  async findManyById(ids: string[]) {
+    if (!ids.length) return [];
+    const users = await this.userModel
+      .find({
+        _id: { $in: ids },
+      })
+      .lean();
+    return users;
+  }
+
+  async findManyByUUID(uidList: string[]) {
+    if (!uidList.length) return [];
+    const users = await this.userModel
+      .find({
+        uid: { $in: uidList },
+      })
+      .lean();
+    return users;
+  }
 }

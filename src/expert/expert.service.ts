@@ -235,4 +235,15 @@ export class ExpertService implements FormDocumentService {
       )
       .lean();
   }
+
+  async findMany(ids: string[]) {
+    if (!ids.length) return [];
+    const experts = await this.expertModel
+      .find({
+        _id: { $in: ids },
+        deletedAt: null,
+      })
+      .lean();
+    return experts;
+  }
 }

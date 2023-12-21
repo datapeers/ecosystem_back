@@ -181,4 +181,13 @@ export class ResourcesRepliesService {
       .populate('resource')
       .lean();
   }
+
+  async findByStartupWithoutPopulate(startupID: string, phaseID: string) {
+    return this.resourceReplyModel
+      .find({
+        startup: new Types.ObjectId(startupID),
+        phase: new Types.ObjectId(phaseID),
+      })
+      .lean();
+  }
 }

@@ -7,12 +7,17 @@ import { Model } from 'mongoose';
 import { AuthUser } from '../auth/types/auth-user';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { UserLogService } from 'src/user-log/user-log.service';
+import { ResourcesRepliesService } from 'src/resources/resources-replies/resources-replies.service';
+import { ResourceReplyState } from '../resources/resources-replies/models/resorce-reply-states';
+import { ResourceType } from 'src/resources/enums/resources-types';
 @Injectable()
 export class ContentService {
   constructor(
     @InjectModel(Content.name) private readonly contentModel: Model<Content>,
     @Inject(forwardRef(() => UserLogService))
     private readonly userLogService: UserLogService,
+    @Inject(forwardRef(() => ResourcesRepliesService))
+    private readonly resourcesRepliesService: ResourcesRepliesService,
   ) {}
 
   async create(createContentInput: CreateContentInput) {
@@ -66,13 +71,13 @@ export class ContentService {
       'metadata.batch': batchId,
       'metadata.startup': startupId,
     });
+
     const contents = await this.contentModel
       .find({ phase: batchId, 'extra_options.sprint': true, isDeleted: false })
       .populate({ path: 'childs', populate: 'resources' })
       .populate('resources')
       .lean();
     let lastContent = null;
-
     // Busca del ultimo contenido sin completar
     for (const sprint of contents) {
       if (lastContent) continue;
@@ -101,7 +106,35 @@ export class ContentService {
         ++numberOfContent;
       }
     }
-    return { lastContent, contentCompleted: logsBatch.length, numberOfContent };
+
+    // Conteo de tareas pendientes
+    const logsResources =
+      await this.resourcesRepliesService.findByStartupWithoutPopulate(
+        startupId,
+        batchId,
+      );
+    let numberOfResourcesPending = 0;
+    for (const content of contents) {
+      for (const resource of content.resources) {
+        if (resource.hide || resource.isDeleted) continue;
+        const completed = logsResources.find(
+          (i) => i.resource.toString() === resource._id.toString(),
+        );
+        if (
+          !completed ||
+          resource.type === ResourceType.downloadable ||
+          completed.state !== ResourceReplyState.Aprobado
+        )
+          continue;
+        numberOfResourcesPending++;
+      }
+    }
+    return {
+      lastContent,
+      contentCompleted: logsBatch.length,
+      numberOfContent,
+      numberOfResourcesPending,
+    };
   }
 
   async update(id: string, updateContentInput: UpdateContentInput) {

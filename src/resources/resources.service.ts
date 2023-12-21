@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateResourceInput } from './dto/create-resource.input';
 import { UpdateResourceInput } from './dto/update-resource.input';
 import { InjectModel } from '@nestjs/mongoose';
@@ -9,6 +9,7 @@ import { ContentService } from 'src/content/content.service';
 export class ResourcesService {
   constructor(
     @InjectModel(Resource.name) private readonly resourceModel: Model<Resource>,
+    @Inject(forwardRef(() => ContentService))
     private readonly contentService: ContentService,
   ) {}
 

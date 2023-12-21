@@ -6,6 +6,7 @@ import { Content, ContentSchema } from './entities/content.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { LoggerModule } from 'src/logger/logger.module';
 import { UserLogModule } from 'src/user-log/user-log.module';
+import { ResourcesRepliesModule } from 'src/resources/resources-replies/resources-replies.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UserLogModule } from 'src/user-log/user-log.module';
     AuthModule,
     LoggerModule,
     forwardRef(() => UserLogModule),
+    forwardRef(() => ResourcesRepliesModule),
   ],
   providers: [ContentResolver, ContentService],
   exports: [ContentService],

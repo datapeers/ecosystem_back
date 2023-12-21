@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ResourcesService } from './resources.service';
 import { ResourcesResolver } from './resources.resolver';
 import { Resource, ResourceSchema } from './entities/resource.entity';
@@ -14,7 +14,7 @@ import { ResourcesRepliesModule } from './resources-replies/resources-replies.mo
     ]),
     AuthModule,
     LoggerModule,
-    ContentModule,
+    forwardRef(() => ContentModule),
   ],
   providers: [ResourcesResolver, ResourcesService],
   exports: [ResourcesService],

@@ -12,4 +12,6 @@ export class LastContentOutput {
   contentCompleted: number;
   @Field()
   numberOfContent: number;
+  @Field()
+  numberOfResourcesPending: number;
 }

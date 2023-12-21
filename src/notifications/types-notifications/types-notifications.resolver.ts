@@ -4,10 +4,12 @@ import { TypesNotification } from './entities/types-notification.entity';
 
 @Resolver(() => TypesNotification)
 export class TypesNotificationsResolver {
-  constructor(private readonly typesNotificationsService: TypesNotificationsService) {}
+  constructor(
+    private readonly typesNotificationsService: TypesNotificationsService,
+  ) {}
 
-  @Mutation(() => TypesNotification)
-  seedNotificationTypes() {
-    return this.typesNotificationsService.seed();
-  }
+  // @Mutation(() => TypesNotification)
+  // seedNotificationTypes() {
+  //   return this.typesNotificationsService.seed();
+  // }
 }

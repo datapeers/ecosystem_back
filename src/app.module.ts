@@ -51,6 +51,7 @@ import { RatingModule } from './rating/rating.module';
 import { IntegrationsModule } from './integrations/integrations.module';
 import { TermsOfUseModule } from './terms-of-use/terms-of-use.module';
 import { UserConfigModule } from './user-config/user-config.module';
+import { TypesNotificationsModule } from './notifications/types-notifications/types-notifications.module';
 
 @Module({
   imports: [
@@ -139,6 +140,7 @@ import { UserConfigModule } from './user-config/user-config.module';
     CalendarModule,
     UserLogModule,
     NotificationsModule,
+    TypesNotificationsModule,
     HelpDeskModule,
     ConfigurationAppModule,
     EventEmitterModule.forRoot(),

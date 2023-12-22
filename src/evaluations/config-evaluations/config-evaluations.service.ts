@@ -41,6 +41,25 @@ export class ConfigEvaluationsService {
     return this.configEvaluationModel.findById(id).lean();
   }
 
+  findToday(rol: ValidRoles) {
+    // let infoSemana = this.obtenerInfoSemana();
+    let today = new Date();
+    // Configura las fechas para el rango del día específico
+    const begin = new Date(today);
+    begin.setHours(0, 0, 0, 0);
+    const end = new Date(today);
+    end.setHours(23, 59, 59, 999);
+    return this.configEvaluationModel
+      .find({
+        reviewer: rol,
+        startAt: {
+          $gte: begin,
+          $lt: end,
+        },
+      })
+      .lean();
+  }
+
   async update(
     id: string,
     updateConfigEvaluationInput: UpdateConfigEvaluationInput,

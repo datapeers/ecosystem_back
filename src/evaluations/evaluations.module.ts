@@ -10,6 +10,8 @@ import { Evaluation, EvaluationSchema } from './entities/evaluation.entity';
 import { UsersModule } from 'src/users/users.module';
 import { ExpertModule } from 'src/expert/expert.module';
 import { StartupModule } from 'src/startup/startup.module';
+import { ConfigNotificationsModule } from 'src/notifications/config-notifications/config-notifications.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { StartupModule } from 'src/startup/startup.module';
     forwardRef(() => UsersModule),
     forwardRef(() => ExpertModule),
     forwardRef(() => StartupModule),
+    forwardRef(() => ConfigNotificationsModule),
+    forwardRef(() => NotificationsModule),
   ],
   providers: [EvaluationsResolver, EvaluationsService],
   exports: [EvaluationsService],

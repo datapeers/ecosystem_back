@@ -446,7 +446,7 @@ export class PhasesService {
     return await this.startupService.findNumbParticipants(phase);
   }
 
-  @Cron('0 0 5 * * *')
+  @Cron('0 0 5 * * *', { name: 'cronBatchEnd' })
   async checkPhaseFinal() {
     let phases = await this.phaseModel
       .find({ basePhase: false, isDeleted: false, isActive: true })

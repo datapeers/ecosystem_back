@@ -16,10 +16,24 @@ import { ConfigEvaluationsService } from './config-evaluations/config-evaluation
 import { ExpertService } from 'src/expert/expert.service';
 import { StartupService } from 'src/startup/startup.service';
 import { UsersService } from 'src/users/users.service';
+import { Cron } from '@nestjs/schedule';
+import { default_notification_types } from 'src/notifications/types-notifications/model/types-notification.default';
+import { EmailNotificationTypes } from 'src/notifications/types-notifications/model/email-notification-types.enum';
+import { ConfigNotificationsService } from 'src/notifications/config-notifications/config-notifications.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { ConfigEvaluation } from './config-evaluations/entities/config-evaluation.entity';
+import { NotificationStates } from 'src/notifications/enum/notification-states.enum';
+import { NotificationTypes } from 'src/notifications/enum/notification-types.enum';
+import { User } from 'src/users/entities/user.entity';
 @Injectable()
 export class EvaluationsService {
   canBeEvaluated = [ValidRoles.user, ValidRoles.teamCoach, ValidRoles.expert];
-  canBeReviewer = [ValidRoles.host, ValidRoles.teamCoach, ValidRoles.expert];
+  canBeReviewer = [
+    ValidRoles.user,
+    ValidRoles.host,
+    ValidRoles.teamCoach,
+    ValidRoles.expert,
+  ];
   constructor(
     @InjectModel(Evaluation.name)
     private readonly evaluationModel: Model<Evaluation>,
@@ -31,6 +45,10 @@ export class EvaluationsService {
     private readonly expertService: ExpertService,
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => ConfigNotificationsService))
+    private readonly configNotificationsService: ConfigNotificationsService,
+    @Inject(forwardRef(() => NotificationsService))
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async getDocument(id: string) {
@@ -213,5 +231,76 @@ export class EvaluationsService {
       default:
         return '';
     }
+  }
+
+  @Cron('0 0 6 * * *', { name: 'cronEvaluations' })
+  async checkEvaluationsLiberation() {
+    let evaluationsConfigs = await this.configService.findToday(
+      ValidRoles.user,
+    );
+    if (!evaluationsConfigs.length) return;
+    for (const configEvaluation of evaluationsConfigs) {
+      const startupList = await this.startupService.findByPhase(
+        configEvaluation.phase,
+      );
+      const listIdsEntrepreneurs = [];
+      for (const startup of startupList) {
+        for (const entrepreneur of startup.entrepreneurs) {
+          if (entrepreneur.rol !== 'leader') continue;
+          listIdsEntrepreneurs.push(entrepreneur._id.toString());
+        }
+      }
+      const entrepreneurs =
+        await this.startupService.getEntrepreneurs(listIdsEntrepreneurs);
+      const uidList = [];
+
+      for (const iterator of entrepreneurs) {
+        if (!iterator.accountId || iterator.accountId === '') continue;
+        uidList.push(iterator.accountId);
+      }
+      const users = await this.usersService.findManyByUUID(uidList);
+      const notificationType = default_notification_types.find(
+        (t) => t.type == EmailNotificationTypes.assessmentAvailable,
+      );
+
+      const notificationsConfig =
+        await this.configNotificationsService.findByType(
+          notificationType._id.toString(),
+        );
+      const notifications = [];
+      for (const user of users) {
+        if (
+          notificationsConfig.excluded.some(
+            (userEmail) => userEmail == user.email,
+          )
+        )
+          continue;
+        notifications.push(this.buildNotification(user, configEvaluation));
+      }
+      this.notificationsService.createMany(notifications);
+    }
+  }
+
+  buildNotification(user: User, config: ConfigEvaluation) {
+    let evaluated = '';
+    switch (config.evaluated) {
+      case ValidRoles.expert:
+        evaluated = 'experts';
+        break;
+      case ValidRoles.teamCoach:
+        evaluated = 'team coach`s';
+      default:
+        break;
+    }
+    let text = `${user.fullName}, califica a tus ${evaluated}`;
+    return {
+      text,
+      date: new Date(),
+      target: `userNotification ${user._id};`,
+      state: NotificationStates.pending,
+      type: NotificationTypes.rate,
+      isDeleted: false,
+      url: '',
+    };
   }
 }

@@ -52,6 +52,7 @@ import { IntegrationsModule } from './integrations/integrations.module';
 import { TermsOfUseModule } from './terms-of-use/terms-of-use.module';
 import { UserConfigModule } from './user-config/user-config.module';
 import { TypesNotificationsModule } from './notifications/types-notifications/types-notifications.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -108,6 +109,7 @@ import { TypesNotificationsModule } from './notifications/types-notifications/ty
         };
       },
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
     AuthModule,
     EmailsModule,

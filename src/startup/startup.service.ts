@@ -582,4 +582,8 @@ export class StartupService implements FormDocumentService<Startup> {
       },
     );
   }
+
+  getEntrepreneurs(ids: string[]) {
+    return this.entrepreneurService.findMany(ids);
+  }
 }

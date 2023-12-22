@@ -27,6 +27,14 @@ import {
   searchResult,
 } from 'src/shared/models/search-result.model';
 import { Resource } from 'src/resources/entities/resource.entity';
+import { Cron } from '@nestjs/schedule';
+import { UsersService } from '../users/users.service';
+import { default_notification_types } from 'src/notifications/types-notifications/model/types-notification.default';
+import { EmailNotificationTypes } from 'src/notifications/types-notifications/model/email-notification-types.enum';
+import { ConfigNotificationsService } from 'src/notifications/config-notifications/config-notifications.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { NotificationStates } from 'src/notifications/enum/notification-states.enum';
+import { NotificationTypes } from 'src/notifications/enum/notification-types.enum';
 
 @Injectable()
 export class PhasesService {
@@ -37,12 +45,17 @@ export class PhasesService {
     private readonly contentService: ContentService,
     private readonly resourcesService: ResourcesService,
     private readonly activitiesConfigService: ActivitiesConfigService,
+    private readonly usersService: UsersService,
     @Inject(forwardRef(() => StagesService))
     private readonly stagesService: StagesService,
     @Inject(forwardRef(() => UserLogService))
     private readonly logsService: UserLogService,
     @Inject(forwardRef(() => ResourcesRepliesService))
     private readonly resourceRepliesService: ResourcesRepliesService,
+    @Inject(forwardRef(() => ConfigNotificationsService))
+    private readonly configNotificationsService: ConfigNotificationsService,
+    @Inject(forwardRef(() => NotificationsService))
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async findAll(user: AuthUser): Promise<Phase[]> {
@@ -431,5 +444,77 @@ export class PhasesService {
 
   async numbParticipants(phase: string) {
     return await this.startupService.findNumbParticipants(phase);
+  }
+
+  @Cron('0 0 5 * * *')
+  async checkPhaseFinal() {
+    let phases = await this.phaseModel
+      .find({ basePhase: false, isDeleted: false, isActive: true })
+      .lean();
+    const today = moment(new Date());
+    for (const phase of phases) {
+      const endDate = await this.calcEndDate(phase);
+      const inputDate = moment(new Date(endDate));
+      // Compara año, mes y día sin tener en cuenta la hora
+      const isToday = inputDate.isSame(today, 'day');
+      if (isToday) {
+        this.phaseModel.updateOne({ _id: phase._id }, { isActive: false });
+        this.sendNotificationAndEmailsPhase(phase);
+      }
+    }
+  }
+
+  async sendNotificationAndEmailsPhase(phase: Phase) {
+    const startupsParticipants = await this.startupService.findByPhase(
+      phase._id.toString(),
+    );
+    const entrepreneursIds = [];
+    for (const startup of startupsParticipants) {
+      //if (startup.entrepreneurs)
+      for (const entrepreneurLink of startup.entrepreneurs) {
+        if (entrepreneurLink.state === 'leaved') continue;
+        entrepreneursIds.push(entrepreneurLink._id.toString());
+      }
+    }
+    const entrepreneursDocs =
+      await this.startupService.getEntrepreneurs(entrepreneursIds);
+    const uidList = [];
+    for (const entrepreneur of entrepreneursDocs) {
+      if (!entrepreneur.accountId || entrepreneur?.accountId === '') continue;
+      uidList.push(entrepreneur.accountId);
+    }
+    const userDocs = await this.usersService.findManyByUUID(uidList);
+    const notificationType = default_notification_types.find(
+      (t) => t.type == EmailNotificationTypes.phaseCompletion,
+    );
+    const notificationsConfig =
+      await this.configNotificationsService.findByType(
+        notificationType._id.toString(),
+      );
+    const notifications = [];
+    for (const iterator of userDocs) {
+      if (
+        notificationsConfig.excluded.some(
+          (userEmail) => userEmail == iterator.email,
+        )
+      )
+        continue;
+      notifications.push(this.buildNotificationEnd(iterator._id, phase));
+    }
+    this.notificationsService.createMany(notifications);
+  }
+
+  buildNotificationEnd(accountId: string, batch: Phase) {
+    let text = `¡Felicidades! Has completado ${batch.name}. No pierdas el ritmo`;
+    // const urlInvitation = process.env.APP_URI + '/home/calendar';
+    return {
+      text,
+      date: new Date(),
+      target: `userNotification ${accountId};`,
+      state: NotificationStates.pending,
+      type: NotificationTypes.approved,
+      isDeleted: false,
+      url: '',
+    };
   }
 }

@@ -14,6 +14,8 @@ import { StartupModule } from 'src/startup/startup.module';
 import { StagesModule } from 'src/stages/stages.module';
 import { ResourcesRepliesModule } from 'src/resources/resources-replies/resources-replies.module';
 import { UserLogModule } from 'src/user-log/user-log.module';
+import { ConfigNotificationsModule } from 'src/notifications/config-notifications/config-notifications.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Phase.name, schema: PhaseSchema }]),
@@ -27,6 +29,8 @@ import { UserLogModule } from 'src/user-log/user-log.module';
     forwardRef(() => StagesModule),
     forwardRef(() => ResourcesRepliesModule),
     forwardRef(() => UserLogModule),
+    forwardRef(() => ConfigNotificationsModule),
+    forwardRef(() => NotificationsModule),
     ActivitiesConfigModule,
   ],
   providers: [PhasesResolver, PhasesService],

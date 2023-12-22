@@ -11,6 +11,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { LoggerModule } from 'src/logger/logger.module';
 import { StartupModule } from 'src/startup/startup.module';
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
     LoggerModule,
     forwardRef(() => StartupModule),
     forwardRef(() => EntrepreneurModule),
+    forwardRef(() => NotificationsModule),
   ],
   providers: [HelpDeskResolver, HelpDeskService],
   exports: [HelpDeskService],

@@ -16,6 +16,9 @@ import { AuthUser } from 'src/auth/types/auth-user';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 import { StartupService } from 'src/startup/startup.service';
+import { NotificationStates } from 'src/notifications/enum/notification-states.enum';
+import { NotificationTypes } from 'src/notifications/enum/notification-types.enum';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class HelpDeskService {
@@ -26,6 +29,8 @@ export class HelpDeskService {
     private readonly entrepreneurService: EntrepreneurService,
     @Inject(forwardRef(() => StartupService))
     private readonly startupService: StartupService,
+    @Inject(forwardRef(() => NotificationsService))
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   _logger = new Logger(HelpDeskService.name);
@@ -102,7 +107,9 @@ export class HelpDeskService {
           { new: true },
         )
         .lean();
-
+      this.notificationsService.create(
+        this.buildNotification(updatedHelpDeskTicket),
+      );
       return updatedHelpDeskTicket;
     } catch (error) {
       this._logger.error(
@@ -120,5 +127,19 @@ export class HelpDeskService {
     } catch (error) {
       this._logger.error(`Error removing ticket ${id} ${error}`);
     }
+  }
+
+  buildNotification(ticket: HelpDeskTicket) {
+    let text = `Tu ticket ${ticket.title} ha recibido respuesta o cambios`;
+    const urlInvitation = process.env.APP_URI + '/home/helpdesk';
+    return {
+      text,
+      date: new Date(),
+      target: `userNotification ${ticket.childs[0].answerById};`,
+      state: NotificationStates.pending,
+      type: NotificationTypes.notes,
+      isDeleted: false,
+      url: urlInvitation,
+    };
   }
 }

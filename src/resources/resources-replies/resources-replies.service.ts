@@ -252,7 +252,7 @@ export class ResourcesRepliesService {
       await this.sendNotification({
         body: resourceReply.resource['name'],
         from: '',
-        subject: `${resourceReply.resource['name']} se aprobó`,
+        subject: `${user.fullName}, ${resourceReply.resource['name']} se aprobó`,
         to: user.email,
         startupID: '',
         startupName: '',

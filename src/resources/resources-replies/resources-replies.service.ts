@@ -19,6 +19,16 @@ import { Content } from 'src/content/entities/content.entity';
 import { ContentService } from 'src/content/content.service';
 import { ResourceType } from '../enums/resources-types';
 import { ResourceReplyState } from './models/resorce-reply-states';
+import { NotificationStates } from 'src/notifications/enum/notification-states.enum';
+import { NotificationTypes } from 'src/notifications/enum/notification-types.enum';
+import { ContactArgs } from 'src/startup/args/contact-startup.args';
+import { EmailsService } from 'src/emails/emails.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { UsersService } from 'src/users/users.service';
+import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
+import { default_notification_types } from 'src/notifications/types-notifications/model/types-notification.default';
+import { EmailNotificationTypes } from 'src/notifications/types-notifications/model/email-notification-types.enum';
+import { ConfigNotificationsService } from 'src/notifications/config-notifications/config-notifications.service';
 
 @Injectable()
 export class ResourcesRepliesService {
@@ -29,8 +39,18 @@ export class ResourcesRepliesService {
     private readonly resourceService: ResourcesService,
     @Inject(forwardRef(() => StartupService))
     private readonly startupService: StartupService,
+    @Inject(forwardRef(() => EntrepreneurService))
+    private readonly entrepreneurService: EntrepreneurService,
     @Inject(forwardRef(() => ContentService))
     private readonly contentService: ContentService,
+    @Inject(forwardRef(() => EmailsService))
+    private readonly emailsService: EmailsService,
+    @Inject(forwardRef(() => ConfigNotificationsService))
+    private readonly configNotificationsService: ConfigNotificationsService,
+    @Inject(forwardRef(() => NotificationsService))
+    private readonly notificationsService: NotificationsService,
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService,
   ) {}
 
   async getDocument(id: string) {
@@ -90,7 +110,9 @@ export class ResourcesRepliesService {
     await this.resourceReplyModel
       .updateOne({ _id: id }, data, { new: true })
       .lean();
-    return this.findOne(id);
+    const updatedDoc = await this.findOne(id);
+
+    return updatedDoc;
   }
 
   async updateDoc(
@@ -107,6 +129,9 @@ export class ResourcesRepliesService {
       .populate('startup')
       .populate('resource')
       .lean();
+    if (updatedReply?.state === ResourceReplyState.Aprobado) {
+      this.notificationResource(updatedReply);
+    }
     return updatedReply;
   }
 
@@ -189,5 +214,88 @@ export class ResourcesRepliesService {
         phase: new Types.ObjectId(phaseID),
       })
       .lean();
+  }
+
+  async notificationResource(resourceReply: Resource | any) {
+    const entrepreneurs = await this.entrepreneurService.findMany(
+      resourceReply.startup['entrepreneurs'].map((i) => i._id.toString()),
+    );
+    const notificationType = default_notification_types.find(
+      (t) => t.type == EmailNotificationTypes.qualifiedResource,
+    );
+    const notificationsConfig =
+      await this.configNotificationsService.findByType(
+        notificationType._id.toString(),
+      );
+    const entrepreneursIds = [];
+    for (const entrepreneur of entrepreneurs) {
+      if (!entrepreneur?.accountId) continue;
+      entrepreneursIds.push({
+        _id: entrepreneur._id,
+        accountId: entrepreneur.accountId,
+      });
+    }
+    const usersFiles = await this.usersService.findManyByUUID(
+      entrepreneursIds.map((i) => i.accountId),
+    );
+    const usersToNotify = [];
+    for (const user of usersFiles) {
+      if (
+        notificationsConfig.excluded.some(
+          (userEmail) => userEmail == user.email,
+        )
+      )
+        continue;
+      usersToNotify.push(
+        this.buildNotification(user._id, resourceReply.resource),
+      );
+      await this.sendNotification({
+        body: resourceReply.resource['name'],
+        from: '',
+        subject: `${resourceReply.resource['name']} se aprobó`,
+        to: user.email,
+        startupID: '',
+        startupName: '',
+      });
+    }
+    return this.notificationsService.createMany(usersToNotify);
+  }
+
+  buildNotification(accountId: string, resource: Resource | any) {
+    let text = `${resource.name} ha sido aprobado`;
+    const urlInvitation = process.env.APP_URI + '/home/toolkit';
+    return {
+      text,
+      date: new Date(),
+      target: `userNotification ${accountId};`,
+      state: NotificationStates.pending,
+      type: NotificationTypes.calendar,
+      isDeleted: false,
+      url: urlInvitation,
+    };
+  }
+
+  async sendNotification(contactArgs: ContactArgs) {
+    try {
+      const defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
+      const urlInvitation = process.env.APP_URI + '/home/toolkit';
+      await this.emailsService.send({
+        from: defaultVerifiedEmail,
+        html: `
+          <p>
+            <span style="font-size:14px">
+              <a href="${urlInvitation}">${urlInvitation}</a>&nbsp;<em><strong>se aprobó ${contactArgs.body} en EcosystemBT, entra y mira los resultados</strong></em>
+            </span>
+          </p>
+          <p><span style="font-size:11px"><em>Recuerda que este mensaje es un intermediario, y solo se envió por ecosystem, y no debes responder en este hilo.</em></span></p>
+        `,
+        subject: contactArgs.subject,
+        text: `${contactArgs.body} ha sido aprobado`,
+        to: contactArgs.to,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

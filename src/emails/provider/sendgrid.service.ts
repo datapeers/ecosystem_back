@@ -78,7 +78,7 @@ export class SendGridProvider implements EmailsRepository {
     try {
       const transport = await SendGrid.send({
         ...templateInput,
-        from: templateInput.from ?? this.defaultVerifiedEmail,
+        from: this.defaultVerifiedEmail,
         templateId: templateId,
       });
       return transport;

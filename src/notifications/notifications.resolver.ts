@@ -75,7 +75,7 @@ export class NotificationsResolver {
     );
   }
 
-  @Mutation(() => Notification)
+  @Mutation(() => Notification, { nullable: true })
   removeNotification(@Args('id', { type: () => ID }) id: string) {
     return this.notificationsService.remove(id);
   }

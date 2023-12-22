@@ -169,6 +169,19 @@ export class EvaluationsService {
     return evaluation;
   }
 
+  async findOneByReviewer(
+    reviewer: string,
+    config: string,
+    evaluated: string,
+  ): Promise<Evaluation> {
+    const evaluation = await this.evaluationModel.findOne({
+      reviewer,
+      config,
+      evaluated,
+    });
+    return evaluation;
+  }
+
   async create(data: CreateEvaluationInput): Promise<Evaluation> {
     const createdEvaluation = await this.evaluationModel.create(data);
     return createdEvaluation;
@@ -300,7 +313,7 @@ export class EvaluationsService {
       state: NotificationStates.pending,
       type: NotificationTypes.rate,
       isDeleted: false,
-      url: '',
+      url: config._id,
     };
   }
 }

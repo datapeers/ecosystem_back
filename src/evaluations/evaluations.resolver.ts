@@ -45,6 +45,19 @@ export class EvaluationsResolver {
     return this.evaluationsService.findOne(id);
   }
 
+  @Query(() => Evaluation, { name: 'evaluationByReviewer', nullable: true })
+  findByReviewer(
+    @Args('reviewer', { type: () => String }) reviewer: string,
+    @Args('config', { type: () => String }) config: string,
+    @Args('evaluated', { type: () => String }) evaluated: string,
+  ) {
+    return this.evaluationsService.findOneByReviewer(
+      reviewer,
+      config,
+      evaluated,
+    );
+  }
+
   @Mutation(() => Evaluation)
   removeEvaluation(@Args('ids', { type: () => [String] }) ids: [string]) {
     return this.evaluationsService.delete(ids);

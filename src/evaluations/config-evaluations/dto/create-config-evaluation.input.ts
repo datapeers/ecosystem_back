@@ -1,6 +1,8 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class CreateConfigEvaluationInput {
   @Field(() => String)

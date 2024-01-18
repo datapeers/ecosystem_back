@@ -1,4 +1,11 @@
-import { Resolver, Mutation, Args, ResolveField, Parent, Query } from '@nestjs/graphql';
+import {
+  Resolver,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+  Query,
+} from '@nestjs/graphql';
 import { FormsService } from './forms.service';
 import { Form } from './entities/form.entity';
 import { CreateFormInput } from './dto/create-form.input';
@@ -10,18 +17,18 @@ import { UseGuards } from '@nestjs/common';
 import { FindFormsArgs } from './args/find-forms.args';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from 'src/auth/types/auth-user';
-
+/**
+ * @ignore
+ */
 @Resolver(() => Form)
 export class FormsResolver {
   constructor(
     private readonly formsService: FormsService,
-    private readonly formTagService: FormTagService
+    private readonly formTagService: FormTagService,
   ) {}
 
   @Query(() => [Form], { name: 'forms' })
-  findMany(
-    @Args() findFormsArgs: FindFormsArgs,
-  ) {
+  findMany(@Args() findFormsArgs: FindFormsArgs) {
     return this.formsService.findMany(findFormsArgs);
   }
 
@@ -67,7 +74,7 @@ export class FormsResolver {
   }
 
   @ResolveField('tags', () => [FormTag])
-  async getFormTags (@Parent() form: Form) {
+  async getFormTags(@Parent() form: Form) {
     const { tags } = form;
     return await this.formTagService.findMany(tags);
   }

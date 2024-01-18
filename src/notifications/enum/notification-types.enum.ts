@@ -1,3 +1,6 @@
+/**
+ * notifications types
+ */
 export enum NotificationTypes {
   calendar = 'calendar',
   notes = 'notes',

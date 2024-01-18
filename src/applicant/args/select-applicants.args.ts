@@ -3,7 +3,9 @@ import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApplicationStates } from '../enums/application-states.enum';
 import { AnnouncementTargets } from 'src/announcements/enums/announcement-targets.enum';
 import GraphQLJSON from 'graphql-type-json';
-
+/**
+ * graphql args input
+ */
 @ArgsType()
 export class SelectApplicantsArgs {
   @Field(() => String)

@@ -1,9 +1,18 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { IsDefined, IsInt, IsOptional, IsPositive, Min, ValidateNested } from "class-validator";
-import { FieldSort } from "./field-filter";
-import { FieldFilter } from "./field-order";
-import { Type } from "class-transformer";
-
+import { Field, InputType } from '@nestjs/graphql';
+import {
+  IsDefined,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { FieldSort } from './field-filter';
+import { FieldFilter } from './field-order';
+import { Type } from 'class-transformer';
+/**
+ * @ignore
+ */
 @InputType()
 export class PageRequest {
   @IsDefined()
@@ -35,7 +44,7 @@ export class PageRequest {
   @Type(() => FieldFilter)
   @Field(() => [FieldFilter])
   filter: FieldFilter[];
-  
+
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => FieldSort)

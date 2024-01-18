@@ -1,13 +1,17 @@
 import { Expert } from 'src/expert/entities/expert.entity';
 import { Startup } from 'src/startup/entities/startup.entity';
-
+/**
+ * @ignore
+ */
 export interface IAssignHoursConfig {
   from: string;
   limit: number;
   to: { id: string; limit: string }[];
   __typename?: any;
 }
-
+/**
+ * @ignore
+ */
 export class Assign_item {
   from: string;
   limit: number;
@@ -20,11 +24,15 @@ export class Assign_item {
     this.to = [];
   }
 }
-
+/**
+ * @ignore
+ */
 export interface IConfigStartup extends Startup {
   hours: { [key: string]: number }; // key its activity id
 }
-
+/**
+ * @ignore
+ */
 export interface IConfigExpert extends Expert {
   hours: {
     [key: string]: {
@@ -35,7 +43,9 @@ export interface IConfigExpert extends Expert {
   }; // key its activity id
   startups: Startup[];
 }
-
+/**
+ * @ignore
+ */
 export interface IConfigTeamCoach {
   _id: string;
   item: {

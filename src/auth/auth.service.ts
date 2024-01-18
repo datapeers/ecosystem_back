@@ -21,6 +21,9 @@ export class AuthService {
     });
   }
 
+  /**
+   * validate login token in firebase
+   */
   async validateToken(idToken: string) {
     try {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
@@ -33,6 +36,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * get account user by login token firebase
+   */
   async exchangeToken(idToken: string): Promise<User | AuthUser> {
     try {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
@@ -56,6 +62,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * create default account with generic password
+   */
   async createAccountWithDefaultPassword(email: string, rol: ValidRoles) {
     const user = await admin.auth().createUser({
       email: email,
@@ -72,16 +81,25 @@ export class AuthService {
     return createdUser;
   }
 
+  /**
+   * update account password in firebase
+   */
   async updatePassword(uid: string, newPassword: string) {
     return await admin.auth().updateUser(uid, {
       password: newPassword,
     });
   }
 
+  /**
+   * delete account in firebase by uid
+   */
   async deleteUser(uid: string) {
     return await admin.auth().deleteUser(uid);
   }
 
+  /**
+   * find the app rol of an account
+   */
   async getRol(id: string) {
     return this.usersService.findRolByID(id);
   }

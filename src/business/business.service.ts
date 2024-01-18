@@ -32,11 +32,17 @@ export class BusinessService {
     private readonly downloadService: DownloadsService,
   ) {}
 
+  /**
+   * find doc business, is only intended to be used by websocket.
+   */
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
   }
 
+  /**
+   * create doc business, is only intended to be used by websocket.
+   */
   async createDocument(submission: any, context?: any) {
     const data = {
       item: submission,
@@ -56,16 +62,25 @@ export class BusinessService {
     return createdDocument;
   }
 
+  /**
+   * update doc business, is only intended to be used by websocket.
+   */
   async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(id, { item: submission });
     return updatedDocument;
   }
 
+  /**
+   * find all doc business.
+   */
   async findAll(): Promise<Business[]> {
     const businesses = await this.businessModel.find({ deletedAt: null });
     return businesses;
   }
 
+  /**
+   * find many doc business by id
+   */
   async findMany(ids: string[]): Promise<Business[]> {
     const businesses = await this.businessModel.find({
       _id: { $in: ids },
@@ -73,6 +88,9 @@ export class BusinessService {
     return businesses;
   }
 
+  /**
+   * find doc business paginated
+   */
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
@@ -93,6 +111,9 @@ export class BusinessService {
     return documents[0];
   }
 
+  /**
+   * find doc business paginated by filters
+   */
   async findManyIdsByRequest(request: PageRequest): Promise<string[]> {
     // TODO Implement filtering by user if required
     const options = new AggregateBuildOptions();
@@ -108,6 +129,9 @@ export class BusinessService {
     return documents.map((doc) => doc._id);
   }
 
+  /**
+   * find doc business by id
+   */
   async findOne(id: string): Promise<Business> {
     const business = await this.businessModel.findById(id);
     if (!business)
@@ -115,16 +139,25 @@ export class BusinessService {
     return business;
   }
 
+  /**
+   * create doc business
+   */
   async create(data: Partial<Business>): Promise<Business> {
     const createdBusiness = await this.businessModel.create(data);
     return createdBusiness;
   }
 
+  /**
+   * update doc business
+   */
   async update(id: string, data: Partial<Business>): Promise<Business> {
     await this.businessModel.updateOne({ _id: id }, data, { new: true }).lean();
     return this.findOne(id);
   }
 
+  /**
+   * link list of business to entrepreneurs
+   */
   async linkBusinessesAndEntrepreneurs(
     ids: string[],
     entrepreneurs: string[],
@@ -148,9 +181,8 @@ export class BusinessService {
       );
 
     // Find entrepreneurs
-    const entrepreneurDocuments = await this.entrepreneurService.findMany(
-      entrepreneurs,
-    );
+    const entrepreneurDocuments =
+      await this.entrepreneurService.findMany(entrepreneurs);
     const entrepreneurRelationships = entrepreneurDocuments.map((document) => {
       return { _id: document._id, item: document.item };
     });
@@ -161,6 +193,9 @@ export class BusinessService {
     return businessUpdateResult;
   }
 
+  /**
+   * only link list of entrepreneurs in business only by property
+   */
   async linkWithEntrepreneurs(
     ids: string[],
     entrepreneurRelationships: EntrepreneurRelationship[],
@@ -174,6 +209,9 @@ export class BusinessService {
       .lean();
   }
 
+  /**
+   * search business request table and link entrepreneurs to that business
+   */
   async linkWithEntrepreneursByRequest({
     request,
     targetIds,
@@ -182,6 +220,9 @@ export class BusinessService {
     return await this.linkBusinessesAndEntrepreneurs(businesses, targetIds);
   }
 
+  /**
+   * soft delete of many business
+   */
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.businessModel.updateMany(
       { _id: { $in: ids.map((id) => new Types.ObjectId(id)) } },
@@ -193,6 +234,9 @@ export class BusinessService {
     };
   }
 
+  /**
+   * download table of business
+   */
   async downloadByRequest(
     { request, configId, format }: DownloadRequestArgs,
     user: AuthUser,

@@ -4,6 +4,9 @@ import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { InvitationStates } from '../enums/invitation-states.enum';
 import { User } from 'src/users/entities/user.entity';
 import GraphQLJSON from 'graphql-type-json';
+/**
+ * invitations to use app
+ */
 @ObjectType()
 @Schema({ timestamps: true })
 export class Invitation {
@@ -57,5 +60,7 @@ export class Invitation {
     return this.expiresAt.getTime() < Date.now();
   }
 }
-
+/**
+ * @ignore
+ */
 export const InvitationSchema = SchemaFactory.createForClass(Invitation);

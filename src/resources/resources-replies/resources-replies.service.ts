@@ -53,11 +53,16 @@ export class ResourcesRepliesService {
     private readonly usersService: UsersService,
   ) {}
 
+  /**
+   * find resource reply, is only intended to be used by websocket.
+   */
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
   }
-
+  /**
+   * create resource reply, is only intended to be used by websocket.
+   */
   async createDocument(submission: any, context?: any) {
     const data = {
       ...context,
@@ -66,7 +71,9 @@ export class ResourcesRepliesService {
     const createdDocument = await this.create(data);
     return createdDocument;
   }
-
+  /**
+   * update resource reply, is only intended to be used by websocket.
+   */
   async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(id, {
       item: submission,
@@ -74,7 +81,9 @@ export class ResourcesRepliesService {
     });
     return updatedDocument;
   }
-
+  /**
+   * create resource reply
+   */
   async create(
     createResourcesReplyInput: CreateResourcesReplyInput,
   ): Promise<ResourcesReply> {
@@ -83,7 +92,9 @@ export class ResourcesRepliesService {
     );
     return this.findOne(createdEvaluation._id);
   }
-
+  /**
+   * find all resource reply
+   */
   findAll() {
     return this.resourceReplyModel
       .find({ isDeleted: false })
@@ -91,7 +102,9 @@ export class ResourcesRepliesService {
       .populate('resource')
       .lean();
   }
-
+  /**
+   * find resource reply by id
+   */
   async findOne(id: string): Promise<ResourcesReply> {
     const resourceReply = await this.resourceReplyModel
       .findById(id)
@@ -103,6 +116,9 @@ export class ResourcesRepliesService {
     return resourceReply;
   }
 
+  /**
+   * update resource reply
+   */
   async update(
     id: string,
     data: Partial<ResourcesReply>,
@@ -115,6 +131,9 @@ export class ResourcesRepliesService {
     return updatedDoc;
   }
 
+  /**
+   * find resource reply with inner populate of resources and startup
+   */
   async updateDoc(
     id: string,
     updateResourcesReplyInput: UpdateResourcesReplyInput,
@@ -135,6 +154,9 @@ export class ResourcesRepliesService {
     return updatedReply;
   }
 
+  /**
+   * soft delete resource reply
+   */
   async remove(id: string) {
     const updatedReply = await this.resourceReplyModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
@@ -144,6 +166,9 @@ export class ResourcesRepliesService {
     return updatedReply;
   }
 
+  /**
+   * find all resource reply by resource
+   */
   async findByResource(resourceID: string, sprintID: string, user: AuthUser) {
     const resource = await this.resourceService.findOne(resourceID);
     const sprint = await this.contentService.findById(sprintID);
@@ -173,6 +198,9 @@ export class ResourcesRepliesService {
     return ansList;
   }
 
+  /**
+   * fake resource reply instance
+   */
   createSimpleReply(startup: Startup, resource: Resource, sprint: Content) {
     const newReply = new ResourcesReply();
     newReply._id = new Types.ObjectId().toString();
@@ -196,6 +224,9 @@ export class ResourcesRepliesService {
     return newReply;
   }
 
+  /**
+   * find all resource reply by startup and batch wit populate resource
+   */
   async findByStartup(startupID: string, phaseID: string) {
     return this.resourceReplyModel
       .find({
@@ -207,6 +238,9 @@ export class ResourcesRepliesService {
       .lean();
   }
 
+  /**
+   * find all resource reply in a batch an startup
+   */
   async findByStartupWithoutPopulate(startupID: string, phaseID: string) {
     return this.resourceReplyModel
       .find({
@@ -216,6 +250,9 @@ export class ResourcesRepliesService {
       .lean();
   }
 
+  /**
+   * notification resource reply approved
+   */
   async notificationResource(resourceReply: Resource | any) {
     const entrepreneurs = await this.entrepreneurService.findMany(
       resourceReply.startup['entrepreneurs'].map((i) => i._id.toString()),
@@ -261,6 +298,9 @@ export class ResourcesRepliesService {
     return this.notificationsService.createMany(usersToNotify);
   }
 
+  /**
+   * fake instance resource reply
+   */
   buildNotification(accountId: string, resource: Resource | any) {
     let text = `${resource.name} ha sido aprobado`;
     const urlInvitation = process.env.APP_URI + '/home/toolkit';
@@ -275,6 +315,9 @@ export class ResourcesRepliesService {
     };
   }
 
+  /**
+   * send notification email
+   */
   async sendNotification(contactArgs: ContactArgs) {
     try {
       const defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;

@@ -20,7 +20,9 @@ import { FormSubmissionFiles } from '../form/entities/form-submission-files';
 import { GetSubmittedFilesArgs } from './args/get-submitted-files.args';
 import { FormFileSubmission } from '../factories/form-file-submission';
 import { FormCollections } from '../form/enums/form-collections';
-
+/**
+ * @ignore
+ */
 @Resolver(() => FormSubscription)
 export class FormSubscriptionResolver {
   constructor(

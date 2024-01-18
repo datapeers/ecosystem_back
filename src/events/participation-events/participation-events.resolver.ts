@@ -3,7 +3,9 @@ import { ParticipationEventsService } from './participation-events.service';
 import { ParticipationEvent } from './entities/participation-event.entity';
 import { CreateParticipationEventInput } from './dto/create-participation-event.input';
 import { UpdateParticipationEventInput } from './dto/update-participation-event.input';
-
+/**
+ * @ignore
+ */
 @Resolver(() => ParticipationEvent)
 export class ParticipationEventsResolver {
   constructor(

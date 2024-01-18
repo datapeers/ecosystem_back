@@ -6,7 +6,10 @@ import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 export class InvitationsController {
   constructor(private readonly invitationsService: InvitationsService) {}
 
-  @Post("/accept")
+  /**
+   * accept invitation state
+   */
+  @Post('/accept')
   acceptInvitation(@Body() acceptInvitationDto: AcceptInvitationDto) {
     return this.invitationsService.accept(acceptInvitationDto);
   }

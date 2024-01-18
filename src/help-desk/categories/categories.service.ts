@@ -19,6 +19,9 @@ export class TicketCategoriesService {
 
   _logger = new Logger(TicketCategoriesService.name);
 
+  /**
+   * create category for help desk
+   */
   async create(
     createCategoryInput: CreateCategoryInput,
   ): Promise<TicketCategory> {
@@ -35,10 +38,16 @@ export class TicketCategoriesService {
     }
   }
 
+  /**
+   * find all category for help desk
+   */
   findAll() {
     return this.ticketCategoryModel.find({});
   }
 
+  /**
+   * find category by id
+   */
   async findOne(id: string): Promise<TicketCategory> {
     const category = await this.ticketCategoryModel.findOne({
       where: {
@@ -52,6 +61,9 @@ export class TicketCategoriesService {
     return category.toObject();
   }
 
+  /**
+   * update category for help desk
+   */
   async update(
     id: string,
     updateCategoryInput: UpdateCategoryInput,
@@ -76,6 +88,9 @@ export class TicketCategoriesService {
     }
   }
 
+  /**
+   * soft delete category for help desk
+   */
   async remove(id: string): Promise<TicketCategory> {
     try {
       const updatedType = await this.ticketCategoryModel

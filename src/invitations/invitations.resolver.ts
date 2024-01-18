@@ -16,7 +16,9 @@ import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { User } from 'src/users/entities/user.entity';
 import { FindInvitationArgs } from './args/find-invitation.args';
 import { UsersService } from 'src/users/users.service';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Invitation)
 export class InvitationsResolver {

@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { EntrepreneurService } from './entrepreneur.service';
@@ -12,6 +19,9 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
 import { DownloadResult } from 'src/shared/models/download-result';
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Entrepreneur)
 export class EntrepreneurResolver {
@@ -64,7 +74,7 @@ export class EntrepreneurResolver {
   ): Promise<UpdateResultPayload> {
     return this.entrepreneurService.linkWithBusinessesByRequest(
       linkWithTargetsByRequestArgs,
-      user
+      user,
     );
   }
 
@@ -89,7 +99,7 @@ export class EntrepreneurResolver {
   ): Promise<UpdateResultPayload> {
     return this.entrepreneurService.linkWithStartupsByRequest(
       linkWithTargetsByRequestArgs,
-      user
+      user,
     );
   }
 
@@ -107,6 +117,6 @@ export class EntrepreneurResolver {
 
   @ResolveField('isProspect', () => Boolean)
   resolveIsProspect(@Parent() entrepreneur: Omit<Entrepreneur, 'isProspect'>) {
-    return entrepreneur.startups.some(startup => !!startup.phases?.length);
+    return entrepreneur.startups.some((startup) => !!startup.phases?.length);
   }
 }

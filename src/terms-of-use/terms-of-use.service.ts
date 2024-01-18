@@ -15,16 +15,25 @@ export class TermsOfUseService {
   //   return this.termsOfUseModel.create(createTermsOfUseInput);
   // }
 
+  /**
+   * find all terms of use
+   */
   findAll() {
     return this.termsOfUseModel.find().lean();
   }
 
+  /**
+   * find specific terms of use
+   */
   findOne(name: string) {
     return this.termsOfUseModel
       .findOneAndUpdate({ name: name }, { name }, { new: true, upsert: true })
       .lean();
   }
 
+  /**
+   * update terms of use
+   */
   update(id: string, updateTermsOfUseInput: UpdateTermsOfUseInput) {
     delete updateTermsOfUseInput['_id'];
     return this.termsOfUseModel
@@ -36,6 +45,9 @@ export class TermsOfUseService {
       .lean();
   }
 
+  /**
+   * @ignore
+   */
   remove(id: number) {
     return `This action removes a #${id} termsOfUse`;
   }

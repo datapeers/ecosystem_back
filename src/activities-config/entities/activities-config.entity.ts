@@ -1,7 +1,9 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes } from 'mongoose';
-
+/**
+ * the configuration of activities are the documents that have the global limit of hours of a batch, its allocation of hours per activity as well as the allocations to experts, startups and teamcoaches.
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class ActivitiesConfig {
@@ -42,7 +44,9 @@ export class ActivitiesConfig {
   @Prop({ type: 'boolean', default: false })
   isDeleted: boolean;
 }
-
+/**
+ * assigned activity config
+ */
 @Schema()
 @ObjectType()
 export class activities implements IActivities {
@@ -53,7 +57,9 @@ export class activities implements IActivities {
   @Field(() => Int)
   limit: number;
 }
-
+/**
+ * assigned entity config
+ */
 @Schema()
 @ObjectType()
 export class Assign implements IAssign {
@@ -68,17 +74,23 @@ export class Assign implements IAssign {
   @Prop({ type: SchemaTypes.ObjectId })
   activityID: string;
 }
-
+/**
+ * @ignore
+ */
 export interface IActivities {
   id: string;
   limit: number;
 }
-
+/**
+ * @ignore
+ */
 export interface IAssign {
   entityID: string;
   limit: number;
   activityID: string;
 }
-
+/**
+ * @ignore
+ */
 export const ActivitiesConfigSchema =
   SchemaFactory.createForClass(ActivitiesConfig);

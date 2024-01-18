@@ -20,6 +20,9 @@ export class ContentService {
     private readonly resourcesRepliesService: ResourcesRepliesService,
   ) {}
 
+  /**
+   * create content or sprint for a phase or batch
+   */
   async create(createContentInput: CreateContentInput) {
     if (createContentInput.extra_options?.parent) {
       const newContent = await this.contentModel.create(createContentInput);
@@ -33,6 +36,9 @@ export class ContentService {
     }
   }
 
+  /**
+   * find all sprints and content and resources for a phase or batch
+   */
   async findAll(phase: string, user?: AuthUser): Promise<Content[]> {
     if (user?.rolDoc.type === ValidRoles.user) {
       let sprints = await this.contentModel
@@ -55,10 +61,16 @@ export class ContentService {
     }
   }
 
+  /**
+   * find content or sprint by id
+   */
   findById(id: string) {
     return this.contentModel.findById(id).lean();
   }
 
+  /**
+   * find content or sprint by id and return content with resources
+   */
   findOne(id: string) {
     return this.contentModel
       .findById(id)
@@ -66,6 +78,9 @@ export class ContentService {
       .populate('resources');
   }
 
+  /**
+   * find the latest content viewed by a startup
+   */
   async findLastContent(batchId: string, startupId: string) {
     const logsBatch = await this.userLogService.findByFilters({
       'metadata.batch': batchId,
@@ -137,6 +152,9 @@ export class ContentService {
     };
   }
 
+  /**
+   * find sprint or content
+   */
   async update(id: string, updateContentInput: UpdateContentInput) {
     delete updateContentInput['_id'];
     const updatedContent = await this.contentModel
@@ -147,6 +165,9 @@ export class ContentService {
     return updatedContent;
   }
 
+  /**
+   * soft delete of a sprint or content
+   */
   async remove(id: string) {
     const updatedContent = await this.contentModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
@@ -156,16 +177,25 @@ export class ContentService {
     return updatedContent;
   }
 
+  /**
+   * add resource id to sprint or content
+   */
   async addResource(contentID: string, id: string) {
     return await this.contentModel.findByIdAndUpdate(contentID, {
       $addToSet: { resources: id },
     });
   }
 
+  /**
+   * create many sprint or content
+   */
   createMany(content: Content[]) {
     return this.contentModel.insertMany(content);
   }
 
+  /**
+   * find sprint or content that can only be seen
+   */
   checkStateDisplayUser(sprints: Content[]) {
     let sprintsFiltered = [];
     for (const sprint of sprints) {

@@ -42,13 +42,18 @@ export class AwsService implements StorageService {
       },
     };
   }
-
+  /**
+   * get rute of file location
+   */
   private getFileLocation(bucketName: string, fileKey: string): string {
     return `${this.configService.get(
       'awsS3PublicUri',
     )}/${bucketName}/${fileKey}`;
   }
 
+  /**
+   * create url to download file
+   */
   async createPresignedUrl(key: string, publicFile?: boolean): Promise<string> {
     const client = new S3Client(publicFile ? this.publicConfig : this.config);
     const config = {
@@ -66,6 +71,9 @@ export class AwsService implements StorageService {
     }
   }
 
+  /**
+   * get url to download file
+   */
   async getPresignedUrl(key: string, publicFile?: boolean) {
     const client = new S3Client(publicFile ? this.publicConfig : this.config);
     const config = {
@@ -83,6 +91,9 @@ export class AwsService implements StorageService {
     }
   }
 
+  /**
+   * upload file
+   */
   async uploadTemporaryFile(key: string, data: Buffer) {
     const client = new S3Client(this.publicConfig);
     const command = new PutObjectCommand({

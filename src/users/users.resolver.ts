@@ -11,6 +11,9 @@ import { FindUsersArgs } from './args/find-users.args';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ContactArgs } from 'src/startup/args/contact-startup.args';
 
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
 export class UsersResolver {

@@ -3,6 +3,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { Resource } from 'src/resources/entities/resource.entity';
+/**
+ * Sprints and content of a batch or phase
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Content {
@@ -62,5 +65,7 @@ export class Content {
   @Prop({ type: 'boolean', default: false })
   isDeleted: boolean;
 }
-
+/**
+ * @ignore
+ */
 export const ContentSchema = SchemaFactory.createForClass(Content);

@@ -13,6 +13,9 @@ import { EmailTemplates, templateNames } from '../enums/email-templates';
 import { getIcsObjectInstance } from 'src/shared/utilities/ics';
 import { Event } from 'src/events/entities/event.entity';
 
+/**
+ * send grid provider emails
+ */
 export class SendGridProvider implements EmailsRepository {
   private readonly templatesId: Record<EmailTemplates, string>;
   private readonly defaultVerifiedEmail: string;
@@ -33,6 +36,9 @@ export class SendGridProvider implements EmailsRepository {
     this.defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
   }
 
+  /**
+   * send one email
+   */
   async send(mail: SendEmailInput) {
     if (!this.apiKey)
       throw new MethodNotAllowedException('This service is not available');
@@ -58,6 +64,9 @@ export class SendGridProvider implements EmailsRepository {
     }
   }
 
+  /**
+   * send one email by template
+   */
   async sendFromTemplate(templateInput: Template) {
     const templateId = this.templatesId[templateInput.template];
     if (!templateId)
@@ -91,6 +100,9 @@ export class SendGridProvider implements EmailsRepository {
     }
   }
 
+  /**
+   * send one email with ics file
+   */
   async sendIcs(
     mail: {
       to: string | string[];

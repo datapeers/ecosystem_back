@@ -1,6 +1,15 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { IsString, IsDefined, IsInt, NotEquals, Min, Max } from "class-validator";
-
+import { Field, InputType } from '@nestjs/graphql';
+import {
+  IsString,
+  IsDefined,
+  IsInt,
+  NotEquals,
+  Min,
+  Max,
+} from 'class-validator';
+/**
+ * @ignore
+ */
 @InputType()
 export class FieldSort {
   @IsString()

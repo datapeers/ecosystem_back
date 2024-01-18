@@ -1,6 +1,8 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
-
+/**
+ * graphql args input
+ */
 @ArgsType()
 export class LinkExpertsToPhaseArgs {
   @IsNotEmpty()

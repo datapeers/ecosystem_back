@@ -1,6 +1,9 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { ValidRoles } from "../enums/valid-roles.enum";
+import { Field, InputType } from '@nestjs/graphql';
+import { ValidRoles } from '../enums/valid-roles.enum';
 
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class SignUpInput {
   @Field()

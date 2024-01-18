@@ -7,16 +7,20 @@ import { UsersModule } from 'src/users/users.module';
 import { Investor, InvestorSchema } from './entities/investor.entity';
 import { DownloadsModule } from 'src/downloads/downloads.module';
 import { TableModule } from 'src/table/table.module';
-
+/**
+ * @ignore
+ */
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Investor.name, schema: InvestorSchema }]),
+    MongooseModule.forFeature([
+      { name: Investor.name, schema: InvestorSchema },
+    ]),
     AuthModule,
     UsersModule,
     DownloadsModule,
     forwardRef(() => TableModule),
   ],
   providers: [InvestorResolver, InvestorService],
-  exports: [InvestorService]
+  exports: [InvestorService],
 })
 export class InvestorModule {}

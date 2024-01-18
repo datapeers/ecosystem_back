@@ -1,8 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import GraphQLJSON from 'graphql-type-json';
 import { User } from 'src/users/entities/user.entity';
-
+/**
+ * Config of evaluations in app, date, etc
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class ConfigEvaluation {
@@ -60,6 +61,8 @@ export class ConfigEvaluation {
   @Prop({ default: false })
   isDeleted: boolean;
 }
-
+/**
+ * @ignore
+ */
 export const ConfigEvaluationSchema =
   SchemaFactory.createForClass(ConfigEvaluation);

@@ -1,7 +1,9 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-
+/**
+ * rating of users app
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Rating {

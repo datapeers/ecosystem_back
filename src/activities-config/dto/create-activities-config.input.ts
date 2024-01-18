@@ -1,6 +1,11 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
-import { GraphQLJSONObject } from 'graphql-scalars';
+
+/**
+ * graphql input scheme
+ * @param {int} phase  batchId of activity config
+ * @param {string} limit  global hours limit
+ */
 @InputType()
 export class CreateActivitiesConfigInput {
   @Field(() => Int)

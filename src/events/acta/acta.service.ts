@@ -12,18 +12,30 @@ export class ActaService {
     private readonly actaModel: Model<Acta>,
   ) {}
 
+  /**
+   * create acta of a event
+   */
   create(createActaInput: CreateActaInput) {
     return this.actaModel.create(createActaInput);
   }
 
+  /**
+   * find all actas
+   */
   findAll() {
     return this.actaModel.find({});
   }
 
+  /**
+   * find acta by event id
+   */
   findByEvent(event: string) {
     return this.actaModel.findOne({ event, isDeleted: false });
   }
 
+  /**
+   * find actas of event list
+   */
   findByEventsList(events: string[]) {
     return this.actaModel
       .find({
@@ -33,10 +45,16 @@ export class ActaService {
       .lean();
   }
 
+  /**
+   * find acta by id
+   */
   findOne(id: string) {
     return this.actaModel.findById(id);
   }
 
+  /**
+   * update acta
+   */
   async update(id: string, updateActaInput: UpdateActaInput) {
     delete updateActaInput['_id'];
     const updatedEvent = await this.actaModel
@@ -45,6 +63,9 @@ export class ActaService {
     return updatedEvent;
   }
 
+  /**
+   * soft delete acta
+   */
   async remove(id: string) {
     const updatedType = await this.actaModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })

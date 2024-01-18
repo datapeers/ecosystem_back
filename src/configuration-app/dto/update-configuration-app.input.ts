@@ -2,6 +2,9 @@ import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
 
+/**
+ * graphql scheme
+ */
 @InputType()
 export class UpdateConfigurationAppInput {
   @Field(() => ID)

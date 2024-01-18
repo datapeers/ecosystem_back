@@ -2,6 +2,9 @@ import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { CreateAnnouncementInput } from './create-announcement.input';
 import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
 
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class UpdateAnnouncementInput extends PartialType(CreateAnnouncementInput) {
   @Field(() => ID)

@@ -1,0 +1,2038 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ecosystem_back documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/default.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">ecosystem_back documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ResourcesRepliesService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/resources/resources-replies/resources-replies.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#buildNotification" >buildNotification</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#create" >create</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#createDocument" >createDocument</a>
+                            </li>
+                            <li>
+                                <a href="#createSimpleReply" >createSimpleReply</a>
+                            </li>
+                            <li>
+                                <a href="#findAll" >findAll</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByResource" >findByResource</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByStartup" >findByStartup</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByStartupWithoutPopulate" >findByStartupWithoutPopulate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findOne" >findOne</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDocument" >getDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#notificationResource" >notificationResource</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#remove" >remove</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#sendNotification" >sendNotification</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#update" >update</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateDoc" >updateDoc</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateDocument" >updateDocument</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(resourceReplyModel: Model<ResourcesReply>, resourceService: <a href="../injectables/ResourcesService.html" target="_self">ResourcesService</a>, startupService: <a href="../injectables/StartupService.html" target="_self">StartupService</a>, entrepreneurService: <a href="../injectables/EntrepreneurService.html" target="_self">EntrepreneurService</a>, contentService: <a href="../injectables/ContentService.html" target="_self">ContentService</a>, emailsService: <a href="../injectables/EmailsService.html" target="_self">EmailsService</a>, configNotificationsService: <a href="../injectables/ConfigNotificationsService.html" target="_self">ConfigNotificationsService</a>, notificationsService: <a href="../injectables/NotificationsService.html" target="_self">NotificationsService</a>, usersService: <a href="../injectables/UsersService.html" target="_self">UsersService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:34</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>resourceReplyModel</td>
+                                                  
+                                                        <td>
+                                                                    <code>Model&lt;ResourcesReply&gt;</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>resourceService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ResourcesService.html" target="_self" >ResourcesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>startupService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StartupService.html" target="_self" >StartupService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>entrepreneurService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EntrepreneurService.html" target="_self" >EntrepreneurService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>contentService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ContentService.html" target="_self" >ContentService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>emailsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EmailsService.html" target="_self" >EmailsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>configNotificationsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ConfigNotificationsService.html" target="_self" >ConfigNotificationsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>notificationsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/NotificationsService.html" target="_self" >NotificationsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>usersService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UsersService.html" target="_self" >UsersService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildNotification"></a>
+                    <span class="name">
+                        <span ><b>buildNotification</b></span>
+                        <a href="#buildNotification"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildNotification(accountId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, resource: <a href="../classes/Resource.html" target="_self">Resource | any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="304"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:304</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>fake instance resource reply</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>accountId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>resource</td>
+                                            <td>
+                                                            <code><a href="../classes/Resource.html" target="_self" >Resource | any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>{ text: string; date: any; target: string; state: any; type: any; isDeleted: boolean; url: string; }</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="create"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>create</b></span>
+                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>create(createResourcesReplyInput: <a href="../classes/CreateResourcesReplyInput.html" target="_self">CreateResourcesReplyInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="87"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:87</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create resource reply</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>createResourcesReplyInput</td>
+                                            <td>
+                                                            <code><a href="../classes/CreateResourcesReplyInput.html" target="_self" >CreateResourcesReplyInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;ResourcesReply&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>createDocument</b></span>
+                        <a href="#createDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createDocument(submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="66"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create resource reply, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createSimpleReply"></a>
+                    <span class="name">
+                        <span ><b>createSimpleReply</b></span>
+                        <a href="#createSimpleReply"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>createSimpleReply(startup: <a href="../classes/Startup.html" target="_self">Startup</a>, resource: <a href="../classes/Resource.html" target="_self">Resource</a>, sprint: <a href="../classes/Content.html" target="_self">Content</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="204"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:204</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>fake resource reply instance</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>startup</td>
+                                            <td>
+                                                            <code><a href="../classes/Startup.html" target="_self" >Startup</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>resource</td>
+                                            <td>
+                                                            <code><a href="../classes/Resource.html" target="_self" >Resource</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>sprint</td>
+                                            <td>
+                                                            <code><a href="../classes/Content.html" target="_self" >Content</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findAll"></a>
+                    <span class="name">
+                        <span ><b>findAll</b></span>
+                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>findAll()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="98"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:98</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find all resource reply</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByResource"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByResource</b></span>
+                        <a href="#findByResource"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByResource(resourceID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, sprintID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, user: <a href="../classes/User.html" target="_self">AuthUser</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="172"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:172</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find all resource reply by resource</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>resourceID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>sprintID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByStartup"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByStartup</b></span>
+                        <a href="#findByStartup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByStartup(startupID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, phaseID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="230"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:230</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find all resource reply by startup and batch wit populate resource</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>startupID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>phaseID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByStartupWithoutPopulate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByStartupWithoutPopulate</b></span>
+                        <a href="#findByStartupWithoutPopulate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByStartupWithoutPopulate(startupID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, phaseID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="244"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:244</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find all resource reply in a batch an startup</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>startupID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>phaseID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="108"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:108</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find resource reply by id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;ResourcesReply&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getDocument</b></span>
+                        <a href="#getDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="59"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find resource reply, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="notificationResource"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>notificationResource</b></span>
+                        <a href="#notificationResource"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>notificationResource(resourceReply: <a href="../classes/Resource.html" target="_self">Resource | any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="256"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:256</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>notification resource reply approved</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>resourceReply</td>
+                                            <td>
+                                                            <code><a href="../classes/Resource.html" target="_self" >Resource | any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="remove"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>remove</b></span>
+                        <a href="#remove"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="160"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:160</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>soft delete resource reply</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendNotification"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>sendNotification</b></span>
+                        <a href="#sendNotification"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendNotification(contactArgs: <a href="../classes/ContactArgs.html" target="_self">ContactArgs</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="321"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:321</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>send notification email</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>contactArgs</td>
+                                            <td>
+                                                            <code><a href="../classes/ContactArgs.html" target="_self" >ContactArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="update"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>update</b></span>
+                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, data: Partial<ResourcesReply>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="122"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:122</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update resource reply</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                        <code>Partial&lt;ResourcesReply&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;ResourcesReply&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDoc"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateDoc</b></span>
+                        <a href="#updateDoc"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateDoc(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, updateResourcesReplyInput: <a href="../classes/UpdateResourcesReplyInput.html" target="_self">UpdateResourcesReplyInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="137"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:137</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find resource reply with inner populate of resources and startup</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>updateResourcesReplyInput</td>
+                                            <td>
+                                                            <code><a href="../classes/UpdateResourcesReplyInput.html" target="_self" >UpdateResourcesReplyInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateDocument</b></span>
+                        <a href="#updateDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="77"
+                                    class="link-to-prism">src/resources/resources-replies/resources-replies.service.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update resource reply, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CreateResourcesReplyInput } from &#x27;./dto/create-resources-reply.input&#x27;;
+import { UpdateResourcesReplyInput } from &#x27;./dto/update-resources-reply.input&#x27;;
+import {
+  Inject,
+  Injectable,
+  forwardRef,
+  NotFoundException,
+  BadRequestException,
+} from &#x27;@nestjs/common&#x27;;
+import { InjectModel } from &#x27;@nestjs/mongoose&#x27;;
+import { ResourcesReply } from &#x27;./entities/resources-reply.entity&#x27;;
+import { Model, Types } from &#x27;mongoose&#x27;;
+import { AuthUser } from &#x27;src/auth/types/auth-user&#x27;;
+import { ResourcesService } from &#x27;../resources.service&#x27;;
+import { StartupService } from &#x27;src/startup/startup.service&#x27;;
+import { Startup } from &#x27;src/startup/entities/startup.entity&#x27;;
+import { Resource } from &#x27;../entities/resource.entity&#x27;;
+import { Content } from &#x27;src/content/entities/content.entity&#x27;;
+import { ContentService } from &#x27;src/content/content.service&#x27;;
+import { ResourceType } from &#x27;../enums/resources-types&#x27;;
+import { ResourceReplyState } from &#x27;./models/resorce-reply-states&#x27;;
+import { NotificationStates } from &#x27;src/notifications/enum/notification-states.enum&#x27;;
+import { NotificationTypes } from &#x27;src/notifications/enum/notification-types.enum&#x27;;
+import { ContactArgs } from &#x27;src/startup/args/contact-startup.args&#x27;;
+import { EmailsService } from &#x27;src/emails/emails.service&#x27;;
+import { NotificationsService } from &#x27;src/notifications/notifications.service&#x27;;
+import { UsersService } from &#x27;src/users/users.service&#x27;;
+import { EntrepreneurService } from &#x27;src/entrepreneur/entrepreneur.service&#x27;;
+import { default_notification_types } from &#x27;src/notifications/types-notifications/model/types-notification.default&#x27;;
+import { EmailNotificationTypes } from &#x27;src/notifications/types-notifications/model/email-notification-types.enum&#x27;;
+import { ConfigNotificationsService } from &#x27;src/notifications/config-notifications/config-notifications.service&#x27;;
+
+@Injectable()
+export class ResourcesRepliesService {
+  constructor(
+    @InjectModel(ResourcesReply.name)
+    private readonly resourceReplyModel: Model&lt;ResourcesReply&gt;,
+    @Inject(forwardRef(() &#x3D;&gt; ResourcesService))
+    private readonly resourceService: ResourcesService,
+    @Inject(forwardRef(() &#x3D;&gt; StartupService))
+    private readonly startupService: StartupService,
+    @Inject(forwardRef(() &#x3D;&gt; EntrepreneurService))
+    private readonly entrepreneurService: EntrepreneurService,
+    @Inject(forwardRef(() &#x3D;&gt; ContentService))
+    private readonly contentService: ContentService,
+    @Inject(forwardRef(() &#x3D;&gt; EmailsService))
+    private readonly emailsService: EmailsService,
+    @Inject(forwardRef(() &#x3D;&gt; ConfigNotificationsService))
+    private readonly configNotificationsService: ConfigNotificationsService,
+    @Inject(forwardRef(() &#x3D;&gt; NotificationsService))
+    private readonly notificationsService: NotificationsService,
+    @Inject(forwardRef(() &#x3D;&gt; UsersService))
+    private readonly usersService: UsersService,
+  ) {}
+
+  /**
+   * find resource reply, is only intended to be used by websocket.
+   */
+  async getDocument(id: string) {
+    const document &#x3D; await this.findOne(id);
+    return document;
+  }
+  /**
+   * create resource reply, is only intended to be used by websocket.
+   */
+  async createDocument(submission: any, context?: any) {
+    const data &#x3D; {
+      ...context,
+      item: submission,
+    };
+    const createdDocument &#x3D; await this.create(data);
+    return createdDocument;
+  }
+  /**
+   * update resource reply, is only intended to be used by websocket.
+   */
+  async updateDocument(id: string, submission: any, context: any) {
+    const updatedDocument &#x3D; await this.update(id, {
+      item: submission,
+      modified: true,
+    });
+    return updatedDocument;
+  }
+  /**
+   * create resource reply
+   */
+  async create(
+    createResourcesReplyInput: CreateResourcesReplyInput,
+  ): Promise&lt;ResourcesReply&gt; {
+    const createdEvaluation &#x3D; await this.resourceReplyModel.create(
+      createResourcesReplyInput,
+    );
+    return this.findOne(createdEvaluation._id);
+  }
+  /**
+   * find all resource reply
+   */
+  findAll() {
+    return this.resourceReplyModel
+      .find({ isDeleted: false })
+      .populate(&#x27;startup&#x27;)
+      .populate(&#x27;resource&#x27;)
+      .lean();
+  }
+  /**
+   * find resource reply by id
+   */
+  async findOne(id: string): Promise&lt;ResourcesReply&gt; {
+    const resourceReply &#x3D; await this.resourceReplyModel
+      .findById(id)
+      .populate(&#x27;startup&#x27;)
+      .populate(&#x27;resource&#x27;)
+      .lean();
+    if (!resourceReply)
+      throw new NotFoundException(&#x60;Couldn&#x27;t find resource reply with id ${id}&#x60;);
+    return resourceReply;
+  }
+
+  /**
+   * update resource reply
+   */
+  async update(
+    id: string,
+    data: Partial&lt;ResourcesReply&gt;,
+  ): Promise&lt;ResourcesReply&gt; {
+    await this.resourceReplyModel
+      .updateOne({ _id: id }, data, { new: true })
+      .lean();
+    const updatedDoc &#x3D; await this.findOne(id);
+
+    return updatedDoc;
+  }
+
+  /**
+   * find resource reply with inner populate of resources and startup
+   */
+  async updateDoc(
+    id: string,
+    updateResourcesReplyInput: UpdateResourcesReplyInput,
+  ) {
+    delete updateResourcesReplyInput[&#x27;_id&#x27;];
+    const updatedReply &#x3D; await this.resourceReplyModel
+      .findOneAndUpdate(
+        { _id: id },
+        { ...updateResourcesReplyInput },
+        { new: true },
+      )
+      .populate(&#x27;startup&#x27;)
+      .populate(&#x27;resource&#x27;)
+      .lean();
+    if (updatedReply?.state &#x3D;&#x3D;&#x3D; ResourceReplyState.Aprobado) {
+      this.notificationResource(updatedReply);
+    }
+    return updatedReply;
+  }
+
+  /**
+   * soft delete resource reply
+   */
+  async remove(id: string) {
+    const updatedReply &#x3D; await this.resourceReplyModel
+      .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+      .populate(&#x27;startup&#x27;)
+      .populate(&#x27;resource&#x27;)
+      .lean();
+    return updatedReply;
+  }
+
+  /**
+   * find all resource reply by resource
+   */
+  async findByResource(resourceID: string, sprintID: string, user: AuthUser) {
+    const resource &#x3D; await this.resourceService.findOne(resourceID);
+    const sprint &#x3D; await this.contentService.findById(sprintID);
+    const replies &#x3D; await this.resourceReplyModel
+      .find({
+        resource: resource._id.toString(),
+      })
+      .lean();
+    // console.log(replies);
+    let ansList: ResourcesReply[] &#x3D; [];
+    const startupList &#x3D; await this.startupService.findByPhase(
+      resource.phase.toString(),
+      user,
+    );
+    for (const startup of startupList) {
+      let reply &#x3D; replies.find(
+        (i) &#x3D;&gt; i.startup.toString() &#x3D;&#x3D;&#x3D; startup._id.toString(),
+      );
+      if (!reply) reply &#x3D; this.createSimpleReply(startup, resource, sprint);
+      ansList.push({
+        ...reply,
+        resource: resource as any,
+        startup: startup as any,
+        sprint: sprint as any,
+      });
+    }
+    return ansList;
+  }
+
+  /**
+   * fake resource reply instance
+   */
+  createSimpleReply(startup: Startup, resource: Resource, sprint: Content) {
+    const newReply &#x3D; new ResourcesReply();
+    newReply._id &#x3D; new Types.ObjectId().toString();
+    newReply.item &#x3D; {} as any;
+    newReply.type &#x3D; resource.type;
+    newReply.observations &#x3D; &#x27;&#x27;;
+    newReply.startup &#x3D; startup as any;
+    newReply.sprint &#x3D; sprint as any;
+    newReply.createdAt &#x3D; new Date();
+    newReply.updatedAt &#x3D; new Date();
+    newReply.isDeleted &#x3D; false;
+    newReply.modified &#x3D; false;
+    switch (resource.type) {
+      case ResourceType.downloadable:
+        newReply.state &#x3D; ResourceReplyState[&#x27;Sin descargar&#x27;];
+        break;
+      default:
+        newReply.state &#x3D; ResourceReplyState.Pendiente;
+        break;
+    }
+    return newReply;
+  }
+
+  /**
+   * find all resource reply by startup and batch wit populate resource
+   */
+  async findByStartup(startupID: string, phaseID: string) {
+    return this.resourceReplyModel
+      .find({
+        startup: new Types.ObjectId(startupID),
+        phase: new Types.ObjectId(phaseID),
+      })
+      .populate(&#x27;startup&#x27;)
+      .populate(&#x27;resource&#x27;)
+      .lean();
+  }
+
+  /**
+   * find all resource reply in a batch an startup
+   */
+  async findByStartupWithoutPopulate(startupID: string, phaseID: string) {
+    return this.resourceReplyModel
+      .find({
+        startup: new Types.ObjectId(startupID),
+        phase: new Types.ObjectId(phaseID),
+      })
+      .lean();
+  }
+
+  /**
+   * notification resource reply approved
+   */
+  async notificationResource(resourceReply: Resource | any) {
+    const entrepreneurs &#x3D; await this.entrepreneurService.findMany(
+      resourceReply.startup[&#x27;entrepreneurs&#x27;].map((i) &#x3D;&gt; i._id.toString()),
+    );
+    const notificationType &#x3D; default_notification_types.find(
+      (t) &#x3D;&gt; t.type &#x3D;&#x3D; EmailNotificationTypes.qualifiedResource,
+    );
+    const notificationsConfig &#x3D;
+      await this.configNotificationsService.findByType(
+        notificationType._id.toString(),
+      );
+    const entrepreneursIds &#x3D; [];
+    for (const entrepreneur of entrepreneurs) {
+      if (!entrepreneur?.accountId) continue;
+      entrepreneursIds.push({
+        _id: entrepreneur._id,
+        accountId: entrepreneur.accountId,
+      });
+    }
+    const usersFiles &#x3D; await this.usersService.findManyByUUID(
+      entrepreneursIds.map((i) &#x3D;&gt; i.accountId),
+    );
+    const usersToNotify &#x3D; [];
+    for (const user of usersFiles) {
+      if (
+        notificationsConfig.excluded.some(
+          (userEmail) &#x3D;&gt; userEmail &#x3D;&#x3D; user.email,
+        )
+      )
+        continue;
+      usersToNotify.push(
+        this.buildNotification(user._id, resourceReply.resource),
+      );
+      await this.sendNotification({
+        body: resourceReply.resource[&#x27;name&#x27;],
+        from: &#x27;&#x27;,
+        subject: &#x60;${user.fullName}, ${resourceReply.resource[&#x27;name&#x27;]} se aprobó&#x60;,
+        to: user.email,
+        startupID: &#x27;&#x27;,
+        startupName: &#x27;&#x27;,
+      });
+    }
+    return this.notificationsService.createMany(usersToNotify);
+  }
+
+  /**
+   * fake instance resource reply
+   */
+  buildNotification(accountId: string, resource: Resource | any) {
+    let text &#x3D; &#x60;${resource.name} ha sido aprobado&#x60;;
+    const urlInvitation &#x3D; process.env.APP_URI + &#x27;/home/toolkit&#x27;;
+    return {
+      text,
+      date: new Date(),
+      target: &#x60;userNotification ${accountId};&#x60;,
+      state: NotificationStates.pending,
+      type: NotificationTypes.calendar,
+      isDeleted: false,
+      url: urlInvitation,
+    };
+  }
+
+  /**
+   * send notification email
+   */
+  async sendNotification(contactArgs: ContactArgs) {
+    try {
+      const defaultVerifiedEmail &#x3D; process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
+      const urlInvitation &#x3D; process.env.APP_URI + &#x27;/home/toolkit&#x27;;
+      await this.emailsService.send({
+        from: defaultVerifiedEmail,
+        html: &#x60;
+          &lt;p&gt;
+            &lt;span style&#x3D;&quot;font-size:14px&quot;&gt;
+              &lt;a href&#x3D;&quot;${urlInvitation}&quot;&gt;${urlInvitation}&lt;/a&gt;&amp;nbsp;&lt;em&gt;&lt;strong&gt;se aprobó ${contactArgs.body} en EcosystemBT, entra y mira los resultados&lt;/strong&gt;&lt;/em&gt;
+            &lt;/span&gt;
+          &lt;/p&gt;
+          &lt;p&gt;&lt;span style&#x3D;&quot;font-size:11px&quot;&gt;&lt;em&gt;Recuerda que este mensaje es un intermediario, y solo se envió por ecosystem, y no debes responder en este hilo.&lt;/em&gt;&lt;/span&gt;&lt;/p&gt;
+        &#x60;,
+        subject: contactArgs.subject,
+        text: &#x60;${contactArgs.body} ha sido aprobado&#x60;,
+        to: contactArgs.to,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'ResourcesRepliesService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

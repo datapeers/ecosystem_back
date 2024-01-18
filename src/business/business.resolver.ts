@@ -12,7 +12,9 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from 'src/auth/types/auth-user';
 import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
 import { DownloadResult } from 'src/shared/models/download-result';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Business)
 export class BusinessResolver {
@@ -30,7 +32,7 @@ export class BusinessResolver {
   findAll() {
     return this.businessService.findAll();
   }
-  
+
   @Query(() => PaginatedResult<Business>, { name: 'businessesPage' })
   findManyPage(
     @Args('request') request: PageRequest,
@@ -49,13 +51,23 @@ export class BusinessResolver {
     return this.businessService.delete(ids);
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkBusinessesWithEntrepreneursByRequest' })
-  linkBusinessesWithEntrepreneursByRequest(@Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs ): Promise<UpdateResultPayload> {
-    return this.businessService.linkWithEntrepreneursByRequest(linkWithTargetsByRequestArgs);
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkBusinessesWithEntrepreneursByRequest',
+  })
+  linkBusinessesWithEntrepreneursByRequest(
+    @Args() linkWithTargetsByRequestArgs: LinkWithTargetsByRequestArgs,
+  ): Promise<UpdateResultPayload> {
+    return this.businessService.linkWithEntrepreneursByRequest(
+      linkWithTargetsByRequestArgs,
+    );
   }
 
-  @Mutation(() => UpdateResultPayload, { name: 'linkBusinessesWithEntrepreneurs' })
-  linkBusinessesWithEntrepreneurs(@Args() { ids, targetIds }: LinkWithTargetsArgs ): Promise<UpdateResultPayload> {
+  @Mutation(() => UpdateResultPayload, {
+    name: 'linkBusinessesWithEntrepreneurs',
+  })
+  linkBusinessesWithEntrepreneurs(
+    @Args() { ids, targetIds }: LinkWithTargetsArgs,
+  ): Promise<UpdateResultPayload> {
     return this.businessService.linkBusinessesAndEntrepreneurs(ids, targetIds);
   }
 }

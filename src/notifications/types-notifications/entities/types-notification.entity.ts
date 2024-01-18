@@ -1,6 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-
+/**
+ * type notification class
+ */
 @Schema()
 @ObjectType()
 export class TypesNotification {
@@ -11,5 +13,8 @@ export class TypesNotification {
   @Prop({ required: true })
   name: string;
 }
-
-export const TypesNotificationSchema = SchemaFactory.createForClass(TypesNotification);
+/**
+ * @ignore
+ */
+export const TypesNotificationSchema =
+  SchemaFactory.createForClass(TypesNotification);

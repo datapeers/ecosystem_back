@@ -19,7 +19,9 @@ import { ApplicantArgs } from './args/applicant.args';
 import { SelectApplicantsArgs } from './args/select-applicants.args';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
-
+/**
+ * @ignore
+ */
 @Resolver(() => Applicant)
 export class ApplicantResolver {
   constructor(private readonly applicantService: ApplicantService) {}

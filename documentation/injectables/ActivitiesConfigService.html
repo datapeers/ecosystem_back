@@ -1,0 +1,1779 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ecosystem_back documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/default.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">ecosystem_back documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ActivitiesConfigService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/activities-config/activities-config.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#activitiesForTeamCoach" >activitiesForTeamCoach</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#calcHours" >calcHours</a>
+                            </li>
+                            <li>
+                                <a href="#calcHoursExpert" >calcHoursExpert</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#calcHoursStartups" >calcHoursStartups</a>
+                            </li>
+                            <li>
+                                <a href="#calcHoursTeamCoach" >calcHoursTeamCoach</a>
+                            </li>
+                            <li>
+                                <a href="#create" >create</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#duplicate" >duplicate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByPhase" >findByPhase</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByPhaseAndStartup" >findByPhaseAndStartup</a>
+                            </li>
+                            <li>
+                                <a href="#findOne" >findOne</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#remove" >remove</a>
+                            </li>
+                            <li>
+                                <a href="#update" >update</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(activitiesConfig: <a href="../classes/ActivitiesConfig.html" target="_self">Model&lt;ActivitiesConfig&gt;</a>, expertsService: <a href="../injectables/ExpertService.html" target="_self">ExpertService</a>, startupsService: <a href="../injectables/StartupService.html" target="_self">StartupService</a>, usersService: <a href="../injectables/UsersService.html" target="_self">UsersService</a>, eventsService: <a href="../injectables/EventsService.html" target="_self">EventsService</a>, typesEventsService: <a href="../injectables/TypesEventsService.html" target="_self">TypesEventsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/activities-config/activities-config.service.ts:34</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>activitiesConfig</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/ActivitiesConfig.html" target="_self" >Model&lt;ActivitiesConfig&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>expertsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ExpertService.html" target="_self" >ExpertService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>startupsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StartupService.html" target="_self" >StartupService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>usersService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UsersService.html" target="_self" >UsersService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>eventsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EventsService.html" target="_self" >EventsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>typesEventsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TypesEventsService.html" target="_self" >TypesEventsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calcHours"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>calcHours</b></span>
+                        <a href="#calcHours"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>calcHours(config: <a href="../classes/ActivitiesConfig.html" target="_self">ActivitiesConfig</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="166"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:166</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>the current configuration of hours assigned to startups, experts and team coaches</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../classes/ActivitiesConfig.html" target="_self" >ActivitiesConfig</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>hours allocated in startups, experts, team coaches</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calcHoursExpert"></a>
+                    <span class="name">
+                        <span ><b>calcHoursExpert</b></span>
+                        <a href="#calcHoursExpert"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>calcHoursExpert(config: <a href="../classes/ActivitiesConfig.html" target="_self">ActivitiesConfig</a>, listActivities: TypesEvent[], listExpert: <a href="../classes/Expert.html" target="_self">Expert[]</a>, listStartups: <a href="../classes/Startup.html" target="_self">Startup[]</a>, events: <a href="../classes/Event.html" target="_self">EventEntity[]</a>, actas: <a href="../classes/Acta.html" target="_self">Acta[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="274"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:274</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>the current configuration of hours assigned to experts</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../classes/ActivitiesConfig.html" target="_self" >ActivitiesConfig</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listActivities</td>
+                                            <td>
+                                                        <code>TypesEvent[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listExpert</td>
+                                            <td>
+                                                            <code><a href="../classes/Expert.html" target="_self" >Expert[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listStartups</td>
+                                            <td>
+                                                            <code><a href="../classes/Startup.html" target="_self" >Startup[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>events</td>
+                                            <td>
+                                                            <code><a href="../classes/Event.html" target="_self" >EventEntity[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>actas</td>
+                                            <td>
+                                                            <code><a href="../classes/Acta.html" target="_self" >Acta[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Expert.html" target="_self" >IConfigExpert[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>hours allocated in experts</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calcHoursStartups"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>calcHoursStartups</b></span>
+                        <a href="#calcHoursStartups"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>calcHoursStartups(config: <a href="../classes/ActivitiesConfig.html" target="_self">ActivitiesConfig</a>, listActivities: TypesEvent[], listStartups: <a href="../classes/Startup.html" target="_self">Startup[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="215"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:215</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>the current configuration of hours assigned to startups</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../classes/ActivitiesConfig.html" target="_self" >ActivitiesConfig</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listActivities</td>
+                                            <td>
+                                                        <code>TypesEvent[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listStartups</td>
+                                            <td>
+                                                            <code><a href="../classes/Startup.html" target="_self" >Startup[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Startup.html" target="_self" >Promise&lt;IConfigStartup[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>hours allocated in startups</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calcHoursTeamCoach"></a>
+                    <span class="name">
+                        <span ><b>calcHoursTeamCoach</b></span>
+                        <a href="#calcHoursTeamCoach"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>calcHoursTeamCoach(config: <a href="../classes/ActivitiesConfig.html" target="_self">ActivitiesConfig</a>, listActivities: TypesEvent[], listTeamCoaches: <a href="../classes/User.html" target="_self">User[]</a>, listStartups: <a href="../classes/Startup.html" target="_self">Startup[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="342"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:342</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>the current configuration of hours assigned to team coaches</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../classes/ActivitiesConfig.html" target="_self" >ActivitiesConfig</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listActivities</td>
+                                            <td>
+                                                        <code>TypesEvent[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listTeamCoaches</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >User[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>listStartups</td>
+                                            <td>
+                                                            <code><a href="../classes/Startup.html" target="_self" >Startup[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>IConfigTeamCoach[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>hours allocated in team coaches</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="create"></a>
+                    <span class="name">
+                        <span ><b>create</b></span>
+                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>create(createActivitiesConfigInput: <a href="../classes/CreateActivitiesConfigInput.html" target="_self">CreateActivitiesConfigInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="53"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:53</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>createActivitiesConfigInput</td>
+                                            <td>
+                                                            <code><a href="../classes/CreateActivitiesConfigInput.html" target="_self" >CreateActivitiesConfigInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Create new activity config for batch</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="duplicate"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>duplicate</b></span>
+                        <a href="#duplicate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>duplicate(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, newPhaseID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="156"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:156</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>clone activity config by batch id and assign new batch</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>newPhaseID</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>activity config</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByPhase"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByPhase</b></span>
+                        <a href="#findByPhase"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByPhase(phase: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="61"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:61</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>search activity config by batch id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>phase</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>activity config for batch</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByPhaseAndStartup"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByPhaseAndStartup</b></span>
+                        <a href="#findByPhaseAndStartup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByPhaseAndStartup(phase: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, startup: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="76"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:76</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>search activity config by batch id and startup and find the hours allocated to that startup</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>phase</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>startup</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>hours allocated to that startup</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="121"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:121</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>search activity config by id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>activity config</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="remove"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>remove</b></span>
+                        <a href="#remove"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>remove(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="145"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:145</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>soft delete of activity config by batch id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>activity config updated</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="update"></a>
+                    <span class="name">
+                        <span ><b>update</b></span>
+                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, updateActivitiesConfigInput: <a href="../classes/UpdateActivitiesConfigInput.html" target="_self">UpdateActivitiesConfigInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="129"
+                                    class="link-to-prism">src/activities-config/activities-config.service.ts:129</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update params of activity config by batch id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>updateActivitiesConfigInput</td>
+                                            <td>
+                                                            <code><a href="../classes/UpdateActivitiesConfigInput.html" target="_self" >UpdateActivitiesConfigInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>activity config updated</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="activitiesForTeamCoach"></a>
+                    <span class="name">
+                        <span ><b>activitiesForTeamCoach</b></span>
+                        <a href="#activitiesForTeamCoach"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[&#x27;646f953cc2305c411d73f700&#x27;]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/activities-config/activities-config.service.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from &#x27;@nestjs/common&#x27;;
+import { CreateActivitiesConfigInput } from &#x27;./dto/create-activities-config.input&#x27;;
+import { UpdateActivitiesConfigInput } from &#x27;./dto/update-activities-config.input&#x27;;
+import { InjectModel } from &#x27;@nestjs/mongoose&#x27;;
+import { Model } from &#x27;mongoose&#x27;;
+import { ActivitiesConfig } from &#x27;./entities/activities-config.entity&#x27;;
+import { default_types_events } from &#x27;src/events/types-events/model/type-events.default&#x27;;
+import { ExpertService } from &#x27;src/expert/expert.service&#x27;;
+import { StartupService } from &#x27;src/startup/startup.service&#x27;;
+import {
+  Assign_item,
+  IConfigExpert,
+  IConfigStartup,
+  IConfigTeamCoach,
+} from &#x27;./model/assign-item&#x27;;
+import { UsersService } from &#x27;src/users/users.service&#x27;;
+import { ValidRoles } from &#x27;src/auth/enums/valid-roles.enum&#x27;;
+import { TypesEventsService } from &#x27;src/events/types-events/types-events.service&#x27;;
+import { TypesEvent } from &#x27;src/events/types-events/entities/types-event.entity&#x27;;
+import { Startup } from &#x27;src/startup/entities/startup.entity&#x27;;
+import { Expert } from &#x27;src/expert/entities/expert.entity&#x27;;
+import { User } from &#x27;src/users/entities/user.entity&#x27;;
+import { EventsService } from &#x27;src/events/events.service&#x27;;
+import { Acta } from &#x27;src/events/acta/entities/acta.entity&#x27;;
+import { Event as EventEntity } from &#x27;src/events/entities/event.entity&#x27;;
+
+@Injectable()
+export class ActivitiesConfigService {
+  activitiesForTeamCoach &#x3D; [&#x27;646f953cc2305c411d73f700&#x27;];
+  constructor(
+    @InjectModel(ActivitiesConfig.name)
+    private readonly activitiesConfig: Model&lt;ActivitiesConfig&gt;,
+    @Inject(forwardRef(() &#x3D;&gt; ExpertService))
+    private readonly expertsService: ExpertService,
+    @Inject(forwardRef(() &#x3D;&gt; StartupService))
+    private readonly startupsService: StartupService,
+    @Inject(forwardRef(() &#x3D;&gt; UsersService))
+    private readonly usersService: UsersService,
+    @Inject(forwardRef(() &#x3D;&gt; EventsService))
+    private readonly eventsService: EventsService,
+    @Inject(forwardRef(() &#x3D;&gt; TypesEventsService))
+    private readonly typesEventsService: TypesEventsService,
+  ) {}
+
+  /**
+   * @returns Create new activity config for batch
+   */
+  create(createActivitiesConfigInput: CreateActivitiesConfigInput) {
+    return this.activitiesConfig.create(createActivitiesConfigInput);
+  }
+
+  /**
+   * search activity config by batch id
+   * @returns activity config for batch
+   */
+  async findByPhase(phase: string) {
+    let item &#x3D; await this.activitiesConfig.findOne({ phase }).lean();
+    if (!item) {
+      item &#x3D; await this.create({
+        limit: 0,
+        phase,
+      });
+    }
+    return item;
+  }
+
+  /**
+   * search activity config by batch id and startup and find the hours allocated to that startup
+   * @returns hours allocated to that startup
+   */
+  async findByPhaseAndStartup(phase: string, startup: string) {
+    let item &#x3D; await this.activitiesConfig.findOne({ phase }).lean();
+    if (!item) {
+      item &#x3D; await this.create({
+        limit: 0,
+        phase,
+      });
+    }
+
+    const hoursTarget &#x3D; await this.calcHours(item);
+
+    const startupConfig &#x3D; hoursTarget.hoursAssignStartups.filter(
+      (s) &#x3D;&gt; s._id.toString() &#x3D;&#x3D; startup.toString(),
+    );
+
+    if (startupConfig.length &#x3D;&#x3D; 0) return { hours: {} };
+
+    let hoursConsumend: any &#x3D; {};
+
+    try {
+      hoursConsumend &#x3D; await this.eventsService.getConsumedHours(
+        startup,
+        phase,
+      );
+    } catch (error) {}
+
+    const ans &#x3D; {};
+
+    Object.keys(startupConfig[0].hours).forEach((k) &#x3D;&gt; {
+      ans[k] &#x3D; {
+        target: startupConfig[0].hours[k],
+        value:
+          hoursConsumend.hours &amp;&amp; hoursConsumend.hours[k]
+            ? hoursConsumend.hours &amp;&amp; hoursConsumend.hours[k]
+            : 0,
+      };
+    });
+
+    return { hours: ans };
+  }
+
+  /**
+   * search activity config by id
+   * @returns activity config
+   */
+  findOne(id: string) {
+    return this.activitiesConfig.findById(id).lean();
+  }
+
+  /**
+   * update params of activity config by batch id
+   * @returns activity config updated
+   */
+  update(id: string, updateActivitiesConfigInput: UpdateActivitiesConfigInput) {
+    delete updateActivitiesConfigInput[&#x27;_id&#x27;];
+    const updated &#x3D; this.activitiesConfig
+      .findOneAndUpdate(
+        { _id: id },
+        { ...updateActivitiesConfigInput },
+        { new: true },
+      )
+      .lean();
+    return updated;
+  }
+
+  /**
+   * soft delete of activity config by batch id
+   * @returns activity config updated
+   */
+  async remove(id: string) {
+    const updatedContent &#x3D; await this.activitiesConfig
+      .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
+      .lean();
+    return updatedContent;
+  }
+
+  /**
+   * clone activity config by batch id and assign new batch
+   * @returns activity config
+   */
+  async duplicate(id: string, newPhaseID: string) {
+    const config &#x3D; await this.findByPhase(id);
+    delete config[&#x27;_id&#x27;];
+    return this.activitiesConfig.create({ ...config, phase: newPhaseID });
+  }
+
+  /**
+   * the current configuration of hours assigned to startups, experts and team coaches
+   * @returns hours allocated in startups, experts, team coaches
+   */
+  async calcHours(config: ActivitiesConfig): Promise&lt;{
+    hoursAssignStartups: IConfigStartup[];
+    hoursAssignExperts: IConfigExpert[];
+    hoursAssignTeamCoaches: IConfigTeamCoach[];
+  }&gt; {
+    const listStartups &#x3D; await this.startupsService.findByPhase(
+      config.phase.toString(),
+    );
+    const listExperts &#x3D; await this.expertsService.findByPhase(
+      config.phase.toString(),
+    );
+    const listTeamCoach &#x3D; await this.usersService.findMany({
+      roles: [ValidRoles.teamCoach],
+      relationsAssign: { batches: config.phase.toString() },
+    });
+    const listActivities &#x3D; await this.typesEventsService.findAll();
+    const hoursAssignStartups &#x3D; await this.calcHoursStartups(
+      config,
+      listActivities,
+      listStartups,
+    );
+    const { events, actas } &#x3D; await this.eventsService.getEventsAndActas(
+      config.phase,
+    );
+    const hoursAssignExperts &#x3D; this.calcHoursExpert(
+      config,
+      listActivities,
+      listExperts,
+      listStartups,
+      events,
+      actas,
+    );
+    const hoursAssignTeamCoaches &#x3D; this.calcHoursTeamCoach(
+      config,
+      listActivities,
+      listTeamCoach,
+      listStartups,
+    );
+    return {
+      hoursAssignStartups,
+      hoursAssignExperts,
+      hoursAssignTeamCoaches,
+    };
+  }
+
+  /**
+   * the current configuration of hours assigned to startups
+   * @returns hours allocated in startups
+   */
+  async calcHoursStartups(
+    config: ActivitiesConfig,
+    listActivities: TypesEvent[],
+    listStartups: Startup[],
+  ): Promise&lt;IConfigStartup[]&gt; {
+    let hoursAssignStartups: { [key: string]: IConfigStartup } &#x3D; {};
+    listStartups.forEach(
+      (i) &#x3D;&gt; (hoursAssignStartups[i._id] &#x3D; { ...i, hours: {} }),
+    );
+    for (const activity of listActivities) {
+      let hoursBagForActivity &#x3D; config.activities.find(
+        (i) &#x3D;&gt; i.id &#x3D;&#x3D;&#x3D; activity._id.toString(),
+      );
+      if (!hoursBagForActivity) continue; // means that if the activity is not found it is deleted and we must avoid it.
+      let limitHoursIts &#x3D; hoursBagForActivity.limit;
+      let numbOfStartupsWithoutAssign &#x3D; 0;
+      let startupsWithoutConfig &#x3D; {}; // it should be a dictionary to save us in the next steps having to do a find()
+      for (const startup of listStartups) {
+        const previousConfig &#x3D; config.startups.find(
+          (i) &#x3D;&gt;
+            i.entityID &#x3D;&#x3D;&#x3D; startup._id.toString() &amp;&amp;
+            i.activityID &#x3D;&#x3D;&#x3D; activity._id.toString(),
+        );
+        if (previousConfig) {
+          limitHoursIts -&#x3D; previousConfig.limit;
+          hoursAssignStartups[startup._id].hours[activity._id] &#x3D;
+            previousConfig.limit;
+        } else {
+          numbOfStartupsWithoutAssign++;
+          startupsWithoutConfig[startup._id] &#x3D; true;
+        }
+      }
+      let hoursEach &#x3D; this.getHoursForOthers(
+        limitHoursIts,
+        Object.keys(startupsWithoutConfig).length,
+      );
+
+      for (const startupId of Object.keys(startupsWithoutConfig)) {
+        if (limitHoursIts &#x3D;&#x3D;&#x3D; 0) hoursEach &#x3D; 0;
+        limitHoursIts -&#x3D; hoursEach;
+        hoursAssignStartups[startupId].hours[activity._id] &#x3D; hoursEach;
+      }
+    }
+    return Object.values(hoursAssignStartups);
+  }
+
+  /**
+   * @ignore
+   */
+  getHoursForOthers(limit: number, pending: number) {
+    let hoursForOthersStartups &#x3D; Math.round(limit / pending);
+    if (hoursForOthersStartups &lt; 1) return 1;
+    return hoursForOthersStartups;
+  }
+
+  /**
+   * the current configuration of hours assigned to experts
+   * @returns hours allocated in experts
+   */
+  calcHoursExpert(
+    config: ActivitiesConfig,
+    listActivities: TypesEvent[],
+    listExpert: Expert[],
+    listStartups: Startup[],
+    events: EventEntity[],
+    actas: Acta[],
+  ): IConfigExpert[] {
+    let hoursAssignExpert: { [key: string]: IConfigExpert } &#x3D; {};
+    listExpert.forEach(
+      (i) &#x3D;&gt; (hoursAssignExpert[i._id] &#x3D; { ...i, hours: {}, startups: [] }),
+    );
+    const listActivitiesExpert &#x3D; listActivities.filter((i) &#x3D;&gt; i.expertFocus);
+    // Assign activities to expert
+    for (const activity of listActivitiesExpert) {
+      if (activity.isDeleted) continue; // means that if the activity is not found it is deleted and we must avoid it.
+      const eventsActivity &#x3D; events.filter(
+        (i) &#x3D;&gt; !(i.type &#x3D;&#x3D;&#x3D; activity._id.toString()),
+      );
+      for (const expert of listExpert) {
+        const previousConfig &#x3D; config.experts.find(
+          (i) &#x3D;&gt;
+            i.entityID &#x3D;&#x3D;&#x3D; expert._id.toString() &amp;&amp;
+            i.activityID &#x3D;&#x3D;&#x3D; activity._id.toString(),
+        );
+        const eventsExpert &#x3D; eventsActivity.filter((i) &#x3D;&gt;
+          i.experts.find((i) &#x3D;&gt; i._id &#x3D;&#x3D;&#x3D; expert._id.toString()),
+        );
+        const actasExpert &#x3D; [];
+        for (const event of eventsExpert) {
+          const acta &#x3D; actas.find(
+            (i) &#x3D;&gt; i.event.toString() &#x3D;&#x3D;&#x3D; event._id.toString(),
+          );
+          if (!acta) continue;
+          actasExpert.push(acta);
+        }
+        const { countHoursDone, countHoursDonated } &#x3D;
+          this.eventsService.getExpertHours(actasExpert, expert._id.toString());
+        hoursAssignExpert[expert._id].hours[activity._id] &#x3D; {
+          allocated: previousConfig ? previousConfig.limit : 0,
+          donated: countHoursDonated,
+          done: countHoursDone,
+        };
+      }
+    }
+
+    // Assign startups expert
+    for (const expert of listExpert) {
+      const profilePhase &#x3D; expert.phases.find(
+        (i) &#x3D;&gt; i._id.toString() &#x3D;&#x3D;&#x3D; config.phase.toString(),
+      );
+      for (const startup of profilePhase.startUps) {
+        const docStartup &#x3D; listStartups.find(
+          (i) &#x3D;&gt; i._id.toString() &#x3D;&#x3D;&#x3D; startup._id,
+        );
+        if (!docStartup) continue;
+        hoursAssignExpert[expert._id].startups.push({
+          ...docStartup,
+        });
+      }
+    }
+    return Object.values(hoursAssignExpert);
+  }
+
+  /**
+   * the current configuration of hours assigned to team coaches
+   * @returns hours allocated in team coaches
+   */
+  calcHoursTeamCoach(
+    config: ActivitiesConfig,
+    listActivities: TypesEvent[],
+    listTeamCoaches: User[],
+    listStartups: Startup[],
+  ): IConfigTeamCoach[] {
+    let hoursAssignTeamCoaches: { [key: string]: IConfigTeamCoach } &#x3D; {};
+    listTeamCoaches.forEach(
+      (i) &#x3D;&gt;
+        (hoursAssignTeamCoaches[i._id] &#x3D; {
+          _id: i._id.toString(),
+          item: {
+            nombre: i.fullName,
+          },
+          hours: {},
+          startups: [],
+        }),
+    );
+    const listActivitiesTeamCoach &#x3D; listActivities.filter((i) &#x3D;&gt;
+      this.activitiesForTeamCoach.includes(i._id.toString()),
+    );
+
+    // Assign activities to expert
+    for (const activity of listActivitiesTeamCoach) {
+      if (activity.isDeleted) continue; // means that if the activity is not found it is deleted and we must avoid it.
+      for (const teamCoach of listTeamCoaches) {
+        const previousConfig &#x3D; config.teamCoaches.find(
+          (i) &#x3D;&gt;
+            i.entityID &#x3D;&#x3D;&#x3D; teamCoach._id.toString() &amp;&amp;
+            i.activityID &#x3D;&#x3D;&#x3D; activity._id.toString(),
+        );
+        if (previousConfig) {
+          hoursAssignTeamCoaches[teamCoach._id].hours[activity._id] &#x3D; {
+            allocated: previousConfig.limit,
+            done: 0,
+          };
+        } else {
+          hoursAssignTeamCoaches[teamCoach._id].hours[activity._id] &#x3D; {
+            allocated: 0,
+            done: 0,
+          };
+        }
+      }
+    }
+    // Assign startups expert
+    for (const teamCoach of listTeamCoaches) {
+      for (const startup of teamCoach.relationsAssign.startups) {
+        const docStartup &#x3D; listStartups.find(
+          (i) &#x3D;&gt; i._id.toString() &#x3D;&#x3D;&#x3D; startup._id,
+        );
+        if (!docStartup) continue;
+        hoursAssignTeamCoaches[teamCoach._id].startups.push({
+          ...docStartup,
+        });
+      }
+    }
+    return Object.values(hoursAssignTeamCoaches);
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'ActivitiesConfigService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

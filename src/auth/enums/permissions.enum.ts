@@ -1,5 +1,8 @@
 import { AuthUser } from '../types/auth-user';
 
+/**
+ * permission for accounts in app
+ */
 export enum Permission {
   // Startups
   view_startups = 'view_startups',
@@ -96,6 +99,9 @@ export enum Permission {
   homeworks_evaluate = 'homeworks_evaluate',
 }
 
+/**
+ * permission descriptions
+ */
 export const permissionDescriptions: Record<Permission, string> = {
   // Startups
   [Permission.view_startups]: 'Ver sección Startups',
@@ -198,16 +204,23 @@ export const permissionDescriptions: Record<Permission, string> = {
     'Permitir evaluar las tareas de los participantes',
 };
 
+/**
+ * get permission obj
+ */
 export const permissionDescription = (permission: Permission) => {
   return permissionDescriptions[permission];
 };
-
+/**
+ * extract token from header
+ */
 export interface item_permission {
   label: string;
   key: Permission;
   activated: boolean;
 }
-
+/**
+ * extract token from header
+ */
 export const list_of_permissions: item_permission[] = Object.entries(
   permissionDescriptions,
 ).map(([key, value]) => {
@@ -217,7 +230,9 @@ export const list_of_permissions: item_permission[] = Object.entries(
     activated: false,
   };
 });
-
+/**
+ * extract token from header
+ */
 export function getPermissionList(user: AuthUser) {
   if (user.permissions && user.permissions.length !== 0) {
     return user.permissions;

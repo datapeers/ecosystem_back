@@ -13,28 +13,46 @@ export class UserLogService {
     private readonly userLogModel: Model<UserLog>,
   ) {}
 
+  /**
+   * create a user log
+   */
   create(createUserLogInput: CreateUserLogInput, user: AuthUser) {
     return this.userLogModel.create({
       metadata: { ...createUserLogInput.metadata, user: user._id },
     });
   }
 
+  /**
+   * find all users logs
+   */
   findAll() {
     return this.userLogModel.find().lean();
   }
 
+  /**
+   * find user log by filters
+   */
   findByFilters(filters: Record<string, any>) {
     return this.userLogModel.find(filters).lean();
   }
 
+  /**
+   * find an user log
+   */
   findOne(id: string) {
     return this.userLogModel.findById(id).lean();
   }
 
+  /**
+   * delete a user log
+   */
   remove(id: string) {
     return this.userLogModel.findByIdAndDelete(id).lean();
   }
 
+  /**
+   * create or update user login session
+   */
   async registerLogin(idUser: string) {
     // let infoSemana = this.obtenerInfoSemana();
     let today = new Date();
@@ -67,6 +85,9 @@ export class UserLogService {
       .lean();
   }
 
+  /**
+   * find user login sessions in a week
+   */
   /** @var date: date format YYYY-MM-DD */
   registerLoginByDate(date: string) {
     const begin = new Date(`${date}T00:00:00.000Z`);
@@ -81,6 +102,9 @@ export class UserLogService {
       .lean();
   }
 
+  /**
+   * find user activity in a week
+   */
   /** @var date: date format YYYY-MM-DD */
   registerUserByDate(user, date: string) {
     const begin = new Date(`${date}T00:00:00.000Z`);
@@ -96,6 +120,9 @@ export class UserLogService {
       .lean();
   }
 
+  /**
+   * find user resources replies in a week
+   */
   /** @var date: date format YYYY-MM-DD */
   registerResourcesByUser(date: string, user: AuthUser) {
     const begin = new Date(`${date}T00:00:00.000Z`);
@@ -112,6 +139,9 @@ export class UserLogService {
       .lean();
   }
 
+  /**
+   * find multiple users login sessions in a week
+   */
   async getRegistersUsers() {
     let dates = infoWeekDates();
     let labels = [
@@ -139,7 +169,9 @@ export class UserLogService {
     }
     return { labels, data, dateLabels: dates, count: uniquesUsers.size };
   }
-
+  /**
+   * find multiple users resources replies in a week
+   */
   async getUserRegisterWeek(user: AuthUser) {
     let dates = infoWeekDates();
     let labels = [

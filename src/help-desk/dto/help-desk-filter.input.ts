@@ -10,7 +10,9 @@ import {
 } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
 import { TicketEnum } from '../enum/ticket-status.enum';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class HelpDeskFilterInput {
   @Field(() => String)

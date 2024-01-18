@@ -1,3 +1,6 @@
+/**
+ * get dates during week
+ */
 export function infoWeekDates() {
   var fechaActual = new Date();
 

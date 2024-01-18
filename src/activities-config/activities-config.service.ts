@@ -47,10 +47,17 @@ export class ActivitiesConfigService {
     private readonly typesEventsService: TypesEventsService,
   ) {}
 
+  /**
+   * @returns Create new activity config for batch
+   */
   create(createActivitiesConfigInput: CreateActivitiesConfigInput) {
     return this.activitiesConfig.create(createActivitiesConfigInput);
   }
 
+  /**
+   * search activity config by batch id
+   * @returns activity config for batch
+   */
   async findByPhase(phase: string) {
     let item = await this.activitiesConfig.findOne({ phase }).lean();
     if (!item) {
@@ -62,6 +69,10 @@ export class ActivitiesConfigService {
     return item;
   }
 
+  /**
+   * search activity config by batch id and startup and find the hours allocated to that startup
+   * @returns hours allocated to that startup
+   */
   async findByPhaseAndStartup(phase: string, startup: string) {
     let item = await this.activitiesConfig.findOne({ phase }).lean();
     if (!item) {
@@ -103,10 +114,18 @@ export class ActivitiesConfigService {
     return { hours: ans };
   }
 
+  /**
+   * search activity config by id
+   * @returns activity config
+   */
   findOne(id: string) {
     return this.activitiesConfig.findById(id).lean();
   }
 
+  /**
+   * update params of activity config by batch id
+   * @returns activity config updated
+   */
   update(id: string, updateActivitiesConfigInput: UpdateActivitiesConfigInput) {
     delete updateActivitiesConfigInput['_id'];
     const updated = this.activitiesConfig
@@ -119,6 +138,10 @@ export class ActivitiesConfigService {
     return updated;
   }
 
+  /**
+   * soft delete of activity config by batch id
+   * @returns activity config updated
+   */
   async remove(id: string) {
     const updatedContent = await this.activitiesConfig
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
@@ -126,13 +149,25 @@ export class ActivitiesConfigService {
     return updatedContent;
   }
 
+  /**
+   * clone activity config by batch id and assign new batch
+   * @returns activity config
+   */
   async duplicate(id: string, newPhaseID: string) {
     const config = await this.findByPhase(id);
     delete config['_id'];
     return this.activitiesConfig.create({ ...config, phase: newPhaseID });
   }
 
-  async calcHours(config: ActivitiesConfig) {
+  /**
+   * the current configuration of hours assigned to startups, experts and team coaches
+   * @returns hours allocated in startups, experts, team coaches
+   */
+  async calcHours(config: ActivitiesConfig): Promise<{
+    hoursAssignStartups: IConfigStartup[];
+    hoursAssignExperts: IConfigExpert[];
+    hoursAssignTeamCoaches: IConfigTeamCoach[];
+  }> {
     const listStartups = await this.startupsService.findByPhase(
       config.phase.toString(),
     );
@@ -173,6 +208,10 @@ export class ActivitiesConfigService {
     };
   }
 
+  /**
+   * the current configuration of hours assigned to startups
+   * @returns hours allocated in startups
+   */
   async calcHoursStartups(
     config: ActivitiesConfig,
     listActivities: TypesEvent[],
@@ -219,12 +258,19 @@ export class ActivitiesConfigService {
     return Object.values(hoursAssignStartups);
   }
 
+  /**
+   * @ignore
+   */
   getHoursForOthers(limit: number, pending: number) {
     let hoursForOthersStartups = Math.round(limit / pending);
     if (hoursForOthersStartups < 1) return 1;
     return hoursForOthersStartups;
   }
 
+  /**
+   * the current configuration of hours assigned to experts
+   * @returns hours allocated in experts
+   */
   calcHoursExpert(
     config: ActivitiesConfig,
     listActivities: TypesEvent[],
@@ -232,7 +278,7 @@ export class ActivitiesConfigService {
     listStartups: Startup[],
     events: EventEntity[],
     actas: Acta[],
-  ) {
+  ): IConfigExpert[] {
     let hoursAssignExpert: { [key: string]: IConfigExpert } = {};
     listExpert.forEach(
       (i) => (hoursAssignExpert[i._id] = { ...i, hours: {}, startups: [] }),
@@ -289,12 +335,16 @@ export class ActivitiesConfigService {
     return Object.values(hoursAssignExpert);
   }
 
+  /**
+   * the current configuration of hours assigned to team coaches
+   * @returns hours allocated in team coaches
+   */
   calcHoursTeamCoach(
     config: ActivitiesConfig,
     listActivities: TypesEvent[],
     listTeamCoaches: User[],
     listStartups: Startup[],
-  ) {
+  ): IConfigTeamCoach[] {
     let hoursAssignTeamCoaches: { [key: string]: IConfigTeamCoach } = {};
     listTeamCoaches.forEach(
       (i) =>

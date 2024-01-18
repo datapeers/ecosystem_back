@@ -13,6 +13,9 @@ import { CreateActivitiesConfigInput } from './dto/create-activities-config.inpu
 import { UpdateActivitiesConfigInput } from './dto/update-activities-config.input';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { Hours } from './outputs/hours.model';
+/**
+ * @ignore
+ */
 @Resolver(() => ActivitiesConfig)
 export class ActivitiesConfigResolver {
   constructor(

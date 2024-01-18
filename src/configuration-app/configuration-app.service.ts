@@ -19,6 +19,9 @@ export class ConfigurationAppService {
     private readonly eventsService: EventsService,
   ) {}
 
+  /**
+   * initializes the app configuration
+   */
   async onModuleInit() {
     let types = await this.configurationApp.find({});
     if (types.length === 0) {
@@ -26,10 +29,16 @@ export class ConfigurationAppService {
     }
   }
 
+  /**
+   * find the app configuration
+   */
   async find() {
     return (await this.configurationApp.find())[0];
   }
 
+  /**
+   * update the app configuration
+   */
   async update(
     id: string,
     updateConfigurationAppInput: UpdateConfigurationAppInput,
@@ -45,6 +54,9 @@ export class ConfigurationAppService {
     return updatedStage;
   }
 
+  /**
+   * search data graphs for dashboard
+   */
   async initGraph(user: AuthUser) {
     let ans = {};
     switch (user.rolDoc.type) {

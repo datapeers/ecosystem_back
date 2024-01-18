@@ -2,7 +2,9 @@ import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { NotificationTypes } from '../enum/notification-types.enum';
 import { NotificationStates } from '../enum/notification-states.enum';
-
+/**
+ * user notifications
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Notification {
@@ -43,5 +45,7 @@ export class Notification {
   @Field(() => Date)
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const NotificationSchema = SchemaFactory.createForClass(Notification);

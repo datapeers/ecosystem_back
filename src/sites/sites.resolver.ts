@@ -3,7 +3,9 @@ import { SitesService } from './sites.service';
 import { Site } from './entities/site.entity';
 import { CreateSiteInput } from './dto/create-site.input';
 import { UpdateSiteInput } from './dto/update-site.input';
-
+/**
+ * @ignore
+ */
 @Resolver(() => Site)
 export class SitesResolver {
   constructor(private readonly sitesService: SitesService) {}

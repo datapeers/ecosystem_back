@@ -1,0 +1,1393 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ecosystem_back documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/default.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">ecosystem_back documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content miscellaneous-variables">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Variables</li>
+</ol>
+
+<section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <ul class="index-list">
+                        <li>
+                            <a href="#BearerToken" title="src/auth/decorators/bearer-token.decorator.ts" ><b>BearerToken</b>&nbsp;&nbsp;&nbsp;(src/.../bearer-token.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#buildAggregationFromRequest" title="src/shared/utilities/request.utilities.ts" ><b>buildAggregationFromRequest</b>&nbsp;&nbsp;&nbsp;(src/.../request.utilities.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#CurrentUser" title="src/auth/decorators/current-user.decorator.ts" ><b>CurrentUser</b>&nbsp;&nbsp;&nbsp;(src/.../current-user.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#default_notification_types" title="src/notifications/types-notifications/model/types-notification.default.ts" ><b>default_notification_types</b>&nbsp;&nbsp;&nbsp;(src/.../types-notification.default.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#default_types_events" title="src/events/types-events/model/type-events.default.ts" ><b>default_types_events</b>&nbsp;&nbsp;&nbsp;(src/.../type-events.default.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#defaultRoles" title="src/rol/model/rol.ts" ><b>defaultRoles</b>&nbsp;&nbsp;&nbsp;(src/.../rol.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#excelUtilities" title="src/shared/utilities/excel.utilities.ts" ><b>excelUtilities</b>&nbsp;&nbsp;&nbsp;(src/.../excel.utilities.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#list_of_permissions" title="src/auth/enums/permissions.enum.ts" ><b>list_of_permissions</b>&nbsp;&nbsp;&nbsp;(src/.../permissions.enum.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#listPermission" title="src/rol/model/rol.ts" ><b>listPermission</b>&nbsp;&nbsp;&nbsp;(src/.../rol.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#permissionDescription" title="src/auth/enums/permissions.enum.ts" ><b>permissionDescription</b>&nbsp;&nbsp;&nbsp;(src/.../permissions.enum.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#permissionDescriptions" title="src/auth/enums/permissions.enum.ts" ><b>permissionDescriptions</b>&nbsp;&nbsp;&nbsp;(src/.../permissions.enum.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#rolNames" title="src/auth/enums/valid-roles.enum.ts" ><b>rolNames</b>&nbsp;&nbsp;&nbsp;(src/.../valid-roles.enum.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#rolValues" title="src/auth/enums/valid-roles.enum.ts" ><b>rolValues</b>&nbsp;&nbsp;&nbsp;(src/.../valid-roles.enum.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#templateNames" title="src/emails/enums/email-templates.ts" ><b>templateNames</b>&nbsp;&nbsp;&nbsp;(src/.../email-templates.ts)</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <h3>src/auth/decorators/bearer-token.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="BearerToken"></a>
+                    <span class="name">
+                        <span ><b>BearerToken</b></span>
+                        <a href="#BearerToken"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createParamDecorator(
+  (_params: any, context: ExecutionContext) &#x3D;&gt; {
+    const ctx &#x3D; GqlExecutionContext.create(context);
+    const token: string &#x3D; ctx.getContext().req.token;
+    return token;
+  },
+)</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>extract token from header</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/shared/utilities/request.utilities.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildAggregationFromRequest"></a>
+                    <span class="name">
+                        <span ><b>buildAggregationFromRequest</b></span>
+                        <a href="#buildAggregationFromRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(
+  request: PageRequest,
+  options: AggregateBuildOptions,
+) &#x3D;&gt; {
+  const {
+    lookups,
+    project,
+    defaultMatch,
+    paginated,
+    outputProjection,
+    virtualFields,
+  } &#x3D; options;
+  const aggregation: any[] &#x3D; [];
+  const skip &#x3D; request.skip !&#x3D; null ? { $skip: request.skip } : null;
+  const limit &#x3D; request.limit !&#x3D; null ? { $limit: request.limit } : null;
+  const sort &#x3D; {
+    $sort: request.sort.reduce((prev, curr) &#x3D;&gt; {
+      prev[curr.field] &#x3D; curr.order;
+      return prev;
+    }, {}),
+  };
+  const foreignSort &#x3D; {
+    $sort: request.foreignSort.reduce((prev, curr) &#x3D;&gt; {
+      prev[curr.field] &#x3D; curr.order;
+      return prev;
+    }, {}),
+  };
+  const idSorting &#x3D; { $sort: { _id: 1 } };
+
+  const match &#x3D; _buildMatch(request.filter);
+  const foreignMatch &#x3D; _buildMatch(request.foreignFilter, {});
+  const globalMatch &#x3D; request?.globalFilter
+    ? _buildMatch([request.globalFilter])
+    : null;
+
+  const documentsFacet &#x3D; [];
+  if (skip) {
+    documentsFacet.push(skip);
+  }
+  if (limit) {
+    documentsFacet.push(limit);
+  }
+  let output: any[];
+  if (paginated) {
+    output &#x3D; [
+      {
+        $facet: {
+          documents: documentsFacet,
+          totalRecords: [{ $count: &#x27;count&#x27; }],
+        },
+      },
+      { $unwind: { path: &#x27;$totalRecords&#x27;, preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          documents: &#x27;$documents&#x27;,
+          totalRecords: { $ifNull: [&#x27;$totalRecords.count&#x27;, 0] },
+        },
+      },
+    ];
+  } else {
+    output &#x3D; documentsFacet;
+  }
+  // Apply default match operations first, this should use indexes.
+  aggregation.push({ $match: defaultMatch });
+  // Project calculated fields (Like separate diferent types of an array element)
+  if (project) {
+    aggregation.push(project);
+  }
+  if (virtualFields) {
+    aggregation.push(virtualFields);
+  }
+  // Add non-foreign match operations to reduce amount of elements during lookups
+  if (request.filter.length &gt; 0) {
+    aggregation.push(match);
+  }
+  // Apply lookups to search for additional fields
+  aggregation.push(...lookups);
+  // Apply filters that are related to array fields
+  // Apply foreign filters, this should always go after lookups
+  if (request.foreignFilter.length &gt; 0) {
+    aggregation.push(foreignMatch);
+  }
+  // Apply global match if any
+  if (globalMatch !&#x3D; null) {
+    aggregation.push(globalMatch);
+  }
+  // If sorting by any field do an id sort first.
+  if (request.sort.length &gt; 0 || request.foreignSort.length &gt; 0) {
+    aggregation.push(idSorting);
+  }
+  // Apply local sorts
+  if (request.sort.length &gt; 0) {
+    aggregation.push(sort);
+  }
+  // Apply Foreign sorts
+  if (request.foreignSort.length &gt; 0) {
+    aggregation.push(foreignSort);
+  }
+  // Apply output projection, remove unnecesary fields
+  if (outputProjection) {
+    documentsFacet.push(outputProjection);
+  }
+  // Push last output operation
+  // If a request is paginated (Usually case for tables, this implies)
+  aggregation.push(...output);
+
+  // const util &#x3D; require(&#x27;util&#x27;);
+  // console.log(util.inspect(request, {showHidden: false, depth: null, colors: true}));
+  // console.log(util.inspect(aggregation, {showHidden: false, depth: null, colors: true}));
+  return aggregation;
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>default pipelines for table request</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/auth/decorators/current-user.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="CurrentUser"></a>
+                    <span class="name">
+                        <span ><b>CurrentUser</b></span>
+                        <a href="#CurrentUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createParamDecorator(
+  (roles: ValidRoles[] &#x3D; [], context: ExecutionContext) &#x3D;&gt; {
+    const ctx &#x3D; GqlExecutionContext.create(context);
+    const user: AuthUser &#x3D; ctx.getContext().req.user;
+    const rol &#x3D; ctx.getContext().req.rol;
+    user[&#x27;rolDoc&#x27;] &#x3D; rol;
+    if (!user) {
+      throw new InternalServerErrorException(
+        &#x60;No user inside the request - make sure that we used the AuthGuard&#x60;,
+      );
+    }
+
+    if (roles.length &#x3D;&#x3D;&#x3D; 0) return user;
+
+    if (!user.rol) {
+      throw new ForbiddenException(
+        &#x27;Attempted to access a protected route with a user without roles or document&#x27;,
+      );
+    }
+
+    if (user.isActive &#x3D;&#x3D;&#x3D; false) {
+      throw new ForbiddenException(
+        &#x27;Attempted to access a protected route with a disabled user&#x27;,
+      );
+    }
+
+    if (roles.includes(rol.type as ValidRoles)) {
+      return user;
+    }
+
+    throw new ForbiddenException(
+      &#x60;User ${user.fullName} need a valid role [${roles}]&#x60;,
+    );
+  },
+)</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>get user from token</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/notifications/types-notifications/model/types-notification.default.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="default_notification_types"></a>
+                    <span class="name">
+                        <span ><b>default_notification_types</b></span>
+                        <a href="#default_notification_types"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    _id: new Types.ObjectId(&#x27;646f943cc2305c411d73f6d2&#x27;),
+    name: &#x27;Invitación a evento&#x27;,
+    type: EmailNotificationTypes.invitationToEvent,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f9538c2305c411d73f6f2&#x27;),
+    name: &#x27;Actualización Evento&#x27;,
+    type: EmailNotificationTypes.eventUpdate,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f953cc2305c411d73f702&#x27;),
+    name: &#x27;Recurso calificado&#x27;,
+    type: EmailNotificationTypes.qualifiedResource,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f941ac2305c411d73f6c2&#x27;),
+    name: &#x27;Recurso próximo a vencer&#x27;,
+    type: EmailNotificationTypes.resourceExpiringSoon,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f953dc2305c411d73f702&#x27;),
+    name: &#x27;Culminación de fase&#x27;,
+    type: EmailNotificationTypes.phaseCompletion,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f958cc2305c411d73f712&#x27;),
+    name: &#x27;Evaluación disponible&#x27;,
+    type: EmailNotificationTypes.assessmentAvailable,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f9598c2305c411d73f712&#x27;),
+    name: &#x27;Actualización ticket mesa de ayuda&#x27;,
+    type: EmailNotificationTypes.helpdeskTicketUpdate,
+  },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>default types of notifications</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/events/types-events/model/type-events.default.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="default_types_events"></a>
+                    <span class="name">
+                        <span ><b>default_types_events</b></span>
+                        <a href="#default_types_events"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    _id: new Types.ObjectId(&#x27;646f943cc2305c411d73f6d0&#x27;),
+    name: &#x27;Mentoría&#x27;,
+    extra_options: {
+      allow_acta: true,
+      allow_files: true,
+    },
+    expertFocus: true,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f9538c2305c411d73f6fb&#x27;),
+    name: &#x27;Asesoría&#x27;,
+    extra_options: {
+      allow_acta: true,
+      allow_files: true,
+    },
+    expertFocus: true,
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f953cc2305c411d73f700&#x27;),
+    name: &#x27;Team Coach session&#x27;,
+    extra_options: {
+      allow_acta: true,
+      allow_files: true,
+    },
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f941ac2305c411d73f6c7&#x27;),
+    name: &#x27;Entrevista&#x27;,
+    extra_options: {
+      allow_acta: false,
+      allow_files: true,
+    },
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f953dc2305c411d73f705&#x27;),
+    name: &#x27;Comités&#x27;,
+    extra_options: {
+      allow_acta: true,
+      allow_files: true,
+    },
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f958cc2305c411d73f716&#x27;),
+    name: &#x27;Master Class&#x27;,
+    extra_options: {
+      allow_acta: false,
+      allow_files: false,
+    },
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f9598c2305c411d73f71f&#x27;),
+    name: &#x27;Workshop&#x27;,
+    extra_options: {
+      allow_acta: false,
+      allow_files: false,
+    },
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f95a2c2305c411d73f728&#x27;),
+    name: &#x27;Kickoff&#x27;,
+    extra_options: {
+      allow_acta: false,
+      allow_files: false,
+    },
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f95e1c2305c411d73f737&#x27;),
+    name: &#x27;Demo day&#x27;,
+    extra_options: {
+      allow_acta: false,
+      allow_files: false,
+    },
+  },
+  {
+    _id: new Types.ObjectId(&#x27;646f95f2c2305c411d73f740&#x27;),
+    name: &#x27;Networking&#x27;,
+    extra_options: {
+      allow_acta: false,
+      allow_files: false,
+    },
+  },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>default types events app</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/rol/model/rol.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="defaultRoles"></a>
+                    <span class="name">
+                        <span ><b>defaultRoles</b></span>
+                        <a href="#defaultRoles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    type: &#x27;superAdmin&#x27;,
+    name: &#x27;Super Admin&#x27;,
+    permissions: [
+      &#x27;view_startups&#x27;,
+      &#x27;load_all_startups&#x27;,
+      &#x27;create_startups&#x27;,
+      &#x27;edit_startups&#x27;,
+      &#x27;view_experts&#x27;,
+      &#x27;create_experts&#x27;,
+      &#x27;edit_experts&#x27;,
+      &#x27;view_entrepreneurs&#x27;,
+      &#x27;load_all_entrepreneurs&#x27;,
+      &#x27;create_entrepreneurs&#x27;,
+      &#x27;edit_entrepreneurs&#x27;,
+      &#x27;view_business&#x27;,
+      &#x27;create_business&#x27;,
+      &#x27;edit_business&#x27;,
+      &#x27;download_all_tables&#x27;,
+      &#x27;reports_view&#x27;,
+      &#x27;reports_create&#x27;,
+      &#x27;reports_edit&#x27;,
+      &#x27;community_view&#x27;,
+      &#x27;community_create&#x27;,
+      &#x27;community_edit&#x27;,
+      &#x27;form_view&#x27;,
+      &#x27;form_create&#x27;,
+      &#x27;form_edit&#x27;,
+      &#x27;help_desk_view&#x27;,
+      &#x27;help_desk_create&#x27;,
+      &#x27;help_desk_edit&#x27;,
+      &#x27;sites_and_services_view&#x27;,
+      &#x27;sites_and_services_create&#x27;,
+      &#x27;sites_and_services_edit&#x27;,
+      &#x27;announcements_view&#x27;,
+      &#x27;announcements_challenges&#x27;,
+      &#x27;announcements_edit_challenge&#x27;,
+      &#x27;announcements_create&#x27;,
+      &#x27;announcements_edit&#x27;,
+      &#x27;phases_batch_access&#x27;,
+      &#x27;phases_phase_access&#x27;,
+      &#x27;phases_phase_edit&#x27;,
+      &#x27;phases_batch_create&#x27;,
+      &#x27;phases_batch_edit&#x27;,
+      &#x27;phases_batch_close&#x27;,
+      &#x27;events_view&#x27;,
+      &#x27;load_all_events&#x27;,
+      &#x27;events_create&#x27;,
+      &#x27;events_edit&#x27;,
+      &#x27;actas_view&#x27;,
+      &#x27;actas_create&#x27;,
+      &#x27;actas_edit&#x27;,
+      &#x27;actas_close&#x27;,
+      &#x27;hours_view&#x27;,
+      &#x27;hours_edit_activities&#x27;,
+      &#x27;hours_edit_startups&#x27;,
+      &#x27;hours_edit_experts&#x27;,
+      &#x27;hours_edit_teamCoach&#x27;,
+      &#x27;evaluation_view&#x27;,
+      &#x27;evaluation_create&#x27;,
+      &#x27;evaluation_edit&#x27;,
+      &#x27;evaluation_edit_docs&#x27;,
+      &#x27;homeworks_view&#x27;,
+      &#x27;homeworks_evaluate&#x27;,
+    ],
+  },
+  {
+    type: &#x27;admin&#x27;,
+    name: &#x27;Administrador&#x27;,
+    permissions: [
+      &#x27;view_startups&#x27;,
+      &#x27;load_all_startups&#x27;,
+      &#x27;create_startups&#x27;,
+      &#x27;edit_startups&#x27;,
+      &#x27;view_experts&#x27;,
+      &#x27;create_experts&#x27;,
+      &#x27;edit_experts&#x27;,
+      &#x27;view_entrepreneurs&#x27;,
+      &#x27;load_all_entrepreneurs&#x27;,
+      &#x27;create_entrepreneurs&#x27;,
+      &#x27;edit_entrepreneurs&#x27;,
+      &#x27;view_business&#x27;,
+      &#x27;create_business&#x27;,
+      &#x27;edit_business&#x27;,
+      &#x27;download_all_tables&#x27;,
+      &#x27;reports_view&#x27;,
+      &#x27;reports_create&#x27;,
+      &#x27;reports_edit&#x27;,
+      &#x27;community_view&#x27;,
+      &#x27;community_create&#x27;,
+      &#x27;community_edit&#x27;,
+      &#x27;form_view&#x27;,
+      &#x27;form_create&#x27;,
+      &#x27;form_edit&#x27;,
+      &#x27;help_desk_view&#x27;,
+      &#x27;help_desk_create&#x27;,
+      &#x27;help_desk_edit&#x27;,
+      &#x27;sites_and_services_view&#x27;,
+      &#x27;sites_and_services_create&#x27;,
+      &#x27;sites_and_services_edit&#x27;,
+      &#x27;announcements_view&#x27;,
+      &#x27;announcements_challenges&#x27;,
+      &#x27;announcements_edit_challenge&#x27;,
+      &#x27;announcements_create&#x27;,
+      &#x27;announcements_edit&#x27;,
+      &#x27;phases_batch_access&#x27;,
+      &#x27;phases_phase_access&#x27;,
+      &#x27;phases_phase_edit&#x27;,
+      &#x27;phases_batch_create&#x27;,
+      &#x27;phases_batch_edit&#x27;,
+      &#x27;phases_batch_close&#x27;,
+      &#x27;events_view&#x27;,
+      &#x27;load_all_events&#x27;,
+      &#x27;events_create&#x27;,
+      &#x27;events_edit&#x27;,
+      &#x27;actas_view&#x27;,
+      &#x27;actas_create&#x27;,
+      &#x27;actas_edit&#x27;,
+      &#x27;actas_close&#x27;,
+      &#x27;hours_view&#x27;,
+      &#x27;hours_edit_activities&#x27;,
+      &#x27;hours_edit_startups&#x27;,
+      &#x27;hours_edit_experts&#x27;,
+      &#x27;hours_edit_teamCoach&#x27;,
+      &#x27;evaluation_view&#x27;,
+      &#x27;evaluation_create&#x27;,
+      &#x27;evaluation_edit&#x27;,
+      &#x27;evaluation_edit_docs&#x27;,
+      &#x27;homeworks_view&#x27;,
+      &#x27;homeworks_evaluate&#x27;,
+    ],
+  },
+  {
+    type: &#x27;host&#x27;,
+    name: &#x27;Host&#x27;,
+    permissions: [
+      &#x27;view_startups&#x27;,
+      &#x27;load_all_startups&#x27;,
+      &#x27;create_startups&#x27;,
+      &#x27;edit_startups&#x27;,
+      &#x27;view_experts&#x27;,
+      &#x27;create_experts&#x27;,
+      &#x27;edit_experts&#x27;,
+      &#x27;view_entrepreneurs&#x27;,
+      &#x27;load_all_entrepreneurs&#x27;,
+      &#x27;create_entrepreneurs&#x27;,
+      &#x27;edit_entrepreneurs&#x27;,
+      &#x27;download_all_tables&#x27;,
+      &#x27;reports_view&#x27;,
+      &#x27;reports_create&#x27;,
+      &#x27;reports_edit&#x27;,
+      &#x27;sites_and_services_view&#x27;,
+      &#x27;phases_batch_access&#x27;,
+      &#x27;events_view&#x27;,
+      &#x27;load_all_events&#x27;,
+      &#x27;events_create&#x27;,
+      &#x27;events_edit&#x27;,
+      &#x27;actas_view&#x27;,
+      &#x27;actas_create&#x27;,
+      &#x27;actas_edit&#x27;,
+      &#x27;actas_close&#x27;,
+      &#x27;hours_view&#x27;,
+      &#x27;hours_edit_activities&#x27;,
+      &#x27;hours_edit_startups&#x27;,
+      &#x27;hours_edit_experts&#x27;,
+      &#x27;hours_edit_teamCoach&#x27;,
+      &#x27;evaluation_view&#x27;,
+      &#x27;evaluation_create&#x27;,
+      &#x27;evaluation_edit&#x27;,
+      &#x27;evaluation_edit_docs&#x27;,
+      &#x27;homeworks_view&#x27;,
+      &#x27;homeworks_evaluate&#x27;,
+    ],
+  },
+  {
+    type: &#x27;teamCoach&#x27;,
+    name: &#x27;Team Coach&#x27;,
+    permissions: [
+      &#x27;view_startups&#x27;,
+      &#x27;view_entrepreneurs&#x27;,
+      &#x27;community_view&#x27;,
+      &#x27;phases_batch_access&#x27;,
+      &#x27;events_view&#x27;,
+      &#x27;events_create&#x27;,
+      &#x27;events_edit&#x27;,
+      &#x27;actas_view&#x27;,
+      &#x27;actas_create&#x27;,
+      &#x27;actas_edit&#x27;,
+      &#x27;actas_close&#x27;,
+      &#x27;evaluation_view&#x27;,
+      &#x27;evaluation_create&#x27;,
+      &#x27;evaluation_edit&#x27;,
+      &#x27;evaluation_edit_docs&#x27;,
+    ],
+  },
+  {
+    type: &#x27;expert&#x27;,
+    name: &#x27;Experto&#x27;,
+    permissions: [
+      &#x27;view_startups&#x27;,
+      &#x27;view_entrepreneurs&#x27;,
+      &#x27;phases_batch_access&#x27;,
+      &#x27;actas_view&#x27;,
+      &#x27;actas_view&#x27;,
+      &#x27;actas_create&#x27;,
+      &#x27;actas_edit&#x27;,
+      &#x27;actas_close&#x27;,
+      &#x27;events_view&#x27;,
+      &#x27;events_create&#x27;,
+      &#x27;events_edit&#x27;,
+      &#x27;evaluation_view&#x27;,
+      &#x27;evaluation_create&#x27;,
+      &#x27;evaluation_edit&#x27;,
+      &#x27;evaluation_edit_docs&#x27;,
+    ],
+  },
+  {
+    type: &#x27;user&#x27;,
+    name: &#x27;Usuario&#x27;,
+    permissions: [],
+  },
+  {
+    type: &#x27;challenger&#x27;,
+    name: &#x27;Challenger&#x27;,
+    permissions: [],
+  },
+]</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>default app roles</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listPermission"></a>
+                    <span class="name">
+                        <span ><b>listPermission</b></span>
+                        <a href="#listPermission"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  // Startups
+  view_startups: true,
+  create_startups: true,
+  edit_startups: true,
+
+  // Experts
+  view_experts: true,
+  create_experts: true,
+  edit_experts: true,
+
+  // Entrepreneurs
+  view_entrepreneurs: true,
+  create_entrepreneurs: true,
+  edit_entrepreneurs: true,
+
+  // Business
+  view_business: true,
+  create_business: true,
+  edit_business: true,
+
+  // Tables
+  download_all_tables: true,
+
+  // Reports
+  reports_view: true,
+  reports_create: true,
+  reports_edit: true,
+
+  // Community
+  community_view: true,
+  community_create: true,
+  community_edit: true,
+
+  // Forms
+  form_view: true,
+  form_create: true,
+  form_edit: true,
+
+  // Help Desk
+  help_desk_view: true,
+  help_desk_create: true,
+  help_desk_edit: true,
+
+  // Sites
+  sites_and_services_view: true,
+  sites_and_services_create: true,
+  sites_and_services_edit: true,
+
+  // Announcements
+  announcements_view: true,
+  announcements_challenges: true,
+  announcements_create: true,
+  announcements_edit: true,
+
+  // Phase and batch
+  phases_view: true,
+  phases_batch_create: true,
+  phases_batch_access: true,
+  phases_batch_edit: true,
+  phases_batch_content: true,
+  phases_phase_edit: true,
+
+  // Phase Events
+  events_view: true,
+  events_create: true,
+  events_edit: true,
+
+  // Phase Actas
+  actas_view: true,
+  actas_create: true,
+  actas_close: true,
+  actas_edit: true,
+
+  // Phase Hours bag
+  hours_view: true,
+  hours_edit_activities: true,
+  hours_edit_startups: true,
+  hours_edit_experts: true,
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>permission list</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/shared/utilities/excel.utilities.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="excelUtilities"></a>
+                    <span class="name">
+                        <span ><b>excelUtilities</b></span>
+                        <a href="#excelUtilities"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  buildWorkbookBuffer,
+  parseDocumentsToRows,
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>functions necessary to build excel doc</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/auth/enums/permissions.enum.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="list_of_permissions"></a>
+                    <span class="name">
+                        <span ><b>list_of_permissions</b></span>
+                        <a href="#list_of_permissions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/item_permission.html" target="_self" >item_permission[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>Object.entries(
+  permissionDescriptions,
+).map(([key, value]) &#x3D;&gt; {
+  return {
+    label: value,
+    key: key as Permission,
+    activated: false,
+  };
+})</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>extract token from header</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="permissionDescription"></a>
+                    <span class="name">
+                        <span ><b>permissionDescription</b></span>
+                        <a href="#permissionDescription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(permission: Permission) &#x3D;&gt; {
+  return permissionDescriptions[permission];
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>get permission obj</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="permissionDescriptions"></a>
+                    <span class="name">
+                        <span ><b>permissionDescriptions</b></span>
+                        <a href="#permissionDescriptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#Permission" target="_self" >Record&lt;Permission, string&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  // Startups
+  [Permission.view_startups]: &#x27;Ver sección Startups&#x27;,
+  [Permission.load_all_startups]: &#x27;Permitir que vea todas las startups&#x27;,
+  [Permission.create_startups]: &#x27;Crear startup&#x27;,
+  [Permission.edit_startups]: &#x27;Editar startup&#x27;,
+
+  // Experts
+  [Permission.view_experts]: &#x27;Ver sección expertos&#x27;,
+  [Permission.create_experts]: &#x27;Crear experto&#x27;,
+  [Permission.edit_experts]: &#x27;Editar expertos&#x27;,
+
+  // Entrepreneurs
+  [Permission.view_entrepreneurs]: &#x27;Ver sección empresarios&#x27;,
+  [Permission.load_all_entrepreneurs]: &#x27;Permitir que vea todos los empresarios&#x27;,
+  [Permission.create_entrepreneurs]: &#x27;Crear empresario&#x27;,
+  [Permission.edit_entrepreneurs]: &#x27;Editar empresarios&#x27;,
+
+  // Business
+  [Permission.view_business]: &#x27;Ver sección empresas&#x27;,
+  [Permission.create_business]: &#x27;Crear empresa&#x27;,
+  [Permission.edit_business]: &#x27;Editar empresas&#x27;,
+
+  // Tables
+  [Permission.download_all_tables]: &#x27;Descargar información de tablas&#x27;,
+
+  // Reports
+  [Permission.reports_view]: &#x27;Ver sección reportes&#x27;,
+  [Permission.reports_create]: &#x27;Crear reporte&#x27;,
+  [Permission.reports_edit]: &#x27;Editar reporte&#x27;,
+
+  // Community
+  [Permission.community_view]: &#x27;Ver sección comunidad&#x27;,
+  [Permission.community_edit]: &#x27;Editar visibilidad de comunidades&#x27;,
+
+  // Forms
+  [Permission.form_view]: &#x27;Ver sección formularios&#x27;,
+  [Permission.form_create]: &#x27;Crear formulario&#x27;,
+  [Permission.form_edit]: &#x27;Editar y borrar formularios&#x27;,
+
+  // Help Desk
+  [Permission.help_desk_view]: &#x27;Ver sección Mesa de ayuda&#x27;,
+  [Permission.help_desk_create]: &#x27;Crear hilo en mesa de ayuda&#x27;,
+  [Permission.help_desk_edit]: &#x27;Permitir editar un hilo en mesa de ayuda&#x27;,
+
+  // Sites
+  [Permission.sites_and_services_view]: &#x27;Ver sección Sedes y servicios&#x27;,
+  [Permission.sites_and_services_create]: &#x27;Crear sede y servicios&#x27;,
+  [Permission.sites_and_services_edit]: &#x27;Editar sede y servicios&#x27;,
+
+  // Announcements
+  [Permission.announcements_view]: &#x27;Ver sección convocatorias&#x27;,
+  [Permission.announcements_challenges]: &#x27;Crear reto&#x27;,
+  [Permission.announcements_edit_challenge]: &#x27;Editar reto&#x27;,
+  [Permission.announcements_create]: &#x27;Crear convocatoria&#x27;,
+  [Permission.announcements_edit]: &#x27;Editar convocatoria&#x27;,
+
+  // Phase and batch
+  [Permission.phases_batch_access]: &#x27;Ver sección fases&#x27;,
+  [Permission.phases_phase_access]: &#x27;Ver configuración de fases base&#x27;,
+  [Permission.phases_phase_edit]: &#x27;Permitir editar fase base&#x27;,
+
+  [Permission.phases_batch_create]: &#x27;Crear batch&#x27;,
+  [Permission.phases_batch_edit]: &#x27;Editar batch&#x27;,
+  [Permission.phases_batch_close]:
+    &#x27;Puede cerrar un batch y asignar quienes pasan y quienes no&#x27;,
+
+  // Phase Events
+  [Permission.events_view]: &#x27;Ver sección eventos en los batch&#x27;,
+  [Permission.load_all_events]: &#x27;Permitir que vea todos los eventos del batch&#x27;,
+  [Permission.events_create]: &#x27;Crear evento&#x27;,
+  [Permission.events_edit]: &#x27;Editar evento&#x27;,
+
+  // Phase Actas
+  [Permission.actas_view]: &#x27;Ver actas de los eventos&#x27;,
+  [Permission.actas_create]: &#x27;Crear acta&#x27;,
+  [Permission.actas_edit]: &#x27;Editar acta&#x27;,
+  [Permission.actas_close]: &#x27;Cerrar acta&#x27;,
+
+  // Phase Hours bag
+  [Permission.hours_view]: &#x27;Ver sección bolsa de horas en batch&#x27;,
+  [Permission.hours_edit_activities]: &#x27;Editar límite de horas por actividad&#x27;,
+  [Permission.hours_edit_startups]: &#x27;Editar horas esperadas de los startups&#x27;,
+  [Permission.hours_edit_experts]: &#x27;Editar horas necesarios de los experto&#x27;,
+  [Permission.hours_edit_teamCoach]:
+    &#x27;Editar horas necesarios de los team coach&#x27;,
+
+  // Evaluations
+  [Permission.evaluation_view]: &#x27;Ver sección de valuaciones en batch&#x27;,
+  [Permission.evaluation_create]:
+    &#x27;Permitir crear una configuración para evaluaciones&#x27;,
+  [Permission.evaluation_edit]:
+    &#x27;Permitir editar las configuraciones de una evaluación&#x27;,
+  [Permission.evaluation_edit_docs]:
+    &#x27;Permitir evaluar en cualquiera de las evaluaciones&#x27;,
+
+  // Homeworks
+  [Permission.homeworks_view]: &#x27;Ver sección de tareas en batch&#x27;,
+  [Permission.homeworks_evaluate]:
+    &#x27;Permitir evaluar las tareas de los participantes&#x27;,
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>permission descriptions</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/auth/enums/valid-roles.enum.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rolNames"></a>
+                    <span class="name">
+                        <span ><b>rolNames</b></span>
+                        <a href="#rolNames"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/Rol.html" target="_self" >Record&lt;ValidRoles, string&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  [ValidRoles.superAdmin]: &#x27;Super admin&#x27;,
+  [ValidRoles.admin]: &#x27;Admin&#x27;,
+  [ValidRoles.user]: &#x27;Usuario&#x27;,
+  [ValidRoles.expert]: &#x27;Experto&#x27;,
+  [ValidRoles.host]: &#x27;Host&#x27;,
+  [ValidRoles.teamCoach]: &#x27;Team Coach&#x27;,
+  [ValidRoles.challenger]: &#x27;Challenger&#x27;,
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>roles names</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rolValues"></a>
+                    <span class="name">
+                        <span ><b>rolValues</b></span>
+                        <a href="#rolValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/Rol.html" target="_self" >Record&lt;ValidRoles, number&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  [ValidRoles.superAdmin]: 9999,
+  [ValidRoles.admin]: 999,
+  [ValidRoles.host]: 99,
+  [ValidRoles.teamCoach]: 9,
+  [ValidRoles.expert]: 3,
+  [ValidRoles.user]: 2,
+  [ValidRoles.challenger]: 1,
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>roles weight</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/emails/enums/email-templates.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="templateNames"></a>
+                    <span class="name">
+                        <span ><b>templateNames</b></span>
+                        <a href="#templateNames"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#EmailTemplates" target="_self" >Record&lt;EmailTemplates, string&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  [EmailTemplates.invitation]: &#x27;Invitatión&#x27;,
+  [EmailTemplates.notification]: &#x27;Notificatión&#x27;,
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>name in Spanish of type invitations</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-variables';
+            var COMPODOC_CURRENT_PAGE_URL = 'variables.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

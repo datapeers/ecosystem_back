@@ -21,7 +21,9 @@ import { DownloadRequestArgs } from 'src/shared/models/download-request.args';
 import { DownloadResult } from 'src/shared/models/download-result';
 import { UpdateExpertInput } from './args/update-expert.input';
 import { UsersService } from 'src/users/users.service';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Expert)
 export class ExpertResolver {

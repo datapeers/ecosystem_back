@@ -7,6 +7,9 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from 'src/auth/types/auth-user';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { UseGuards } from '@nestjs/common';
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => ConfigEvaluation)
 export class ConfigEvaluationsResolver {

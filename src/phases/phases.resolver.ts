@@ -17,6 +17,9 @@ import { AuthUser } from '../auth/types/auth-user';
 import { Stage } from 'src/stages/entities/stage.entity';
 import { SearchBatchInput } from './dto/others.inpt';
 import { SearchInBatchOutput } from 'src/shared/models/search-result.model';
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Phase)
 export class PhasesResolver {

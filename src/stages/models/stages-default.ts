@@ -1,5 +1,8 @@
 import { Types } from 'mongoose';
-
+/**
+ * default stages
+ * @ignore
+ */
 export const default_stages = [
   {
     _id: new Types.ObjectId('64418ce45aae5f4960eeedcd'),

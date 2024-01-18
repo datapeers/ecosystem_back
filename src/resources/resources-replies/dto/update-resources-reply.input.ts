@@ -2,7 +2,9 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { CreateResourcesReplyInput } from './create-resources-reply.input';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class UpdateResourcesReplyInput extends PartialType(
   CreateResourcesReplyInput,

@@ -7,7 +7,9 @@ import { SchemaTypes, Types, Document } from 'mongoose';
 import { Startup } from 'src/startup/entities/startup.entity';
 import { Content } from 'src/content/entities/content.entity';
 import { Phase } from 'src/phases/entities/phase.entity';
-
+/**
+ * resources replies by users
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class ResourcesReply {
@@ -62,5 +64,7 @@ export class ResourcesReply {
   @Prop({ default: true })
   modified: boolean;
 }
-
+/**
+ * @ignore
+ */
 export const ResourceReplySchema = SchemaFactory.createForClass(ResourcesReply);

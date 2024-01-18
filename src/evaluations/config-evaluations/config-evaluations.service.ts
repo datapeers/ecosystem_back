@@ -14,10 +14,16 @@ export class ConfigEvaluationsService {
     private readonly configEvaluationModel: Model<ConfigEvaluation>,
   ) {}
 
+  /**
+   * create config evaluation
+   */
   create(createConfigEvaluationInput: CreateConfigEvaluationInput) {
     return this.configEvaluationModel.create(createConfigEvaluationInput);
   }
 
+  /**
+   * find all config evaluation by user
+   */
   findAll(user?: AuthUser) {
     switch (user.rolDoc.type) {
       case ValidRoles.expert:
@@ -33,14 +39,23 @@ export class ConfigEvaluationsService {
     }
   }
 
+  /**
+   * config evaluation by batch id
+   */
   findByPhase(phase: string, user: AuthUser) {
     return this.configEvaluationModel.find({ phase }).lean();
   }
 
+  /**
+   * find config evaluation by id
+   */
   findOne(id: string) {
     return this.configEvaluationModel.findById(id).lean();
   }
 
+  /**
+   * find evaluations that need to be done today
+   */
   findToday(rol: ValidRoles) {
     // let infoSemana = this.obtenerInfoSemana();
     let today = new Date();
@@ -60,6 +75,9 @@ export class ConfigEvaluationsService {
       .lean();
   }
 
+  /**
+   * update config evaluation by id
+   */
   async update(
     id: string,
     updateConfigEvaluationInput: UpdateConfigEvaluationInput,
@@ -75,6 +93,9 @@ export class ConfigEvaluationsService {
     return updatedEvent;
   }
 
+  /**
+   * soft delete config evaluation by id
+   */
   async remove(id: string) {
     const updatedType = await this.configEvaluationModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })

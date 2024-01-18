@@ -3,12 +3,18 @@ import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
 import axios from 'axios';
 
+/**
+ * @ignore
+ */
 @Injectable()
 export class CalendarService {
   create(createCalendarDto: CreateCalendarDto) {
     return 'This action adds a new calendar';
   }
 
+  /**
+   * @ignore
+   */
   async findAll() {
     try {
       const { data } = await axios.get(
@@ -35,14 +41,23 @@ export class CalendarService {
     }
   }
 
+  /**
+   * @ignore
+   */
   findOne(id: number) {
     return `This action returns a #${id} calendar`;
   }
 
+  /**
+   * @ignore
+   */
   update(id: number, updateCalendarDto: UpdateCalendarDto) {
     return `This action updates a #${id} calendar`;
   }
 
+  /**
+   * @ignore
+   */
   remove(id: number) {
     return `This action removes a #${id} calendar`;
   }

@@ -13,6 +13,9 @@ export class ResourcesService {
     private readonly contentService: ContentService,
   ) {}
 
+  /**
+   * create a new resource
+   */
   async create(createResourceInput: CreateResourceInput) {
     const newResource = await this.resourceModel.create(createResourceInput);
     const contentModified = await this.contentService.addResource(
@@ -22,18 +25,30 @@ export class ResourcesService {
     return newResource;
   }
 
+  /**
+   * find all resources of a content
+   */
   findAllByContent(content: string) {
     return this.resourceModel.find({ content, isDeleted: false });
   }
 
+  /**
+   * find all resources of a content
+   */
   findAllByPhase(content: string) {
     return this.resourceModel.find({ content, isDeleted: false });
   }
 
+  /**
+   * find resources by id
+   */
   findOne(id: string) {
     return this.resourceModel.findById(id).lean();
   }
 
+  /**
+   * update resource
+   */
   async update(id: string, updateContentInput: UpdateResourceInput) {
     delete updateContentInput['_id'];
     const updatedContent = await this.resourceModel
@@ -43,6 +58,9 @@ export class ResourcesService {
     return updatedContent;
   }
 
+  /**
+   * soft delete resource
+   */
   async remove(id: string) {
     const updatedContent = await this.resourceModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
@@ -51,6 +69,9 @@ export class ResourcesService {
     return updatedContent;
   }
 
+  /**
+   * create many resources
+   */
   createMany(resources: Resource[]) {
     return this.resourceModel.insertMany(resources);
   }

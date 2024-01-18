@@ -37,6 +37,9 @@ export class InvitationsService {
     this.logger.setContext(InvitationsService.name);
   }
 
+  /**
+   * create an invitation
+   */
   async create(
     { email, rol }: CreateInvitationArgs,
     adminUser: User,
@@ -105,10 +108,16 @@ export class InvitationsService {
     }
   }
 
+  /**
+   * find all invitation
+   */
   findAll(skip: number = 0, limit: number = 25) {
     return this.invitationModel.find().skip(skip).limit(limit);
   }
 
+  /**
+   * find invitation by filters
+   */
   async findOne(filters: { _id?: string; code?: string; email?: string }) {
     const invitation = await this.invitationModel.findOne(filters).lean();
     if (!invitation)
@@ -118,6 +127,9 @@ export class InvitationsService {
     return invitation;
   }
 
+  /**
+   * find an invitation by email
+   */
   async tryFindOneByEmail(email: string): Promise<Invitation> {
     const invitation = await this.invitationModel
       .findOne({
@@ -129,6 +141,9 @@ export class InvitationsService {
     return invitation;
   }
 
+  /**
+   * resend an invitation
+   */
   async resend(id: string) {
     const invitation = await this.findOne({ _id: id });
     if (invitation.state !== InvitationStates.enabled)
@@ -152,6 +167,9 @@ export class InvitationsService {
     return invitation;
   }
 
+  /**
+   * cancel an invitation
+   */
   async cancel(id: string) {
     const invitation = await this.invitationModel.findOne({ _id: id });
     if (invitation.state === InvitationStates.disabled)
@@ -167,6 +185,9 @@ export class InvitationsService {
     return invitation;
   }
 
+  /**
+   * invitation accepted
+   */
   async accept({
     code,
     name,

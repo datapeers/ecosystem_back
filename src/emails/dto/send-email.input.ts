@@ -1,5 +1,8 @@
-import { IsEmail, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
+/**
+ * graphql input scheme
+ */
 export class SendEmailInput {
   @IsString()
   @IsEmail()
@@ -7,16 +10,16 @@ export class SendEmailInput {
 
   @IsString()
   @IsOptional()
-  subject: string = "";
+  subject: string = '';
 
   @IsOptional()
   from: string;
 
   @IsString()
   @IsOptional()
-  text: string = "";
+  text: string = '';
 
   @IsString()
   @IsOptional()
-  html: string = "";
+  html: string = '';
 }

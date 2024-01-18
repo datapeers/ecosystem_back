@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRatingInput } from './dto/create-rating.input';
 import { UpdateRatingInput } from './dto/update-rating.input';
-
+/**
+ * @ignore
+ */
 @Injectable()
 export class RatingService {
   create(createRatingInput: CreateRatingInput) {

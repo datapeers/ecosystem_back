@@ -23,6 +23,9 @@ import { DownloadResult } from 'src/shared/models/download-result';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { ContactArgs } from './args/contact-startup.args';
 import { EntrepreneurStartupArgs } from 'src/shared/args/entrepreneur-startup-data';
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Startup)
 export class StartupResolver {

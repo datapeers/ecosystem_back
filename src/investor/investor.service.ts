@@ -15,6 +15,9 @@ import { excelUtilities } from 'src/shared/utilities/excel.utilities';
 import { DownloadsService } from 'src/downloads/downloads.service';
 import { TableConfigService } from 'src/table/table-config/table-config.service';
 
+/**
+ * @ignore
+ */
 @Injectable()
 export class InvestorService implements FormDocumentService<Investor> {
   constructor(

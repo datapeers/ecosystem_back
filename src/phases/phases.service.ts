@@ -58,6 +58,9 @@ export class PhasesService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
+  /**
+   * find phases and batches by user
+   */
   async findAll(user: AuthUser): Promise<Phase[]> {
     switch (user.rolDoc.type) {
       case ValidRoles.expert:
@@ -71,6 +74,9 @@ export class PhasesService {
     }
   }
 
+  /**
+   * find phases and batches list
+   */
   async findList(ids: string[]) {
     const phaseBases = await this.phaseModel
       .find({ isDeleted: false, basePhase: true })
@@ -85,6 +91,9 @@ export class PhasesService {
     return [...phaseBases, ...batches];
   }
 
+  /**
+   * find only phases
+   */
   async findPhaseBases() {
     const phaseBases = await this.phaseModel
       .find({ isDeleted: false, basePhase: true })
@@ -92,17 +101,26 @@ export class PhasesService {
     return phaseBases;
   }
 
+  /**
+   * find by list
+   */
   async find(ids: string[]): Promise<Phase[]> {
     const phases = await this.phaseModel.find({ isDeleted: false });
     return phases;
   }
 
+  /**
+   * find by id
+   */
   async findOne(id: string): Promise<Phase> {
     const phase = await this.phaseModel.findOne({ _id: id }).lean();
     if (!phase) throw new NotFoundException(`No phase found with id ${id}`);
     return phase;
   }
 
+  /**
+   * find a phase or batch
+   */
   async create(
     createPhaseInput: CreatePhaseInput,
     user: AuthUser,
@@ -118,6 +136,9 @@ export class PhasesService {
     }
   }
 
+  /**
+   * create batch cloning a phase
+   */
   async clone(createPhaseInput: CreatePhaseInput, user: AuthUser) {
     const father = await this.findOne(createPhaseInput.childrenOf);
     delete father['_id'];
@@ -141,6 +162,9 @@ export class PhasesService {
     return createdBatch;
   }
 
+  /**
+   * clone content
+   */
   async duplicateContent(phaseOld: string, phaseNew: Phase) {
     const docs = await this.contentService.findAll(phaseOld);
     const operationsContent = [];
@@ -205,6 +229,9 @@ export class PhasesService {
     return true;
   }
 
+  /**
+   * update a phase or batch
+   */
   async update(id: string, updatePhaseInput: UpdatePhaseInput): Promise<Phase> {
     delete updatePhaseInput['_id'];
     const updatedPhase = await this.phaseModel
@@ -213,6 +240,9 @@ export class PhasesService {
     return updatedPhase;
   }
 
+  /**
+   * soft delete a phase or batch
+   */
   async remove(id: string) {
     const deletedPhase = await this.phaseModel.findOneAndUpdate(
       { _id: id },
@@ -222,6 +252,9 @@ export class PhasesService {
     return deletedPhase;
   }
 
+  /**
+   * find batches by expert
+   */
   async getExpertBatchesAndPhases(user: AuthUser) {
     const docExpert = await this.expertService.findByAccount(user.uid);
     const batchesExpert = await this.phaseModel
@@ -239,6 +272,9 @@ export class PhasesService {
     return [...phasesExpert, ...batchesExpert];
   }
 
+  /**
+   * find batches by host
+   */
   async getHostBatchesAndPhases(user: AuthUser) {
     if (!user.relationsAssign || Object.keys(user.relationsAssign).length === 0)
       return [];
@@ -288,6 +324,9 @@ export class PhasesService {
     return ans;
   }
 
+  /**
+   * find batches by team coach
+   */
   async getTeamCoachBatchesAndHost(user: AuthUser) {
     if (!user.relationsAssign || Object.keys(user.relationsAssign).length === 0)
       return [];
@@ -312,6 +351,9 @@ export class PhasesService {
     return [...phases, ...batches];
   }
 
+  /**
+   * find batches by host
+   */
   async getAllBatchesAccessHost(user: AuthUser): Promise<Types.ObjectId[]> {
     if (!user.relationsAssign || Object.keys(user.relationsAssign).length === 0)
       return [];
@@ -370,6 +412,9 @@ export class PhasesService {
     return ans;
   }
 
+  /**
+   * calculate end date of a batch
+   */
   async calcEndDate(phase: Phase) {
     if (phase.basePhase) return new Date(phase.endAt);
     const docs = await this.contentService.findAll(phase._id.toString());
@@ -378,11 +423,17 @@ export class PhasesService {
     return moment(lastSprint.extra_options.end).add(1, 'days').toDate();
   }
 
+  /**
+   * find stage of a phase or batch
+   */
   async getStage(phase: Phase): Promise<Stage> {
     const stage = await this.stagesService.findOne(phase.stage);
     return stage;
   }
 
+  /**
+   * search
+   */
   async search(user: AuthUser, batchIds: string[], searchValue: string) {
     let phasesList: Phase[] = [];
     if (ValidRoles.user === (user.rolDoc.type as ValidRoles)) {
@@ -442,10 +493,16 @@ export class PhasesService {
     return { ansPhases, ansContent, ansResource };
   }
 
+  /**
+   * find numb of startups in batch
+   */
   async numbParticipants(phase: string) {
     return await this.startupService.findNumbParticipants(phase);
   }
 
+  /**
+   * cron job to notify batch ending
+   */
   @Cron('0 0 5 * * *', { name: 'cronBatchEnd' })
   async checkPhaseFinal() {
     let phases = await this.phaseModel
@@ -464,6 +521,9 @@ export class PhasesService {
     }
   }
 
+  /**
+   * notification emails sender
+   */
   async sendNotificationAndEmailsPhase(phase: Phase) {
     const startupsParticipants = await this.startupService.findByPhase(
       phase._id.toString(),
@@ -504,6 +564,9 @@ export class PhasesService {
     this.notificationsService.createMany(notifications);
   }
 
+  /**
+   * build instance notification for batch
+   */
   buildNotificationEnd(accountId: string, batch: Phase) {
     let text = `¡Felicidades! Has completado ${batch.name}. No pierdas el ritmo`;
     // const urlInvitation = process.env.APP_URI + '/home/calendar';

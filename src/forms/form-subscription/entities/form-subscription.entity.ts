@@ -3,7 +3,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { Form } from 'src/forms/form/entities/form.entity';
 import { FormCollections } from 'src/forms/form/enums/form-collections';
-
+/**
+ * form websocket opened
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class FormSubscription {
@@ -11,7 +13,7 @@ export class FormSubscription {
   _id: string;
 
   @Field(() => String, { nullable: true })
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   doc?: string;
 
   @Field(() => GraphQLJSON, { nullable: true })
@@ -30,18 +32,21 @@ export class FormSubscription {
   data?: JSON;
 
   @Field(() => String, { nullable: true })
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   reason?: string;
 
   @Field(() => FormCollections)
   @Prop({ enum: FormCollections })
   target: FormCollections;
 
-  @Field(() => Date, { description: "Date of entity creation."})
+  @Field(() => Date, { description: 'Date of entity creation.' })
   createdAt: Date;
 
-  @Field(() => Date, { description: "Date of last entity update."})
+  @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
 }
-
-export const FormSubscriptionSchema = SchemaFactory.createForClass(FormSubscription);
+/**
+ * @ignore
+ */
+export const FormSubscriptionSchema =
+  SchemaFactory.createForClass(FormSubscription);

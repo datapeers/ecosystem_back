@@ -2,7 +2,9 @@ import { CreateSiteInput } from './create-site.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
-
+/**
+ * graphql inputs
+ */
 @InputType()
 export class UpdateSiteInput {
   @Field(() => ID)
@@ -53,7 +55,9 @@ export class UpdateSiteInput {
   @IsOptional()
   isDeleted?: boolean;
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 export class ServicesSiteInput {
   @Field(() => String)
@@ -75,7 +79,9 @@ export class ServicesSiteInput {
   @IsNotEmpty()
   coords: Record<string, any>;
 }
-
+/**
+ * service contact person
+ */
 @InputType()
 export class ContactServicesInput {
   @Field(() => String)

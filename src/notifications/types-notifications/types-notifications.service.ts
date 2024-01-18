@@ -11,6 +11,9 @@ export class TypesNotificationsService implements OnModuleInit {
     private readonly typesNotificationModel: Model<TypesNotification>,
   ) {}
 
+  /**
+   * initialize types of notifications
+   */
   async onModuleInit() {
     let types = await this.typesNotificationModel.find({});
     if (types.length === 0) {
@@ -18,6 +21,9 @@ export class TypesNotificationsService implements OnModuleInit {
     }
   }
 
+  /**
+   * get all types of notifications
+   */
   async getTypes() {
     return this.typesNotificationModel.find({}).lean();
   }

@@ -2,7 +2,9 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { ContactServicesInput } from './update-site.input';
-
+/**
+ * graphql inputs
+ */
 @InputType()
 export class CreateSiteInput {
   @Field(() => String)

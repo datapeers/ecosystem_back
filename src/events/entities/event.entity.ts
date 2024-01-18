@@ -2,7 +2,9 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { SchemaTypes } from 'mongoose';
-
+/**
+ * Events docs
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Event {
@@ -67,7 +69,9 @@ export class Event {
   @Prop({ default: [] })
   participants: ParticipantEventLink[];
 }
-
+/**
+ * team coach link
+ */
 @Schema()
 @ObjectType()
 export class TeamCoachLink implements IEntityEvent {
@@ -83,7 +87,9 @@ export class TeamCoachLink implements IEntityEvent {
   @Prop()
   email: string;
 }
-
+/**
+ * expert link
+ */
 @Schema()
 @ObjectType()
 export class ExpertEventLink implements IEntityEvent {
@@ -100,6 +106,9 @@ export class ExpertEventLink implements IEntityEvent {
   email: string;
 }
 
+/**
+ * participant link
+ */
 @Schema()
 @ObjectType()
 export class ParticipantEventLink implements IEntityEvent {
@@ -119,11 +128,15 @@ export class ParticipantEventLink implements IEntityEvent {
   @Prop()
   startupEntrepreneur: string;
 }
-
+/**
+ * @ignore
+ */
 export interface IEntityEvent {
   _id: string;
   name: string;
   email: string;
 }
-
+/**
+ * @ignore
+ */
 export const EventSchema = SchemaFactory.createForClass(Event);

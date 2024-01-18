@@ -2,6 +2,9 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { SchemaTypes, Types, Document } from 'mongoose';
+/**
+ * types of events dynamic
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class TypesEvent {
@@ -42,5 +45,7 @@ export class TypesEvent {
   @Field(() => Date)
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const TypesEventSchema = SchemaFactory.createForClass(TypesEvent);

@@ -1,7 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from 'src/users/entities/user.entity';
-
+/**
+ * phases and batches
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Phase {
@@ -77,5 +79,7 @@ export class Phase {
   @Field(() => Date, { description: 'Update date of the entity.' })
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const PhaseSchema = SchemaFactory.createForClass(Phase);

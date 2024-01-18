@@ -1,6 +1,8 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsString, MinLength } from 'class-validator';
-
+/**
+ * @ignore
+ */
 @InputType()
 export class CreateCategoryInput {
   @Field(() => String)

@@ -1,8 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import GraphQLJSON from 'graphql-type-json';
-import { SchemaTypes } from 'mongoose';
-
+/**
+ * roles in app
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Rol {
@@ -27,5 +27,7 @@ export class Rol {
   @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const RolSchema = SchemaFactory.createForClass(Rol);

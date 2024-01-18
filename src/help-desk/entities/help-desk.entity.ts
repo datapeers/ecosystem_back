@@ -5,6 +5,9 @@ import { TicketCategory } from '../enum/ticket-category.enum';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { SchemaTypes } from 'mongoose';
 import { IFileUpload } from 'src/shared/models/file';
+/**
+ * help desk docs
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class HelpDeskTicket {
@@ -53,7 +56,9 @@ export class HelpDeskTicket {
   @Field(() => Date)
   updatedAt: Date;
 }
-
+/**
+ * answer to post
+ */
 export class TicketChild {
   body: string;
   attachment: IFileUpload[];
@@ -61,6 +66,8 @@ export class TicketChild {
   answerBy: string;
   answerById: string;
 }
-
+/**
+ * @ignore
+ */
 export const HelpDeskTicketSchema =
   SchemaFactory.createForClass(HelpDeskTicket);

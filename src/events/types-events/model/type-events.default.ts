@@ -1,4 +1,7 @@
 import { Types } from 'mongoose';
+/**
+ * default types events app
+ */
 export const default_types_events = [
   {
     _id: new Types.ObjectId('646f943cc2305c411d73f6d0'),

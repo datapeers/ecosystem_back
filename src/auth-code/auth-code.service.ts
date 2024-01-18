@@ -14,6 +14,9 @@ export class AuthCodeService {
     @InjectModel(AuthCode.name) private readonly authCodeModel: Model<AuthCode>,
   ) {}
 
+  /**
+   * token jwt for account
+   */
   async create(_user: AuthUser, jwt: string): Promise<AuthCode> {
     const createdCode = await this.authCodeModel.create({
       token: jwt,
@@ -26,6 +29,9 @@ export class AuthCodeService {
     return createdCode;
   }
 
+  /**
+   * find auth code for account by id
+   */
   async findOne(id: string): Promise<AuthCode> {
     const code = await this.authCodeModel.findById(id).lean();
     if (!code) throw new NotFoundException('The code has expired');

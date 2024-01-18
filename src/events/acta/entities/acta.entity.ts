@@ -2,7 +2,9 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { SchemaTypes } from 'mongoose';
-
+/**
+ * Acta for events
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Acta {
@@ -59,5 +61,7 @@ export class Acta {
   @Field(() => Date)
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const ActaSchema = SchemaFactory.createForClass(Acta);

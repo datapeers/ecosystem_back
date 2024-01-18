@@ -1,3 +1,6 @@
+/**
+ * @ignore
+ */
 export interface ZoomApiResponse {
   uuid: string;
   id: number;
@@ -20,7 +23,9 @@ export interface ZoomApiResponse {
   settings: Settings;
   pre_schedule: boolean;
 }
-
+/**
+ * @ignore
+ */
 export interface Settings {
   host_video: boolean;
   participant_video: boolean;
@@ -69,11 +74,15 @@ export interface Settings {
   sign_language_interpretation: ApprovedOrDeniedCountriesOrRegions;
   email_in_attendee_report: boolean;
 }
-
+/**
+ * @ignore
+ */
 export interface ApprovedOrDeniedCountriesOrRegions {
   enable: boolean;
 }
-
+/**
+ * @ignore
+ */
 export interface ContinuousMeetingChat {
   enable: boolean;
   auto_add_invited_external_users: boolean;

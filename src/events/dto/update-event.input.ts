@@ -7,7 +7,9 @@ import {
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class UpdateEventInput extends PartialType(CreateEventInput) {
   @Field(() => ID)

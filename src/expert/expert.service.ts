@@ -38,11 +38,17 @@ export class ExpertService implements FormDocumentService {
     },
   };
 
+  /**
+   * find expert doc, is only intended to be used by websocket.
+   */
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
   }
 
+  /**
+   * create expert doc, is only intended to be used by websocket.
+   */
   async createDocument(submission: any, context?: any) {
     const data = {
       item: submission,
@@ -52,11 +58,17 @@ export class ExpertService implements FormDocumentService {
     return createdDocument;
   }
 
+  /**
+   * update expert doc, is only intended to be used by websocket.
+   */
   async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(id, { item: submission });
     return updatedDocument;
   }
 
+  /**
+   * find all expert docs
+   */
   async findAll(): Promise<Expert[]> {
     const experts = await this.expertModel.find({
       $or: [
@@ -67,6 +79,9 @@ export class ExpertService implements FormDocumentService {
     return experts;
   }
 
+  /**
+   * find expert doc by table request
+   */
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
@@ -88,6 +103,9 @@ export class ExpertService implements FormDocumentService {
     return documents[0];
   }
 
+  /**
+   * find experts docs by batch
+   */
   async findByPhase(phase: string): Promise<Expert[]> {
     const initMatch = {
       deletedAt: null,
@@ -116,16 +134,25 @@ export class ExpertService implements FormDocumentService {
     });
   }
 
+  /**
+   * find expert assigned to startups
+   */
   async findByStartup(startupID: string) {
     return await this.expertModel
       .find({ 'phases.startUps._id': startupID })
       .lean();
   }
 
+  /**
+   * find expert doc by account
+   */
   async findByAccount(accountId: string) {
     return await this.expertModel.findOne({ accountId }).lean();
   }
 
+  /**
+   * find expert by id
+   */
   async findOne(id: string): Promise<Expert> {
     const expert = await this.expertModel.findById(id);
     if (!expert)
@@ -133,11 +160,17 @@ export class ExpertService implements FormDocumentService {
     return expert;
   }
 
+  /**
+   * create expert
+   */
   async create(data: Partial<Expert>): Promise<Expert> {
     const createdExpert = await this.expertModel.create(data);
     return createdExpert;
   }
 
+  /**
+   * update expert
+   */
   async update(id: string, data: Partial<Expert>): Promise<Expert> {
     delete data['_id'];
     const updatedExpert = await this.expertModel.findOneAndUpdate(
@@ -148,6 +181,9 @@ export class ExpertService implements FormDocumentService {
     return updatedExpert;
   }
 
+  /**
+   * soft delete expert list
+   */
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.expertModel.updateMany(
       { _id: { $in: ids.map((id) => new Types.ObjectId(id)) } },
@@ -159,6 +195,9 @@ export class ExpertService implements FormDocumentService {
     };
   }
 
+  /**
+   * link expert to a batch
+   */
   async linkWithPhase(
     linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs,
   ): Promise<UpdateResultPayload> {
@@ -176,6 +215,9 @@ export class ExpertService implements FormDocumentService {
       .lean();
   }
 
+  /**
+   * link startups to expert
+   */
   linkStartupsToExperts(linkStartupsExpertsArgs: LinkStartupsExpertsArgs) {
     try {
       return this.expertModel.findOneAndUpdate(
@@ -192,6 +234,9 @@ export class ExpertService implements FormDocumentService {
     }
   }
 
+  /**
+   * download table of expert
+   */
   async downloadByRequest(
     { request, configId, format }: DownloadRequestArgs,
     user: AuthUser,
@@ -217,6 +262,9 @@ export class ExpertService implements FormDocumentService {
     return { url: fileUrl };
   }
 
+  /**
+   * assign new account an expert doc
+   */
   async assignAccountAndLinkBatch(
     accountId: string,
     linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs,
@@ -236,6 +284,9 @@ export class ExpertService implements FormDocumentService {
       .lean();
   }
 
+  /**
+   * find list of expert
+   */
   async findMany(ids: string[]) {
     if (!ids.length) return [];
     const experts = await this.expertModel

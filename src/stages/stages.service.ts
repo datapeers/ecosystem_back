@@ -12,6 +12,9 @@ export class StagesService implements OnModuleInit {
     @InjectModel(Stage.name) private readonly stageModel: Model<Stage>,
   ) {}
 
+  /**
+   * initialize stages
+   */
   async onModuleInit() {
     let types = await this.stageModel.find({});
     if (types.length === 0) {
@@ -19,20 +22,32 @@ export class StagesService implements OnModuleInit {
     }
   }
 
+  /**
+   * create a stage
+   */
   create(createStageInput: CreateStageInput) {
     return this.stageModel.create(createStageInput);
   }
 
+  /**
+   * find all stages
+   */
   async findAll() {
     return (await this.stageModel.find({}).lean()).sort(
       (firstItem, secondItem) => firstItem.index - secondItem.index,
     );
   }
 
+  /**
+   * find a stage by id
+   */
   findOne(id: string) {
     return this.stageModel.findById(id).lean();
   }
 
+  /**
+   * update a stage
+   */
   async update(id: string, updateStageInput: UpdateStageInput) {
     delete updateStageInput['_id'];
     const updatedStage = await this.stageModel
@@ -41,6 +56,9 @@ export class StagesService implements OnModuleInit {
     return updatedStage;
   }
 
+  /**
+   * modify order of display
+   */
   async modifyIndex(stageId: string, newIndex: number, type: 'up' | 'down') {
     const updatedStage = await this.stageModel
       .findOneAndUpdate(
@@ -73,6 +91,9 @@ export class StagesService implements OnModuleInit {
     return updatedStage;
   }
 
+  /**
+   * soft delete a stage
+   */
   async remove(id: string) {
     const updatedStage = await this.stageModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })

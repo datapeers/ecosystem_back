@@ -1,5 +1,7 @@
 import { registerEnumType } from '@nestjs/graphql';
-
+/**
+ * target collection for answered forms
+ */
 export enum FormCollections {
   announcements = 'announcements',
   resources = 'resources',

@@ -30,10 +30,16 @@ export class UsersService {
     private readonly notificationService: NotificationsService,
   ) {}
 
+  /**
+   * find user doc by filters
+   */
   async tryFindOne(filters: { uid?: string; email?: string }) {
     return await this.userModel.findOne(filters).lean();
   }
 
+  /**
+   * find user doc by uid
+   */
   async findOne(uid: string) {
     const user = await (
       await this.userModel.findOne({ uid: uid })
@@ -43,6 +49,9 @@ export class UsersService {
     return user;
   }
 
+  /**
+   * find user doc by id
+   */
   async findById(id: string) {
     const user = (await this.userModel.findById(id)).populate('rol');
 
@@ -50,6 +59,9 @@ export class UsersService {
     return user;
   }
 
+  /**
+   * find many user doc by rol
+   */
   async findMany({ search, roles, relationsAssign }: FindUsersArgs) {
     let filters = {};
     let rolesDocs = [];
@@ -75,11 +87,17 @@ export class UsersService {
     return users;
   }
 
+  /**
+   * count of users
+   */
   async countAll() {
     const docs = await this.userModel.find({ isActive: true }).lean();
     return docs.length;
   }
 
+  /**
+   * create a user doc
+   */
   async create(createUserInput: Partial<User>) {
     const user = await this.tryFindOne({ uid: createUserInput.uid });
     if (user) throw new ConflictException('Authenticated user already exist');
@@ -87,6 +105,9 @@ export class UsersService {
     return await createdUser.populate('rol');
   }
 
+  /**
+   * update user doc
+   */
   async update(
     filters: { _id?: string; uid?: string },
     userUpdates: Partial<User>,
@@ -105,6 +126,9 @@ export class UsersService {
     return user;
   }
 
+  /**
+   * update state of a user
+   */
   async updateState(uid: string, adminUser: User, setActive: boolean) {
     const user = await this.findOne(uid);
     if (user.isActive === setActive)
@@ -119,18 +143,30 @@ export class UsersService {
     return user;
   }
 
+  /**
+   * delete user
+   */
   async deleteUser(uid: string) {
     return this.userModel.deleteOne({ uid }).populate('rol');
   }
 
+  /**
+   * find rol by id
+   */
   async findRolByID(id: string) {
     return await this.rolService.findOne(id);
   }
 
+  /**
+   * find rol by type
+   */
   async findRolByType(type: string) {
     return await this.rolService.findByType(type);
   }
 
+  /**
+   * send invitation email user
+   */
   async invite(contactArgs: ContactArgs) {
     const user = await this.tryFindOne({ email: contactArgs.to });
     if (!user)
@@ -170,6 +206,9 @@ export class UsersService {
     }
   }
 
+  /**
+   * find list of users docs
+   */
   async findManyById(ids: string[]) {
     if (!ids.length) return [];
     const users = await this.userModel
@@ -180,6 +219,9 @@ export class UsersService {
     return users;
   }
 
+  /**
+   * find list of users docs by uid list
+   */
   async findManyByUUID(uidList: string[]) {
     if (!uidList.length) return [];
     const users = await this.userModel

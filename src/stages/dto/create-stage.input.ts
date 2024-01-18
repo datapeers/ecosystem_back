@@ -1,6 +1,8 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
-
+/**
+ * graphql inputs
+ */
 @InputType()
 export class CreateStageInput {
   @Field(() => Int)

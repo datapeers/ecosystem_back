@@ -1,5 +1,7 @@
-import { TableColumnType } from "src/table/models/table-column-type.enum";
-
+import { TableColumnType } from 'src/table/models/table-column-type.enum';
+/**
+ * @ignore
+ */
 export type TableColumn = {
   label: string;
   key: string;
@@ -8,14 +10,16 @@ export type TableColumn = {
   propConditionalClass?: { prop?: string; class?: any };
   booleanText?: { true: string; false: string };
 };
-  
-export type TableCellFormat = 
-| 'string'
-| 'url'
-| 'number'
-| 'currency'
-| 'boolean'
-| 'date'
-| 'dateAndTime'
-| 'time'
-| 'arraysTags';
+/**
+ * @ignore
+ */
+export type TableCellFormat =
+  | 'string'
+  | 'url'
+  | 'number'
+  | 'currency'
+  | 'boolean'
+  | 'date'
+  | 'dateAndTime'
+  | 'time'
+  | 'arraysTags';

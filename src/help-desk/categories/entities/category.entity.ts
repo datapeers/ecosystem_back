@@ -1,6 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-
+/**
+ * category of help desk doc
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class TicketCategory {
@@ -25,6 +27,8 @@ export class TicketCategory {
   @Field(() => Date)
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const TicketCategorySchema =
   SchemaFactory.createForClass(TicketCategory);

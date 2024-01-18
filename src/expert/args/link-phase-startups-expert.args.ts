@@ -2,7 +2,9 @@ import { ArgsType, InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString, IsDefined } from 'class-validator';
 import { StartupLink } from '../entities/expert.entity';
 import { Type } from 'class-transformer';
-
+/**
+ * graphql args input
+ */
 @ArgsType()
 export class LinkStartupsExpertsArgs {
   @IsNotEmpty()
@@ -20,7 +22,9 @@ export class LinkStartupsExpertsArgs {
   @IsOptional()
   startUps: StartupItem[];
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 class StartupItem {
   @Field(() => String)

@@ -16,7 +16,9 @@ import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from 'src/auth/types/auth-user';
 import { ParticipationEvent } from './participation-events/entities/participation-event.entity';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => EventEntity)
 export class EventsResolver {

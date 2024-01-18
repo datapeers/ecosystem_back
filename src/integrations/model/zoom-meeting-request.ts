@@ -1,3 +1,6 @@
+/**
+ * @ignore
+ */
 export interface ZoomMeetingRequest {
   agenda: string;
   default_password: boolean;
@@ -14,7 +17,9 @@ export interface ZoomMeetingRequest {
   tracking_fields: TrackingField[];
   type: number;
 }
-
+/**
+ * @ignore
+ */
 export interface Recurrence {
   end_date_time: Date;
   end_times: number;
@@ -25,7 +30,9 @@ export interface Recurrence {
   type: number;
   weekly_days: string;
 }
-
+/**
+ * @ignore
+ */
 export interface Settings {
   additional_data_center_regions?: string[];
   allow_multiple_devices: boolean;
@@ -73,64 +80,88 @@ export interface Settings {
   push_change_to_calendar: boolean;
   resources: Resource[];
 }
-
+/**
+ * @ignore
+ */
 export interface ApprovedOrDeniedCountriesOrRegions {
   approved_list: string[];
   denied_list: string[];
   enable: boolean;
   method: string;
 }
-
+/**
+ * @ignore
+ */
 export interface AuthenticationException {
   email: string;
   name: string;
 }
-
+/**
+ * @ignore
+ */
 export interface BreakoutRoom {
   enable: boolean;
   rooms: Room[];
 }
-
+/**
+ * @ignore
+ */
 export interface Room {
   name: string;
   participants: string[];
 }
-
+/**
+ * @ignore
+ */
 export interface ContinuousMeetingChat {
   enable: boolean;
   auto_add_invited_external_users: boolean;
 }
-
+/**
+ * @ignore
+ */
 export interface LanguageInterpretation {
   enable: boolean;
   interpreters: LanguageInterpretationInterpreter[];
 }
-
+/**
+ * @ignore
+ */
 export interface LanguageInterpretationInterpreter {
   email: string;
   languages: string;
 }
-
+/**
+ * @ignore
+ */
 export interface MeetingInvitee {
   email: string;
 }
-
+/**
+ * @ignore
+ */
 export interface Resource {
   resource_type: string;
   resource_id: string;
   permission_level: string;
 }
-
+/**
+ * @ignore
+ */
 export interface SignLanguageInterpretation {
   enable: boolean;
   interpreters: SignLanguageInterpretationInterpreter[];
 }
-
+/**
+ * @ignore
+ */
 export interface SignLanguageInterpretationInterpreter {
   email: string;
   sign_language: string;
 }
-
+/**
+ * @ignore
+ */
 export interface TrackingField {
   field: string;
   value: string;

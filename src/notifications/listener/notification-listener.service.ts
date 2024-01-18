@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { NotificationsService } from '../notifications.service';
 
+/**
+ * @ignore
+ */
 @Injectable()
 export class NotificationListenerService {
   constructor(private readonly notificationService: NotificationsService) {}

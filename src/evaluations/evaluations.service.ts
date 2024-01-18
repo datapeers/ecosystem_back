@@ -51,11 +51,17 @@ export class EvaluationsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
+  /**
+   * find doc evaluations, is only intended to be used by websocket.
+   */
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
   }
 
+  /**
+   * create doc evaluations, is only intended to be used by websocket.
+   */
   async createDocument(submission: any, context?: any) {
     const data = {
       ...context,
@@ -65,15 +71,24 @@ export class EvaluationsService {
     return createdDocument;
   }
 
+  /**
+   * update doc evaluations, is only intended to be used by websocket.
+   */
   async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(id, { item: submission });
     return updatedDocument;
   }
 
+  /**
+   * find all doc evaluations
+   */
   findAll() {
     return this.evaluationModel.find();
   }
 
+  /**
+   * find doc evaluations by config
+   */
   async findByConfig(config: string, user: AuthUser) {
     const configEvaluation = await this.configService.findOne(config);
     const evaluations = await this.evaluationModel
@@ -162,6 +177,9 @@ export class EvaluationsService {
     return ansList;
   }
 
+  /**
+   * find doc evaluations by id
+   */
   async findOne(id: string): Promise<Evaluation> {
     const evaluation = await this.evaluationModel.findById(id);
     if (!evaluation)
@@ -169,6 +187,9 @@ export class EvaluationsService {
     return evaluation;
   }
 
+  /**
+   * find doc evaluations by reviewer
+   */
   async findOneByReviewer(
     reviewer: string,
     config: string,
@@ -182,11 +203,17 @@ export class EvaluationsService {
     return evaluation;
   }
 
+  /**
+   * create evaluated doc
+   */
   async create(data: CreateEvaluationInput): Promise<Evaluation> {
     const createdEvaluation = await this.evaluationModel.create(data);
     return createdEvaluation;
   }
 
+  /**
+   * update evaluated doc
+   */
   async update(id: string, data: Partial<Evaluation>): Promise<Evaluation> {
     await this.evaluationModel
       .updateOne({ _id: id }, data, { new: true })
@@ -194,6 +221,9 @@ export class EvaluationsService {
     return this.findOne(id);
   }
 
+  /**
+   * soft delete evaluated doc list
+   */
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.evaluationModel.updateMany(
       { _id: { $in: ids.map((id) => new Types.ObjectId(id)) } },
@@ -205,12 +235,15 @@ export class EvaluationsService {
     };
   }
 
+  /**
+   * create a fake evaluated doc
+   */
   createSimpleEvaluation(
     evaluated: string,
     config: string,
     state: string,
     form: string,
-  ) {
+  ): Evaluation {
     const newEvaluation = new Evaluation();
     newEvaluation._id = new Types.ObjectId().toString();
     newEvaluation.item = {} as any;
@@ -225,6 +258,9 @@ export class EvaluationsService {
     return newEvaluation;
   }
 
+  /**
+   * get name of evaluated person
+   */
   async getName(evaluation: Evaluation) {
     const configEvaluation = await this.configService.findOne(
       evaluation.config,
@@ -246,6 +282,9 @@ export class EvaluationsService {
     }
   }
 
+  /**
+   * CRON JOB to find the evaluations that have to be done today and send the respective notifications and release the content to the users.
+   */
   @Cron('0 0 6 * * *', { name: 'cronEvaluations' })
   async checkEvaluationsLiberation() {
     let evaluationsConfigs = await this.configService.findToday(
@@ -294,6 +333,9 @@ export class EvaluationsService {
     }
   }
 
+  /**
+   * instance a notification for evaluation by user
+   */
   buildNotification(user: User, config: ConfigEvaluation) {
     let evaluated = '';
     switch (config.evaluated) {

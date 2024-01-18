@@ -74,11 +74,17 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
   //   }
   // }
 
+  /**
+   * find doc entrepreneur, is only intended to be used by websocket.
+   */
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
   }
 
+  /**
+   * create doc entrepreneur, is only intended to be used by websocket.
+   */
   async createDocument(submission: any, context?: any) {
     const data = {
       item: submission,
@@ -88,11 +94,17 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return createdDocument;
   }
 
+  /**
+   * update doc entrepreneur, is only intended to be used by websocket.
+   */
   async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(id, { item: submission });
     return updatedDocument;
   }
 
+  /**
+   * find all entrepreneur docs
+   */
   async findAll(): Promise<Entrepreneur[]> {
     const entrepreneurs = await this.entrepreneurModel.find({
       deletedAt: null,
@@ -100,6 +112,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return entrepreneurs;
   }
 
+  /**
+   * find doc entrepreneur paginated
+   */
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
@@ -147,6 +162,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return documents[0];
   }
 
+  /**
+   * find doc entrepreneur paginated filtered
+   */
   async findManyIdsByRequest(
     request: PageRequest,
     user: AuthUser,
@@ -169,6 +187,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return documents.map((doc) => doc._id);
   }
 
+  /**
+   * filters in table requests according to user role
+   */
   async updatePipelineForUser(aggregationPipeline: any, user: AuthUser) {
     if (
       user.rolDoc.type === ValidRoles.expert &&
@@ -194,6 +215,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return aggregationPipeline;
   }
 
+  /**
+   * find many entrepreneurs by ids
+   */
   async findMany(ids: string[]) {
     if (!ids.length) return [];
     const entrepreneurs = await this.entrepreneurModel.find({
@@ -203,6 +227,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return entrepreneurs;
   }
 
+  /**
+   * find entrepreneur by id
+   */
   async findOne(id: string): Promise<Entrepreneur> {
     const entrepreneur = await this.entrepreneurModel.findOne({
       _id: id,
@@ -212,15 +239,24 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return entrepreneur;
   }
 
+  /**
+   * find entrepreneurs by uid account
+   */
   async findByAccount(accountId: string) {
     return await this.entrepreneurModel.findOne({ accountId }).lean();
   }
 
+  /**
+   * create entrepreneur doc
+   */
   async create(data: Partial<Entrepreneur>): Promise<Entrepreneur> {
     const createdEntrepreneur = await this.entrepreneurModel.create(data);
     return createdEntrepreneur;
   }
 
+  /**
+   * update entrepreneur doc
+   */
   async update(id: string, data: Partial<Entrepreneur>): Promise<Entrepreneur> {
     await this.entrepreneurModel
       .updateOne({ _id: id }, data, { new: true })
@@ -228,19 +264,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return this.findOne(id);
   }
 
-  async linkWithBusinesses(
-    ids: string[],
-    businessesRelationships: BusinessRelationship[],
-  ): Promise<UpdateResultPayload> {
-    return await this.entrepreneurModel
-      .updateMany(
-        { _id: { $in: ids } },
-        { $addToSet: { businesses: { $each: businessesRelationships } } },
-        { new: true },
-      )
-      .lean();
-  }
-
+  /**
+   * link list of entrepreneur to business and marked leaved the other startup links
+   */
   async linkWithStartups(
     ids: string[],
     startupsRelationships: StartupRelationship[],
@@ -265,6 +291,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
       .lean();
   }
 
+  /**
+   * soft delete of many entrepreneurs
+   */
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.entrepreneurModel.updateMany(
       { _id: { $in: ids.map((id) => new Types.ObjectId(id)) } },
@@ -276,6 +305,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     };
   }
 
+  /**
+   * link list of entrepreneur to business in two ways by table
+   */
   async linkWithBusinessesByRequest(
     { request, targetIds }: LinkWithTargetsByRequestArgs,
     user: AuthUser,
@@ -284,6 +316,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return await this.linkEntrepreneursAndBusinesses(entrepreneurs, targetIds);
   }
 
+  /**
+   * link list of entrepreneur to business in two ways
+   */
   async linkEntrepreneursAndBusinesses(ids: string[], businesses: string[]) {
     // Find entrepreneurs by ids
     const entrepreneurs = await this.findMany(ids);
@@ -375,6 +410,25 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return entrepreneurUpdateResult;
   }
 
+  /**
+   * link list of entrepreneur to business only by property
+   */
+  async linkWithBusinesses(
+    ids: string[],
+    businessesRelationships: BusinessRelationship[],
+  ): Promise<UpdateResultPayload> {
+    return await this.entrepreneurModel
+      .updateMany(
+        { _id: { $in: ids } },
+        { $addToSet: { businesses: { $each: businessesRelationships } } },
+        { new: true },
+      )
+      .lean();
+  }
+
+  /**
+   * download table of entrepreneurs
+   */
   async downloadByRequest(
     { request, configId, format }: DownloadRequestArgs,
     user: AuthUser,
@@ -400,6 +454,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return { url: fileUrl };
   }
 
+  /**
+   * update states of startups entrepreneurs linked to a batch
+   */
   async updatePhasesForStartupsRelationships(
     relationships: StartupRelationship[],
   ) {
@@ -434,6 +491,9 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     return bulkWriteResult;
   }
 
+  /**
+   * update states of startups entrepreneurs linked to a batch to leaved
+   */
   unlinkStartup(entrepreneurId, startupId) {
     return this.entrepreneurModel.updateOne(
       { _id: entrepreneurId, 'startups._id': startupId },

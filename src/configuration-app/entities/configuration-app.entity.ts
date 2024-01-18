@@ -2,7 +2,9 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
-
+/**
+ * Main configuration of app
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class ConfigurationApp {
@@ -35,6 +37,8 @@ export class ConfigurationApp {
   @Field(() => Date, { description: 'Update date of the entity.' })
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const ConfigurationAppSchema =
   SchemaFactory.createForClass(ConfigurationApp);

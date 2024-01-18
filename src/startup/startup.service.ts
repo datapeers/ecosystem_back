@@ -53,16 +53,6 @@ export class StartupService implements FormDocumentService<Startup> {
     private readonly emailsService: EmailsService,
   ) {}
 
-  // async onModuleInit() {
-  //   let startups = await this.startupModel.find({});
-  //   for (const iterator of startups) {
-  //     iterator.entrepreneurs = iterator.entrepreneurs.map((i) => {
-  //       return { ...i, state: 'member' };
-  //     });
-  //     await iterator.save();
-  //   }
-  // }
-
   private static readonly virtualFields = {
     // $addFields: { isProspect: { $eq: [{ $size: '$phases' }, 0] } },
     $addFields: {
@@ -76,11 +66,17 @@ export class StartupService implements FormDocumentService<Startup> {
     },
   };
 
+  /**
+   * find startup doc, is only intended to be used by websocket.
+   */
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
   }
 
+  /**
+   * create startup doc, is only intended to be used by websocket.
+   */
   async createDocument(submission: any, context?: any) {
     const data = {
       item: submission,
@@ -101,6 +97,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return createdDocument;
   }
 
+  /**
+   * find startup docs request table
+   */
   async findManyPage(
     request: PageRequest,
     user: AuthUser,
@@ -138,6 +137,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return documents[0];
   }
 
+  /**
+   * pipelines table for user
+   */
   async updatePipelineForUser(aggregationPipeline: any, user: AuthUser) {
     if (
       user.rolDoc.type === ValidRoles.expert &&
@@ -161,6 +163,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return aggregationPipeline;
   }
 
+  /**
+   * request table with filters
+   */
   async findManyIdsByRequest(
     request: PageRequest,
     user: AuthUser,
@@ -184,6 +189,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return documents.map((doc) => doc._id);
   }
 
+  /**
+   * link two ways between startup and entrepreneur
+   */
   async linkStartupsAndEntrepreneurs(
     ids: string[],
     entrepreneurs: string[],
@@ -238,6 +246,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return startupUpdateResult;
   }
 
+  /**
+   * link only startup with entrepreneurs by property
+   */
   async linkWithEntrepreneurs(
     ids: string[],
     entrepreneurRelationships: EntrepreneurRelationship[],
@@ -251,11 +262,17 @@ export class StartupService implements FormDocumentService<Startup> {
       .lean();
   }
 
+  /**
+   * update startup doc, is only intended to be used by websocket.
+   */
   async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(id, { item: submission });
     return updatedDocument;
   }
 
+  /**
+   * find all startup doc
+   */
   async findAll(): Promise<Startup[]> {
     const startups = await this.startupModel.find({
       deletedAt: null,
@@ -264,6 +281,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return startups;
   }
 
+  /**
+   * find startup doc by entrepreneur
+   */
   async findByEntrepreneur(idEntrepreneur: string): Promise<Startup[]> {
     const startup = await this.startupModel
       .find({
@@ -274,6 +294,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return startup;
   }
 
+  /**
+   * find startup doc like communities
+   */
   async findLikeCommunity(): Promise<Startup[]> {
     const startups = await this.startupModel.aggregate([
       {
@@ -314,6 +337,9 @@ export class StartupService implements FormDocumentService<Startup> {
     });
   }
 
+  /**
+   * find startup doc by batch and user
+   */
   async findByPhase(phase: string, user?: AuthUser): Promise<Startup[]> {
     const initMatch = {
       'phases._id': phase,
@@ -405,6 +431,9 @@ export class StartupService implements FormDocumentService<Startup> {
     });
   }
 
+  /**
+   * find numb of startups in a batch
+   */
   async findNumbParticipants(batch: string) {
     const startups = await this.startupModel.find(
       { 'phases._id': batch, deletedAt: null },
@@ -413,6 +442,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return startups.length;
   }
 
+  /**
+   * find list of startup doc
+   */
   async findMany(ids: string[]): Promise<Startup[]> {
     const startups = await this.startupModel.find({
       _id: { $in: ids },
@@ -420,6 +452,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return startups;
   }
 
+  /**
+   * find startup doc by id
+   */
   async findOne(id: string): Promise<Startup> {
     const startup = await this.startupModel.findById(id);
     if (!startup)
@@ -427,17 +462,26 @@ export class StartupService implements FormDocumentService<Startup> {
     return startup;
   }
 
+  /**
+   * create startup
+   */
   async create(data: Partial<Startup>): Promise<Startup> {
     const createdStartup = await this.startupModel.create(data);
     return createdStartup;
   }
 
+  /**
+   * update startup doc
+   */
   async update(id: string, data: Partial<Startup>): Promise<Startup> {
     await this.startupModel.updateOne({ _id: id }, data, { new: true }).lean();
     const doc = await this.findOne(id);
     return doc;
   }
 
+  /**
+   * soft delete startup doc
+   */
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.startupModel.updateMany(
       { _id: { $in: ids.map((id) => new Types.ObjectId(id)) } },
@@ -449,6 +493,9 @@ export class StartupService implements FormDocumentService<Startup> {
     };
   }
 
+  /**
+   * link startup doc with batch
+   */
   async linkWithPhase(
     linkStartUpsToPhaseArgs: LinkStartupToPhaseArgs,
   ): Promise<UpdateResultPayload> {
@@ -473,6 +520,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return UpdateResultPayload.fromPayload(updateResult);
   }
 
+  /**
+   * get startup doc reduced relationships
+   */
   async getStartupsRelationships(
     ids: string[],
   ): Promise<StartupRelationship[]> {
@@ -482,6 +532,9 @@ export class StartupService implements FormDocumentService<Startup> {
     );
   }
 
+  /**
+   * link entrepreneurs to startups
+   */
   async linkWithEntrepreneursByRequest(
     { request, targetIds }: LinkWithTargetsByRequestArgs,
     user: AuthUser,
@@ -490,6 +543,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return await this.linkStartupsAndEntrepreneurs(startups, targetIds);
   }
 
+  /**
+   * download table of startups
+   */
   async downloadByRequest(
     { request, configId, format }: DownloadRequestArgs,
     user: AuthUser,
@@ -515,6 +571,9 @@ export class StartupService implements FormDocumentService<Startup> {
     return { url: fileUrl };
   }
 
+  /**
+   * create a generic startup, only viewed in phase 1, not display in others views
+   */
   async genericStartup(entrepreneur?: Entrepreneur) {
     const genericStartupItem: any = {
       nombre: 'Sin startup',
@@ -535,8 +594,14 @@ export class StartupService implements FormDocumentService<Startup> {
     });
   }
 
+  /**
+   * unlink entrepreneurs
+   */
   async entrepreneursLeaveStartup(entrepreneurs) {}
 
+  /**
+   * email contact startup
+   */
   async contactStartup(contactArgs: ContactArgs) {
     try {
       const defaultVerifiedEmail = process.env.SEND_GRID_DEFAULT_VERIFIED_EMAIL;
@@ -561,6 +626,9 @@ export class StartupService implements FormDocumentService<Startup> {
     }
   }
 
+  /**
+   * unlink entrepreneur and startup
+   */
   unlinkEntrepreneur(startupId, entrepreneurId) {
     return this.startupModel.updateOne(
       { _id: startupId, 'entrepreneurs._id': entrepreneurId },
@@ -568,6 +636,9 @@ export class StartupService implements FormDocumentService<Startup> {
     );
   }
 
+  /**
+   * update inner data of entrepreneur in startup
+   */
   updateDataEntrepreneur(entrepreneurData: EntrepreneurStartupArgs) {
     return this.startupModel.updateOne(
       {
@@ -583,6 +654,9 @@ export class StartupService implements FormDocumentService<Startup> {
     );
   }
 
+  /**
+   * get entrepreneurs list
+   */
   getEntrepreneurs(ids: string[]) {
     return this.entrepreneurService.findMany(ids);
   }

@@ -4,6 +4,9 @@ import { ValidRoles, rolValues } from 'src/auth/enums/valid-roles.enum';
 import { SchemaTypes } from 'mongoose';
 import { Rol } from 'src/rol/entities/rol.entity';
 import { GraphQLJSONObject } from 'graphql-scalars';
+/**
+ * users docs
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class User {
@@ -77,4 +80,7 @@ export class User {
   permissions: string[];
 }
 
+/**
+ * @ignore
+ */
 export const UserSchema = SchemaFactory.createForClass(User);

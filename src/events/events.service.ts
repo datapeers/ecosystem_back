@@ -55,6 +55,9 @@ export class EventsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
+  /**
+   * create event
+   */
   async create(createEventInput: CreateEventInput) {
     if (createEventInput.attendanceType === 'zoom') {
       return this.createEventAndZoom(createEventInput);
@@ -63,6 +66,9 @@ export class EventsService {
     }
   }
 
+  /**
+   * create event with zoom instance, send email and more
+   */
   async createEventAndZoom(createEventInput: CreateEventInput) {
     const hosting = [];
     const participants = [];
@@ -146,6 +152,9 @@ export class EventsService {
     return eventCreated;
   }
 
+  /**
+   * create simple event
+   */
   async createEventNormal(createEventInput: CreateEventInput) {
     const hosting = [];
     const participants = [];
@@ -220,10 +229,16 @@ export class EventsService {
     return eventCreated;
   }
 
+  /**
+   * fin all events
+   */
   findAll() {
     return this.eventModel.find({});
   }
 
+  /**
+   * find events for user
+   */
   async findByUser(user: AuthUser) {
     let filters = {};
     switch (user.rolDoc.type) {
@@ -254,6 +269,9 @@ export class EventsService {
     return this.eventModel.find({ isDeleted: false, ...filters });
   }
 
+  /**
+   * find events by batch
+   */
   async findByBatch(batch: string, user: AuthUser) {
     if (
       ValidRoles.teamCoach === user.rolDoc.type &&
@@ -279,10 +297,16 @@ export class EventsService {
     return this.eventModel.find({ batch, isDeleted: false });
   }
 
+  /**
+   * find event by id
+   */
   findOne(id: string) {
     return this.eventModel.findById(id);
   }
 
+  /**
+   * update event
+   */
   async update(id: string, updateEventInput: UpdateEventInput) {
     delete updateEventInput['_id'];
     const updatedEvent: EventEntity = await this.eventModel
@@ -325,6 +349,9 @@ export class EventsService {
     return updatedEvent;
   }
 
+  /**
+   * soft delete event, and notify all participant of delete
+   */
   async remove(id: string) {
     const updatedType: EventEntity = await this.eventModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
@@ -365,6 +392,9 @@ export class EventsService {
     return updatedType;
   }
 
+  /**
+   * cancel event, and notify all participant of cancel
+   */
   async cancelEventEmail(updatedEvent: EventEntity) {
     const hosting = [];
     const participants = [];
@@ -426,6 +456,9 @@ export class EventsService {
     return updatedEvent;
   }
 
+  /**
+   * notify all participant of changes in event
+   */
   async changeEventEmail(updatedEvent: EventEntity) {
     const hosting = [];
     const participants = [];
@@ -478,10 +511,16 @@ export class EventsService {
     return updatedEvent;
   }
 
+  /**
+   * get participant list of a event
+   */
   async getParticipation(event: EventEntity) {
     return await this.participationService.findByEvent(event._id);
   }
 
+  /**
+   * data for table dashboard of expert hours done
+   */
   async registersExpert(user: AuthUser) {
     const docExpert = await this.expertService.findByAccount(user.uid);
     const idAsString = docExpert._id.toString();
@@ -534,6 +573,9 @@ export class EventsService {
     };
   }
 
+  /**
+   * data of expert hours done
+   */
   async getRegistersHorus(expertId: string) {
     const events = await this.eventModel
       .find({
@@ -555,6 +597,9 @@ export class EventsService {
     return { countHoursDone, countHoursDonated };
   }
 
+  /**
+   * hours consumed by startup in batch
+   */
   async getConsumedHours(startup: string, batch: string) {
     const events = await this.eventModel
       .find({
@@ -590,6 +635,9 @@ export class EventsService {
     return { hours: acc };
   }
 
+  /**
+   * get list of event and actas
+   */
   async getEventsAndActas(phase: string) {
     const events: EventEntity[] = await this.eventModel
       .find({
@@ -604,6 +652,9 @@ export class EventsService {
     return { events, actas };
   }
 
+  /**
+   * order data of hours done by expert, only set
+   */
   getExpertHours(actas: Acta[], expertId: string) {
     let countHoursDone = 0;
     let countHoursDonated = 0;
@@ -615,6 +666,9 @@ export class EventsService {
     return { countHoursDone, countHoursDonated };
   }
 
+  /**
+   * send notifications to participants by event
+   */
   async sendNotificationDB(
     participantsId: string[],
     experts: string[],
@@ -645,6 +699,9 @@ export class EventsService {
     return this.notificationsService.createMany(notificationList);
   }
 
+  /**
+   * instance build notification
+   */
   buildNotification(
     type: 'creation' | 'update' | 'delete',
     accountId: string,

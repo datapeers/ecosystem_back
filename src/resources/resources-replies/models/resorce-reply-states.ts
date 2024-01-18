@@ -1,3 +1,6 @@
+/**
+ * resources replies states
+ */
 export enum ResourceReplyState {
   Pendiente = 'Pendiente',
   'Sin descargar' = 'Sin descargar',

@@ -18,12 +18,19 @@ import { EvaluationsModule } from 'src/evaluations/evaluations.module';
 import { EvaluationsService } from '../../evaluations/evaluations.service';
 import { ResourcesRepliesModule } from 'src/resources/resources-replies/resources-replies.module';
 import { ResourcesRepliesService } from 'src/resources/resources-replies/resources-replies.service';
-
+/**
+ * @ignore
+ */
 export const FORM_DOCUMENT_SERVICE_PROVIDER = 'FORM_DOCUMENT_SERVICE_PROVIDER';
+/**
+ * @ignore
+ */
 export type FormDocumentServiceProvider = (
   target: FormCollections,
 ) => FormDocumentService;
-
+/**
+ * @ignore
+ */
 export const formDocumentServiceImports = [
   forwardRef(() => EntrepreneurModule),
   forwardRef(() => BusinessModule),
@@ -33,7 +40,9 @@ export const formDocumentServiceImports = [
   forwardRef(() => ApplicantModule),
   forwardRef(() => ResourcesRepliesModule),
 ];
-
+/**
+ * @ignore
+ */
 export const formDocumentServiceProviders = [
   {
     inject: [ModuleRef],

@@ -13,6 +13,9 @@ export class FormsService {
     @InjectModel(Form.name) private readonly formModel: Model<Form>,
   ) {}
 
+  /**
+   * find many forms config by filters
+   */
   async findMany(filters: FindFormsArgs) {
     return this.formModel.find({
       ...filters,
@@ -20,27 +23,32 @@ export class FormsService {
     });
   }
 
+  /**
+   * find form config by id
+   */
   async findOne(id: string): Promise<Form> {
     const form = await this.formModel.findById(id).lean();
     if (!form) throw new NotFoundException(`Couldn't find form with id ${id}`);
     return form;
   }
 
+  /**
+   * create form config
+   */
   async create(createFormInput: CreateFormInput, user: AuthUser) {
-    const createdForm = await this.formModel.create(
-      {
-        ...createFormInput,
-        createdBy: user.uid,
-      });
+    const createdForm = await this.formModel.create({
+      ...createFormInput,
+      createdBy: user.uid,
+    });
     return createdForm;
   }
 
+  /**
+   * clone form config
+   */
   async clone(id: string, user: AuthUser) {
     const formToClone = await this.findOne(id);
-    const {
-      _id,
-      ...data
-    } = formToClone;
+    const { _id, ...data } = formToClone;
     const clonedForm = await this.formModel.create({
       ...data,
       name: `Clon ${data.name}`,
@@ -49,13 +57,21 @@ export class FormsService {
     return clonedForm;
   }
 
-  async update(id: string, updateFormInput: Partial<UpdateFormInput>, user: AuthUser) {
+  /**
+   * update form config
+   */
+  async update(
+    id: string,
+    updateFormInput: Partial<UpdateFormInput>,
+    user: AuthUser,
+  ) {
     delete updateFormInput['_id'];
     const form = await this.formModel
       .findByIdAndUpdate(
         id,
         {
-          ...updateFormInput, updatedBy: user.uid,
+          ...updateFormInput,
+          updatedBy: user.uid,
         },
         { new: true },
       )
@@ -63,8 +79,15 @@ export class FormsService {
     return form;
   }
 
+  /**
+   * soft delete form config
+   */
   async delete(id: string, user: AuthUser) {
-    const deletedForm = await this.update(id, { deletedAt: new Date(), deletedBy: user.uid }, user);
+    const deletedForm = await this.update(
+      id,
+      { deletedAt: new Date(), deletedBy: user.uid },
+      user,
+    );
     return deletedForm;
   }
 }

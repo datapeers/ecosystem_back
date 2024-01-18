@@ -5,7 +5,9 @@ import { CreateTypesEventInput } from './dto/create-types-event.input';
 import { UpdateTypesEventInput } from './dto/update-types-event.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => TypesEvent)
 export class TypesEventsResolver {

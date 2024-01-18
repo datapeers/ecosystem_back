@@ -1,6 +1,8 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { InputType, Field, ID, Int } from '@nestjs/graphql';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class UpdatePhaseInput {
   @Field(() => ID)

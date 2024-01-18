@@ -1,3 +1,6 @@
+/**
+ * @ignore
+ */
 export class AggregateBuildOptions {
   lookups: any[] = [];
   project?: { $project: any };
@@ -6,7 +9,5 @@ export class AggregateBuildOptions {
   outputProjection?: { $project: any };
   virtualFields: { $addFields: any };
 
-  constructor() {
-
-  }
+  constructor() {}
 }

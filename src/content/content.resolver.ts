@@ -8,6 +8,9 @@ import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import { LastContentOutput } from './dto/last-content-output';
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Content)
 export class ContentResolver {

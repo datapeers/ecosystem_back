@@ -1,6 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-
+/**
+ * @ignore
+ */
 @Schema()
 @ObjectType()
 export class ConfigNotification {
@@ -15,5 +17,8 @@ export class ConfigNotification {
   @Prop({ required: true })
   excluded: string[];
 }
-
-export const ConfigNotificationSchema = SchemaFactory.createForClass(ConfigNotification);
+/**
+ * @ignore
+ */
+export const ConfigNotificationSchema =
+  SchemaFactory.createForClass(ConfigNotification);

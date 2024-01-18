@@ -2,6 +2,9 @@ import { Event } from 'src/events/entities/event.entity';
 import { SendEmailInput } from '../dto/send-email.input';
 import { Template } from '../templates/template';
 
+/**
+ * email repository
+ */
 export interface EmailsRepository {
   send: (mail: SendEmailInput) => Promise<any>;
   sendFromTemplate: (templateInput: Template) => Promise<any>;
@@ -21,5 +24,7 @@ export interface EmailsRepository {
     },
   ) => Promise<any>;
 }
-
+/**
+ * @ignore
+ */
 export const EMAIL_TOKEN = 'emails-token';

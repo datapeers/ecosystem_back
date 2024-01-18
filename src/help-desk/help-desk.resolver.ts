@@ -9,7 +9,9 @@ import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import GraphQLJSON from 'graphql-type-json';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => HelpDeskTicket)
 export class HelpDeskResolver {

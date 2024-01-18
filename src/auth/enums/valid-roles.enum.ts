@@ -1,6 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
 
-// TODO: Implementar enum como GraphQL Enum Type
+/**
+ * roles in app
+ */
 export enum ValidRoles {
   superAdmin = 'superAdmin',
   admin = 'admin',
@@ -10,7 +12,9 @@ export enum ValidRoles {
   teamCoach = 'teamCoach',
   challenger = 'challenger',
 }
-
+/**
+ * roles names
+ */
 export const rolNames: Record<ValidRoles, string> = {
   [ValidRoles.superAdmin]: 'Super admin',
   [ValidRoles.admin]: 'Admin',
@@ -21,6 +25,9 @@ export const rolNames: Record<ValidRoles, string> = {
   [ValidRoles.challenger]: 'Challenger',
 };
 
+/**
+ * roles weight
+ */
 export const rolValues: Record<ValidRoles, number> = {
   [ValidRoles.superAdmin]: 9999,
   [ValidRoles.admin]: 999,
@@ -30,7 +37,9 @@ export const rolValues: Record<ValidRoles, number> = {
   [ValidRoles.user]: 2,
   [ValidRoles.challenger]: 1,
 };
-
+/**
+ * @ignore
+ */
 registerEnumType(ValidRoles, {
   name: 'ValidRoles',
 });

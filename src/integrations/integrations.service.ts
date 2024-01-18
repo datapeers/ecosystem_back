@@ -26,6 +26,9 @@ export class IntegrationsService {
     private readonly emailsService: EmailsService,
   ) {}
 
+  /**
+   * create or update integration doc
+   */
   async updateOrCreate(data: CreateIntegrationInput) {
     return await this.integrationModel
       .findOneAndUpdate(
@@ -36,16 +39,25 @@ export class IntegrationsService {
       .lean();
   }
 
+  /**
+   * find all integration doc
+   */
   findAll() {
     return this.integrationModel.find().lean();
   }
 
+  /**
+   * find integration zoom doc
+   */
   zoomIntegration() {
     return this.integrationModel
       .findOne({ typeIntegration: TypeIntegration.zoom })
       .lean();
   }
 
+  /**
+   * find token zoom followed integration zoom
+   */
   async tokenZoom() {
     const integration = await this.zoomIntegration();
     if (!integration)
@@ -76,6 +88,9 @@ export class IntegrationsService {
     }
   }
 
+  /**
+   * create an zoom meeting
+   */
   async zoomMeeting(
     meetingName: string,
     start_time,
@@ -188,6 +203,9 @@ export class IntegrationsService {
     }
   }
 
+  /**
+   * delete a zoom meeting
+   */
   async deleteMeeting(meetingId: string) {
     const integration = await this.zoomIntegration();
     if (!integration)
@@ -215,6 +233,9 @@ export class IntegrationsService {
     }
   }
 
+  /**
+   * @ignore
+   */
   async testIcs() {
     const integration = await this.zoomIntegration();
     if (!integration)

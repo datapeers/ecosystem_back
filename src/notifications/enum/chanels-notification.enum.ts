@@ -1,3 +1,6 @@
+/**
+ * @ignore
+ */
 export enum channelsNotificationEnum {
   userNotification = 'userNotification',
   entrepreneurNotification = 'entrepreneurNotification',

@@ -4,6 +4,9 @@ import { UpdateTermsOfUseInput } from './dto/update-terms-of-use.input';
 import { TermsOfUse } from './entities/terms-of-use.entity';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => TermsOfUse)
 export class TermsOfUseResolver {

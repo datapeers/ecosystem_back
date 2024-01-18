@@ -1,7 +1,9 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class CreateEventInput {
   @Field(() => String)
@@ -48,7 +50,9 @@ export class CreateEventInput {
   @IsOptional()
   participants: ParticipantEventSubmit[];
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 export class TeamCoachSubmit {
   @Field(() => String)
@@ -62,7 +66,9 @@ export class TeamCoachSubmit {
   @Field(() => String)
   email: string;
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 export class ExpertEventSubmit {
   @Field(() => String)
@@ -76,7 +82,9 @@ export class ExpertEventSubmit {
   @Field(() => String)
   email: string;
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 export class ParticipantEventSubmit {
   @Field(() => String)

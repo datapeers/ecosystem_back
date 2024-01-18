@@ -1,0 +1,1938 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ecosystem_back documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/default.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">ecosystem_back documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >EvaluationsService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/evaluations/evaluations.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#canBeEvaluated" >canBeEvaluated</a>
+                            </li>
+                            <li>
+                                <a href="#canBeReviewer" >canBeReviewer</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#buildNotification" >buildNotification</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Async</span>
+                                <a href="#checkEvaluationsLiberation" >checkEvaluationsLiberation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#create" >create</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#createDocument" >createDocument</a>
+                            </li>
+                            <li>
+                                <a href="#createSimpleEvaluation" >createSimpleEvaluation</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#delete" >delete</a>
+                            </li>
+                            <li>
+                                <a href="#findAll" >findAll</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByConfig" >findByConfig</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findOne" >findOne</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findOneByReviewer" >findOneByReviewer</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDocument" >getDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getName" >getName</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#update" >update</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateDocument" >updateDocument</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(evaluationModel: <a href="../classes/Evaluation.html" target="_self">Model&lt;Evaluation&gt;</a>, configService: <a href="../injectables/ConfigEvaluationsService.html" target="_self">ConfigEvaluationsService</a>, startupService: <a href="../injectables/StartupService.html" target="_self">StartupService</a>, expertService: <a href="../injectables/ExpertService.html" target="_self">ExpertService</a>, usersService: <a href="../injectables/UsersService.html" target="_self">UsersService</a>, configNotificationsService: <a href="../injectables/ConfigNotificationsService.html" target="_self">ConfigNotificationsService</a>, notificationsService: <a href="../injectables/NotificationsService.html" target="_self">NotificationsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/evaluations/evaluations.service.ts:36</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>evaluationModel</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Evaluation.html" target="_self" >Model&lt;Evaluation&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>configService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ConfigEvaluationsService.html" target="_self" >ConfigEvaluationsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>startupService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StartupService.html" target="_self" >StartupService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>expertService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ExpertService.html" target="_self" >ExpertService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>usersService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UsersService.html" target="_self" >UsersService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>configNotificationsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ConfigNotificationsService.html" target="_self" >ConfigNotificationsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>notificationsService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/NotificationsService.html" target="_self" >NotificationsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildNotification"></a>
+                    <span class="name">
+                        <span ><b>buildNotification</b></span>
+                        <a href="#buildNotification"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildNotification(user: <a href="../classes/User.html" target="_self">User</a>, config: <a href="../classes/ConfigEvaluation.html" target="_self">ConfigEvaluation</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="339"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:339</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>instance a notification for evaluation by user</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../classes/ConfigEvaluation.html" target="_self" >ConfigEvaluation</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>{ text: string; date: any; target: string; state: any; type: any; isDeleted: boolean; url: any; }</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkEvaluationsLiberation"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Async</span>
+                        <span ><b>checkEvaluationsLiberation</b></span>
+                        <a href="#checkEvaluationsLiberation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkEvaluationsLiberation()</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@Cron(&#x27;0 0 6 * * *&#x27;, {name: &#x27;cronEvaluations&#x27;})<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="289"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:289</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>CRON JOB to find the evaluations that have to be done today and send the respective notifications and release the content to the users.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="create"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>create</b></span>
+                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>create(data: <a href="../classes/Evaluation.html" target="_self">CreateEvaluationInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="209"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:209</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create evaluated doc</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/Evaluation.html" target="_self" >CreateEvaluationInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Evaluation.html" target="_self" >Promise&lt;Evaluation&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>createDocument</b></span>
+                        <a href="#createDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createDocument(submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="65"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:65</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create doc evaluations, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createSimpleEvaluation"></a>
+                    <span class="name">
+                        <span ><b>createSimpleEvaluation</b></span>
+                        <a href="#createSimpleEvaluation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>createSimpleEvaluation(evaluated: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, config: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, state: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, form: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="241"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:241</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create a fake evaluated doc</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>evaluated</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>state</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>form</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Evaluation.html" target="_self" >Evaluation</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="delete"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>delete</b></span>
+                        <a href="#delete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>delete(ids: string[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="227"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:227</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>soft delete evaluated doc list</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;UpdateResultPayload&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findAll"></a>
+                    <span class="name">
+                        <span ><b>findAll</b></span>
+                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>findAll()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="85"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find all doc evaluations</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByConfig"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByConfig</b></span>
+                        <a href="#findByConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByConfig(config: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, user: <a href="../classes/User.html" target="_self">AuthUser</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="92"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:92</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc evaluations by config</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="183"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:183</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc evaluations by id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Evaluation.html" target="_self" >Promise&lt;Evaluation&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOneByReviewer"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOneByReviewer</b></span>
+                        <a href="#findOneByReviewer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOneByReviewer(reviewer: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, config: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, evaluated: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="193"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:193</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc evaluations by reviewer</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>reviewer</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>evaluated</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Evaluation.html" target="_self" >Promise&lt;Evaluation&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getDocument</b></span>
+                        <a href="#getDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc evaluations, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getName"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getName</b></span>
+                        <a href="#getName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getName(evaluation: <a href="../classes/Evaluation.html" target="_self">Evaluation</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="264"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:264</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>get name of evaluated person</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>evaluation</td>
+                                            <td>
+                                                            <code><a href="../classes/Evaluation.html" target="_self" >Evaluation</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="update"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>update</b></span>
+                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, data: <a href="../classes/Evaluation.html" target="_self">Partial&lt;Evaluation&gt;</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="217"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:217</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update evaluated doc</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/Evaluation.html" target="_self" >Partial&lt;Evaluation&gt;</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Evaluation.html" target="_self" >Promise&lt;Evaluation&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateDocument</b></span>
+                        <a href="#updateDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="77"
+                                    class="link-to-prism">src/evaluations/evaluations.service.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update doc evaluations, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="canBeEvaluated"></a>
+                    <span class="name">
+                        <span ><b>canBeEvaluated</b></span>
+                        <a href="#canBeEvaluated"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[ValidRoles.user, ValidRoles.teamCoach, ValidRoles.expert]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/evaluations/evaluations.service.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="canBeReviewer"></a>
+                    <span class="name">
+                        <span ><b>canBeReviewer</b></span>
+                        <a href="#canBeReviewer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+    ValidRoles.user,
+    ValidRoles.host,
+    ValidRoles.teamCoach,
+    ValidRoles.expert,
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/evaluations/evaluations.service.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CreateEvaluationInput } from &#x27;./dto/create-evaluation.input&#x27;;
+import { InjectModel } from &#x27;@nestjs/mongoose&#x27;;
+import { Evaluation } from &#x27;./entities/evaluation.entity&#x27;;
+import { Model, Types } from &#x27;mongoose&#x27;;
+import { UpdateResultPayload } from &#x27;src/shared/models/update-result&#x27;;
+import { AuthUser } from &#x27;src/auth/types/auth-user&#x27;;
+import { ValidRoles } from &#x27;src/auth/enums/valid-roles.enum&#x27;;
+import {
+  Inject,
+  Injectable,
+  forwardRef,
+  NotFoundException,
+  BadRequestException,
+} from &#x27;@nestjs/common&#x27;;
+import { ConfigEvaluationsService } from &#x27;./config-evaluations/config-evaluations.service&#x27;;
+import { ExpertService } from &#x27;src/expert/expert.service&#x27;;
+import { StartupService } from &#x27;src/startup/startup.service&#x27;;
+import { UsersService } from &#x27;src/users/users.service&#x27;;
+import { Cron } from &#x27;@nestjs/schedule&#x27;;
+import { default_notification_types } from &#x27;src/notifications/types-notifications/model/types-notification.default&#x27;;
+import { EmailNotificationTypes } from &#x27;src/notifications/types-notifications/model/email-notification-types.enum&#x27;;
+import { ConfigNotificationsService } from &#x27;src/notifications/config-notifications/config-notifications.service&#x27;;
+import { NotificationsService } from &#x27;src/notifications/notifications.service&#x27;;
+import { ConfigEvaluation } from &#x27;./config-evaluations/entities/config-evaluation.entity&#x27;;
+import { NotificationStates } from &#x27;src/notifications/enum/notification-states.enum&#x27;;
+import { NotificationTypes } from &#x27;src/notifications/enum/notification-types.enum&#x27;;
+import { User } from &#x27;src/users/entities/user.entity&#x27;;
+@Injectable()
+export class EvaluationsService {
+  canBeEvaluated &#x3D; [ValidRoles.user, ValidRoles.teamCoach, ValidRoles.expert];
+  canBeReviewer &#x3D; [
+    ValidRoles.user,
+    ValidRoles.host,
+    ValidRoles.teamCoach,
+    ValidRoles.expert,
+  ];
+  constructor(
+    @InjectModel(Evaluation.name)
+    private readonly evaluationModel: Model&lt;Evaluation&gt;,
+    @Inject(forwardRef(() &#x3D;&gt; ConfigEvaluationsService))
+    private readonly configService: ConfigEvaluationsService,
+    @Inject(forwardRef(() &#x3D;&gt; StartupService))
+    private readonly startupService: StartupService,
+    @Inject(forwardRef(() &#x3D;&gt; ExpertService))
+    private readonly expertService: ExpertService,
+    @Inject(forwardRef(() &#x3D;&gt; UsersService))
+    private readonly usersService: UsersService,
+    @Inject(forwardRef(() &#x3D;&gt; ConfigNotificationsService))
+    private readonly configNotificationsService: ConfigNotificationsService,
+    @Inject(forwardRef(() &#x3D;&gt; NotificationsService))
+    private readonly notificationsService: NotificationsService,
+  ) {}
+
+  /**
+   * find doc evaluations, is only intended to be used by websocket.
+   */
+  async getDocument(id: string) {
+    const document &#x3D; await this.findOne(id);
+    return document;
+  }
+
+  /**
+   * create doc evaluations, is only intended to be used by websocket.
+   */
+  async createDocument(submission: any, context?: any) {
+    const data &#x3D; {
+      ...context,
+      item: submission,
+    };
+    const createdDocument &#x3D; await this.create(data);
+    return createdDocument;
+  }
+
+  /**
+   * update doc evaluations, is only intended to be used by websocket.
+   */
+  async updateDocument(id: string, submission: any, context: any) {
+    const updatedDocument &#x3D; await this.update(id, { item: submission });
+    return updatedDocument;
+  }
+
+  /**
+   * find all doc evaluations
+   */
+  findAll() {
+    return this.evaluationModel.find();
+  }
+
+  /**
+   * find doc evaluations by config
+   */
+  async findByConfig(config: string, user: AuthUser) {
+    const configEvaluation &#x3D; await this.configService.findOne(config);
+    const evaluations &#x3D; await this.evaluationModel
+      .find({
+        config,
+        isDeleted: false,
+      })
+      .lean();
+    if (!this.canBeEvaluated.includes(configEvaluation.evaluated as ValidRoles))
+      throw new BadRequestException(&#x27;Invalid evaluated&#x27;, {
+        cause: new Error(),
+        description: &#x27;Evaluated its not a valid type for this endpoint&#x27;,
+      });
+    if (!this.canBeReviewer.includes(configEvaluation.reviewer as ValidRoles))
+      throw new BadRequestException(&#x27;Invalid reviewer&#x27;, {
+        cause: new Error(),
+        description: &#x27;Reviewer its not a valid type for this endpoint&#x27;,
+      });
+    let ansList: Evaluation[] &#x3D; [];
+    switch (configEvaluation.evaluated) {
+      case ValidRoles.user:
+        const startupList &#x3D; await this.startupService.findByPhase(
+          configEvaluation.phase,
+          user,
+        );
+        for (const startup of startupList) {
+          let evaluation &#x3D; evaluations.find(
+            (i) &#x3D;&gt;
+              i.evaluated &#x3D;&#x3D;&#x3D; startup._id.toString() &amp;&amp;
+              i.config &#x3D;&#x3D;&#x3D; configEvaluation._id.toString(),
+          );
+          if (!evaluation)
+            evaluation &#x3D; this.createSimpleEvaluation(
+              startup._id.toString(),
+              configEvaluation._id.toString(),
+              &#x27;pendiente&#x27;,
+              configEvaluation.form,
+            );
+          ansList.push(evaluation);
+        }
+        break;
+      case ValidRoles.teamCoach:
+        const teamCoachList &#x3D; await this.usersService.findMany({
+          roles: [ValidRoles.teamCoach],
+          relationsAssign: { batches: configEvaluation.phase },
+        });
+        for (const teamCoach of teamCoachList) {
+          let evaluation &#x3D; evaluations.find(
+            (i) &#x3D;&gt;
+              i.evaluated &#x3D;&#x3D;&#x3D; teamCoach._id.toString() &amp;&amp;
+              i.config &#x3D;&#x3D;&#x3D; configEvaluation._id.toString(),
+          );
+          if (!evaluation)
+            evaluation &#x3D; this.createSimpleEvaluation(
+              teamCoach._id.toString(),
+              configEvaluation._id.toString(),
+              &#x27;pendiente&#x27;,
+              configEvaluation.form,
+            );
+          ansList.push(evaluation);
+        }
+        break;
+      case ValidRoles.expert:
+        const expertList &#x3D; await this.expertService.findByPhase(
+          configEvaluation.phase,
+        );
+        for (const expert of expertList) {
+          let evaluation &#x3D; evaluations.find(
+            (i) &#x3D;&gt;
+              i.evaluated &#x3D;&#x3D;&#x3D; expert._id.toString() &amp;&amp;
+              i.config &#x3D;&#x3D;&#x3D; configEvaluation._id.toString(),
+          );
+          if (!evaluation)
+            evaluation &#x3D; this.createSimpleEvaluation(
+              expert._id.toString(),
+              configEvaluation._id.toString(),
+              &#x27;pendiente&#x27;,
+              configEvaluation.form,
+            );
+          ansList.push(evaluation);
+        }
+        break;
+      default:
+        break;
+    }
+    return ansList;
+  }
+
+  /**
+   * find doc evaluations by id
+   */
+  async findOne(id: string): Promise&lt;Evaluation&gt; {
+    const evaluation &#x3D; await this.evaluationModel.findById(id);
+    if (!evaluation)
+      throw new NotFoundException(&#x60;Couldn&#x27;t find evaluation with id ${id}&#x60;);
+    return evaluation;
+  }
+
+  /**
+   * find doc evaluations by reviewer
+   */
+  async findOneByReviewer(
+    reviewer: string,
+    config: string,
+    evaluated: string,
+  ): Promise&lt;Evaluation&gt; {
+    const evaluation &#x3D; await this.evaluationModel.findOne({
+      reviewer,
+      config,
+      evaluated,
+    });
+    return evaluation;
+  }
+
+  /**
+   * create evaluated doc
+   */
+  async create(data: CreateEvaluationInput): Promise&lt;Evaluation&gt; {
+    const createdEvaluation &#x3D; await this.evaluationModel.create(data);
+    return createdEvaluation;
+  }
+
+  /**
+   * update evaluated doc
+   */
+  async update(id: string, data: Partial&lt;Evaluation&gt;): Promise&lt;Evaluation&gt; {
+    await this.evaluationModel
+      .updateOne({ _id: id }, data, { new: true })
+      .lean();
+    return this.findOne(id);
+  }
+
+  /**
+   * soft delete evaluated doc list
+   */
+  async delete(ids: string[]): Promise&lt;UpdateResultPayload&gt; {
+    const updateResult &#x3D; await this.evaluationModel.updateMany(
+      { _id: { $in: ids.map((id) &#x3D;&gt; new Types.ObjectId(id)) } },
+      { isDeleted: true },
+    );
+    return {
+      ...updateResult,
+      upsertedId: updateResult.upsertedId?.toString(),
+    };
+  }
+
+  /**
+   * create a fake evaluated doc
+   */
+  createSimpleEvaluation(
+    evaluated: string,
+    config: string,
+    state: string,
+    form: string,
+  ): Evaluation {
+    const newEvaluation &#x3D; new Evaluation();
+    newEvaluation._id &#x3D; new Types.ObjectId().toString();
+    newEvaluation.item &#x3D; {} as any;
+    newEvaluation.evaluated &#x3D; evaluated;
+    newEvaluation.reviewer &#x3D; &#x27;&#x27;;
+    newEvaluation.form &#x3D; form;
+    newEvaluation.config &#x3D; config;
+    newEvaluation.state &#x3D; state;
+    newEvaluation.createdAt &#x3D; new Date();
+    newEvaluation.updatedAt &#x3D; new Date();
+    newEvaluation.isDeleted &#x3D; false;
+    return newEvaluation;
+  }
+
+  /**
+   * get name of evaluated person
+   */
+  async getName(evaluation: Evaluation) {
+    const configEvaluation &#x3D; await this.configService.findOne(
+      evaluation.config,
+    );
+    switch (configEvaluation.evaluated) {
+      case ValidRoles.user:
+        const startup &#x3D; await this.startupService.findOne(evaluation.evaluated);
+        return startup.item[&#x27;nombre&#x27;];
+      case ValidRoles.teamCoach:
+        const teamCoach &#x3D; await this.usersService.findById(
+          evaluation.evaluated,
+        );
+        return teamCoach.fullName;
+      case ValidRoles.expert:
+        const expert &#x3D; await this.expertService.findOne(evaluation.evaluated);
+        return expert.item[&#x27;nombre&#x27;];
+      default:
+        return &#x27;&#x27;;
+    }
+  }
+
+  /**
+   * CRON JOB to find the evaluations that have to be done today and send the respective notifications and release the content to the users.
+   */
+  @Cron(&#x27;0 0 6 * * *&#x27;, { name: &#x27;cronEvaluations&#x27; })
+  async checkEvaluationsLiberation() {
+    let evaluationsConfigs &#x3D; await this.configService.findToday(
+      ValidRoles.user,
+    );
+    if (!evaluationsConfigs.length) return;
+    for (const configEvaluation of evaluationsConfigs) {
+      const startupList &#x3D; await this.startupService.findByPhase(
+        configEvaluation.phase,
+      );
+      const listIdsEntrepreneurs &#x3D; [];
+      for (const startup of startupList) {
+        for (const entrepreneur of startup.entrepreneurs) {
+          if (entrepreneur.rol !&#x3D;&#x3D; &#x27;leader&#x27;) continue;
+          listIdsEntrepreneurs.push(entrepreneur._id.toString());
+        }
+      }
+      const entrepreneurs &#x3D;
+        await this.startupService.getEntrepreneurs(listIdsEntrepreneurs);
+      const uidList &#x3D; [];
+
+      for (const iterator of entrepreneurs) {
+        if (!iterator.accountId || iterator.accountId &#x3D;&#x3D;&#x3D; &#x27;&#x27;) continue;
+        uidList.push(iterator.accountId);
+      }
+      const users &#x3D; await this.usersService.findManyByUUID(uidList);
+      const notificationType &#x3D; default_notification_types.find(
+        (t) &#x3D;&gt; t.type &#x3D;&#x3D; EmailNotificationTypes.assessmentAvailable,
+      );
+
+      const notificationsConfig &#x3D;
+        await this.configNotificationsService.findByType(
+          notificationType._id.toString(),
+        );
+      const notifications &#x3D; [];
+      for (const user of users) {
+        if (
+          notificationsConfig.excluded.some(
+            (userEmail) &#x3D;&gt; userEmail &#x3D;&#x3D; user.email,
+          )
+        )
+          continue;
+        notifications.push(this.buildNotification(user, configEvaluation));
+      }
+      this.notificationsService.createMany(notifications);
+    }
+  }
+
+  /**
+   * instance a notification for evaluation by user
+   */
+  buildNotification(user: User, config: ConfigEvaluation) {
+    let evaluated &#x3D; &#x27;&#x27;;
+    switch (config.evaluated) {
+      case ValidRoles.expert:
+        evaluated &#x3D; &#x27;experts&#x27;;
+        break;
+      case ValidRoles.teamCoach:
+        evaluated &#x3D; &#x27;team coach&#x60;s&#x27;;
+      default:
+        break;
+    }
+    let text &#x3D; &#x60;${user.fullName}, califica a tus ${evaluated}&#x60;;
+    return {
+      text,
+      date: new Date(),
+      target: &#x60;userNotification ${user._id};&#x60;,
+      state: NotificationStates.pending,
+      type: NotificationTypes.rate,
+      isDeleted: false,
+      url: config._id,
+    };
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'EvaluationsService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

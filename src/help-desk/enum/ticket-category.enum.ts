@@ -1,3 +1,6 @@
+/**
+ * category tickets
+ */
 export enum TicketCategory {
   support = 'support',
   specializedConsulting = 'specializedConsulting',

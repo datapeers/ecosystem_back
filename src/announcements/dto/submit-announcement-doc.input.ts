@@ -2,6 +2,9 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
 
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class SubmitAnnouncementDocInput {
   @Field(() => String, { description: 'Announcement id.' })

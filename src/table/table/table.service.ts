@@ -25,6 +25,9 @@ export class TableService {
     private readonly formsService: FormsService,
   ) {}
 
+  /**
+   * create a table doc
+   */
   async create(data: CreateTableInput): Promise<Table> {
     const createdTable = await this.tableModel.create(data);
     if (!createdTable)
@@ -44,6 +47,9 @@ export class TableService {
     return createdTable;
   }
 
+  /**
+   * create joins table
+   */
   async addTableJoin({ id, join }: AddTableJoinInput): Promise<Table> {
     const updatedTable = await this.tableModel.findByIdAndUpdate(
       id,
@@ -53,6 +59,9 @@ export class TableService {
     return updatedTable;
   }
 
+  /**
+   * remove joins table
+   */
   async removeTableJoin({ id, key }: RemoveTableJoinInput): Promise<Table> {
     const updatedTable = await this.tableModel.findByIdAndUpdate(
       id,
@@ -62,6 +71,9 @@ export class TableService {
     return updatedTable;
   }
 
+  /**
+   * find a table
+   */
   async findOne(filters: { _id?: string; locator?: string }): Promise<Table> {
     const table = await this.tableModel.findOne(filters);
     if (!table)
@@ -71,6 +83,9 @@ export class TableService {
     return table;
   }
 
+  /**
+   * find joins in table
+   */
   async resolveTableGroups(
     table: Omit<Table, 'columnGroups'>,
   ): Promise<ColumnGroup[]> {
@@ -101,6 +116,9 @@ export class TableService {
     return joins;
   }
 
+  /**
+   * get table columns of a table
+   */
   async resolveTableColumns(table: Omit<Table, 'columns'>) {
     const form = await this.formsService.findOne(table.form);
     const formComponents = JSON.parse(form.formJson);

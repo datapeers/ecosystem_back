@@ -11,7 +11,9 @@ export class TypesEventsService implements OnModuleInit {
     @InjectModel(TypesEvent.name)
     private readonly typeEventModel: Model<TypesEvent>,
   ) {}
-
+  /**
+   * initialize types of events in app
+   */
   async onModuleInit() {
     let types = await this.typeEventModel.find({});
     if (types.length === 0) {
@@ -19,18 +21,30 @@ export class TypesEventsService implements OnModuleInit {
     }
   }
 
+  /**
+   * create new type of event
+   */
   create(createTypeEventInput: CreateTypesEventInput) {
     return this.typeEventModel.create(createTypeEventInput);
   }
 
+  /**
+   * find all type of events
+   */
   findAll() {
     return this.typeEventModel.find({ isDeleted: false }).lean();
   }
 
+  /**
+   * find type of event by id
+   */
   findOne(id: string) {
     return this.typeEventModel.findById(id).lean();
   }
 
+  /**
+   * update type of event
+   */
   async update(id: string, updateTypeEventInput: UpdateTypesEventInput) {
     delete updateTypeEventInput['_id'];
     const updatedType = await this.typeEventModel
@@ -39,6 +53,9 @@ export class TypesEventsService implements OnModuleInit {
     return updatedType;
   }
 
+  /**
+   * soft delete type of event
+   */
   async remove(id: string) {
     const updatedType = await this.typeEventModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })

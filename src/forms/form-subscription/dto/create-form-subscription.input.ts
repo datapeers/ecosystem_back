@@ -2,7 +2,9 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsEmpty, IsNotEmpty, IsOptional } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
 import { FormCollections } from 'src/forms/form/enums/form-collections';
-
+/**
+ * graphql input
+ */
 @InputType()
 export class CreateFormSubscriptionInput {
   @Field(() => String, { nullable: true })

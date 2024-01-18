@@ -21,7 +21,9 @@ import { CloseFormSubscriptionArgs } from './args/close-form-subscription.args';
 import { SubmitFileInput } from './inputs/submit-file.input';
 import { FormSubmissionFiles } from '../form/entities/form-submission-files';
 import { pubSubInstance } from 'src/shared/sockets/socket-instance';
-
+/**
+ * @ignore
+ */
 const pubSub = pubSubInstance;
 
 @Injectable()
@@ -36,6 +38,9 @@ export class FormSubscriptionService {
     private readonly documentServiceProvider: FormDocumentServiceProvider,
   ) {}
 
+  /**
+   * find form subscription
+   */
   async findOne(id: string) {
     const subscription = await this.formSubscriptionModel.findById(id).lean();
     if (!subscription)
@@ -43,6 +48,9 @@ export class FormSubscriptionService {
     return subscription;
   }
 
+  /**
+   * create form subscription
+   */
   async create(createFormSubscriptionInput: CreateFormSubscriptionInput) {
     const subscriptionForm = await this.formsService.findOne(
       createFormSubscriptionInput.form,
@@ -59,12 +67,18 @@ export class FormSubscriptionService {
     return createdFormSubscription;
   }
 
+  /**
+   * subscribe channel pubsub
+   */
   subscribe() {
     return pubSub.asyncIterator<FormSubscription>([
       FormSubscriptionService.triggerName,
     ]);
   }
 
+  /**
+   * submit document in subscription
+   */
   async submit({ id, data }: SubmitFormSubscriptionArgs) {
     const subscription = await this.findOne(id);
     if (subscription.opened === false)
@@ -92,6 +106,9 @@ export class FormSubscriptionService {
     return closedSubscription;
   }
 
+  /**
+   * close subscription opened
+   */
   async close({
     id,
     doc,
@@ -110,6 +127,9 @@ export class FormSubscriptionService {
     return closedSubscription;
   }
 
+  /**
+   * handle document sended by subscription
+   */
   private async handleDocumentSubmit(
     { target, doc }: FormSubscription,
     data: any,
@@ -125,6 +145,9 @@ export class FormSubscriptionService {
     return document;
   }
 
+  /**
+   * get document specified in property inside subscription
+   */
   async getSubmittedDocument(
     id: string,
     target: FormCollections,
@@ -134,6 +157,9 @@ export class FormSubscriptionService {
     return document.item;
   }
 
+  /**
+   * submit file in subscription
+   */
   async submitFile({ doc, fileKey, fileUrl, form }: SubmitFileInput) {
     const targetForm = await this.formsService.findOne(form);
     const documentService = this.documentServiceProvider(targetForm.target);
@@ -147,6 +173,9 @@ export class FormSubscriptionService {
     return { documents: docFiles };
   }
 
+  /**
+   * get submited file
+   */
   async getSubmittedFiles(
     id: string,
     target: FormCollections,

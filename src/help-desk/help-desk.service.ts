@@ -35,6 +35,9 @@ export class HelpDeskService {
 
   _logger = new Logger(HelpDeskService.name);
 
+  /**
+   * create a post in help desk
+   */
   async create(createHelpDeskInput: CreateHelpDeskInput) {
     try {
       const newTicket = await this.ticketsModel.create({
@@ -49,6 +52,9 @@ export class HelpDeskService {
     }
   }
 
+  /**
+   * find all post in help desk
+   */
   findAll(filter: HelpDeskFilterInput) {
     const { status, startupId, page, perPage } = filter;
     const query = this.ticketsModel.find();
@@ -64,6 +70,9 @@ export class HelpDeskService {
     return query.exec();
   }
 
+  /**
+   * find post in help desk with filters
+   */
   async findByFilters(user: AuthUser, filters: JSON) {
     switch (user.rolDoc.type) {
       case ValidRoles.user:
@@ -85,6 +94,9 @@ export class HelpDeskService {
     }
   }
 
+  /**
+   * find a post in help desk by id
+   */
   async findOne(id: string): Promise<HelpDeskTicket> {
     const ticket = await this.ticketsModel.findOne({
       where: {
@@ -97,6 +109,9 @@ export class HelpDeskService {
     return ticket;
   }
 
+  /**
+   * update a post in help desk
+   */
   async update(id: string, updateHelpDeskInput: UpdateHelpDeskInput) {
     try {
       delete updateHelpDeskInput['_id'];
@@ -118,6 +133,9 @@ export class HelpDeskService {
     }
   }
 
+  /**
+   * soft delete a post in help desk
+   */
   async remove(id: string): Promise<HelpDeskTicket> {
     try {
       const updatedType = await this.ticketsModel
@@ -129,6 +147,9 @@ export class HelpDeskService {
     }
   }
 
+  /**
+   * build and instance of a notification post in help desk
+   */
   buildNotification(ticket: HelpDeskTicket) {
     let text = `Tu ticket ${ticket.title} ha recibido respuesta o cambios`;
     const urlInvitation = process.env.APP_URI + '/home/helpdesk';

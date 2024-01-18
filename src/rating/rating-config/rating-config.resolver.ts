@@ -3,13 +3,18 @@ import { RatingConfigService } from './rating-config.service';
 import { RatingConfig } from './entities/rating-config.entity';
 import { CreateRatingConfigInput } from './dto/create-rating-config.input';
 import { UpdateRatingConfigInput } from './dto/update-rating-config.input';
-
+/**
+ * @ignore
+ */
 @Resolver(() => RatingConfig)
 export class RatingConfigResolver {
   constructor(private readonly ratingConfigService: RatingConfigService) {}
 
   @Mutation(() => RatingConfig)
-  createRatingConfig(@Args('createRatingConfigInput') createRatingConfigInput: CreateRatingConfigInput) {
+  createRatingConfig(
+    @Args('createRatingConfigInput')
+    createRatingConfigInput: CreateRatingConfigInput,
+  ) {
     return this.ratingConfigService.create(createRatingConfigInput);
   }
 
@@ -24,8 +29,14 @@ export class RatingConfigResolver {
   }
 
   @Mutation(() => RatingConfig)
-  updateRatingConfig(@Args('updateRatingConfigInput') updateRatingConfigInput: UpdateRatingConfigInput) {
-    return this.ratingConfigService.update(updateRatingConfigInput.id, updateRatingConfigInput);
+  updateRatingConfig(
+    @Args('updateRatingConfigInput')
+    updateRatingConfigInput: UpdateRatingConfigInput,
+  ) {
+    return this.ratingConfigService.update(
+      updateRatingConfigInput.id,
+      updateRatingConfigInput,
+    );
   }
 
   @Mutation(() => RatingConfig)

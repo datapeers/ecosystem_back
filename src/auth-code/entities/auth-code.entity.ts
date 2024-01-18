@@ -1,6 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-
+/**
+ * Authorization code management for users
+ */
 @Schema({ timestamps: { createdAt: true } })
 @ObjectType()
 export class AuthCode {
@@ -19,5 +21,7 @@ export class AuthCode {
   @Prop({ expires: 60 })
   createdAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const AuthCodeSchema = SchemaFactory.createForClass(AuthCode);

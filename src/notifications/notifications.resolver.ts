@@ -14,7 +14,9 @@ import { UpdateNotificationInput } from './dto/update-notification.input';
 import { AuthUser } from '../auth/types/auth-user';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { OthersInput } from './dto/others.inpt';
-
+/**
+ * @ignore
+ */
 @Resolver(() => Notification)
 export class NotificationsResolver {
   constructor(private readonly notificationsService: NotificationsService) {}

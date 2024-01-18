@@ -1,6 +1,8 @@
 import { Body, Controller, Param, Post, Get, Query } from '@nestjs/common';
 import { StorageService } from './models/storage-service';
-
+/**
+ * upload files endpoints
+ */
 @Controller('storage')
 export class StorageController {
   constructor(private readonly storageService: StorageService) {}

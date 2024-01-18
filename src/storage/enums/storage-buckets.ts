@@ -1,3 +1,6 @@
+/**
+ * @ignore
+ */
 export enum StorageBuckets {
-  test
+  test,
 }

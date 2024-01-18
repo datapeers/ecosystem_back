@@ -2,7 +2,9 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
-
+/**
+ * terms of use display for experts
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class TermsOfUse {
@@ -29,5 +31,7 @@ export class TermsOfUse {
   @Prop({ type: Date })
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const TermsOfUseSchema = SchemaFactory.createForClass(TermsOfUse);

@@ -2,6 +2,9 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 import { CreateContentInput } from './create-content.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-scalars';
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class UpdateContentInput extends PartialType(CreateContentInput) {
   @Field(() => ID)

@@ -3,7 +3,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { SchemaTypes } from 'mongoose';
 import { TableColumn } from 'src/shared/models/table-column';
-
+/**
+ * inner relationship between table and table configs
+ */
 @Schema()
 @ObjectType()
 export class TableConfig {
@@ -14,7 +16,7 @@ export class TableConfig {
   @Prop({ required: true })
   name: string;
 
-  @Field(() => String, { description: "Id of the parent table." })
+  @Field(() => String, { description: 'Id of the parent table.' })
   @Prop({ required: true, type: SchemaTypes.ObjectId })
   table: string;
 
@@ -26,9 +28,14 @@ export class TableConfig {
   @Prop({ type: Object })
   loadEvent: JSON;
 
-  @Field(() => Date, { description: "If set, The date the entity was deleted.", nullable: true })
+  @Field(() => Date, {
+    description: 'If set, The date the entity was deleted.',
+    nullable: true,
+  })
   @Prop()
   deletedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const TableConfigSchema = SchemaFactory.createForClass(TableConfig);

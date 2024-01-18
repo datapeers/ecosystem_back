@@ -17,36 +17,58 @@ export class UserConfigService {
     private readonly configNotificationsService: ConfigNotificationsService,
   ) {}
 
+  /**
+   *create user config
+   */
   async create(uid: string) {
     return this.userConfigModel.create({ uid, ...defaultUserConfig });
   }
 
+  /**
+   * find user config by uuid
+   */
   async findOne(uid: string) {
     const config = await this.userConfigModel.findOne({ uid }).lean();
-    if(!config) return this.create(uid);
+    if (!config) return this.create(uid);
     return {
       ...config,
       // Include additional configuration if any is added after it was created.
-      notifications: { ...defaultUserConfig.notifications, ...config?.notifications ?? {} }
+      notifications: {
+        ...defaultUserConfig.notifications,
+        ...(config?.notifications ?? {}),
+      },
     };
   }
 
+  /**
+   * update user config
+   */
   async update(updateUserConfigInput: UpdateUserConfigInput, user: User) {
     const currentConfig = await this.findOne(updateUserConfigInput.uid);
-    const updatePromises = Object.keys(currentConfig.notifications).map(async key => {
-      const newValue = updateUserConfigInput.notifications[key];
-      const oldValue = currentConfig.notifications[key];
-      if(oldValue == newValue) return;
-      const typeId = default_notification_types.find(t => t.type == key)._id.toString();
-      if(newValue) {
-        return this.configNotificationsService.removeExcludedUserForType(typeId, user.email);
-      } else {
-        return this.configNotificationsService.excludeUserForType(typeId, user.email);
-      }
-    });
+    const updatePromises = Object.keys(currentConfig.notifications).map(
+      async (key) => {
+        const newValue = updateUserConfigInput.notifications[key];
+        const oldValue = currentConfig.notifications[key];
+        if (oldValue == newValue) return;
+        const typeId = default_notification_types
+          .find((t) => t.type == key)
+          ._id.toString();
+        if (newValue) {
+          return this.configNotificationsService.removeExcludedUserForType(
+            typeId,
+            user.email,
+          );
+        } else {
+          return this.configNotificationsService.excludeUserForType(
+            typeId,
+            user.email,
+          );
+        }
+      },
+    );
     await Promise.all(updatePromises);
     const updatedConfig = {
-      ...updateUserConfigInput
+      ...updateUserConfigInput,
     };
     delete updatedConfig._id;
     delete updatedConfig.uid;

@@ -3,7 +3,9 @@ import { RolService } from './rol.service';
 import { Rol } from './entities/rol.entity';
 import { CreateRolInput } from './dto/create-rol.input';
 import { UpdateRolInput } from './dto/update-rol.input';
-
+/**
+ * @ignore
+ */
 @Resolver(() => Rol)
 export class RolResolver {
   constructor(private readonly rolService: RolService) {}

@@ -18,6 +18,9 @@ import { GraphQLJSONObject } from 'graphql-scalars';
 import { UserLogService } from 'src/user-log/user-log.service';
 import { UsersService } from 'src/users/users.service';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => ConfigurationApp)
 export class ConfigurationAppResolver {

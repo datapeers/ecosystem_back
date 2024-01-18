@@ -1,9 +1,18 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
-import { IsDefined, IsEmpty, IsEnum, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import {
+  IsDefined,
+  IsEmpty,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { FormCollections } from '../enums/form-collections';
 import { IFormDocument } from '../entities/form.entity';
 import { Type } from 'class-transformer';
-
+/**
+ * graphql input
+ */
 @InputType()
 export class UpdateFormInput {
   @Field(() => ID)
@@ -34,7 +43,7 @@ export class UpdateFormInput {
   @Field(() => [String], { nullable: true })
   @IsOptional()
   keys: string[];
-  
+
   @IsEmpty()
   deletedAt?: Date;
 
@@ -45,7 +54,9 @@ export class UpdateFormInput {
   @IsOptional()
   tags: string[];
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 class InputFormDocument implements IFormDocument {
   @Field(() => String)

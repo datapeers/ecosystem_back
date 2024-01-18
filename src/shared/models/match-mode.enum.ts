@@ -1,5 +1,7 @@
-import { registerEnumType } from "@nestjs/graphql";
-
+import { registerEnumType } from '@nestjs/graphql';
+/**
+ * @ignore
+ */
 export enum MatchMode {
   contains = 'contains',
   notContains = 'notContains',
@@ -8,7 +10,9 @@ export enum MatchMode {
   equals = 'equals',
   notEquals = 'notEquals',
 }
-
+/**
+ * @ignore
+ */
 registerEnumType(MatchMode, {
   name: 'MatchMode',
 });

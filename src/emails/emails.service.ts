@@ -24,14 +24,23 @@ export class EmailsService {
     this.logger.setContext(EmailsService.name);
   }
 
+  /**
+   * send one email
+   */
   async send(mail: SendEmailInput) {
     return this.emailService.send(mail);
   }
 
+  /**
+   * send one email by template
+   */
   async sendFromTemplate(templateInput: Template) {
     return this.emailService.sendFromTemplate(templateInput);
   }
 
+  /**
+   * send one email with ics file
+   */
   async sendIcs(
     mail: {
       to: string | string[];

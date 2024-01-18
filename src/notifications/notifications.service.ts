@@ -19,7 +19,9 @@ import { EmailNotificationTypes } from './types-notifications/model/email-notifi
 import { ConfigNotificationsService } from './config-notifications/config-notifications.service';
 import { ExpertEventSubmit } from 'src/events/dto/create-event.input';
 import { Event as EventEntity } from 'src/events/entities/event.entity';
-
+/**
+ * @ignore
+ */
 const pubSub = pubSubInstance;
 @Injectable()
 export class NotificationsService {
@@ -31,6 +33,10 @@ export class NotificationsService {
 
   _logger = new Logger(NotificationsService.name);
 
+  /**
+   * subscription channel in notification
+   * @ignore
+   */
   subscribe(
     user: AuthUser,
     others?:
@@ -55,6 +61,9 @@ export class NotificationsService {
     return pubSub.asyncIterator<any>(listTriggerNotifications);
   }
 
+  /**
+   * create a notification
+   */
   async create(createNotificationInput: CreateNotificationInput) {
     try {
       var newNotification = await this.notificationModel.create(
@@ -75,6 +84,9 @@ export class NotificationsService {
     }
   }
 
+  /**
+   * find notification by id
+   */
   async findOne(id: string) {
     try {
       var ans = await this.notificationModel.findOne({ _id: id });
@@ -87,6 +99,9 @@ export class NotificationsService {
     }
   }
 
+  /**
+   * find notification users
+   */
   findByUser(userId: string) {
     return this.notificationModel.find({
       target: { $regex: userId },
@@ -94,6 +109,9 @@ export class NotificationsService {
     });
   }
 
+  /**
+   * find notification by list
+   */
   async findNotificationsByTargets(targets: string[]) {
     const regexConditions = targets.map((target) => ({
       target: { $regex: target },
@@ -106,6 +124,9 @@ export class NotificationsService {
     return notifications;
   }
 
+  /**
+   * update notification
+   */
   async update(id: string, updateNotificationInput: UpdateNotificationInput) {
     try {
       await this.findOne(id);
@@ -125,7 +146,9 @@ export class NotificationsService {
       );
     }
   }
-
+  /**
+   * soft delete notification
+   */
   async remove(id: string) {
     const updatedType = await this.notificationModel
       .findOneAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
@@ -133,6 +156,9 @@ export class NotificationsService {
     return updatedType;
   }
 
+  /**
+   * create many notifications
+   */
   async createMany(createNotificationInput: CreateNotificationInput[]) {
     try {
       var newNotification = await this.notificationModel.insertMany(

@@ -1,7 +1,9 @@
-import { Field, ObjectType } from "@nestjs/graphql";
-import GraphQLJSON from "graphql-type-json";
-import { TableColumn } from "src/shared/models/table-column";
-
+import { Field, ObjectType } from '@nestjs/graphql';
+import GraphQLJSON from 'graphql-type-json';
+import { TableColumn } from 'src/shared/models/table-column';
+/**
+ * columns of tables
+ */
 @ObjectType()
 export class ColumnGroup {
   @Field()
@@ -10,6 +12,6 @@ export class ColumnGroup {
   @Field()
   key: string;
 
-  @Field(() => GraphQLJSON, { description: "Configurable columns." })
+  @Field(() => GraphQLJSON, { description: 'Configurable columns.' })
   columns: TableColumn[];
 }

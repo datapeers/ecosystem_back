@@ -1,6 +1,8 @@
 import { ConfigToColumn, RowConfigColumn } from '../models/row-config-column';
 import { TableColumnType } from '../models/table-column-type.enum';
-
+/**
+ * @ignore
+ */
 const convertFormToColumns = (
   rowsForm: any[],
   files: any[],
@@ -76,7 +78,9 @@ const convertFormToColumns = (
   }
   return displayColumnsTable.map(ConfigToColumn);
 };
-
+/**
+ * @ignore
+ */
 export function set_row(label: string, format: string, key: any, row?: any) {
   switch (format) {
     case 'textfield':
@@ -159,7 +163,9 @@ export function set_row(label: string, format: string, key: any, row?: any) {
       return new RowConfigColumn(label, TableColumnType.data, key, 'string');
   }
 }
-
+/**
+ * @ignore
+ */
 export function columnStartupsExpert() {
   return new RowConfigColumn(
     'Startups Asignadas',
@@ -168,7 +174,9 @@ export function columnStartupsExpert() {
     'string',
   );
 }
-
+/**
+ * @ignore
+ */
 export function columnsEvaluations() {
   return [
     new RowConfigColumn(
@@ -180,7 +188,9 @@ export function columnsEvaluations() {
     new RowConfigColumn('Estado', TableColumnType.data, 'state', 'string'),
   ];
 }
-
+/**
+ * @ignore
+ */
 export function columnsResourceReply() {
   return [
     new RowConfigColumn(
@@ -204,7 +214,9 @@ export function columnsResourceReply() {
     ),
   ];
 }
-
+/**
+ * @ignore
+ */
 export function columnsCommunities() {
   return [
     new RowConfigColumn(
@@ -221,7 +233,9 @@ export function columnsCommunities() {
     ),
   ];
 }
-
+/**
+ * @ignore
+ */
 export function columnsAnnouncementSelected() {
   return [
     new RowConfigColumn(
@@ -232,7 +246,9 @@ export function columnsAnnouncementSelected() {
     ),
   ];
 }
-
+/**
+ * @ignore
+ */
 export const tableUtilities = {
   convertFormToColumns,
   columnStartupsExpert,

@@ -1,5 +1,7 @@
 import { Readable } from 'stream';
-
+/**
+ * repository of storage service
+ */
 export abstract class StorageService {
   public abstract createPresignedUrl(
     key: string,

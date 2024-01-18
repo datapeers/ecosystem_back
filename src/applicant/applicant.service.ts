@@ -44,11 +44,18 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     private readonly invitationService: InvitationsService,
   ) {}
 
+  /**
+   * find doc applicant, is only intended to be used by websocket.
+   * @returns announcement
+   */
   async getDocument(id: string) {
     const document = await this.findOne(id);
     return document;
   }
 
+  /**
+   * create applicant document, is only intended to be used by websocket.
+   */
   async createDocument(submission: any, context?: any) {
     const data = {
       ...context,
@@ -58,6 +65,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return createdDocument;
   }
 
+  /**
+   * update applicant document, is only intended to be used by websocket.
+   */
   async updateDocument(id: string, submission: any, context: any) {
     const updatedDocument = await this.update(id, {
       item: submission,
@@ -65,6 +75,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return updatedDocument;
   }
 
+  /**
+   * find applicant document by type and state
+   */
   async findMany({
     announcement,
     state,
@@ -91,6 +104,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return applicants;
   }
 
+  /**
+   * find applicant documents by announcement
+   */
   async findByAnnouncement(
     filters: AnnouncementApplicantArgs,
   ): Promise<Applicant | null> {
@@ -108,6 +124,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return applicant;
   }
 
+  /**
+   * find numb of applicant documents
+   */
   async numbApplicants(announcement: string) {
     const applicants = await this.applicantModel
       .find(
@@ -121,6 +140,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return applicants.length;
   }
 
+  /**
+   * handle applicant documents by websocket
+   */
   async handleDocumentSubmit(
     submitAnnouncementDocInput: SubmitAnnouncementDocInput,
   ): Promise<any> {
@@ -145,6 +167,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return createdApplicant;
   }
 
+  /**
+   * upload files urls of applicant documents
+   */
   async uploadFile(
     id: string,
     document: FormFileSubmission,
@@ -168,6 +193,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return documents;
   }
 
+  /**
+   * find applicant documents by id and state
+   */
   async findOneByState({ id, state }: ApplicantArgs) {
     const applicants = await this.applicantModel.aggregate([
       { $match: { _id: new Types.ObjectId(id), 'states.type': state } },
@@ -195,6 +223,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return applicants[0];
   }
 
+  /**
+   * find applicant documents by id
+   */
   async findOne(id: string): Promise<Applicant> {
     const applicant = await this.applicantModel.findById(id);
     if (!applicant)
@@ -202,11 +233,17 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return applicant;
   }
 
+  /**
+   * create applicant document
+   */
   async create(data: Partial<Applicant>): Promise<Applicant> {
     const createdApplicant = await this.applicantModel.create(data);
     return createdApplicant;
   }
 
+  /**
+   * update applicant documents
+   */
   async update(id: string, data: Partial<Applicant>): Promise<Applicant> {
     await this.applicantModel
       .updateOne({ _id: id }, data, { new: true })
@@ -215,6 +252,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return doc;
   }
 
+  /**
+   * soft delete of many applicant document
+   */
   async delete(ids: string[]): Promise<UpdateResultPayload> {
     const updateResult = await this.applicantModel.updateMany(
       { _id: { $in: ids.map((id) => new Types.ObjectId(id)) } },
@@ -226,6 +266,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     };
   }
 
+  /**
+   * update states of many applicant document
+   */
   async updateState({ id, notes, documents, type }: UpdateApplicantStateInput) {
     const applicant = await this.findOne(id);
     let { states } = applicant;
@@ -235,6 +278,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return updateResult;
   }
 
+  /**
+   * update states of many applicant document to selected
+   */
   async selectedApplicant(
     selectApplicantsArgsInput: SelectApplicantsArgs,
     adminUser: User,
@@ -270,6 +316,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return updateResult;
   }
 
+  /**
+   * find applicant document for expert announcement, send email of invitation, and link new account of that expert to expert doc
+   */
   async inviteExpertApplicant(
     selectApplicantsArgsInput: SelectApplicantsArgs,
     adminUser: User,
@@ -301,6 +350,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return;
   }
 
+  /**
+   * find applicant document for startup announcement, send email of invitation, and link new account of that startup to startup doc
+   */
   async inviteApplicantStartup(
     selectApplicantsArgsInput: SelectApplicantsArgs,
     adminUser: User,
@@ -356,6 +408,9 @@ export class ApplicantService implements FormDocumentService<Applicant> {
     return entrepreneur;
   }
 
+  /**
+   * generates the necessary links between the documents of the entrepreneur and his startup that applied to announcement and its selected.
+   */
   async findStartupApplicant(
     selectApplicantsArgsInput,
     entrepreneurDoc: Entrepreneur,

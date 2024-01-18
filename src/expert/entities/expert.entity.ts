@@ -3,7 +3,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { SchemaTypes } from 'mongoose';
 import { User } from 'src/users/entities/user.entity';
-
+/**
+ * Expert docs
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Expert {
@@ -49,7 +51,9 @@ export class Expert {
   @Field(() => Boolean)
   isProspect: boolean;
 }
-
+/**
+ * relationship with phase
+ */
 @Schema()
 @ObjectType()
 export class PhaseExpertRelationship {
@@ -65,7 +69,9 @@ export class PhaseExpertRelationship {
   @Prop({ default: [] })
   startUps: StartupLink[];
 }
-
+/**
+ * relationship with startup
+ */
 @Schema()
 @ObjectType()
 export class StartupLink {
@@ -77,5 +83,7 @@ export class StartupLink {
   @Prop()
   name: string;
 }
-
+/**
+ * @ignore
+ */
 export const ExpertSchema = SchemaFactory.createForClass(Expert);

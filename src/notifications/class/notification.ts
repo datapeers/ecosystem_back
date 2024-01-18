@@ -1,7 +1,9 @@
 import * as moment from 'moment';
 import { NotificationTypes } from '../enum/notification-types.enum';
 import { NotificationStates } from '../enum/notification-states.enum';
-
+/**
+ * class notification global
+ */
 export class Notification {
   _id: string;
   text: string;

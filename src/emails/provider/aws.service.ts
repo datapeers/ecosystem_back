@@ -19,6 +19,9 @@ import {
 import { TemplateData } from '../templates/data';
 import { Event } from 'src/events/entities/event.entity';
 
+/**
+ * aws provider for emails
+ */
 export class AWSSESProvider implements EmailsRepository {
   private readonly templatesId: Record<EmailTemplates, string>;
   private readonly defaultVerifiedEmail: string;
@@ -28,7 +31,7 @@ export class AWSSESProvider implements EmailsRepository {
   private logger = new Logger(AWSSESProvider.name);
   constructor() {
     // Set api key
-    console.log(process.env.AWS_SES_REGION);
+    // console.log(process.env.AWS_SES_REGION);
     this.client = new SESClient({
       apiVersion: '2010-12-01',
       region: process.env.AWS_SES_REGION,
@@ -45,6 +48,9 @@ export class AWSSESProvider implements EmailsRepository {
     // };
   }
 
+  /**
+   * send one email
+   */
   async send(mail: SendEmailInput) {
     if (!this.client)
       throw new MethodNotAllowedException('This service is not available');
@@ -84,6 +90,9 @@ export class AWSSESProvider implements EmailsRepository {
     }
   }
 
+  /**
+   * send one email by template
+   */
   async sendFromTemplate(templateInput: Template) {
     //console.log(templateInput);
     const emailTemplate = new SendBulkTemplatedEmailCommand({
@@ -137,6 +146,9 @@ export class AWSSESProvider implements EmailsRepository {
   // } catch (ex) {
 
   // }
+  /**
+   * send one email with ics
+   */
   async sendIcs(
     mail: {
       to: string | string[];

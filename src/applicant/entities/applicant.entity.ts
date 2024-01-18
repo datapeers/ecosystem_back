@@ -5,6 +5,9 @@ import { User } from 'src/users/entities/user.entity';
 import { ApplicationStates } from '../enums/application-states.enum';
 import { FormFileSubmission } from 'src/forms/factories/form-file-submission';
 
+/**
+ * is the follow-up of an applicant to the announcement, with the documents and their status.
+ */
 @ObjectType()
 export class ApplicantState {
   @Field(() => String)
@@ -19,7 +22,9 @@ export class ApplicantState {
   @Prop({ required: true, enum: ApplicationStates })
   type: ApplicationStates;
 }
-
+/**
+ * when someone participates in a call for proposals this type of document is generated
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Applicant {
@@ -94,9 +99,13 @@ export class Applicant {
   @Prop({ type: Object })
   batch: Record<string, any>;
 }
-
+/**
+ * @ignore
+ */
 export const ApplicantSchema = SchemaFactory.createForClass(Applicant);
-
+/**
+ * extract token from header
+ */
 @ObjectType()
 export class Attachment implements IAttachment {
   @Field(() => String, { description: 'Name of the attachment file.' })
@@ -111,7 +120,9 @@ export class Attachment implements IAttachment {
   @Prop({ default: '' })
   key: string;
 }
-
+/**
+ * extract token from header
+ */
 export interface IAttachment {
   name: string;
   url: string;

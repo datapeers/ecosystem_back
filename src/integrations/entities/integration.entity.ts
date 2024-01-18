@@ -2,7 +2,9 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { TypeIntegration } from '../enum/types.enum';
-
+/**
+ * dynamic integrations with app
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Integration {
@@ -30,5 +32,7 @@ export class Integration {
   @Field(() => Date, { description: 'Date of last entity update.' })
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 export const IntegrationSchema = SchemaFactory.createForClass(Integration);

@@ -3,7 +3,9 @@ import { TicketCategoriesService } from './categories.service';
 import { TicketCategory } from './entities/category.entity';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
-
+/**
+ * @ignore
+ */
 @Resolver(() => TicketCategory)
 export class CategoriesResolver {
   constructor(private readonly categoriesService: TicketCategoriesService) {}

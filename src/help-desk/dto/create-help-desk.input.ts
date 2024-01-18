@@ -3,7 +3,9 @@ import { IsEnum, IsObject, IsString, MinLength } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
 import { TicketCategory } from '../enum/ticket-category.enum';
 import { IFileUpload } from 'src/shared/models/file';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class CreateHelpDeskInput {
   @Field(() => String)

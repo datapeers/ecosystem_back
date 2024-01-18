@@ -1,0 +1,2265 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ecosystem_back documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/default.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">ecosystem_back documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >ApplicantService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/applicant/applicant.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#create" >create</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#createDocument" >createDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#delete" >delete</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByAnnouncement" >findByAnnouncement</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findMany" >findMany</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findOne" >findOne</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findOneByState" >findOneByState</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findStartupApplicant" >findStartupApplicant</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDocument" >getDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#handleDocumentSubmit" >handleDocumentSubmit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#inviteApplicantStartup" >inviteApplicantStartup</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#inviteExpertApplicant" >inviteExpertApplicant</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#numbApplicants" >numbApplicants</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#selectedApplicant" >selectedApplicant</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#update" >update</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateDocument" >updateDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateState" >updateState</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#uploadFile" >uploadFile</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(applicantModel: <a href="../classes/Applicant.html" target="_self">Model&lt;Applicant&gt;</a>, expertService: <a href="../injectables/ExpertService.html" target="_self">ExpertService</a>, entrepreneurService: <a href="../injectables/EntrepreneurService.html" target="_self">EntrepreneurService</a>, startupService: <a href="../injectables/StartupService.html" target="_self">StartupService</a>, invitationService: <a href="../injectables/InvitationsService.html" target="_self">InvitationsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/applicant/applicant.service.ts:33</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>applicantModel</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Applicant.html" target="_self" >Model&lt;Applicant&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>expertService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ExpertService.html" target="_self" >ExpertService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>entrepreneurService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EntrepreneurService.html" target="_self" >EntrepreneurService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>startupService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StartupService.html" target="_self" >StartupService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>invitationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/InvitationsService.html" target="_self" >InvitationsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="create"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>create</b></span>
+                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>create(data: <a href="../classes/Applicant.html" target="_self">Partial&lt;Applicant&gt;</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="239"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:239</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create applicant document</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/Applicant.html" target="_self" >Partial&lt;Applicant&gt;</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Applicant.html" target="_self" >Promise&lt;Applicant&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>createDocument</b></span>
+                        <a href="#createDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createDocument(submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="59"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create applicant document, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="delete"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>delete</b></span>
+                        <a href="#delete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>delete(ids: string[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="258"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:258</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>soft delete of many applicant document</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;UpdateResultPayload&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByAnnouncement"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByAnnouncement</b></span>
+                        <a href="#findByAnnouncement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByAnnouncement(filters: <a href="../classes/AnnouncementApplicantArgs.html" target="_self">AnnouncementApplicantArgs</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="110"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:110</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find applicant documents by announcement</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>filters</td>
+                                            <td>
+                                                            <code><a href="../classes/AnnouncementApplicantArgs.html" target="_self" >AnnouncementApplicantArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Applicant.html" target="_self" >Promise&lt;Applicant | null&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findMany"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findMany</b></span>
+                        <a href="#findMany"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findMany(undefined: <a href="../classes/AnnouncementApplicantsArgs.html" target="_self">AnnouncementApplicantsArgs</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="81"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:81</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find applicant document by type and state</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/AnnouncementApplicantsArgs.html" target="_self" >AnnouncementApplicantsArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Applicant.html" target="_self" >Promise&lt;Applicant[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="229"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:229</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find applicant documents by id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Applicant.html" target="_self" >Promise&lt;Applicant&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOneByState"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOneByState</b></span>
+                        <a href="#findOneByState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOneByState(undefined: <a href="../classes/ApplicantArgs.html" target="_self">ApplicantArgs</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="199"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:199</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find applicant documents by id and state</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/ApplicantArgs.html" target="_self" >ApplicantArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findStartupApplicant"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findStartupApplicant</b></span>
+                        <a href="#findStartupApplicant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findStartupApplicant(selectApplicantsArgsInput, entrepreneurDoc: <a href="../classes/Entrepreneur.html" target="_self">Entrepreneur</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="414"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:414</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>generates the necessary links between the documents of the entrepreneur and his startup that applied to announcement and its selected.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>selectApplicantsArgsInput</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>entrepreneurDoc</td>
+                                            <td>
+                                                            <code><a href="../classes/Entrepreneur.html" target="_self" >Entrepreneur</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getDocument</b></span>
+                        <a href="#getDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="51"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc applicant, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>announcement</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleDocumentSubmit"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>handleDocumentSubmit</b></span>
+                        <a href="#handleDocumentSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleDocumentSubmit(submitAnnouncementDocInput: <a href="../classes/SubmitAnnouncementDocInput.html" target="_self">SubmitAnnouncementDocInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="146"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:146</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>handle applicant documents by websocket</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>submitAnnouncementDocInput</td>
+                                            <td>
+                                                            <code><a href="../classes/SubmitAnnouncementDocInput.html" target="_self" >SubmitAnnouncementDocInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="inviteApplicantStartup"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>inviteApplicantStartup</b></span>
+                        <a href="#inviteApplicantStartup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>inviteApplicantStartup(selectApplicantsArgsInput: <a href="../classes/SelectApplicantsArgs.html" target="_self">SelectApplicantsArgs</a>, adminUser: <a href="../classes/User.html" target="_self">User</a>, applicant: <a href="../classes/Applicant.html" target="_self">Applicant</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="356"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:356</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find applicant document for startup announcement, send email of invitation, and link new account of that startup to startup doc</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>selectApplicantsArgsInput</td>
+                                            <td>
+                                                            <code><a href="../classes/SelectApplicantsArgs.html" target="_self" >SelectApplicantsArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>adminUser</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicant</td>
+                                            <td>
+                                                            <code><a href="../classes/Applicant.html" target="_self" >Applicant</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="inviteExpertApplicant"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>inviteExpertApplicant</b></span>
+                        <a href="#inviteExpertApplicant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>inviteExpertApplicant(selectApplicantsArgsInput: <a href="../classes/SelectApplicantsArgs.html" target="_self">SelectApplicantsArgs</a>, adminUser: <a href="../classes/User.html" target="_self">User</a>, applicant: <a href="../classes/Applicant.html" target="_self">Applicant</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="322"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:322</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find applicant document for expert announcement, send email of invitation, and link new account of that expert to expert doc</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>selectApplicantsArgsInput</td>
+                                            <td>
+                                                            <code><a href="../classes/SelectApplicantsArgs.html" target="_self" >SelectApplicantsArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>adminUser</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>applicant</td>
+                                            <td>
+                                                            <code><a href="../classes/Applicant.html" target="_self" >Applicant</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="numbApplicants"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>numbApplicants</b></span>
+                        <a href="#numbApplicants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>numbApplicants(announcement: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find numb of applicant documents</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>announcement</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedApplicant"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>selectedApplicant</b></span>
+                        <a href="#selectedApplicant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>selectedApplicant(selectApplicantsArgsInput: <a href="../classes/SelectApplicantsArgs.html" target="_self">SelectApplicantsArgs</a>, adminUser: <a href="../classes/User.html" target="_self">User</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="284"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:284</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update states of many applicant document to selected</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>selectApplicantsArgsInput</td>
+                                            <td>
+                                                            <code><a href="../classes/SelectApplicantsArgs.html" target="_self" >SelectApplicantsArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>adminUser</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >User</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="update"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>update</b></span>
+                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, data: <a href="../classes/Applicant.html" target="_self">Partial&lt;Applicant&gt;</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="247"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:247</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update applicant documents</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/Applicant.html" target="_self" >Partial&lt;Applicant&gt;</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Applicant.html" target="_self" >Promise&lt;Applicant&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateDocument</b></span>
+                        <a href="#updateDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="71"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:71</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update applicant document, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateState"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateState</b></span>
+                        <a href="#updateState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateState(undefined: <a href="../classes/UpdateApplicantStateInput.html" target="_self">UpdateApplicantStateInput</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="272"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:272</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update states of many applicant document</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/UpdateApplicantStateInput.html" target="_self" >UpdateApplicantStateInput</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uploadFile"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>uploadFile</b></span>
+                        <a href="#uploadFile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>uploadFile(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, document: <a href="../classes/Form.html" target="_self">FormFileSubmission</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="173"
+                                    class="link-to-prism">src/applicant/applicant.service.ts:173</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>upload files urls of applicant documents</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>document</td>
+                                            <td>
+                                                            <code><a href="../classes/Form.html" target="_self" >FormFileSubmission</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Form.html" target="_self" >Promise&lt;FormFileSubmission[]&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
+  InternalServerErrorException,
+  Inject,
+  forwardRef,
+} from &#x27;@nestjs/common&#x27;;
+import { InjectModel } from &#x27;@nestjs/mongoose&#x27;;
+import { Model, Types } from &#x27;mongoose&#x27;;
+import { FormDocumentService } from &#x27;src/forms/factories/form-document-service&#x27;;
+import { Applicant } from &#x27;./entities/applicant.entity&#x27;;
+import { UpdateResultPayload } from &#x27;src/shared/models/update-result&#x27;;
+import { AnnouncementApplicantArgs } from &#x27;./args/announcement-applicant.args&#x27;;
+import { SubmitAnnouncementDocInput } from &#x27;src/announcements/dto/submit-announcement-doc.input&#x27;;
+import { FormFileSubmission } from &#x27;src/forms/factories/form-file-submission&#x27;;
+import { UpdateApplicantStateInput } from &#x27;./dto/update-applicant-state.input&#x27;;
+import { AnnouncementApplicantsArgs } from &#x27;./args/announcement-applicants.args&#x27;;
+import { ApplicantArgs } from &#x27;./args/applicant.args&#x27;;
+import { AnnouncementTargets } from &#x27;src/announcements/enums/announcement-targets.enum&#x27;;
+import { ExpertService } from &#x27;src/expert/expert.service&#x27;;
+import { StartupService } from &#x27;src/startup/startup.service&#x27;;
+import { InvitationsService } from &#x27;src/invitations/invitations.service&#x27;;
+import { ValidRoles } from &#x27;src/auth/enums/valid-roles.enum&#x27;;
+import { ApplicationStates } from &#x27;./enums/application-states.enum&#x27;;
+import { User } from &#x27;src/users/entities/user.entity&#x27;;
+import { SelectApplicantsArgs } from &#x27;./args/select-applicants.args&#x27;;
+import { EntrepreneurService } from &#x27;src/entrepreneur/entrepreneur.service&#x27;;
+import { Entrepreneur } from &#x27;src/entrepreneur/entities/entrepreneur.entity&#x27;;
+import { Startup } from &#x27;src/startup/entities/startup.entity&#x27;;
+@Injectable()
+export class ApplicantService implements FormDocumentService&lt;Applicant&gt; {
+  constructor(
+    @InjectModel(Applicant.name)
+    private readonly applicantModel: Model&lt;Applicant&gt;,
+    @Inject(forwardRef(() &#x3D;&gt; ExpertService))
+    private readonly expertService: ExpertService,
+    @Inject(forwardRef(() &#x3D;&gt; EntrepreneurService))
+    private readonly entrepreneurService: EntrepreneurService,
+    @Inject(forwardRef(() &#x3D;&gt; StartupService))
+    private readonly startupService: StartupService,
+    @Inject(forwardRef(() &#x3D;&gt; InvitationsService))
+    private readonly invitationService: InvitationsService,
+  ) {}
+
+  /**
+   * find doc applicant, is only intended to be used by websocket.
+   * @returns announcement
+   */
+  async getDocument(id: string) {
+    const document &#x3D; await this.findOne(id);
+    return document;
+  }
+
+  /**
+   * create applicant document, is only intended to be used by websocket.
+   */
+  async createDocument(submission: any, context?: any) {
+    const data &#x3D; {
+      ...context,
+      item: submission,
+    };
+    const createdDocument &#x3D; await this.create(data);
+    return createdDocument;
+  }
+
+  /**
+   * update applicant document, is only intended to be used by websocket.
+   */
+  async updateDocument(id: string, submission: any, context: any) {
+    const updatedDocument &#x3D; await this.update(id, {
+      item: submission,
+    });
+    return updatedDocument;
+  }
+
+  /**
+   * find applicant document by type and state
+   */
+  async findMany({
+    announcement,
+    state,
+  }: AnnouncementApplicantsArgs): Promise&lt;Applicant[]&gt; {
+    const applicants &#x3D; await this.applicantModel.aggregate([
+      { $match: { announcement, &#x27;states.type&#x27;: state } },
+      {
+        $addFields: {
+          state: {
+            $filter: {
+              input: &#x27;$states&#x27;,
+              as: &#x27;state&#x27;,
+              cond: { $eq: [&#x27;$$state.type&#x27;, state] },
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          state: { $arrayElemAt: [&#x27;$state&#x27;, 0] },
+        },
+      },
+    ]);
+    return applicants;
+  }
+
+  /**
+   * find applicant documents by announcement
+   */
+  async findByAnnouncement(
+    filters: AnnouncementApplicantArgs,
+  ): Promise&lt;Applicant | null&gt; {
+    const applicant &#x3D; await this.applicantModel
+      .findOne({
+        deletedAt: null,
+        announcement: filters.announcement,
+        participant: filters.participant,
+      })
+      .lean();
+    if (!applicant)
+      throw new NotFoundException(
+        &#x60;Couldn&#x27;t find applicant for announcement ${filters.announcement}&#x60;,
+      );
+    return applicant;
+  }
+
+  /**
+   * find numb of applicant documents
+   */
+  async numbApplicants(announcement: string) {
+    const applicants &#x3D; await this.applicantModel
+      .find(
+        {
+          deletedAt: null,
+          announcement: announcement,
+        },
+        { _id: 1 },
+      )
+      .lean();
+    return applicants.length;
+  }
+
+  /**
+   * handle applicant documents by websocket
+   */
+  async handleDocumentSubmit(
+    submitAnnouncementDocInput: SubmitAnnouncementDocInput,
+  ): Promise&lt;any&gt; {
+    let docParticipant &#x3D; submitAnnouncementDocInput.participant;
+    if (
+      submitAnnouncementDocInput.announcementTarget &#x3D;&#x3D;&#x3D;
+      AnnouncementTargets.experts
+    ) {
+      const expertDoc &#x3D; await this.expertService.createDocument(
+        submitAnnouncementDocInput.submission,
+        {},
+      );
+      docParticipant &#x3D; expertDoc._id.toString();
+    }
+    const createdApplicant &#x3D; await this.applicantModel.create({
+      announcement: submitAnnouncementDocInput.announcement,
+      participant: docParticipant,
+      item: submitAnnouncementDocInput.submission,
+    });
+    if (!createdApplicant)
+      throw new InternalServerErrorException(&#x27;Failed to create applicant&#x27;);
+    return createdApplicant;
+  }
+
+  /**
+   * upload files urls of applicant documents
+   */
+  async uploadFile(
+    id: string,
+    document: FormFileSubmission,
+  ): Promise&lt;FormFileSubmission[]&gt; {
+    const applicantDoc &#x3D; await this.findOne(id);
+    let documents &#x3D; applicantDoc?.documents ?? [];
+    if (documents.some((doc) &#x3D;&gt; doc.key &#x3D;&#x3D;&#x3D; document.key)) {
+      documents &#x3D; documents.map((doc) &#x3D;&gt; {
+        if (doc.key &#x3D;&#x3D;&#x3D; document.key) {
+          return document;
+        }
+        return doc;
+      });
+    } else {
+      documents.push(document);
+    }
+    await this.applicantModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { documents } },
+    );
+    return documents;
+  }
+
+  /**
+   * find applicant documents by id and state
+   */
+  async findOneByState({ id, state }: ApplicantArgs) {
+    const applicants &#x3D; await this.applicantModel.aggregate([
+      { $match: { _id: new Types.ObjectId(id), &#x27;states.type&#x27;: state } },
+      {
+        $addFields: {
+          state: {
+            $filter: {
+              input: &#x27;$states&#x27;,
+              as: &#x27;state&#x27;,
+              cond: { $eq: [&#x27;$$state.type&#x27;, state] },
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          state: { $arrayElemAt: [&#x27;$state&#x27;, 0] },
+        },
+      },
+    ]);
+    if (!applicants.length)
+      throw new NotFoundException(
+        &#x60;Couldn&#x27;t find applicant with id ${id} and state ${state}&#x60;,
+      );
+    return applicants[0];
+  }
+
+  /**
+   * find applicant documents by id
+   */
+  async findOne(id: string): Promise&lt;Applicant&gt; {
+    const applicant &#x3D; await this.applicantModel.findById(id);
+    if (!applicant)
+      throw new NotFoundException(&#x60;Couldn&#x27;t find applicant with id ${id}&#x60;);
+    return applicant;
+  }
+
+  /**
+   * create applicant document
+   */
+  async create(data: Partial&lt;Applicant&gt;): Promise&lt;Applicant&gt; {
+    const createdApplicant &#x3D; await this.applicantModel.create(data);
+    return createdApplicant;
+  }
+
+  /**
+   * update applicant documents
+   */
+  async update(id: string, data: Partial&lt;Applicant&gt;): Promise&lt;Applicant&gt; {
+    await this.applicantModel
+      .updateOne({ _id: id }, data, { new: true })
+      .lean();
+    const doc &#x3D; await this.findOne(id);
+    return doc;
+  }
+
+  /**
+   * soft delete of many applicant document
+   */
+  async delete(ids: string[]): Promise&lt;UpdateResultPayload&gt; {
+    const updateResult &#x3D; await this.applicantModel.updateMany(
+      { _id: { $in: ids.map((id) &#x3D;&gt; new Types.ObjectId(id)) } },
+      { deletedAt: Date.now() },
+    );
+    return {
+      ...updateResult,
+      upsertedId: updateResult.upsertedId?.toString(),
+    };
+  }
+
+  /**
+   * update states of many applicant document
+   */
+  async updateState({ id, notes, documents, type }: UpdateApplicantStateInput) {
+    const applicant &#x3D; await this.findOne(id);
+    let { states } &#x3D; applicant;
+    states &#x3D; states.filter((state) &#x3D;&gt; state.type !&#x3D; type);
+    states.push({ notes, documents, type });
+    const updateResult &#x3D; await this.update(id, { states });
+    return updateResult;
+  }
+
+  /**
+   * update states of many applicant document to selected
+   */
+  async selectedApplicant(
+    selectApplicantsArgsInput: SelectApplicantsArgs,
+    adminUser: User,
+  ) {
+    const applicant &#x3D; await this.findOne(selectApplicantsArgsInput.idApplicant);
+    switch (selectApplicantsArgsInput.typeApplicant) {
+      case AnnouncementTargets.entrepreneurs:
+        await this.inviteApplicantStartup(
+          selectApplicantsArgsInput,
+          adminUser,
+          applicant,
+        );
+        break;
+      case AnnouncementTargets.experts:
+        await this.inviteExpertApplicant(
+          selectApplicantsArgsInput,
+          adminUser,
+          applicant,
+        );
+        break;
+      default:
+        break;
+    }
+    let { states } &#x3D; applicant;
+    states.push({ notes: &#x27;&#x27;, documents: [], type: ApplicationStates.selected });
+    const updateResult &#x3D; await this.update(applicant._id, {
+      states,
+      batch: {
+        idDoc: selectApplicantsArgsInput.idBatch,
+        nombre: selectApplicantsArgsInput.nameBatch,
+      },
+    });
+    return updateResult;
+  }
+
+  /**
+   * find applicant document for expert announcement, send email of invitation, and link new account of that expert to expert doc
+   */
+  async inviteExpertApplicant(
+    selectApplicantsArgsInput: SelectApplicantsArgs,
+    adminUser: User,
+    applicant: Applicant,
+  ) {
+    const prevInvitation &#x3D; await this.invitationService.tryFindOneByEmail(
+      applicant.item[selectApplicantsArgsInput.metadata[&#x27;emailField&#x27;]],
+    );
+    if (prevInvitation) {
+      throw new BadRequestException(
+        &#x27;Este email ya ha sido invitado a entrar en ecosystem, por favor revizar la sección de invitaciones&#x27;,
+      );
+    }
+    const invitationExpert &#x3D; await this.invitationService.create(
+      {
+        email: applicant.item[&#x27;correoElectronico&#x27;],
+        rol: ValidRoles.expert,
+      },
+      adminUser,
+    );
+    await this.expertService.assignAccountAndLinkBatch(
+      invitationExpert.metadata[&#x27;uidAccount&#x27;],
+      {
+        phaseId: selectApplicantsArgsInput.idBatch,
+        name: selectApplicantsArgsInput.nameBatch,
+        experts: [applicant.participant],
+      },
+    );
+    return;
+  }
+
+  /**
+   * find applicant document for startup announcement, send email of invitation, and link new account of that startup to startup doc
+   */
+  async inviteApplicantStartup(
+    selectApplicantsArgsInput: SelectApplicantsArgs,
+    adminUser: User,
+    applicant: Applicant,
+  ) {
+    let entrepreneur: Entrepreneur;
+    if (!applicant.participant || applicant.participant &#x3D;&#x3D;&#x3D; &#x27;undefined&#x27;) {
+      let item: any &#x3D; {
+        nombre: applicant.item[selectApplicantsArgsInput.metadata[&#x27;nameField&#x27;]],
+        email: applicant.item[selectApplicantsArgsInput.metadata[&#x27;emailField&#x27;]],
+      };
+      entrepreneur &#x3D; await this.entrepreneurService.create({
+        item,
+      });
+      await this.update(applicant._id, { participant: entrepreneur._id });
+    } else {
+      entrepreneur &#x3D; await this.entrepreneurService.findOne(
+        applicant.participant,
+      );
+    }
+    let startup &#x3D; await this.findStartupApplicant(
+      selectApplicantsArgsInput,
+      entrepreneur,
+    );
+    const prevInvitation &#x3D; await this.invitationService.tryFindOneByEmail(
+      applicant.item[selectApplicantsArgsInput.metadata[&#x27;emailField&#x27;]],
+    );
+    if (prevInvitation) {
+      throw new BadRequestException(
+        &#x27;Este email ya ha sido invitado a entrar en ecosystem, por favor revizar la sección de invitaciones&#x27;,
+      );
+    }
+    // Participant have entrepreneur and a STARTUP
+    const invitationExpert &#x3D; await this.invitationService.create(
+      {
+        email: applicant.item[selectApplicantsArgsInput.metadata[&#x27;emailField&#x27;]],
+        rol: ValidRoles.user,
+      },
+      adminUser,
+      {
+        idBatch: selectApplicantsArgsInput.idBatch,
+        idApplicant: selectApplicantsArgsInput.idApplicant,
+      },
+    );
+    await this.entrepreneurService.update(entrepreneur._id.toString(), {
+      accountId: invitationExpert.metadata[&#x27;uidAccount&#x27;],
+    });
+    await this.startupService.linkWithPhase({
+      phaseId: selectApplicantsArgsInput.idBatch,
+      name: selectApplicantsArgsInput.nameBatch,
+      startups: [startup._id.toString()],
+    });
+    return entrepreneur;
+  }
+
+  /**
+   * generates the necessary links between the documents of the entrepreneur and his startup that applied to announcement and its selected.
+   */
+  async findStartupApplicant(
+    selectApplicantsArgsInput,
+    entrepreneurDoc: Entrepreneur,
+  ) {
+    if (
+      selectApplicantsArgsInput.metadata[&#x27;phaseBase&#x27;] !&#x3D;&#x3D;
+        &#x27;65242ea3baa24cae19bd5baf&#x27; &amp;&amp;
+      entrepreneurDoc.startups.length &#x3D;&#x3D;&#x3D; 0
+    )
+      throw new ForbiddenException(
+        &#x60;No se puede agregar un participante sin startup a una fase superior a la 1&#x60;,
+      );
+    if (
+      selectApplicantsArgsInput.metadata[&#x27;phaseBase&#x27;] &#x3D;&#x3D;&#x3D;
+        &#x27;65242ea3baa24cae19bd5baf&#x27; &amp;&amp;
+      entrepreneurDoc.startups.length &#x3D;&#x3D;&#x3D; 0
+    ) {
+      // If the batch its phase 1 create generic startup
+      const docStartup &#x3D; await this.startupService.genericStartup();
+      await this.startupService.linkStartupsAndEntrepreneurs(
+        [docStartup._id.toString()],
+        [entrepreneurDoc._id.toString()],
+      );
+      return docStartup;
+    } else {
+      const docStartupEntrepreneur &#x3D; await this.startupService.findOne(
+        entrepreneurDoc.startups[0]._id.toString(),
+      );
+      return docStartupEntrepreneur;
+    }
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'ApplicantService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

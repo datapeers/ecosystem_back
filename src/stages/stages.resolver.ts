@@ -5,7 +5,9 @@ import { CreateStageInput } from './dto/create-stage.input';
 import { UpdateStageInput } from './dto/update-stage.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => Stage)
 export class StagesResolver {

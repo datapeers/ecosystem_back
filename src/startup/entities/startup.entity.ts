@@ -3,7 +3,9 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { SchemaTypes } from 'mongoose';
 import { User } from 'src/users/entities/user.entity';
-
+/**
+ * startup docs
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Startup {
@@ -49,7 +51,9 @@ export class Startup {
   @Prop({ default: '' })
   thumbnail: string;
 }
-
+/**
+ * relationship with entrepreneurs
+ */
 @Schema()
 @ObjectType()
 export class EntrepreneurRelationship {
@@ -73,7 +77,9 @@ export class EntrepreneurRelationship {
   @Prop()
   state: string;
 }
-
+/**
+ * relationship with phases
+ */
 @Schema()
 @ObjectType()
 export class PhaseRelationship {
@@ -89,5 +95,7 @@ export class PhaseRelationship {
   @Prop()
   state: string;
 }
-
+/**
+ * @ignore
+ */
 export const StartupSchema = SchemaFactory.createForClass(Startup);

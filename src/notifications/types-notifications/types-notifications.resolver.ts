@@ -1,7 +1,9 @@
 import { Resolver, Mutation } from '@nestjs/graphql';
 import { TypesNotificationsService } from './types-notifications.service';
 import { TypesNotification } from './entities/types-notification.entity';
-
+/**
+ * @ignore
+ */
 @Resolver(() => TypesNotification)
 export class TypesNotificationsResolver {
   constructor(

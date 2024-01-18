@@ -12,26 +12,44 @@ export class ParticipationEventsService {
     private readonly participationEventModel: Model<ParticipationEvent>,
   ) {}
 
+  /**
+   * create a register of participant event
+   */
   create(createParticipationEventInput: CreateParticipationEventInput) {
     return this.participationEventModel.create(createParticipationEventInput);
   }
 
+  /**
+   * find all registers
+   */
   findAll() {
     return this.participationEventModel.find({});
   }
 
+  /**
+   * find participation register by id
+   */
   findOne(id: string) {
     return this.participationEventModel.findById(id).lean();
   }
 
+  /**
+   * find participation register by event
+   */
   findByEvent(event: string) {
     return this.participationEventModel.find({ event }).lean();
   }
 
+  /**
+   * find participation register by event and participant
+   */
   findByEventAndParticipant(event: string, participant: string) {
     return this.participationEventModel.findOne({ event, participant }).lean();
   }
 
+  /**
+   * update participation register
+   */
   async update(
     id: string,
     updateParticipationEventInput: UpdateParticipationEventInput,

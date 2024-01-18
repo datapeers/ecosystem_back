@@ -3,7 +3,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types, Document } from 'mongoose';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { ResourceType } from '../enums/resources-types';
-
+/**
+ * resources like homeworks, downloadable and more
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Resource {
@@ -49,5 +51,7 @@ export class Resource {
   @Field(() => String)
   type: ResourceType;
 }
-
+/**
+ * @ignore
+ */
 export const ResourceSchema = SchemaFactory.createForClass(Resource);

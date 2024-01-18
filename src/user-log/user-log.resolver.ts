@@ -14,7 +14,9 @@ import { GqlAuthGuard } from 'src/auth/guards/jwt-gql-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import GraphQLJSON from 'graphql-type-json';
-
+/**
+ * @ignore
+ */
 @UseGuards(GqlAuthGuard)
 @Resolver(() => UserLog)
 export class UserLogResolver {

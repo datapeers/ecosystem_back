@@ -6,11 +6,15 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthService } from '../auth.service';
-
+/**
+ * main function to protect many request by user logged
+ */
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
   constructor(private readonly authService: AuthService) {}
-
+  /**
+   * get user account by token in header
+   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req;
@@ -24,7 +28,9 @@ export class GqlAuthGuard implements CanActivate {
     request.rol = rol;
     return request;
   }
-
+  /**
+   * extract token from header
+   */
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers['authorization']?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;

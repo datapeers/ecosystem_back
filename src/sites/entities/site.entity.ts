@@ -1,8 +1,8 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { GraphQLJSONObject } from 'graphql-scalars';
-import { SchemaTypes } from 'mongoose';
-
+/**
+ * sites in dashboard
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class Site {
@@ -72,7 +72,9 @@ export class Site {
   @Field(() => Date, { description: 'Update date of the entity.' })
   updatedAt: Date;
 }
-
+/**
+ * @ignore
+ */
 @Schema()
 @ObjectType()
 export class ServicesSiteLink {
@@ -96,7 +98,9 @@ export class ServicesSiteLink {
   // @Prop({ type: SchemaTypes.Mixed, required: true })
   // coords: any;
 }
-
+/**
+ * contact relationship
+ */
 @Schema()
 @ObjectType()
 export class ContactServiceLink {
@@ -120,5 +124,7 @@ export class ContactServiceLink {
   // @Prop({ type: SchemaTypes.Mixed, required: true })
   // coords: any;
 }
-
+/**
+ * @ignore
+ */
 export const SiteSchema = SchemaFactory.createForClass(Site);

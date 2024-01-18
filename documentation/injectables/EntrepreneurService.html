@@ -1,0 +1,2724 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ecosystem_back documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/default.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avaoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+
+               if ($darkModeToggles.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">ecosystem_back documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >EntrepreneurService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/entrepreneur/entrepreneur.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#virtualFields" >virtualFields</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#create" >create</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#createDocument" >createDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#delete" >delete</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#downloadByRequest" >downloadByRequest</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findAll" >findAll</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findByAccount" >findByAccount</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findMany" >findMany</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findManyIdsByRequest" >findManyIdsByRequest</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findManyPage" >findManyPage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#findOne" >findOne</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#getDocument" >getDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#linkEntrepreneursAndBusinesses" >linkEntrepreneursAndBusinesses</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#linkEntrepreneursAndStartups" >linkEntrepreneursAndStartups</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#linkWithBusinesses" >linkWithBusinesses</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#linkWithBusinessesByRequest" >linkWithBusinessesByRequest</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#linkWithStartups" >linkWithStartups</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#linkWithStartupsByRequest" >linkWithStartupsByRequest</a>
+                            </li>
+                            <li>
+                                <a href="#unlinkStartup" >unlinkStartup</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#update" >update</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateDocument" >updateDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updatePhasesForStartupsRelationships" >updatePhasesForStartupsRelationships</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updatePipelineForUser" >updatePipelineForUser</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(entrepreneurModel: <a href="../classes/Entrepreneur.html" target="_self">Model&lt;Entrepreneur&gt;</a>, businessService: <a href="../injectables/BusinessService.html" target="_self">BusinessService</a>, startupService: <a href="../injectables/StartupService.html" target="_self">StartupService</a>, expertService: <a href="../injectables/ExpertService.html" target="_self">ExpertService</a>, tableConfigService: <a href="../injectables/TableConfigService.html" target="_self">TableConfigService</a>, downloadService: <a href="../injectables/DownloadsService.html" target="_self">DownloadsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:35</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>entrepreneurModel</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Entrepreneur.html" target="_self" >Model&lt;Entrepreneur&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>businessService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/BusinessService.html" target="_self" >BusinessService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>startupService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StartupService.html" target="_self" >StartupService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>expertService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ExpertService.html" target="_self" >ExpertService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>tableConfigService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TableConfigService.html" target="_self" >TableConfigService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>downloadService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DownloadsService.html" target="_self" >DownloadsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="create"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>create</b></span>
+                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>create(data: <a href="../classes/Entrepreneur.html" target="_self">Partial&lt;Entrepreneur&gt;</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="252"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:252</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create entrepreneur doc</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/Entrepreneur.html" target="_self" >Partial&lt;Entrepreneur&gt;</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Entrepreneur.html" target="_self" >Promise&lt;Entrepreneur&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>createDocument</b></span>
+                        <a href="#createDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createDocument(submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="88"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:88</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>create doc entrepreneur, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="delete"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>delete</b></span>
+                        <a href="#delete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>delete(ids: string[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="297"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:297</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>soft delete of many entrepreneurs</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;UpdateResultPayload&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="downloadByRequest"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>downloadByRequest</b></span>
+                        <a href="#downloadByRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>downloadByRequest(undefined: <a href="../classes/Download.html" target="_self">DownloadRequestArgs</a>, user: <a href="../classes/User.html" target="_self">AuthUser</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="432"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:432</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>download table of entrepreneurs</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/Download.html" target="_self" >DownloadRequestArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Download.html" target="_self" >Promise&lt;DownloadResult&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findAll"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findAll</b></span>
+                        <a href="#findAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findAll()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="108"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:108</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find all entrepreneur docs</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Entrepreneur.html" target="_self" >Promise&lt;Entrepreneur[]&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findByAccount"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findByAccount</b></span>
+                        <a href="#findByAccount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findByAccount(accountId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="245"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:245</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find entrepreneurs by uid account</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>accountId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findMany"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findMany</b></span>
+                        <a href="#findMany"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findMany(ids: string[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="221"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:221</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find many entrepreneurs by ids</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findManyIdsByRequest"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findManyIdsByRequest</b></span>
+                        <a href="#findManyIdsByRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findManyIdsByRequest(request: PageRequest, user: <a href="../classes/User.html" target="_self">AuthUser</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="168"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:168</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc entrepreneur paginated filtered</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>request</td>
+                                            <td>
+                                                        <code>PageRequest</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string[]&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findManyPage"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findManyPage</b></span>
+                        <a href="#findManyPage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findManyPage(request: PageRequest, user: <a href="../classes/User.html" target="_self">AuthUser</a>, outputProjection?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="118"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:118</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc entrepreneur paginated</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>request</td>
+                                            <td>
+                                                        <code>PageRequest</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>outputProjection</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Entrepreneur.html" target="_self" >Promise&lt;PaginatedResult&lt;Entrepreneur&gt;&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findOne"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>findOne</b></span>
+                        <a href="#findOne"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findOne(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="233"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:233</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find entrepreneur by id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Entrepreneur.html" target="_self" >Promise&lt;Entrepreneur&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>getDocument</b></span>
+                        <a href="#getDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>find doc entrepreneur, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="linkEntrepreneursAndBusinesses"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>linkEntrepreneursAndBusinesses</b></span>
+                        <a href="#linkEntrepreneursAndBusinesses"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>linkEntrepreneursAndBusinesses(ids: string[], businesses: string[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="322"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:322</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>link list of entrepreneur to business in two ways</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>businesses</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="linkEntrepreneursAndStartups"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>linkEntrepreneursAndStartups</b></span>
+                        <a href="#linkEntrepreneursAndStartups"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>linkEntrepreneursAndStartups(ids: string[], startups: string[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="361"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:361</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>startups</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="linkWithBusinesses"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>linkWithBusinesses</b></span>
+                        <a href="#linkWithBusinesses"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>linkWithBusinesses(ids: string[], businessesRelationships: BusinessRelationship[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="416"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:416</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>link list of entrepreneur to business only by property</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>businessesRelationships</td>
+                                            <td>
+                                                        <code>BusinessRelationship[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;UpdateResultPayload&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="linkWithBusinessesByRequest"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>linkWithBusinessesByRequest</b></span>
+                        <a href="#linkWithBusinessesByRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>linkWithBusinessesByRequest(undefined: <a href="../classes/LinkWithTargetsByRequestArgs.html" target="_self">LinkWithTargetsByRequestArgs</a>, user: <a href="../classes/User.html" target="_self">AuthUser</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="311"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:311</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>link list of entrepreneur to business in two ways by table</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/LinkWithTargetsByRequestArgs.html" target="_self" >LinkWithTargetsByRequestArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="linkWithStartups"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>linkWithStartups</b></span>
+                        <a href="#linkWithStartups"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>linkWithStartups(ids: string[], startupsRelationships: StartupRelationship[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="270"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:270</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>link list of entrepreneur to business and marked leaved the other startup links</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ids</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>startupsRelationships</td>
+                                            <td>
+                                                        <code>StartupRelationship[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;UpdateResultPayload&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="linkWithStartupsByRequest"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>linkWithStartupsByRequest</b></span>
+                        <a href="#linkWithStartupsByRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>linkWithStartupsByRequest(undefined: <a href="../classes/LinkWithTargetsByRequestArgs.html" target="_self">LinkWithTargetsByRequestArgs</a>, user: <a href="../classes/User.html" target="_self">AuthUser</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="353"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:353</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                            <code><a href="../classes/LinkWithTargetsByRequestArgs.html" target="_self" >LinkWithTargetsByRequestArgs</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="unlinkStartup"></a>
+                    <span class="name">
+                        <span ><b>unlinkStartup</b></span>
+                        <a href="#unlinkStartup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>unlinkStartup(entrepreneurId, startupId)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="497"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:497</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update states of startups entrepreneurs linked to a batch to leaved</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>entrepreneurId</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>startupId</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="update"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>update</b></span>
+                        <a href="#update"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>update(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, data: <a href="../classes/Entrepreneur.html" target="_self">Partial&lt;Entrepreneur&gt;</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="260"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:260</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update entrepreneur doc</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="../classes/Entrepreneur.html" target="_self" >Partial&lt;Entrepreneur&gt;</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/Entrepreneur.html" target="_self" >Promise&lt;Entrepreneur&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDocument"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updateDocument</b></span>
+                        <a href="#updateDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateDocument(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submission: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, context: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="100"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:100</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update doc entrepreneur, is only intended to be used by websocket.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>submission</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>context</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updatePhasesForStartupsRelationships"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updatePhasesForStartupsRelationships</b></span>
+                        <a href="#updatePhasesForStartupsRelationships"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updatePhasesForStartupsRelationships(relationships: StartupRelationship[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="460"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:460</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>update states of startups entrepreneurs linked to a batch</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>relationships</td>
+                                            <td>
+                                                        <code>StartupRelationship[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updatePipelineForUser"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>updatePipelineForUser</b></span>
+                        <a href="#updatePipelineForUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updatePipelineForUser(aggregationPipeline: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, user: <a href="../classes/User.html" target="_self">AuthUser</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="193"
+                                    class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:193</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>filters in table requests according to user role</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>aggregationPipeline</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../classes/User.html" target="_self" >AuthUser</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="virtualFields"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>virtualFields</b></span>
+                        <a href="#virtualFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+    $addFields: {
+      isProspect: {
+        $not: {
+          $anyElementTrue: {
+            $map: {
+              input: &#x27;$startups&#x27;,
+              as: &#x27;startup&#x27;,
+              in: {
+                $gt: [{ $size: { $ifNull: [&#x27;$$startup.phases&#x27;, []] } }, 0],
+              },
+            },
+          },
+        },
+      },
+    },
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/entrepreneur/entrepreneur.service.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  forwardRef,
+} from &#x27;@nestjs/common&#x27;;
+import { InjectModel } from &#x27;@nestjs/mongoose&#x27;;
+import {
+  BusinessRelationship,
+  Entrepreneur,
+  StartupRelationship,
+} from &#x27;./entities/entrepreneur.entity&#x27;;
+import { Model, Types } from &#x27;mongoose&#x27;;
+import { UpdateResultPayload } from &#x27;src/shared/models/update-result&#x27;;
+import { FormDocumentService } from &#x27;src/forms/factories/form-document-service&#x27;;
+import { PaginatedResult } from &#x27;src/shared/models/paginated-result&#x27;;
+import { PageRequest } from &#x27;../shared/models/page-request&#x27;;
+import { requestUtilities } from &#x27;src/shared/utilities/request.utilities&#x27;;
+import { LinkWithTargetsByRequestArgs } from &#x27;src/shared/args/link-with-targets-by-request.args&#x27;;
+import { BusinessService } from &#x27;src/business/business.service&#x27;;
+import { AggregateBuildOptions } from &#x27;src/shared/models/aggregate-build-options&#x27;;
+import { StartupService } from &#x27;src/startup/startup.service&#x27;;
+import { AuthUser } from &#x27;src/auth/types/auth-user&#x27;;
+import { ValidRoles } from &#x27;src/auth/enums/valid-roles.enum&#x27;;
+import { ExpertService } from &#x27;src/expert/expert.service&#x27;;
+import { Permission, getPermissionList } from &#x27;src/auth/enums/permissions.enum&#x27;;
+import { DownloadRequestArgs } from &#x27;src/shared/models/download-request.args&#x27;;
+import { TableConfigService } from &#x27;src/table/table-config/table-config.service&#x27;;
+import { excelUtilities } from &#x27;src/shared/utilities/excel.utilities&#x27;;
+import { DownloadsService } from &#x27;src/downloads/downloads.service&#x27;;
+import { DownloadResult } from &#x27;src/shared/models/download-result&#x27;;
+
+@Injectable()
+export class EntrepreneurService implements FormDocumentService&lt;Entrepreneur&gt; {
+  constructor(
+    @InjectModel(Entrepreneur.name)
+    private readonly entrepreneurModel: Model&lt;Entrepreneur&gt;,
+    @Inject(forwardRef(() &#x3D;&gt; BusinessService))
+    private readonly businessService: BusinessService,
+    @Inject(forwardRef(() &#x3D;&gt; StartupService))
+    private readonly startupService: StartupService,
+    @Inject(forwardRef(() &#x3D;&gt; ExpertService))
+    private readonly expertService: ExpertService,
+    private readonly tableConfigService: TableConfigService,
+    private readonly downloadService: DownloadsService,
+  ) {}
+
+  private static readonly virtualFields &#x3D; {
+    $addFields: {
+      isProspect: {
+        $not: {
+          $anyElementTrue: {
+            $map: {
+              input: &#x27;$startups&#x27;,
+              as: &#x27;startup&#x27;,
+              in: {
+                $gt: [{ $size: { $ifNull: [&#x27;$$startup.phases&#x27;, []] } }, 0],
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  // async onModuleInit() {
+  //   let startups &#x3D; await this.entrepreneurModel.find({});
+  //   for (const iterator of startups) {
+  //     iterator.startups &#x3D; iterator.startups.map((i) &#x3D;&gt; {
+  //       return { ...i, state: &#x27;member&#x27; };
+  //     });
+  //     await iterator.save();
+  //   }
+  // }
+
+  /**
+   * find doc entrepreneur, is only intended to be used by websocket.
+   */
+  async getDocument(id: string) {
+    const document &#x3D; await this.findOne(id);
+    return document;
+  }
+
+  /**
+   * create doc entrepreneur, is only intended to be used by websocket.
+   */
+  async createDocument(submission: any, context?: any) {
+    const data &#x3D; {
+      item: submission,
+      ...context,
+    };
+    const createdDocument &#x3D; await this.create(data);
+    return createdDocument;
+  }
+
+  /**
+   * update doc entrepreneur, is only intended to be used by websocket.
+   */
+  async updateDocument(id: string, submission: any, context: any) {
+    const updatedDocument &#x3D; await this.update(id, { item: submission });
+    return updatedDocument;
+  }
+
+  /**
+   * find all entrepreneur docs
+   */
+  async findAll(): Promise&lt;Entrepreneur[]&gt; {
+    const entrepreneurs &#x3D; await this.entrepreneurModel.find({
+      deletedAt: null,
+    });
+    return entrepreneurs;
+  }
+
+  /**
+   * find doc entrepreneur paginated
+   */
+  async findManyPage(
+    request: PageRequest,
+    user: AuthUser,
+    outputProjection?: any,
+  ): Promise&lt;PaginatedResult&lt;Entrepreneur&gt;&gt; {
+    const options &#x3D; new AggregateBuildOptions();
+    options.virtualFields &#x3D; EntrepreneurService.virtualFields;
+    if (outputProjection) {
+      options.outputProjection &#x3D; outputProjection;
+    }
+    let aggregationPipeline &#x3D; requestUtilities.buildAggregationFromRequest(
+      request,
+      options,
+    );
+    aggregationPipeline &#x3D; await this.updatePipelineForUser(
+      aggregationPipeline,
+      user,
+    );
+    // filtro personas
+    aggregationPipeline[1][&#x27;$addFields&#x27;][&#x27;members&#x27;] &#x3D; {
+      $filter: {
+        input: &#x27;$startups&#x27;,
+        as: &#x27;startup&#x27;,
+        cond: { $eq: [&#x27;$$startup.state&#x27;, &#x27;member&#x27;] },
+      },
+    };
+    // Divide el array en dos partes en la posición deseada
+    let primeraParte &#x3D; aggregationPipeline.slice(0, 2);
+    let segundaParte &#x3D; aggregationPipeline.slice(2);
+
+    // Combina las dos partes con el nuevo elemento en el medio
+    // const miArray &#x3D; [
+    //   ...primeraParte,
+    //   { $match: { members: { $size: 1 } } },
+    //   ...segundaParte,
+    // ];
+    // aggregationPipeline[2];
+
+    const documents &#x3D; await this.entrepreneurModel
+      .aggregate(aggregationPipeline)
+      .collation({ locale: &#x27;en_US&#x27;, strength: 2 });
+    documents[0].documents &#x3D; documents[0].documents.map((i) &#x3D;&gt; {
+      return { ...i, startups: i[&#x27;members&#x27;] };
+    });
+    return documents[0];
+  }
+
+  /**
+   * find doc entrepreneur paginated filtered
+   */
+  async findManyIdsByRequest(
+    request: PageRequest,
+    user: AuthUser,
+  ): Promise&lt;string[]&gt; {
+    const options &#x3D; new AggregateBuildOptions();
+    options.virtualFields &#x3D; EntrepreneurService.virtualFields;
+    options.paginated &#x3D; false;
+    options.outputProjection &#x3D; { $project: { _id: 1 } };
+    let aggregationPipeline &#x3D; requestUtilities.buildAggregationFromRequest(
+      request,
+      options,
+    );
+    aggregationPipeline &#x3D; await this.updatePipelineForUser(
+      aggregationPipeline,
+      user,
+    );
+    const documents &#x3D; await this.entrepreneurModel
+      .aggregate&lt;Entrepreneur&gt;(aggregationPipeline)
+      .collation({ locale: &#x27;en_US&#x27;, strength: 2 });
+    return documents.map((doc) &#x3D;&gt; doc._id);
+  }
+
+  /**
+   * filters in table requests according to user role
+   */
+  async updatePipelineForUser(aggregationPipeline: any, user: AuthUser) {
+    if (
+      user.rolDoc.type &#x3D;&#x3D;&#x3D; ValidRoles.expert &amp;&amp;
+      !getPermissionList(user).includes(Permission.load_all_entrepreneurs)
+    ) {
+      const docExpert &#x3D; await this.expertService.findByAccount(user.uid);
+      const idStartups &#x3D; docExpert.phases.flatMap((phaseProfile) &#x3D;&gt;
+        phaseProfile.startUps.map((startup) &#x3D;&gt; new Types.ObjectId(startup._id)),
+      );
+      aggregationPipeline[0][&#x27;$match&#x27;][&#x27;startups._id&#x27;] &#x3D; { $in: idStartups };
+    }
+    if (
+      user.rolDoc.type &#x3D;&#x3D;&#x3D; ValidRoles.teamCoach &amp;&amp;
+      !getPermissionList(user).includes(Permission.load_all_entrepreneurs)
+    ) {
+      let startupsTeamCoach &#x3D;
+        user.relationsAssign?.startups.map((i) &#x3D;&gt; new Types.ObjectId(i._id)) ??
+        [];
+      aggregationPipeline[0][&#x27;$match&#x27;][&#x27;startups._id&#x27;] &#x3D; {
+        $in: startupsTeamCoach,
+      };
+    }
+    return aggregationPipeline;
+  }
+
+  /**
+   * find many entrepreneurs by ids
+   */
+  async findMany(ids: string[]) {
+    if (!ids.length) return [];
+    const entrepreneurs &#x3D; await this.entrepreneurModel.find({
+      _id: { $in: ids },
+      deletedAt: null,
+    });
+    return entrepreneurs;
+  }
+
+  /**
+   * find entrepreneur by id
+   */
+  async findOne(id: string): Promise&lt;Entrepreneur&gt; {
+    const entrepreneur &#x3D; await this.entrepreneurModel.findOne({
+      _id: id,
+    });
+    if (!entrepreneur)
+      throw new NotFoundException(&#x60;Couldn&#x27;t find entrepreneur with id ${id}&#x60;);
+    return entrepreneur;
+  }
+
+  /**
+   * find entrepreneurs by uid account
+   */
+  async findByAccount(accountId: string) {
+    return await this.entrepreneurModel.findOne({ accountId }).lean();
+  }
+
+  /**
+   * create entrepreneur doc
+   */
+  async create(data: Partial&lt;Entrepreneur&gt;): Promise&lt;Entrepreneur&gt; {
+    const createdEntrepreneur &#x3D; await this.entrepreneurModel.create(data);
+    return createdEntrepreneur;
+  }
+
+  /**
+   * update entrepreneur doc
+   */
+  async update(id: string, data: Partial&lt;Entrepreneur&gt;): Promise&lt;Entrepreneur&gt; {
+    await this.entrepreneurModel
+      .updateOne({ _id: id }, data, { new: true })
+      .lean();
+    return this.findOne(id);
+  }
+
+  /**
+   * link list of entrepreneur to business and marked leaved the other startup links
+   */
+  async linkWithStartups(
+    ids: string[],
+    startupsRelationships: StartupRelationship[],
+  ): Promise&lt;UpdateResultPayload&gt; {
+    const filter &#x3D; { _id: { $in: ids } };
+    // Actualizar el estado de las startups existentes
+    const setUpdate &#x3D; {
+      $set: { &#x27;startups.$[elem].state&#x27;: &#x27;leaved&#x27; },
+    };
+    const arrayFilters &#x3D; [{ &#x27;elem.state&#x27;: { $ne: &#x27;leaved&#x27; } }];
+    await this.entrepreneurModel
+      .updateMany(filter, setUpdate, {
+        arrayFilters,
+      })
+      .lean();
+    // Agregar la nueva startup
+    const addToSetUpdate &#x3D; {
+      $addToSet: { startups: { $each: startupsRelationships } },
+    };
+    return await this.entrepreneurModel
+      .updateMany(filter, addToSetUpdate, { new: true })
+      .lean();
+  }
+
+  /**
+   * soft delete of many entrepreneurs
+   */
+  async delete(ids: string[]): Promise&lt;UpdateResultPayload&gt; {
+    const updateResult &#x3D; await this.entrepreneurModel.updateMany(
+      { _id: { $in: ids.map((id) &#x3D;&gt; new Types.ObjectId(id)) } },
+      { deletedAt: Date.now() },
+    );
+    return {
+      ...updateResult,
+      upsertedId: updateResult.upsertedId?.toString(),
+    };
+  }
+
+  /**
+   * link list of entrepreneur to business in two ways by table
+   */
+  async linkWithBusinessesByRequest(
+    { request, targetIds }: LinkWithTargetsByRequestArgs,
+    user: AuthUser,
+  ) {
+    const entrepreneurs &#x3D; await this.findManyIdsByRequest(request, user);
+    return await this.linkEntrepreneursAndBusinesses(entrepreneurs, targetIds);
+  }
+
+  /**
+   * link list of entrepreneur to business in two ways
+   */
+  async linkEntrepreneursAndBusinesses(ids: string[], businesses: string[]) {
+    // Find entrepreneurs by ids
+    const entrepreneurs &#x3D; await this.findMany(ids);
+
+    // Link entrepreneurs to businesses by given relationships
+    const entrepreneursToLink &#x3D; entrepreneurs.map((document) &#x3D;&gt; {
+      return { _id: document._id, item: document.item };
+    });
+    const businessUpdateResult &#x3D;
+      await this.businessService.linkWithEntrepreneurs(
+        businesses,
+        entrepreneursToLink,
+      );
+
+    if (!businessUpdateResult.acknowledged)
+      throw new InternalServerErrorException(
+        &#x27;Failed to create link between businesses and entrepreneurs&#x27;,
+      );
+
+    // Find entrepreneurs
+    const businessDocuments &#x3D; await this.businessService.findMany(businesses);
+    const businessRelationships &#x3D; businessDocuments.map((document) &#x3D;&gt; {
+      return { _id: document._id, item: document.item };
+    });
+    const entrepreneurUpdateResult &#x3D; await this.linkWithBusinesses(
+      ids,
+      businessRelationships,
+    );
+    return entrepreneurUpdateResult;
+  }
+
+  async linkWithStartupsByRequest(
+    { request, targetIds }: LinkWithTargetsByRequestArgs,
+    user: AuthUser,
+  ) {
+    const entrepreneurs &#x3D; await this.findManyIdsByRequest(request, user);
+    return await this.linkEntrepreneursAndStartups(entrepreneurs, targetIds);
+  }
+
+  async linkEntrepreneursAndStartups(ids: string[], startups: string[]) {
+    // Find entrepreneurs by ids
+    const entrepreneurs &#x3D; await this.findMany(ids);
+
+    // Link entrepreneurs to startups by given relationships
+    const entrepreneursToLink &#x3D; [];
+    for (const entrepreneurDoc of entrepreneurs) {
+      const entrepreneurLink &#x3D; {
+        _id: entrepreneurDoc._id,
+        item: entrepreneurDoc.item,
+        rol: &#x27;partner&#x27;,
+        description: &#x27;&#x27;,
+        state: &#x27;member&#x27;,
+      };
+      entrepreneursToLink.push(entrepreneurLink);
+      const lastStartup &#x3D; entrepreneurDoc.startups.find(
+        (i) &#x3D;&gt; i.state &#x3D;&#x3D;&#x3D; &#x27;member&#x27;,
+      );
+      if (!lastStartup) continue;
+      await this.startupService.unlinkEntrepreneur(
+        lastStartup._id,
+        entrepreneurDoc._id,
+      );
+    }
+    const startupUpdateResult &#x3D; await this.startupService.linkWithEntrepreneurs(
+      startups,
+      entrepreneursToLink,
+    );
+
+    if (!startupUpdateResult.acknowledged)
+      throw new InternalServerErrorException(
+        &#x27;Failed to create link between startups and entrepreneurs&#x27;,
+      );
+
+    // Find entrepreneurs
+    const startupDocuments &#x3D; await this.startupService.findMany(startups);
+    const startupRelationships &#x3D; startupDocuments.map((document) &#x3D;&gt; {
+      return {
+        _id: document._id,
+        item: document.item,
+        phases: document.phases,
+        state: &#x27;member&#x27;,
+      };
+    });
+    const entrepreneurUpdateResult &#x3D; await this.linkWithStartups(
+      ids,
+      startupRelationships,
+    );
+
+    return entrepreneurUpdateResult;
+  }
+
+  /**
+   * link list of entrepreneur to business only by property
+   */
+  async linkWithBusinesses(
+    ids: string[],
+    businessesRelationships: BusinessRelationship[],
+  ): Promise&lt;UpdateResultPayload&gt; {
+    return await this.entrepreneurModel
+      .updateMany(
+        { _id: { $in: ids } },
+        { $addToSet: { businesses: { $each: businessesRelationships } } },
+        { new: true },
+      )
+      .lean();
+  }
+
+  /**
+   * download table of entrepreneurs
+   */
+  async downloadByRequest(
+    { request, configId, format }: DownloadRequestArgs,
+    user: AuthUser,
+  ): Promise&lt;DownloadResult&gt; {
+    const config &#x3D; await this.tableConfigService.findOne(configId);
+    const tableColumns &#x3D; config.columns;
+    const outputProjection &#x3D;
+      requestUtilities.getProjectionFromConfigTable(tableColumns);
+    const pageResult &#x3D; await this.findManyPage(request, user, outputProjection);
+    const rows &#x3D; excelUtilities.parseDocumentsToRows(
+      pageResult.documents,
+      tableColumns,
+    );
+    const columns &#x3D; tableColumns.map((col) &#x3D;&gt; {
+      return { header: col.label, width: col.label.length + 3 };
+    });
+    const data &#x3D; await excelUtilities.buildWorkbookBuffer(
+      columns,
+      rows,
+      format,
+    );
+    const fileUrl &#x3D; await this.downloadService.uploadTempFile(data, format);
+    return { url: fileUrl };
+  }
+
+  /**
+   * update states of startups entrepreneurs linked to a batch
+   */
+  async updatePhasesForStartupsRelationships(
+    relationships: StartupRelationship[],
+  ) {
+    // Initialize the bulk operations array
+    const bulkOperations &#x3D; [];
+
+    // Iterate through the arrayOfStartupsWithNewPhases
+    relationships.forEach((startup) &#x3D;&gt; {
+      // Update operation for each startup
+      const updateOperation &#x3D; {
+        updateMany: {
+          filter: { &#x27;startups._id&#x27;: startup._id }, // Match documents that have the startup in their startups array
+          update: {
+            $set: {
+              &#x27;startups.$.phases&#x27;: startup.phases, // Update the phases array for the matched startup
+            },
+          },
+        },
+      };
+      // Add the update operation to the bulkOperations array
+      bulkOperations.push(updateOperation);
+    });
+
+    // Execute the bulkWrite operation to update all entrepreneurs
+    const bulkWriteResult &#x3D;
+      await this.entrepreneurModel.bulkWrite(bulkOperations);
+    if (!bulkWriteResult.ok) {
+      throw new InternalServerErrorException(
+        &#x27;Failed to update phases for startups relationship in entrepreneurs documents&#x27;,
+      );
+    }
+    return bulkWriteResult;
+  }
+
+  /**
+   * update states of startups entrepreneurs linked to a batch to leaved
+   */
+  unlinkStartup(entrepreneurId, startupId) {
+    return this.entrepreneurModel.updateOne(
+      { _id: entrepreneurId, &#x27;startups._id&#x27;: startupId },
+      { $set: { &#x27;startups.$.state&#x27;: &#x27;leaved&#x27; } },
+    );
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'EntrepreneurService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

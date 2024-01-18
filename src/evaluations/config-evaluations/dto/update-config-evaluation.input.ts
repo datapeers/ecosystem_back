@@ -1,7 +1,9 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { CreateConfigEvaluationInput } from './create-config-evaluation.input';
 import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class UpdateConfigEvaluationInput extends PartialType(
   CreateConfigEvaluationInput,

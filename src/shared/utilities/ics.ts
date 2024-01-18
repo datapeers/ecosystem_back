@@ -1,5 +1,8 @@
 import ical from 'ical-generator';
 
+/**
+ * class for ics file instance
+ */
 export function getIcsObjectInstance(
   start_time,
   end_time,

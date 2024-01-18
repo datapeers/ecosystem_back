@@ -1,3 +1,6 @@
+/**
+ * default app roles
+ */
 export const defaultRoles = [
   {
     type: 'superAdmin',
@@ -226,7 +229,9 @@ export const defaultRoles = [
     permissions: [],
   },
 ];
-
+/**
+ * permission list
+ */
 export const listPermission = {
   // Startups
   view_startups: true,

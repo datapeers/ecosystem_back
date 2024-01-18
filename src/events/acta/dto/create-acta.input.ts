@@ -1,7 +1,9 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { GraphQLJSONObject } from 'graphql-scalars';
-
+/**
+ * graphql input scheme
+ */
 @InputType()
 export class CreateActaInput {
   @Field(() => String)

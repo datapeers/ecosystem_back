@@ -3,7 +3,9 @@ import { ActaService } from './acta.service';
 import { Acta } from './entities/acta.entity';
 import { CreateActaInput } from './dto/create-acta.input';
 import { UpdateActaInput } from './dto/update-acta.input';
-
+/**
+ * @ignore
+ */
 @Resolver(() => Acta)
 export class ActaResolver {
   constructor(private readonly actaService: ActaService) {}

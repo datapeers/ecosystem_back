@@ -13,7 +13,9 @@ import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthUser } from 'src/auth/types/auth-user';
 import { BearerToken } from 'src/auth/decorators/bearer-token.decorator';
-
+/**
+ * @ignore
+ */
 @Resolver(() => AuthCode)
 export class AuthCodeResolver {
   constructor(private readonly authCodeService: AuthCodeService) {}

@@ -1,9 +1,18 @@
-import { Template, TemplatePersonalization } from "./template";
-import { ArrayMinSize, IsArray, IsEnum, IsNotEmpty, IsString, ValidateNested } from "class-validator";
-import { TemplateData } from "./data";
-import { Type } from "class-transformer";
-import { EmailTemplates } from "../enums/email-templates";
-
+import { Template, TemplatePersonalization } from './template';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { TemplateData } from './data';
+import { Type } from 'class-transformer';
+import { EmailTemplates } from '../enums/email-templates';
+/**
+ * @ignore
+ */
 export class InvitationTemplate extends Template {
   from?: string;
 
@@ -17,7 +26,9 @@ export class InvitationTemplate extends Template {
   personalizations: InvitationPersonalization[];
   templateId?: string;
 }
-
+/**
+ * @ignore
+ */
 class InvitationTemplateData extends TemplateData {
   @IsNotEmpty()
   @IsString()
@@ -31,7 +42,9 @@ class InvitationTemplateData extends TemplateData {
   @IsNotEmpty()
   code: string;
 }
-
+/**
+ * @ignore
+ */
 export class InvitationPersonalization extends TemplatePersonalization {
   @ValidateNested()
   @IsNotEmpty()

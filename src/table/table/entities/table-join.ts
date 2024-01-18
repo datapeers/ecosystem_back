@@ -1,9 +1,11 @@
-import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { IsOptional, IsString } from "class-validator";
-import GraphQLJSON from "graphql-type-json";
-import { TableColumn } from "src/shared/models/table-column";
-
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsOptional, IsString } from 'class-validator';
+import GraphQLJSON from 'graphql-type-json';
+import { TableColumn } from 'src/shared/models/table-column';
+/**
+ * joins between tables
+ */
 @Schema()
 @InputType()
 @ObjectType()
@@ -28,5 +30,7 @@ export class TableJoin {
   @Prop({ default: [] })
   extraColumns: TableColumn[];
 }
-
+/**
+ * @ignore
+ */
 export const TableJoinSchema = SchemaFactory.createForClass(TableJoin);

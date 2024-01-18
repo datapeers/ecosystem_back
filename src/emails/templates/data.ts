@@ -1,1 +1,4 @@
-export class TemplateData {};
+/**
+ * @ignore
+ */
+export class TemplateData {}

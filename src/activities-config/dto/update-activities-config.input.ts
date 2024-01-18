@@ -4,6 +4,10 @@ import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
 import { IActivities, IAssign } from '../entities/activities-config.entity';
 import { Type } from 'class-transformer';
 
+/**
+ * graphql input scheme
+ * only updates the fields for limit, activities, assigned startups, experts, team coaches
+ */
 @InputType()
 export class UpdateActivitiesConfigInput extends PartialType(
   CreateActivitiesConfigInput,
@@ -40,7 +44,9 @@ export class UpdateActivitiesConfigInput extends PartialType(
   @IsOptional()
   teamCoaches: AssignSetup[];
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 class ActivitySetup implements IActivities {
   @Field(() => String)
@@ -51,7 +57,9 @@ class ActivitySetup implements IActivities {
   @IsDefined()
   limit: number;
 }
-
+/**
+ * @ignore
+ */
 @InputType()
 class AssignSetup implements IAssign {
   @Field(() => String)

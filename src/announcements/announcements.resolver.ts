@@ -20,7 +20,9 @@ import { FormsService } from '../forms/form/forms.service';
 import { ApplicantService } from 'src/applicant/applicant.service';
 import { SubmitAnnouncementDocInput } from './dto/submit-announcement-doc.input';
 import { FormSubmission } from 'src/forms/form/entities/form-submission';
-
+/**
+ * @ignore
+ */
 @Resolver(() => Announcement)
 export class AnnouncementsResolver {
   constructor(

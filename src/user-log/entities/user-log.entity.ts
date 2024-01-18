@@ -1,7 +1,9 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
-
+/**
+ * dynamic logs for users
+ */
 @Schema({ timestamps: true })
 @ObjectType()
 export class UserLog {
@@ -21,4 +23,7 @@ export class UserLog {
   updatedAt: Date;
 }
 
+/**
+ * @ignore
+ */
 export const UserLogSchema = SchemaFactory.createForClass(UserLog);

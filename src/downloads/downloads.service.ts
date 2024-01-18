@@ -14,6 +14,9 @@ export class DownloadsService {
     private readonly storageService: StorageService,
   ) {}
 
+  /**
+   * prepare data to download file of a table in app
+   */
   async uploadTempFile(data: Buffer, extension: string): Promise<string> {
     const fileId = uuid.v4();
     const fileName = `${fileId}.${extension}`;

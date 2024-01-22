@@ -25,6 +25,10 @@ export class UpdatePhaseInput {
   @IsOptional()
   thumbnail?: string;
 
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  sidebarImage?: string;
+
   @Field(() => Date, { nullable: true })
   @IsOptional()
   startAt?: Date;

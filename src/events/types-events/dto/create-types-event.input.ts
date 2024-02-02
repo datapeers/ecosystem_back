@@ -17,4 +17,12 @@ export class CreateTypesEventInput {
   @Field(() => Boolean, { nullable: false })
   @IsOptional()
   expertFocus?: boolean;
+
+  @Field(() => Boolean, { nullable: false })
+  @IsOptional()
+  isSchedulable?: boolean;
+
+  @Field(() => String, { nullable: false })
+  @IsOptional()
+  scheduleUrl?: string;
 }

@@ -8,7 +8,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
  */
 @ObjectType()
 export class LastContentOutput {
-  @Field()
+  @Field({ nullable: true })
   lastContent: Content;
   @Field()
   contentCompleted: number;

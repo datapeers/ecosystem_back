@@ -118,6 +118,7 @@ export class ContentService {
     let numberOfContent = 0;
     for (const sprint of contents) {
       for (const content of sprint.childs) {
+        if (sprint.isDeleted || content.isDeleted) continue;
         ++numberOfContent;
       }
     }

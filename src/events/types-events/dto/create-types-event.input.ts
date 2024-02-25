@@ -25,4 +25,8 @@ export class CreateTypesEventInput {
   @Field(() => String, { nullable: false })
   @IsOptional()
   scheduleUrl?: string;
+
+  @Field(() => String, { nullable: false })
+  @IsOptional()
+  description?: string;
 }

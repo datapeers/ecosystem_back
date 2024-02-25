@@ -16,8 +16,8 @@ export class Resource {
   @Prop({ required: true })
   name: string;
 
-  @Field(() => GraphQLJSONObject)
-  @Prop({ type: SchemaTypes.Mixed })
+  @Field(() => GraphQLJSONObject, { nullable: true })
+  @Prop({ type: SchemaTypes.Mixed, default: {} })
   extra_options: any;
 
   @Field(() => Boolean)

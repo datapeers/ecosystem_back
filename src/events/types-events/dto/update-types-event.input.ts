@@ -30,4 +30,8 @@ export class UpdateTypesEventInput extends PartialType(CreateTypesEventInput) {
   @Field(() => String, { nullable: false })
   @IsOptional()
   scheduleUrl?: string;
+
+  @Field(() => String, { nullable: false })
+  @IsOptional()
+  description?: string;
 }

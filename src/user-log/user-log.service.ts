@@ -55,7 +55,7 @@ export class UserLogService {
    */
   async registerLogin(idUser: string) {
     // let infoSemana = this.obtenerInfoSemana();
-    let today = new Date();
+    let today = new Date(Date.now() - 5 * 60 * 60 * 1000);
     // Configura las fechas para el rango del día específico
     const begin = new Date(today);
     begin.setHours(0, 0, 0, 0);
@@ -73,7 +73,7 @@ export class UserLogService {
         {
           $setOnInsert: {
             'metadata.user': new Types.ObjectId(idUser),
-            'metadata.logIn': new Date(),
+            'metadata.logIn': new Date(Date.now() - 5 * 60 * 60 * 1000),
             'metadata.loginApp': true,
           },
         },

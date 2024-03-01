@@ -554,7 +554,11 @@ export class StartupService implements FormDocumentService<Startup> {
     const tableColumns = config.columns;
     const outputProjection =
       requestUtilities.getProjectionFromConfigTable(tableColumns);
-    const pageResult = await this.findManyPage(request, user, outputProjection);
+    const pageResult = await this.findManyPage(
+      { ...request, skip: 0, limit: 10000 },
+      user,
+      outputProjection,
+    );
     const rows = excelUtilities.parseDocumentsToRows(
       pageResult.documents,
       tableColumns,

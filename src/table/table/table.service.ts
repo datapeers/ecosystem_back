@@ -141,7 +141,6 @@ export class TableService {
       if (table.locator.includes('selected'))
         columns.push(...tableUtilities.columnsAnnouncementSelected());
     }
-
     return columns;
   }
 }

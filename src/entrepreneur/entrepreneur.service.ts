@@ -437,7 +437,11 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     const tableColumns = config.columns;
     const outputProjection =
       requestUtilities.getProjectionFromConfigTable(tableColumns);
-    const pageResult = await this.findManyPage(request, user, outputProjection);
+    const pageResult = await this.findManyPage(
+      { ...request, skip: 0, limit: 3000 },
+      user,
+      outputProjection,
+    );
     const rows = excelUtilities.parseDocumentsToRows(
       pageResult.documents,
       tableColumns,

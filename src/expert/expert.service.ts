@@ -216,6 +216,21 @@ export class ExpertService implements FormDocumentService {
   }
 
   /**
+   * unlink expert to a batch
+   */
+  async unlinkWithPhase(
+    linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs,
+  ): Promise<UpdateResultPayload> {
+    return this.expertModel
+      .updateMany(
+        { _id: { $in: linkExpertsToPhaseArgs.experts } },
+        { $pull: { phases: { _id: linkExpertsToPhaseArgs.phaseId } } },
+        { new: true },
+      )
+      .lean();
+  }
+
+  /**
    * link startups to expert
    */
   linkStartupsToExperts(linkStartupsExpertsArgs: LinkStartupsExpertsArgs) {

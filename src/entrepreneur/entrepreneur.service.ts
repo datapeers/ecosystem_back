@@ -438,7 +438,7 @@ export class EntrepreneurService implements FormDocumentService<Entrepreneur> {
     const outputProjection =
       requestUtilities.getProjectionFromConfigTable(tableColumns);
     const pageResult = await this.findManyPage(
-      { ...request, skip: 0, limit: 3000 },
+      { ...request, skip: 0, limit: 10000 },
       user,
       outputProjection,
     );

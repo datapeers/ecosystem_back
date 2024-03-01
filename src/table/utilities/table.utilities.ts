@@ -151,7 +151,7 @@ export function set_row(label: string, format: string, key: any, row?: any) {
           );
         } else {
           itemSelect = new RowConfigColumn(
-            `${label}, ${row.label}`,
+            `${label}`,
             TableColumnType.array,
             `${key};`,
             'string',

@@ -78,6 +78,11 @@ export class ExpertResolver {
     return this.expertService.linkWithPhase(linkExpertsToPhaseArgs);
   }
 
+  @Mutation(() => UpdateResultPayload)
+  unlinkPhaseToExperts(@Args() linkExpertsToPhaseArgs: LinkExpertsToPhaseArgs) {
+    return this.expertService.unlinkWithPhase(linkExpertsToPhaseArgs);
+  }
+
   @Mutation(() => Expert)
   linkStartupsToExperts(
     @Args() linkStartupsExpertsArgs: LinkStartupsExpertsArgs,

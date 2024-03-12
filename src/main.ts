@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import * as bodyParser from 'body-parser';
 /**
  * main config app
  */
@@ -22,6 +23,7 @@ async function bootstrap() {
       skipUndefinedProperties: true,
     }),
   );
+  app.use(bodyParser.json({ limit: '10mb' }));
   const port = process.env.PORT ?? 3000;
   await app.listen(port, () => {
     console.log(`Server running on port ${port}`);

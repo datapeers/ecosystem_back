@@ -255,7 +255,7 @@ export class EventsService {
         filters['experts._id'] = docExpert._id.toString();
         break;
       case ValidRoles.teamCoach:
-        filters['teamCoach._id'] = user._id.toString();
+        filters['teamCoaches._id'] = user._id.toString();
         break;
       case ValidRoles.host:
         const listBatchesAccess =

@@ -190,7 +190,7 @@ export const permissionDescriptions: Record<Permission, string> = {
     'Editar horas necesarios de los team coach',
 
   // Evaluations
-  [Permission.evaluation_view]: 'Ver sección de valuaciones en batch',
+  [Permission.evaluation_view]: 'Ver sección de evaluaciones en batch',
   [Permission.evaluation_create]:
     'Permitir crear una configuración para evaluaciones',
   [Permission.evaluation_edit]:

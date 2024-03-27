@@ -40,6 +40,12 @@ export class ActivitiesConfigResolver {
     return this.activitiesConfigService.findOne(id);
   }
 
+  @Query(() => ActivitiesConfig, { name: 'activitiesConfigReport' })
+  generateReportView(@Args('batch', { type: () => String }) batch: string) {
+    console.log('here', batch);
+    return this.activitiesConfigService.generateViewHours(batch);
+  }
+
   @Query(() => Hours, { name: 'activitiesConfigPhasePerStartup' })
   findOneStartup(
     @Args('phase', { type: () => String }) phase: string,

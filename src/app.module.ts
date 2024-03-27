@@ -53,6 +53,7 @@ import { TermsOfUseModule } from './terms-of-use/terms-of-use.module';
 import { UserConfigModule } from './user-config/user-config.module';
 import { TypesNotificationsModule } from './notifications/types-notifications/types-notifications.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -150,6 +151,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     IntegrationsModule,
     TermsOfUseModule,
     UserConfigModule,
+    ReportsModule,
   ],
   controllers: [],
   providers: [],

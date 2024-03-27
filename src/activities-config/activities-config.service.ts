@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { CreateActivitiesConfigInput } from './dto/create-activities-config.input';
 import { UpdateActivitiesConfigInput } from './dto/update-activities-config.input';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model, Types } from 'mongoose';
 import { ActivitiesConfig } from './entities/activities-config.entity';
 import { default_types_events } from 'src/events/types-events/model/type-events.default';
 import { ExpertService } from 'src/expert/expert.service';
@@ -28,6 +28,11 @@ import { User } from 'src/users/entities/user.entity';
 import { EventsService } from 'src/events/events.service';
 import { Acta } from 'src/events/acta/entities/acta.entity';
 import { Event as EventEntity } from 'src/events/entities/event.entity';
+import { ParticipationEvent } from 'src/events/participation-events/entities/participation-event.entity';
+import {
+  getTimeBetweenDates,
+  timeRegister,
+} from 'src/shared/utilities/dates.utilities';
 
 @Injectable()
 export class ActivitiesConfigService {
@@ -45,6 +50,7 @@ export class ActivitiesConfigService {
     private readonly eventsService: EventsService,
     @Inject(forwardRef(() => TypesEventsService))
     private readonly typesEventsService: TypesEventsService,
+    @InjectConnection() private connection: Connection,
   ) {}
 
   /**
@@ -59,14 +65,14 @@ export class ActivitiesConfigService {
    * @returns activity config for batch
    */
   async findByPhase(phase: string) {
-    let item = await this.activitiesConfig.findOne({ phase }).lean();
-    if (!item) {
-      item = await this.create({
+    let config = await this.activitiesConfig.findOne({ phase }).lean();
+    if (!config) {
+      config = await this.create({
         limit: 0,
         phase,
       });
     }
-    return item;
+    return config;
   }
 
   /**
@@ -167,6 +173,10 @@ export class ActivitiesConfigService {
     hoursAssignStartups: IConfigStartup[];
     hoursAssignExperts: IConfigExpert[];
     hoursAssignTeamCoaches: IConfigTeamCoach[];
+    events: EventEntity[];
+    actas: Acta[];
+    listParticipation: ParticipationEvent[];
+    listActivities: TypesEvent[];
   }> {
     const listStartups = await this.startupsService.findByPhase(
       config.phase.toString(),
@@ -178,15 +188,15 @@ export class ActivitiesConfigService {
       roles: [ValidRoles.teamCoach],
       relationsAssign: { batches: config.phase.toString() },
     });
+    const { events, actas, participation } =
+      await this.eventsService.getEventsAndActas(config.phase);
     const listActivities = await this.typesEventsService.findAll();
     const hoursAssignStartups = await this.calcHoursStartups(
       config,
       listActivities,
       listStartups,
     );
-    const { events, actas } = await this.eventsService.getEventsAndActas(
-      config.phase,
-    );
+
     const hoursAssignExperts = this.calcHoursExpert(
       config,
       listActivities,
@@ -205,6 +215,10 @@ export class ActivitiesConfigService {
       hoursAssignStartups,
       hoursAssignExperts,
       hoursAssignTeamCoaches,
+      events,
+      actas,
+      listParticipation: participation,
+      listActivities,
     };
   }
 
@@ -397,4 +411,133 @@ export class ActivitiesConfigService {
     }
     return Object.values(hoursAssignTeamCoaches);
   }
+
+  async generateViewHours(batchId: string) {
+    const nameCollectionViewActivity = 'hours_bag_view';
+    const config = await this.findByPhase(batchId);
+    const batch = await this.connection
+      .collection('phases')
+      .findOne({ _id: new Types.ObjectId(batchId) as any });
+    await this.connection
+      .collection(nameCollectionViewActivity)
+      .deleteMany({ IdBatch: batch._id });
+    try {
+      const calcHours = await this.calcHours(config);
+      const docs: HourBagReportItem[] = [];
+      // ---------------- Startups ---------------------------------------------------------
+      for (const activity of calcHours.listActivities) {
+        for (const startupConfig of calcHours.hoursAssignStartups) {
+          const eventsDone = calcHours.events.filter(
+            (event) =>
+              event.type === activity._id.toString() &&
+              event.participants.find(
+                (entrepreneur) =>
+                  entrepreneur.startupEntrepreneur ===
+                  startupConfig._id.toString(),
+              ),
+          );
+
+          const eventsHours = eventsDone.length
+            ? eventsDone
+                .map((event) => getTimeBetweenDates(event.startAt, event.endAt))
+                .reduce((acc, item) => {
+                  if (!acc) {
+                    acc = item;
+                  } else {
+                    acc.add(item);
+                  }
+                  return acc;
+                })
+            : 0;
+          docs.push({
+            type: 'startup',
+            IdBatch: batch._id,
+            Batch: batch.name,
+            IdActividad: activity._id,
+            Actividad: activity.name,
+            IdStartup: startupConfig._id,
+            Startup: startupConfig.item['nombre'],
+            LimiteStartup: startupConfig.hours[activity._id],
+            StartupHoras: eventsHours ? eventsHours.formatear() : 0,
+          });
+        }
+      }
+      // ---------------- Experts -----------------------------------------------------------
+      const listActivitiesExpert = calcHours.listActivities.filter(
+        (i) => i.expertFocus,
+      );
+      for (const expertActivity of listActivitiesExpert) {
+        for (const expertConfig of calcHours.hoursAssignExperts) {
+          docs.push({
+            type: 'expert',
+            IdBatch: batch._id,
+            Batch: batch.name,
+            IdActividad: expertActivity._id,
+            Actividad: expertActivity.name,
+            IdExpert: expertConfig._id,
+            Expert: expertConfig.item['nombre'],
+            LimiteExpert: expertConfig.hours[expertActivity._id].allocated,
+            ExpertHorasCompletadas: expertConfig.hours[expertActivity._id].done,
+            ExpertHorasDonadas: expertConfig.hours[expertActivity._id].donated,
+          });
+        }
+      }
+
+      // -------------- Team Coaches
+      const listActivitiesTeamCoach = calcHours.listActivities.filter((i) =>
+        this.activitiesForTeamCoach.includes(i._id.toString()),
+      );
+      for (const activityTeamCoach of listActivitiesTeamCoach) {
+        for (const teamCoachConfig of calcHours.hoursAssignTeamCoaches) {
+          docs.push({
+            type: 'teamCoach',
+            IdBatch: batch._id,
+            Batch: batch.name,
+            IdActividad: activityTeamCoach._id,
+            Actividad: activityTeamCoach.name,
+            IdTeamCoach: teamCoachConfig._id,
+            teamCoach: teamCoachConfig.item['nombre'],
+            LimiteHorasTeamCoach:
+              teamCoachConfig.hours[activityTeamCoach._id].allocated,
+            TeamCoachHorasCompletadas:
+              teamCoachConfig.hours[activityTeamCoach._id].done,
+          });
+        }
+      }
+      await this.connection
+        .collection(nameCollectionViewActivity)
+        .insertMany(docs);
+      return config;
+    } catch (error) {
+      console.error('Error al ejecutar la consulta:', error);
+      return config;
+    }
+  }
+}
+
+interface HourBagReportItem {
+  type: 'startup' | 'expert' | 'teamCoach';
+  IdBatch: any;
+  Batch: string;
+  IdActividad: string;
+  Actividad: string;
+  // expert
+  IdExpert?: any;
+  Expert?: string;
+  ExpertHorasCompletadas?: any;
+  ExpertHorasDonadas?: any;
+  LimiteExpert?: any;
+  // startup
+  IdStartup?: any;
+  Startup?: string;
+  LimiteStartup?: any;
+  StartupHoras?: any;
+  // -- teamCoach
+  IdTeamCoach?: any;
+  teamCoach?: string;
+  TeamCoachHorasCompletadas?: any;
+  LimiteHorasTeamCoach?: any;
+  // ----------
+  IdEvento?: any;
+  IdActa?: any;
 }

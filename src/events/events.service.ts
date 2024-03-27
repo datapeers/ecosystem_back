@@ -27,6 +27,7 @@ import { NotificationStates } from 'src/notifications/enum/notification-states.e
 import { NotificationTypes } from 'src/notifications/enum/notification-types.enum';
 import { UsersService } from 'src/users/users.service';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { ParticipationEvent } from './participation-events/entities/participation-event.entity';
 @Injectable()
 export class EventsService {
   constructor(
@@ -649,7 +650,9 @@ export class EventsService {
     const actas: Acta[] = await this.actaService
       .findByEventsList(events.map((i) => i._id.toString()))
       .lean();
-    return { events, actas };
+    const participation: ParticipationEvent[] =
+      await this.participationService.findByEvents(events.map((i) => i._id));
+    return { events, actas, participation };
   }
 
   /**
